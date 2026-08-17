@@ -1,49 +1,8 @@
 <nav x-data="{ open: false }" class="sticky top-0 z-40 border-b border-[#dfe6d5] bg-white/95 backdrop-blur">
     <div class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-8">
-            <a href="{{ route('dashboard') }}" class="text-2xl font-black text-[#31421e]">إحسان</a>
-            <div class="hidden items-center gap-2 sm:flex">
-                <a href="{{ route('dashboard') }}"
-                    class="rounded-lg px-4 py-2 text-sm font-bold {{ request()->routeIs('dashboard') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-500 hover:bg-slate-50' }}">الرئيسية</a>
-                <a href="{{ route('profile.edit') }}"
-                    class="rounded-lg px-4 py-2 text-sm font-bold {{ request()->routeIs('profile.*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-500 hover:bg-slate-50' }}">الملف
-                    الشخصي</a>
-            </div>
-        </div>
-        <div class="hidden items-center gap-3 sm:flex">
-            <div class="text-left">
-                <p class="text-sm font-bold text-slate-700">{{ Auth::user()->name }}</p>
-                <p class="text-xs text-slate-400">{{ Auth::user()->account_type === 'volunteer' ? 'متطوع' : 'كبير سن' }}
-                </p>
-            </div>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button
-                    class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 hover:border-red-200 hover:bg-red-50 hover:text-red-700">تسجيل
-                    الخروج</button>
-            </form>
-        </div>
-        <button type="button" @click="open=!open"
-            class="rounded-lg border border-slate-200 p-2 text-[#31421e] sm:hidden" aria-label="فتح القائمة">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-        </button>
+        <div class="flex items-center gap-8"><a href="{{ route('dashboard') }}" class="text-2xl font-black text-[#31421e]">إحسان</a><div class="hidden items-center gap-2 sm:flex"><a href="{{ route('dashboard') }}" class="rounded-lg px-4 py-2 text-sm font-bold {{ request()->routeIs('dashboard') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-500 hover:bg-slate-50' }}">الرئيسية</a><a href="{{ route('profile.edit') }}" class="rounded-lg px-4 py-2 text-sm font-bold {{ request()->routeIs('profile.*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-500 hover:bg-slate-50' }}">الملف الشخصي</a></div></div>
+        <div class="hidden items-center gap-3 sm:flex"><div class="text-left"><p class="text-sm font-bold text-slate-700">{{ Auth::user()->name }}</p><p class="text-xs text-slate-400">{{ Auth::user()->account_type === 'volunteer' ? 'متطوع' : 'كبير سن' }}</p></div><form method="POST" action="{{ route('logout') }}">@csrf<button class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-bold text-slate-600 hover:border-red-200 hover:bg-red-50 hover:text-red-700">تسجيل الخروج</button></form></div>
+        <button type="button" @click="open=!open" class="rounded-lg border border-slate-200 p-2 text-[#31421e] sm:hidden" aria-label="فتح القائمة"><svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
     </div>
-    <div x-show="open" x-transition class="border-t border-slate-100 px-4 py-4 sm:hidden">
-        <div class="mb-3">
-            <p class="font-bold">{{ Auth::user()->name }}</p>
-            <p class="text-xs text-slate-500">{{ Auth::user()->email }}</p>
-        </div>
-        <div class="grid gap-2">
-            <a href="{{ route('dashboard') }}"
-                class="rounded-lg bg-[#eef2e8] px-4 py-3 font-bold text-[#31421e]">الرئيسية</a>
-            <a href="{{ route('profile.edit') }}" class="rounded-lg px-4 py-3 font-bold text-slate-600">الملف
-                الشخصي</a>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button class="w-full rounded-lg px-4 py-3 text-right font-bold text-red-700">تسجيل الخروج</button>
-            </form>
-        </div>
-    </div>
+    <div x-cloak x-show="open" x-transition class="border-t border-slate-100 bg-white px-4 py-4 sm:hidden"><div class="mb-3 min-w-0"><p class="break-words font-bold">{{ Auth::user()->name }}</p><p class="break-all text-xs text-slate-500">{{ Auth::user()->email }}</p></div><div class="grid gap-2"><a href="{{ route('dashboard') }}" class="rounded-lg bg-[#eef2e8] px-4 py-3 font-bold text-[#31421e]">الرئيسية</a><a href="{{ route('profile.edit') }}" class="rounded-lg px-4 py-3 font-bold text-slate-600">الملف الشخصي</a><form method="POST" action="{{ route('logout') }}">@csrf<button class="w-full rounded-lg px-4 py-3 text-right font-bold text-red-700">تسجيل الخروج</button></form></div></div>
 </nav>
