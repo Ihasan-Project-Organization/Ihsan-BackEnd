@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Frontend\RegistrationPageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -7,19 +8,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::prefix('frontend')->name('frontend.')->group(function () {
-    Route::view('/login', 'frontend.login')->name('login');
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegistrationPageController::class, 'index'])->name('register.choose');
 
-    Route::prefix('elderly')->name('elderly.')->group(function () {
-        Route::view('/register', 'frontend.elderly-register')->name('register');
-        Route::view('/housing', 'frontend.elderly-housing')->name('housing');
-        Route::view('/review', 'frontend.elderly-review')->name('review');
-    });
+    Route::prefix('frontend')->name('frontend.')->group(function () {
+        Route::redirect('/login', '/login')->name('login');
 
-    Route::prefix('volunteer')->name('volunteer.')->group(function () {
-        Route::view('/register', 'frontend.volunteer-register')->name('register');
-        Route::view('/documents', 'frontend.volunteer-documents')->name('documents');
-        Route::view('/review', 'frontend.volunteer-review')->name('review');
+        Route::prefix('elderly')->name('elderly.')->group(function () {
+            Route::get('/register', [RegistrationPageController::class, 'elderly'])->name('register');
+            Route::get('/housing', [RegistrationPageController::class, 'redirectToElderly'])->name('housing');
+            Route::get('/review', [RegistrationPageController::class, 'redirectToElderly'])->name('review');
+        });
+
+        Route::prefix('volunteer')->name('volunteer.')->group(function () {
+            Route::get('/register', [RegistrationPageController::class, 'volunteer'])->name('register');
+            Route::get('/documents', [RegistrationPageController::class, 'redirectToVolunteer'])->name('documents');
+            Route::get('/review', [RegistrationPageController::class, 'redirectToVolunteer'])->name('review');
+        });
     });
 });
 
