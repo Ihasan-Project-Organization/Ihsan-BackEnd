@@ -16,6 +16,9 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $isElderly = $this->user()->account_type === 'elderly';
+        $isVolunteer = $this->user()->account_type === 'volunteer';
+
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
@@ -26,6 +29,13 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'dob' => ['required', 'date', 'before:today'],
+            'phone' => ['required', 'string', 'max:30'],
+            'id_number' => [Rule::requiredIf($isVolunteer), 'nullable', 'string', 'max:255', Rule::unique('registration_profiles', 'identity_number')->ignore($this->user()->registrationProfile?->id)],
+            'city' => [Rule::requiredIf($isElderly), 'nullable', 'string', 'max:255'],
+            'address' => [Rule::requiredIf($isElderly), 'nullable', 'string', 'max:1000'],
+            'housing_type' => [Rule::requiredIf($isElderly), 'nullable', Rule::in(['apartment', 'house', 'family'])],
+            'extra_info' => ['nullable', 'string', 'max:2000'],
         ];
     }
 }
