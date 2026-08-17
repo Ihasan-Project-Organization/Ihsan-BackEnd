@@ -1,1 +1,35 @@
-<section><header><h2 class="text-xl font-black text-[#31421e]">تغيير كلمة المرور</h2><p class="mt-2 text-sm text-slate-500">استخدم كلمة مرور قوية لا تقل عن ثمانية أحرف.</p></header><form method="POST" action="{{ route('password.update') }}" class="mt-7 grid gap-5 sm:grid-cols-2">@csrf @method('put')<div class="sm:col-span-2"><label for="current_password" class="mb-2 block text-sm font-bold">كلمة المرور الحالية</label><input id="current_password" name="current_password" type="password" autocomplete="current-password" class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]"><x-input-error class="mt-2" :messages="$errors->updatePassword->get('current_password')" /></div><div><label for="new_password" class="mb-2 block text-sm font-bold">كلمة المرور الجديدة</label><input id="new_password" name="password" type="password" autocomplete="new-password" class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]"><x-input-error class="mt-2" :messages="$errors->updatePassword->get('password')" /></div><div><label for="new_password_confirmation" class="mb-2 block text-sm font-bold">تأكيد كلمة المرور</label><input id="new_password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]"></div><div class="flex items-center gap-4 sm:col-span-2"><button class="rounded-xl bg-[#31421e] px-7 py-3 font-bold text-white hover:bg-[#52643a]">تحديث كلمة المرور</button>@if(session('status')==='password-updated')<span class="text-sm font-bold text-emerald-700">تم التحديث</span>@endif</div></form></section>
+<section>
+    <header>
+        <h2 class="text-xl font-black text-[#31421e]">تغيير كلمة المرور</h2>
+        <p class="mt-2 text-sm text-slate-500">استخدم كلمة مرور قوية لا تقل عن ثمانية أحرف.</p>
+    </header>
+    <form method="POST" action="{{ route('password.update') }}" class="mt-7 grid gap-5 sm:grid-cols-2">
+        @csrf
+        @method('put')
+        <div class="sm:col-span-2">
+            <label for="current_password" class="mb-2 block text-sm font-bold">كلمة المرور الحالية</label>
+            <input id="current_password" name="current_password" type="password" autocomplete="current-password"
+                class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
+            <x-input-error class="mt-2" :messages="$errors->updatePassword->get('current_password')" />
+        </div>
+        <div>
+            <label for="new_password" class="mb-2 block text-sm font-bold">كلمة المرور الجديدة</label>
+            <input id="new_password" name="password" type="password" autocomplete="new-password"
+                class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
+            <x-input-error class="mt-2" :messages="$errors->updatePassword->get('password')" />
+        </div>
+        <div>
+            <label for="new_password_confirmation" class="mb-2 block text-sm font-bold">تأكيد كلمة المرور</label>
+            <input id="new_password_confirmation" name="password_confirmation" type="password"
+                autocomplete="new-password"
+                class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
+        </div>
+        <div class="flex items-center gap-4 sm:col-span-2">
+            <button class="rounded-xl bg-[#31421e] px-7 py-3 font-bold text-white hover:bg-[#52643a]">تحديث كلمة
+                المرور</button>
+            @if (session('status') === 'password-updated')
+                <span class="text-sm font-bold text-emerald-700">تم التحديث</span>
+            @endif
+        </div>
+    </form>
+</section>

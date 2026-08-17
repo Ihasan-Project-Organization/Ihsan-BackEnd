@@ -1,27 +1,14 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+    <div class="text-center">
+        <h1 class="text-2xl font-black text-[#31421e]">تأكيد كلمة المرور</h1>
+        <p class="mt-3 text-sm leading-7 text-slate-500">هذه منطقة آمنة. أكد كلمة مرورك قبل المتابعة.</p>
     </div>
-
-    <form method="POST" action="{{ route('password.confirm') }}">
-        @csrf
-
-        <!-- Password -->
-        <div>
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <div class="flex justify-end mt-4">
-            <x-primary-button>
-                {{ __('Confirm') }}
-            </x-primary-button>
-        </div>
+    <form method="POST" action="{{ route('password.confirm') }}" class="mt-7">@csrf
+        <label for="password" class="mb-2 block text-sm font-bold">كلمة المرور</label>
+        <input id="password" name="password" type="password" required autocomplete="current-password"
+            class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
+        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <button class="mt-6 w-full rounded-xl bg-[#31421e] px-5 py-3.5 font-bold text-white hover:bg-[#52643a]">تأكيد
+            والمتابعة</button>
     </form>
 </x-guest-layout>

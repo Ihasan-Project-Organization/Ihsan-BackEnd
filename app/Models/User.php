@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\EhsanResetPasswordNotification;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -52,5 +53,10 @@ class User extends Authenticatable
     public function registrationProfile(): HasOne
     {
         return $this->hasOne(RegistrationProfile::class);
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new EhsanResetPasswordNotification($token));
     }
 }

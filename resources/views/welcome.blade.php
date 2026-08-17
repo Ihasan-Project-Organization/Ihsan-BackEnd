@@ -1,13 +1,140 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="description" content="إحسان منصة تربط كبار السن بالمتطوعين الموثوقين"><title>إحسان | العطاء أقرب</title>@vite(['resources/css/app.css','resources/js/app.js'])</head>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="description" content="إحسان منصة تربط كبار السن بالمتطوعين الموثوقين">
+    <title>إحسان | العطاء أقرب</title>@vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+
 <body class="bg-[#f8f6f1] font-sans text-slate-800 antialiased">
-<nav class="border-b border-[#dfe6d5] bg-white"><div class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"><a href="/" class="text-3xl font-black text-[#31421e]">إحسان</a><div class="flex items-center gap-2 sm:gap-3">@auth<a href="{{ route('dashboard') }}" class="rounded-xl bg-[#31421e] px-4 py-2.5 text-sm font-bold text-white sm:px-6">لوحة التحكم</a>@else<a href="{{ route('login') }}" class="rounded-xl px-3 py-2.5 text-sm font-bold text-[#31421e] hover:bg-[#eef2e8] sm:px-5">تسجيل الدخول</a><a href="{{ route('register.choose') }}" class="rounded-xl bg-[#31421e] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#52643a] sm:px-6">إنشاء حساب</a>@endauth</div></div></nav>
-<main>
-    <section class="overflow-hidden bg-[#eef2e8]"><div class="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-2 lg:px-8"><div><span class="inline-flex rounded-full bg-white px-4 py-2 text-sm font-bold text-[#52643a] shadow-sm">معًا لحياة أكثر دفئًا واطمئنانًا</span><h1 class="mt-6 text-4xl font-black leading-tight text-[#243416] sm:text-5xl lg:text-6xl">العطاء أقرب،<br><span class="text-[#718256]">والرعاية أسهل.</span></h1><p class="mt-6 max-w-xl text-base leading-8 text-slate-600 sm:text-lg">منصة إحسان تجمع كبار السن بالمتطوعين الموثوقين لتقديم المساندة اليومية والخدمات الإنسانية بخصوصية وأمان.</p><div class="mt-8 flex flex-col gap-3 sm:flex-row"><a href="{{ route('register.choose') }}" class="rounded-xl bg-[#31421e] px-7 py-3.5 text-center font-bold text-white shadow-lg hover:bg-[#52643a]">ابدأ الآن</a><a href="#how" class="rounded-xl border-2 border-[#718256] px-7 py-3.5 text-center font-bold text-[#52643a] hover:bg-white">كيف تعمل المنصة؟</a></div></div><div class="hidden lg:block"><img src="{{ asset('assets/img/hero-image.jpeg') }}" alt="رعاية ومساندة كبار السن" class="h-[500px] w-full rounded-[2rem] object-cover shadow-2xl"></div></div></section>
-    <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8"><div class="mx-auto max-w-2xl text-center"><p class="font-bold text-[#718256]">لماذا إحسان؟</p><h2 class="mt-2 text-3xl font-black text-[#31421e] sm:text-4xl">خدمة إنسانية موثوقة</h2></div><div class="mt-12 grid gap-5 md:grid-cols-3"><article class="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm"><div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eef2e8] text-2xl">✓</div><h3 class="text-xl font-extrabold text-[#31421e]">متطوعون موثوقون</h3><p class="mt-3 text-sm leading-7 text-slate-500">بيانات ووثائق تساعد على بناء مجتمع آمن وموثوق لتقديم الخدمة.</p></article><article class="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm"><div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eef2e8] text-2xl">♡</div><h3 class="text-xl font-extrabold text-[#31421e]">رعاية باحترام</h3><p class="mt-3 text-sm leading-7 text-slate-500">تجربة بسيطة تراعي احتياجات كبار السن وتحفظ خصوصيتهم وكرامتهم.</p></article><article class="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm"><div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eef2e8] text-2xl">⌁</div><h3 class="text-xl font-extrabold text-[#31421e]">وصول أسهل</h3><p class="mt-3 text-sm leading-7 text-slate-500">خطوات واضحة للتسجيل والوصول إلى الحساب وإدارة البيانات بسهولة.</p></article></div></section>
-    <section id="how" class="bg-[#31421e] text-white"><div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8"><div class="grid items-center gap-12 lg:grid-cols-2"><div><p class="font-bold text-[#cdd9bd]">ثلاث خطوات فقط</p><h2 class="mt-2 text-3xl font-black sm:text-4xl">ابدأ رحلتك مع إحسان</h2><p class="mt-4 leading-8 text-[#e6ecde]">اختر نوع حسابك، أكمل بياناتك، ثم ادخل إلى لوحة التحكم الخاصة بك.</p></div><ol class="grid gap-4"><li class="flex gap-4 rounded-2xl bg-white/10 p-5"><span class="font-black text-[#cdd9bd]">01</span><div><h3 class="font-extrabold">اختر نوع الحساب</h3><p class="mt-1 text-sm text-[#dfe6d5]">كبير سن أو متطوع.</p></div></li><li class="flex gap-4 rounded-2xl bg-white/10 p-5"><span class="font-black text-[#cdd9bd]">02</span><div><h3 class="font-extrabold">أكمل نموذج التسجيل</h3><p class="mt-1 text-sm text-[#dfe6d5]">بيانات واضحة ضمن مراحل قصيرة.</p></div></li><li class="flex gap-4 rounded-2xl bg-white/10 p-5"><span class="font-black text-[#cdd9bd]">03</span><div><h3 class="font-extrabold">ادخل إلى حسابك</h3><p class="mt-1 text-sm text-[#dfe6d5]">تابع ملفك وخدماتك من مكان واحد.</p></div></li></ol></div></div></section>
-    <section class="px-4 py-16 text-center sm:py-24"><h2 class="text-3xl font-black text-[#31421e] sm:text-4xl">مساحة صغيرة للعطاء، أثر كبير في الحياة</h2><p class="mx-auto mt-4 max-w-2xl leading-8 text-slate-500">انضم إلى مجتمع إحسان وكن جزءًا من تجربة رعاية أكثر قربًا وإنسانية.</p><a href="{{ route('register.choose') }}" class="mt-7 inline-flex rounded-xl bg-[#31421e] px-8 py-3.5 font-bold text-white shadow-lg hover:bg-[#52643a]">إنشاء حساب جديد</a></section>
-</main>
-<footer class="border-t border-slate-200 bg-white"><div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-7 text-sm text-slate-500 sm:flex-row sm:px-6 lg:px-8"><span class="text-xl font-black text-[#31421e]">إحسان</span><p>© {{ date('Y') }} منصة إحسان. جميع الحقوق محفوظة.</p></div></footer>
-</body></html>
+    <nav class="border-b border-[#dfe6d5] bg-white">
+        <div class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+            <a href="/" class="text-3xl font-black text-[#31421e]">إحسان</a>
+            <div class="flex items-center gap-2 sm:gap-3">
+                @auth
+                    <a href="{{ route('dashboard') }}"
+                        class="rounded-xl bg-[#31421e] px-4 py-2.5 text-sm font-bold text-white sm:px-6">لوحة التحكم</a>
+                @else
+                    <a href="{{ route('login') }}"
+                        class="rounded-xl px-3 py-2.5 text-sm font-bold text-[#31421e] hover:bg-[#eef2e8] sm:px-5">تسجيل
+                        الدخول</a>
+                    <a href="{{ route('register.choose') }}"
+                        class="rounded-xl bg-[#31421e] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#52643a] sm:px-6">إنشاء
+                        حساب</a>
+                @endauth
+            </div>
+        </div>
+    </nav>
+    <main>
+        <section class="overflow-hidden bg-[#eef2e8]">
+            <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-2 lg:px-8">
+                <div>
+                    <span
+                        class="inline-flex rounded-full bg-white px-4 py-2 text-sm font-bold text-[#52643a] shadow-sm">معًا
+                        لحياة أكثر دفئًا واطمئنانًا</span>
+                    <h1 class="mt-6 text-4xl font-black leading-tight text-[#243416] sm:text-5xl lg:text-6xl">العطاء
+                        أقرب،<br>
+                        <span class="text-[#718256]">والرعاية أسهل.</span>
+                    </h1>
+                    <p class="mt-6 max-w-xl text-base leading-8 text-slate-600 sm:text-lg">منصة إحسان تجمع كبار السن
+                        بالمتطوعين الموثوقين لتقديم المساندة اليومية والخدمات الإنسانية بخصوصية وأمان.</p>
+                    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                        <a href="{{ route('register.choose') }}"
+                            class="rounded-xl bg-[#31421e] px-7 py-3.5 text-center font-bold text-white shadow-lg hover:bg-[#52643a]">ابدأ
+                            الآن</a>
+                        <a href="#how"
+                            class="rounded-xl border-2 border-[#718256] px-7 py-3.5 text-center font-bold text-[#52643a] hover:bg-white">كيف
+                            تعمل المنصة؟</a>
+                    </div>
+                </div>
+                <div class="hidden lg:block">
+                    <img src="{{ asset('assets/img/hero-image.jpeg') }}" alt="رعاية ومساندة كبار السن"
+                        class="h-[500px] w-full rounded-[2rem] object-cover shadow-2xl">
+                </div>
+            </div>
+        </section>
+        <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+            <div class="mx-auto max-w-2xl text-center">
+                <p class="font-bold text-[#718256]">لماذا إحسان؟</p>
+                <h2 class="mt-2 text-3xl font-black text-[#31421e] sm:text-4xl">خدمة إنسانية موثوقة</h2>
+            </div>
+            <div class="mt-12 grid gap-5 md:grid-cols-3">
+                <article class="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
+                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eef2e8] text-2xl">✓
+                    </div>
+                    <h3 class="text-xl font-extrabold text-[#31421e]">متطوعون موثوقون</h3>
+                    <p class="mt-3 text-sm leading-7 text-slate-500">بيانات ووثائق تساعد على بناء مجتمع آمن وموثوق
+                        لتقديم الخدمة.</p>
+                </article>
+                <article class="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
+                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eef2e8] text-2xl">♡
+                    </div>
+                    <h3 class="text-xl font-extrabold text-[#31421e]">رعاية باحترام</h3>
+                    <p class="mt-3 text-sm leading-7 text-slate-500">تجربة بسيطة تراعي احتياجات كبار السن وتحفظ خصوصيتهم
+                        وكرامتهم.</p>
+                </article>
+                <article class="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
+                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#eef2e8] text-2xl">⌁
+                    </div>
+                    <h3 class="text-xl font-extrabold text-[#31421e]">وصول أسهل</h3>
+                    <p class="mt-3 text-sm leading-7 text-slate-500">خطوات واضحة للتسجيل والوصول إلى الحساب وإدارة
+                        البيانات بسهولة.</p>
+                </article>
+            </div>
+        </section>
+        <section id="how" class="bg-[#31421e] text-white">
+            <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+                <div class="grid items-center gap-12 lg:grid-cols-2">
+                    <div>
+                        <p class="font-bold text-[#cdd9bd]">ثلاث خطوات فقط</p>
+                        <h2 class="mt-2 text-3xl font-black sm:text-4xl">ابدأ رحلتك مع إحسان</h2>
+                        <p class="mt-4 leading-8 text-[#e6ecde]">اختر نوع حسابك، أكمل بياناتك، ثم ادخل إلى لوحة التحكم
+                            الخاصة بك.</p>
+                    </div>
+                    <ol class="grid gap-4">
+                        <li class="flex gap-4 rounded-2xl bg-white/10 p-5">
+                            <span class="font-black text-[#cdd9bd]">01</span>
+                            <div>
+                                <h3 class="font-extrabold">اختر نوع الحساب</h3>
+                                <p class="mt-1 text-sm text-[#dfe6d5]">كبير سن أو متطوع.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4 rounded-2xl bg-white/10 p-5">
+                            <span class="font-black text-[#cdd9bd]">02</span>
+                            <div>
+                                <h3 class="font-extrabold">أكمل نموذج التسجيل</h3>
+                                <p class="mt-1 text-sm text-[#dfe6d5]">بيانات واضحة ضمن مراحل قصيرة.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4 rounded-2xl bg-white/10 p-5">
+                            <span class="font-black text-[#cdd9bd]">03</span>
+                            <div>
+                                <h3 class="font-extrabold">ادخل إلى حسابك</h3>
+                                <p class="mt-1 text-sm text-[#dfe6d5]">تابع ملفك وخدماتك من مكان واحد.</p>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+        <section class="px-4 py-16 text-center sm:py-24">
+            <h2 class="text-3xl font-black text-[#31421e] sm:text-4xl">مساحة صغيرة للعطاء، أثر كبير في الحياة</h2>
+            <p class="mx-auto mt-4 max-w-2xl leading-8 text-slate-500">انضم إلى مجتمع إحسان وكن جزءًا من تجربة رعاية
+                أكثر قربًا وإنسانية.</p>
+            <a href="{{ route('register.choose') }}"
+                class="mt-7 inline-flex rounded-xl bg-[#31421e] px-8 py-3.5 font-bold text-white shadow-lg hover:bg-[#52643a]">إنشاء
+                حساب جديد</a>
+        </section>
+    </main>
+    <footer class="border-t border-slate-200 bg-white">
+        <div
+            class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-7 text-sm text-slate-500 sm:flex-row sm:px-6 lg:px-8">
+            <span class="text-xl font-black text-[#31421e]">إحسان</span>
+            <p>© {{ date('Y') }} منصة إحسان. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+</body>
+
+</html>

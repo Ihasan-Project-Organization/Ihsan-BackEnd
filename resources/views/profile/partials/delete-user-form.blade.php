@@ -1,1 +1,24 @@
-<section><h2 class="text-lg font-black text-red-800">حذف الحساب</h2><p class="mt-2 text-sm leading-7 text-slate-500">سيتم حذف الحساب وبياناته ووثائقه نهائيًا.</p><button type="button" x-data x-on:click.prevent="$dispatch('open-modal','confirm-user-deletion')" class="mt-5 rounded-xl border border-red-200 px-5 py-2.5 text-sm font-bold text-red-700 hover:bg-red-50">حذف حسابي</button><x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable><form method="POST" action="{{ route('profile.destroy') }}" class="p-6 text-right sm:p-8">@csrf @method('delete')<h2 class="text-xl font-black text-slate-900">هل أنت متأكد من حذف الحساب؟</h2><p class="mt-2 text-sm leading-7 text-slate-500">أدخل كلمة المرور لتأكيد الحذف النهائي.</p><input name="password" type="password" placeholder="كلمة المرور" class="mt-6 w-full rounded-xl border-slate-300 px-4 py-3 focus:border-red-400 focus:ring-red-400"><x-input-error class="mt-2" :messages="$errors->userDeletion->get('password')" /><div class="mt-6 flex justify-end gap-3"><button type="button" x-on:click="$dispatch('close')" class="rounded-xl border border-slate-300 px-5 py-2.5 font-bold">إلغاء</button><button class="rounded-xl bg-red-700 px-5 py-2.5 font-bold text-white hover:bg-red-800">تأكيد الحذف</button></div></form></x-modal></section>
+<section>
+    <h2 class="text-lg font-black text-red-800">حذف الحساب</h2>
+    <p class="mt-2 text-sm leading-7 text-slate-500">سيتم حذف الحساب وبياناته ووثائقه نهائيًا.</p>
+    <button type="button" x-data x-on:click.prevent="$dispatch('open-modal','confirm-user-deletion')"
+        class="mt-5 rounded-xl border border-red-200 px-5 py-2.5 text-sm font-bold text-red-700 hover:bg-red-50">حذف
+        حسابي</button>
+    <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
+        <form method="POST" action="{{ route('profile.destroy') }}" class="p-6 text-right sm:p-8">
+            @csrf
+            @method('delete')
+            <h2 class="text-xl font-black text-slate-900">هل أنت متأكد من حذف الحساب؟</h2>
+            <p class="mt-2 text-sm leading-7 text-slate-500">أدخل كلمة المرور لتأكيد الحذف النهائي.</p>
+            <input name="password" type="password" placeholder="كلمة المرور"
+                class="mt-6 w-full rounded-xl border-slate-300 px-4 py-3 focus:border-red-400 focus:ring-red-400">
+            <x-input-error class="mt-2" :messages="$errors->userDeletion->get('password')" />
+            <div class="mt-6 flex justify-end gap-3">
+                <button type="button" x-on:click="$dispatch('close')"
+                    class="rounded-xl border border-slate-300 px-5 py-2.5 font-bold">إلغاء</button>
+                <button class="rounded-xl bg-red-700 px-5 py-2.5 font-bold text-white hover:bg-red-800">تأكيد
+                    الحذف</button>
+            </div>
+        </form>
+    </x-modal>
+</section>

@@ -1,4 +1,29 @@
 <x-app-layout>
-    <x-slot name="header"><div><p class="text-sm font-bold text-[#718256]">إعدادات الحساب</p><h1 class="mt-1 text-2xl font-black text-[#31421e]">الملف الشخصي</h1></div></x-slot>
-    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8"><div class="grid gap-6 lg:grid-cols-[1fr_360px]"><div class="space-y-6"><div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">@include('profile.partials.update-profile-information-form')</div><div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">@include('profile.partials.update-password-form')</div></div><aside class="space-y-6"><div class="rounded-2xl bg-[#31421e] p-6 text-white"><div class="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-xl font-black">{{ mb_substr($user->name, 0, 1) }}</div><h2 class="mt-4 text-xl font-black">{{ $user->name }}</h2><p class="mt-1 break-all text-sm text-[#dfe6d5]">{{ $user->email }}</p><span class="mt-4 inline-flex rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold">{{ $user->account_type === 'volunteer' ? 'متطوع' : 'كبير سن' }}</span></div><div class="rounded-2xl border border-red-100 bg-white p-6 shadow-sm">@include('profile.partials.delete-user-form')</div></aside></div></div>
+    <x-slot name="header">
+        <div>
+            <p class="text-sm font-bold text-[#718256]">إعدادات الحساب</p>
+            <h1 class="mt-1 text-2xl font-black text-[#31421e]">الملف الشخصي</h1>
+        </div>
+    </x-slot>
+    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+        <div class="grid gap-6 lg:grid-cols-[1fr_360px]">
+            <div class="space-y-6">
+                <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+                    @include('profile.partials.update-profile-information-form')</div>
+                <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+                    @include('profile.partials.update-password-form')</div>
+            </div>
+            <aside class="space-y-6">
+                <div class="rounded-2xl bg-[#31421e] p-6 text-white">
+                    <div class="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-xl font-black">
+                        {{ mb_substr($user->name, 0, 1) }}</div>
+                    <h2 class="mt-4 text-xl font-black">{{ $user->name }}</h2>
+                    <p class="mt-1 break-all text-sm text-[#dfe6d5]">{{ $user->email }}</p>
+                    <span
+                        class="mt-4 inline-flex rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold">{{ $user->account_type === 'volunteer' ? 'متطوع' : 'كبير سن' }}</span>
+                </div>
+                <div class="rounded-2xl border border-red-100 bg-white p-6 shadow-sm">@include('profile.partials.delete-user-form')</div>
+            </aside>
+        </div>
+    </div>
 </x-app-layout>

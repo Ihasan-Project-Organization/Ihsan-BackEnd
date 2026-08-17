@@ -1,31 +1,22 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+    <div class="text-center">
+        <h1 class="text-2xl font-black text-[#31421e]">توثيق البريد الإلكتروني</h1>
+        <p class="mt-3 text-sm leading-7 text-slate-500">أرسلنا رابط التوثيق إلى بريدك. افتح الرسالة واضغط على الرابط
+            لإكمال التوثيق.</p>
     </div>
-
-    @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-        </div>
+    @if (session('status') === 'verification-link-sent')
+        <div class="mt-5 rounded-xl bg-emerald-50 p-4 text-sm font-bold text-emerald-800">تم إرسال رابط توثيق جديد.</div>
     @endif
-
-    <div class="mt-4 flex items-center justify-between">
-        <form method="POST" action="{{ route('verification.send') }}">
-            @csrf
-
-            <div>
-                <x-primary-button>
-                    {{ __('Resend Verification Email') }}
-                </x-primary-button>
-            </div>
+    <div class="mt-7 grid gap-3 sm:grid-cols-2">
+        <form method="POST" action="{{ route('verification.send') }}">@csrf
+            <button class="w-full rounded-xl bg-[#31421e] px-5 py-3 font-bold text-white hover:bg-[#52643a]">إعادة
+                إرسال
+                الرابط</button>
         </form>
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-
-            <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                {{ __('Log Out') }}
-            </button>
+        <form method="POST" action="{{ route('logout') }}">@csrf
+            <button
+                class="w-full rounded-xl border-2 border-[#718256] px-5 py-3 font-bold text-[#52643a] hover:bg-[#eef2e8]">تسجيل
+                الخروج</button>
         </form>
     </div>
 </x-guest-layout>
