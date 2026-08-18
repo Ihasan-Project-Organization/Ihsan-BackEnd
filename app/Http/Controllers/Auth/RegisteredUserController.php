@@ -52,6 +52,7 @@ class RegisteredUserController extends Controller
                     'email' => $validated['email'],
                     'password' => Hash::make($validated['password']),
                     'account_type' => $validated['account_type'],
+                    'role' => $validated['account_type'] === 'volunteer' ? 'provider' : 'elder',
                 ]);
 
                 $user->registrationProfile()->create([
