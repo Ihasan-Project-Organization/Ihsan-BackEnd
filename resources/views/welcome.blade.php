@@ -6,9 +6,6 @@
     <meta name="description" content="إحسان منصة تربط كبار السن بمتطوعين موثوقين لتقديم المساندة والرعاية اليومية.">
     <meta name="theme-color" content="#24472f">
     <title>إحسان | العطاء أقرب</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         [data-reveal].reveal-ready {
@@ -55,24 +52,24 @@
     </style>
 </head>
 
-<body class="overflow-x-hidden bg-[#fbfaf6] text-[#24352a] antialiased" style="font-family: 'Alexandria', sans-serif;">
+<body class="overflow-x-hidden bg-[#fbfaf6] text-[#24352a] antialiased">
     <header class="relative z-50 border-b border-[#24472f]/10 bg-[#fbfaf6]/95 backdrop-blur-xl">
         <nav class="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10" aria-label="التنقل الرئيسي">
             <a href="{{ url('/') }}" class="flex items-center gap-3" aria-label="العودة إلى الرئيسية">
                 <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#24472f] text-xl font-extrabold text-white shadow-[0_8px_24px_rgba(36,71,47,0.2)]">إ</span>
-                <span class="text-2xl font-extrabold tracking-tight text-[#24472f]">إحسان</span>
+                <span class="hidden text-2xl font-extrabold tracking-tight text-[#24472f] sm:inline">إحسان</span>
             </a>
             <div class="hidden items-center gap-8 text-sm font-medium text-[#506057] md:flex">
                 <a href="#about" class="transition hover:text-[#24472f]">عن إحسان</a>
                 <a href="#services" class="transition hover:text-[#24472f]">خدماتنا</a>
                 <a href="#how" class="transition hover:text-[#24472f]">كيف نعمل؟</a>
             </div>
-            <div class="flex items-center gap-2 sm:gap-3">
+            <div class="flex items-center gap-1 sm:gap-3">
                 @auth
                     <a href="{{ route('dashboard') }}" class="rounded-xl bg-[#24472f] px-4 py-3 text-xs font-semibold text-white transition hover:bg-[#315f40] sm:px-6 sm:text-sm">لوحة التحكم</a>
                 @else
-                    <a href="{{ route('login') }}" class="rounded-xl px-3 py-3 text-xs font-semibold text-[#24472f] transition hover:bg-[#edf1e9] sm:px-5 sm:text-sm">دخول</a>
-                    <a href="{{ route('register.choose') }}" class="rounded-xl bg-[#24472f] px-4 py-3 text-xs font-semibold text-white shadow-[0_8px_24px_rgba(36,71,47,0.16)] transition hover:-translate-y-0.5 hover:bg-[#315f40] sm:px-6 sm:text-sm">انضم إلينا</a>
+                    <a href="{{ route('login') }}" class="rounded-xl px-2.5 py-3 text-xs font-semibold text-[#24472f] transition hover:bg-[#edf1e9] sm:px-5 sm:text-sm">دخول</a>
+                    <a href="{{ route('register.choose') }}" class="rounded-xl bg-[#24472f] px-3 py-3 text-xs font-semibold text-white shadow-[0_8px_24px_rgba(36,71,47,0.16)] transition hover:-translate-y-0.5 hover:bg-[#315f40] sm:px-6 sm:text-sm">انضم إلينا</a>
                 @endauth
             </div>
         </nav>
@@ -83,7 +80,7 @@
             <div class="hero-glow pointer-events-none absolute -right-24 top-4 h-72 w-72 rounded-full bg-[#dfe9d7]/70 blur-3xl"></div>
             <div class="pointer-events-none absolute -left-32 bottom-0 h-80 w-80 rounded-full bg-[#eadfc8]/60 blur-3xl"></div>
             <div class="relative mx-auto grid max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:px-10">
-                <div class="order-2 lg:order-1" data-reveal>
+                <div class="order-1" data-reveal>
                     <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-[#24472f]/10 bg-white px-4 py-2 text-xs font-semibold text-[#315f40] shadow-sm sm:text-sm">
                         <span class="h-2 w-2 rounded-full bg-[#df9b52]"></span>
                         مساحة آمنة للرعاية والعطاء
@@ -117,13 +114,13 @@
                     </div>
                 </div>
 
-                <div class="order-1 lg:order-2" data-reveal="left">
+                <div class="order-2" data-reveal="left">
                     <div class="relative mx-auto max-w-[470px]">
                         <div class="absolute -inset-5 rotate-3 rounded-[2.5rem] bg-[#dfe9d7]"></div>
                         <div class="absolute -left-6 -top-6 h-24 w-24 rounded-full border border-[#b87536]/25"></div>
                         <div class="absolute -left-10 -top-10 h-36 w-36 rounded-full border border-[#b87536]/10"></div>
                         <div class="relative overflow-hidden rounded-[2.25rem] border-[6px] border-white bg-[#eee8d9] shadow-[0_30px_70px_rgba(36,71,47,0.18)]">
-                            <img src="{{ asset('assets/img/hero-image.jpeg') }}" alt="متطوع يساند أحد كبار السن بابتسامة واهتمام" class="h-[490px] w-full object-cover sm:h-[600px]" fetchpriority="high">
+                            <img src="{{ asset('assets/img/hero-image.jpeg') }}" alt="متطوع يساند أحد كبار السن بابتسامة واهتمام" class="h-[400px] w-full object-cover sm:h-[560px] lg:h-[600px]" fetchpriority="high">
                             <div class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#173020]/75 to-transparent"></div>
                             <div class="absolute bottom-6 left-6 right-6 text-white">
                                 <p class="text-xs font-light text-white/80">رسالتنا</p>

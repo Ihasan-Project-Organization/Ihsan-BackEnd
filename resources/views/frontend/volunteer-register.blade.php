@@ -8,29 +8,29 @@
 </head>
 
 <body class="min-h-screen bg-[#f3eee5] font-sans text-slate-800 antialiased">
-    <main class="mx-auto min-h-screen max-w-7xl bg-white shadow-xl sm:my-6 sm:min-h-0 sm:rounded-3xl">
+    <main class="mx-auto min-h-screen w-full max-w-7xl bg-white shadow-xl sm:my-6 sm:min-h-0 sm:w-[calc(100%-3rem)] sm:rounded-3xl">
         <header class="grid overflow-hidden bg-[#eef2e8] lg:grid-cols-[280px_1fr] sm:rounded-t-3xl">
-            <img src="{{ asset('assets/img/vol.jpeg') }}" alt="متطوع" class="hidden h-52 w-full object-cover lg:block">
-            <div class="flex items-center justify-between gap-4 px-5 py-7 sm:px-10">
-                <div>
+            <img src="{{ asset('assets/img/vol.jpeg') }}" alt="متطوع" class="block h-40 w-full object-cover sm:h-48 lg:h-52">
+            <div class="flex flex-col items-start gap-4 px-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:py-7">
+                <div class="min-w-0">
                     <p class="text-sm font-bold text-[#718256]">منصة إحسان</p>
-                    <h1 class="mt-1 text-2xl font-extrabold text-[#31421e] sm:text-3xl">إنشاء حساب متطوع</h1>
+                    <h1 class="mt-1 text-xl font-extrabold leading-[1.7] text-[#31421e] sm:text-3xl">إنشاء حساب متطوع</h1>
                     <p class="mt-2 text-sm text-slate-600">انضم إلى مقدمي الخدمة خلال ثلاث خطوات.</p>
                 </div>
                 <a href="{{ route('frontend.login') }}"
-                    class="shrink-0 rounded-xl border border-[#718256] px-3 py-2 text-sm font-bold text-[#52643a] hover:bg-white sm:px-5">الرجوع</a>
+                    class="min-h-11 shrink-0 rounded-xl border border-[#718256] px-4 py-2.5 text-sm font-bold text-[#52643a] hover:bg-white sm:px-5">الرجوع</a>
             </div>
         </header>
-        <div class="px-4 py-7 sm:px-10 sm:py-10">
-            <ol class="mx-auto mb-9 grid max-w-3xl grid-cols-3 gap-2">
+        <div class="px-3 py-6 sm:px-10 sm:py-10">
+            <ol class="mx-auto mb-7 grid max-w-3xl grid-cols-3 gap-1.5 sm:mb-9 sm:gap-2">
                 <li
-                    class="step-indicator rounded-xl bg-[#31421e] px-2 py-3 text-center text-xs font-bold text-white sm:text-sm">
+                    class="step-indicator rounded-lg bg-[#31421e] px-1 py-3 text-center text-[10px] font-bold leading-5 text-white sm:rounded-xl sm:px-2 sm:text-sm">
                     1. المعلومات</li>
                 <li
-                    class="step-indicator rounded-xl bg-slate-100 px-2 py-3 text-center text-xs font-bold text-slate-500 sm:text-sm">
+                    class="step-indicator rounded-lg bg-slate-100 px-1 py-3 text-center text-[10px] font-bold leading-5 text-slate-500 sm:rounded-xl sm:px-2 sm:text-sm">
                     2. الوثائق</li>
                 <li
-                    class="step-indicator rounded-xl bg-slate-100 px-2 py-3 text-center text-xs font-bold text-slate-500 sm:text-sm">
+                    class="step-indicator rounded-lg bg-slate-100 px-1 py-3 text-center text-[10px] font-bold leading-5 text-slate-500 sm:rounded-xl sm:px-2 sm:text-sm">
                     3. المراجعة</li>
             </ol>
 

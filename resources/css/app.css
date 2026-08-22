@@ -1,3 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    html {
+        overflow-x: hidden;
+    }
+
+    body,
+    button,
+    input,
+    select,
+    textarea {
+        font-family: 'Alexandria', sans-serif;
+    }
+
+    body {
+        min-width: 320px;
+        overflow-x: hidden;
+    }
+
+    img,
+    svg,
+    video {
+        max-width: 100%;
+    }
+
+    input,
+    select,
+    textarea {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    h1 {
+        line-height: 1.65;
+        overflow-wrap: break-word;
+        text-wrap: balance;
+        text-shadow: 0 2px 8px rgb(36 71 47 / 0.08);
+    }
+
+    h2 {
+        line-height: 1.7;
+        overflow-wrap: break-word;
+        text-wrap: balance;
+        text-shadow: 0 2px 8px rgb(36 71 47 / 0.08);
+    }
+
+    h3 {
+        line-height: 1.65;
+        overflow-wrap: break-word;
+        text-shadow: 0 2px 8px rgb(36 71 47 / 0.08);
+    }
+
+    p,
+    a,
+    label,
+    span {
+        overflow-wrap: break-word;
+    }
+}
