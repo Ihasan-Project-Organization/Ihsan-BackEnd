@@ -7,21 +7,21 @@
     <title>تسجيل المتطوع | إحسان</title>@vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="min-h-screen bg-[#f3eee5] font-sans text-slate-800 antialiased">
-    <main class="mx-auto min-h-screen w-full max-w-7xl bg-white shadow-xl sm:my-6 sm:min-h-0 sm:w-[calc(100%-3rem)] sm:rounded-3xl">
-        <header class="grid overflow-hidden bg-[#eef2e8] lg:grid-cols-[280px_1fr] sm:rounded-t-3xl">
+<body class="min-h-screen w-full overflow-x-hidden bg-[#f3eee5] font-sans text-slate-800 antialiased">
+    <main class="mx-auto min-h-screen w-full min-w-0 max-w-7xl overflow-x-hidden bg-white shadow-xl sm:my-6 sm:min-h-0 sm:w-[calc(100%-3rem)] sm:rounded-3xl">
+        <header class="grid w-full min-w-0 overflow-hidden bg-[#eef2e8] lg:grid-cols-[280px_minmax(0,1fr)] sm:rounded-t-3xl">
             <img src="{{ asset('assets/img/vol.jpeg') }}" alt="متطوع" class="block h-40 w-full object-cover sm:h-48 lg:h-52">
-            <div class="flex flex-col items-start gap-4 px-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:py-7">
-                <div class="min-w-0">
+            <div class="flex w-full min-w-0 flex-col items-start gap-4 px-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:py-7">
+                <div class="w-full min-w-0 sm:w-auto">
                     <p class="text-sm font-bold text-[#718256]">منصة إحسان</p>
-                    <h1 class="mt-1 text-xl font-extrabold leading-[1.7] text-[#31421e] sm:text-3xl">إنشاء حساب متطوع</h1>
-                    <p class="mt-2 text-sm text-slate-600">انضم إلى مقدمي الخدمة خلال ثلاث خطوات.</p>
+                    <h1 class="mt-1 max-w-full break-words text-xl font-extrabold leading-[1.7] text-[#31421e] sm:text-3xl">إنشاء حساب متطوع</h1>
+                    <p class="mt-2 max-w-full break-words text-sm leading-7 text-slate-600">انضم إلى مقدمي الخدمة خلال ثلاث خطوات.</p>
                 </div>
                 <a href="{{ route('frontend.login') }}"
                     class="min-h-11 shrink-0 rounded-xl border border-[#718256] px-4 py-2.5 text-sm font-bold text-[#52643a] hover:bg-white sm:px-5">الرجوع</a>
             </div>
         </header>
-        <div class="px-3 py-6 sm:px-10 sm:py-10">
+        <div class="w-full min-w-0 px-3 py-6 sm:px-10 sm:py-10">
             <ol class="mx-auto mb-7 grid max-w-3xl grid-cols-3 gap-1.5 sm:mb-9 sm:gap-2">
                 <li
                     class="step-indicator rounded-lg bg-[#31421e] px-1 py-3 text-center text-[10px] font-bold leading-5 text-white sm:rounded-xl sm:px-2 sm:text-sm">
@@ -45,7 +45,7 @@
             @endif
 
             <form id="registrationForm" method="POST" action="{{ route('register') }}" enctype="multipart/form-data"
-                class="mx-auto max-w-4xl">
+                class="mx-auto w-full min-w-0 max-w-4xl">
 
                 @csrf
                 <input type="hidden" name="account_type" value="volunteer">
