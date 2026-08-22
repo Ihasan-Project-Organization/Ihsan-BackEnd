@@ -18,6 +18,10 @@ services:
         value: "false"
       - key: APP_KEY
         sync: false
+      - key: APP_URL
+        value: https://ihsan-backend-ybyl.onrender.com
+      - key: ASSET_URL
+        value: https://ihsan-backend-ybyl.onrender.com
       - key: LOG_CHANNEL
         value: stderr
       - key: LOG_LEVEL
