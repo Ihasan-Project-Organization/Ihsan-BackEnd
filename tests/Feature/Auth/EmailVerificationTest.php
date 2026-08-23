@@ -28,7 +28,7 @@ test('email can be verified', function () {
 
     Event::assertDispatched(Verified::class);
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
-    $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
+    $response->assertRedirect(route('dashboard', absolute: false) . '?verified=1');
 });
 
 test('email is not verified with invalid hash', function () {
@@ -44,3 +44,14 @@ test('email is not verified with invalid hash', function () {
 
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });
+
+test('email verification notification uses Ehsan branding', function () {
+    \Illuminate\Support\Facades\Notification::fake();
+
+    $user = User::factory()->unverified()->create();
+
+    $this->actingAs($user)->post('/email/verification-notification');
+
+    \Illuminate\Support\Facades\Notification::assertSentTo($user, \App\Notifications\EhsanVerifyEmailNotification::class);
+});
+
