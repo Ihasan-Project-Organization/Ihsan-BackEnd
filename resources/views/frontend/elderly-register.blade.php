@@ -27,10 +27,10 @@
             <ol class="mx-auto mb-7 grid max-w-3xl grid-cols-3 gap-1.5 sm:mb-9 sm:gap-2" aria-label="مراحل التسجيل">
                 <li
                     class="step-indicator rounded-lg bg-[#31421e] px-1 py-3 text-center text-[10px] font-bold leading-5 text-white sm:rounded-xl sm:px-2 sm:text-sm">
-                    1. المعلومات</li>
+                    1. المعلومات والسكن</li>
                 <li
                     class="step-indicator rounded-lg bg-slate-100 px-1 py-3 text-center text-[10px] font-bold leading-5 text-slate-500 sm:rounded-xl sm:px-2 sm:text-sm">
-                    2. السكن</li>
+                    2. المرفقات (اختياري)</li>
                 <li
                     class="step-indicator rounded-lg bg-slate-100 px-1 py-3 text-center text-[10px] font-bold leading-5 text-slate-500 sm:rounded-xl sm:px-2 sm:text-sm">
                     3. المراجعة</li>
@@ -46,15 +46,18 @@
                 </div>
             @endif
 
-            <form id="registrationForm" method="POST" action="{{ route('register') }}" class="mx-auto w-full min-w-0 max-w-4xl">
+            <form id="registrationForm" method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="mx-auto w-full min-w-0 max-w-4xl">
 
                 @csrf
                 <input type="hidden" name="account_type" value="elderly">
+
+                {{-- المرحلة الأولى: المعلومات والسكن --}}
                 <section class="form-step" data-step="1">
                     <div class="grid gap-5 md:grid-cols-2">
                         <div>
                             <label for="name" class="mb-2 block text-sm font-bold">الاسم بالكامل</label>
                             <input id="name" name="name" value="{{ old('name') }}" required
+                                placeholder="مثال: أحمد محمد علي"
                                 class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
                         </div>
                         <div>
@@ -71,52 +74,94 @@
                         <div>
                             <label for="email" class="mb-2 block text-sm font-bold">البريد الإلكتروني</label>
                             <input id="email" name="email" type="email" value="{{ old('email') }}" required
+                                placeholder="name@example.com"
                                 class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
                         </div>
-                        <div>
-                            <label for="password" class="mb-2 block text-sm font-bold">كلمة المرور</label>
-                            <input id="password" name="password" type="password" minlength="8" required
-                                autocomplete="new-password"
-                                class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
-                        </div>
-                        <div>
-                            <label for="password_confirmation" class="mb-2 block text-sm font-bold">تأكيد كلمة
-                                المرور</label>
-                            <input id="password_confirmation" name="password_confirmation" type="password"
-                                minlength="8" required autocomplete="new-password"
-                                class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
-                        </div>
-                    </div>
-                </section>
-                <section class="form-step hidden" data-step="2">
-                    <div class="grid gap-5 md:grid-cols-2">
                         <div>
                             <label for="city" class="mb-2 block text-sm font-bold">المدينة / المنطقة</label>
                             <input id="city" name="city" value="{{ old('city') }}" required
+                                placeholder="مثال: الرياض / حي النرجس"
                                 class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
                         </div>
                         <div>
                             <label for="address" class="mb-2 block text-sm font-bold">العنوان التفصيلي</label>
                             <input id="address" name="address" value="{{ old('address') }}" required
+                                placeholder="الشارع، رقم المبنى، المعلم القريب"
                                 class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
                         </div>
-                        <div>
+                        <div class="md:col-span-2">
                             <label for="housing_type" class="mb-2 block text-sm font-bold">نوع السكن</label>
                             <select id="housing_type" name="housing_type" required
                                 class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
                                 <option value="">اختر نوع السكن</option>
-                                <option value="apartment">شقة</option>
-                                <option value="house">منزل مستقل</option>
-                                <option value="family">سكن مع العائلة</option>
+                                <option value="apartment" {{ old('housing_type') === 'apartment' ? 'selected' : '' }}>شقة</option>
+                                <option value="house" {{ old('housing_type') === 'house' ? 'selected' : '' }}>منزل مستقل</option>
+                                <option value="family" {{ old('housing_type') === 'family' ? 'selected' : '' }}>سكن مع العائلة</option>
                             </select>
                         </div>
                         <div>
-                            <label for="extra_info" class="mb-2 block text-sm font-bold">معلومات إضافية</label>
-                            <textarea id="extra_info" name="extra_info" rows="3"
+                            <label for="password" class="mb-2 block text-sm font-bold">كلمة المرور</label>
+                            <input id="password" name="password" type="password" minlength="8" required
+                                autocomplete="new-password" placeholder="••••••••"
+                                class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
+                        </div>
+                        <div>
+                            <label for="password_confirmation" class="mb-2 block text-sm font-bold">تأكيد كلمة المرور</label>
+                            <input id="password_confirmation" name="password_confirmation" type="password"
+                                minlength="8" required autocomplete="new-password" placeholder="••••••••"
+                                class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="extra_info" class="mb-2 block text-sm font-bold">معلومات إضافية أو ملاحظات صحية (اختياري)</label>
+                            <textarea id="extra_info" name="extra_info" rows="2"
+                                placeholder="أي تفاصيل ترغب بمشاركتها لمساعدتنا في تقديم رعاية أفضل..."
                                 class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">{{ old('extra_info') }}</textarea>
                         </div>
                     </div>
                 </section>
+
+                {{-- المرحلة الثانية: المرفقات والصور (اختياري) --}}
+                <section class="form-step hidden" data-step="2">
+                    <div class="mb-6 rounded-2xl bg-[#eef2e8] p-5 text-[#31421e]">
+                        <div class="flex items-center gap-3">
+                            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#31421e] text-lg text-white">ℹ</span>
+                            <div>
+                                <h3 class="font-extrabold">خطوة اختيارية</h3>
+                                <p class="mt-1 text-xs leading-6 text-slate-600 sm:text-sm">
+                                    يمكنك تخطي هذه الخطوة والضغط على "التالي" مباشرة، أو إرفاق صورة الهوية وصورتك الشخصية لتسهيل التحقق والتعرف.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-5 md:grid-cols-2">
+                        <label
+                            class="group flex min-h-52 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-6 text-center transition hover:border-[#718256] hover:bg-[#eef2e8]">
+                            <span class="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-bold text-slate-600 group-hover:bg-[#dfe6d5] group-hover:text-[#31421e]">اختياري</span>
+                            <span class="mt-3 text-lg font-extrabold text-[#31421e]">صورة الهوية الشخصية</span>
+                            <span class="mt-1 text-xs text-slate-500">PNG أو JPG أو PDF (حد أقصى 5MB)</span>
+                            <input id="id_document" name="id_document" type="file"
+                                accept="image/png,image/jpeg,application/pdf"
+                                class="mt-4 block w-full max-w-xs text-sm file:ml-3 file:rounded-lg file:border-0 file:bg-[#31421e] file:px-4 file:py-2 file:font-bold file:text-white">
+                        </label>
+
+                        <label
+                            class="group flex min-h-52 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-6 text-center transition hover:border-[#718256] hover:bg-[#eef2e8]">
+                            <span class="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-bold text-slate-600 group-hover:bg-[#dfe6d5] group-hover:text-[#31421e]">اختياري</span>
+                            <span class="mt-3 text-lg font-extrabold text-[#31421e]">الصورة الشخصية</span>
+                            <span class="mt-1 text-xs text-slate-500">PNG أو JPG (حد أقصى 5MB)</span>
+                            <input id="profile_photo" name="profile_photo" type="file"
+                                accept="image/png,image/jpeg"
+                                class="mt-4 block w-full max-w-xs text-sm file:ml-3 file:rounded-lg file:border-0 file:bg-[#31421e] file:px-4 file:py-2 file:font-bold file:text-white">
+                        </label>
+                    </div>
+
+                    <div class="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs leading-6 text-slate-600">
+                        🔒 تُعامل جميع الوثائق والصور بسرية وأمان تام وفق أعلى معايير الخصوصية.
+                    </div>
+                </section>
+
+                {{-- المرحلة الثالثة: المراجعة --}}
                 <section class="form-step hidden" data-step="3">
                     <h2 class="mb-5 text-xl font-extrabold text-[#31421e]">راجع بياناتك قبل إنشاء الحساب</h2>
                     <div id="reviewGrid" class="grid gap-3 sm:grid-cols-2">
@@ -126,6 +171,7 @@
                             class="mt-1 rounded border-slate-300 text-[#31421e] focus:ring-[#718256]">أوافق على الشروط
                         والأحكام وسياسة الخصوصية.</label>
                 </section>
+
                 <div class="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-center">
                     <button id="prevButton" type="button"
                         class="hidden rounded-xl border-2 border-[#31421e] px-8 py-3 font-bold text-[#31421e] hover:bg-[#eef2e8]">السابق</button>
@@ -182,15 +228,20 @@
 
         function review() {
             const type = value('housing_type');
+            const idDocFile = value('id_document').files[0]?.name;
+            const profilePhotoFile = value('profile_photo').files[0]?.name;
+
             const data = [
-                ['الاسم', value('name').value],
+                ['الاسم بالكامل', value('name').value],
                 ['تاريخ الميلاد', value('dob').value],
-                ['الجوال', value('phone').value],
-                ['البريد', value('email').value],
-                ['المدينة', value('city').value],
-                ['العنوان', value('address').value],
-                ['نوع السكن', type.options[type.selectedIndex]?.text],
-                ['معلومات إضافية', value('extra_info').value || 'لا يوجد']
+                ['رقم الجوال', value('phone').value],
+                ['البريد الإلكتروني', value('email').value],
+                ['المدينة / المنطقة', value('city').value],
+                ['العنوان التفصيلي', value('address').value],
+                ['نوع السكن', type.options[type.selectedIndex]?.text || 'غير محدد'],
+                ['معلومات إضافية', value('extra_info').value || 'لا يوجد'],
+                ['صورة الهوية الشخصية', idDocFile || 'لم يتم إرفاق ملف (اختياري)'],
+                ['الصورة الشخصية', profilePhotoFile || 'لم يتم إرفاق صورة (اختياري)']
             ];
             document.getElementById('reviewGrid').innerHTML = data.map(([k, v]) => `<div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
 <span class="block text-xs font-bold text-slate-500">${k}</span>

@@ -26,7 +26,7 @@ class RegisteredUserController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'account_type' => ['required', Rule::in(['elderly', 'volunteer'])],
             'dob' => ['required', 'date', 'before:today'],
@@ -36,14 +36,13 @@ class RegisteredUserController extends Controller
             'address' => ['required_if:account_type,elderly', 'nullable', 'string', 'max:1000'],
             'housing_type' => ['required_if:account_type,elderly', 'nullable', Rule::in(['apartment', 'house', 'family'])],
             'extra_info' => ['nullable', 'string', 'max:2000'],
-            'id_document' => ['required_if:account_type,volunteer', 'nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
-            'conduct_document' => ['required_if:account_type,volunteer', 'nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
+            'id_document' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120', 'required_if:account_type,volunteer'],
         ]);
 
         $documentPaths = [
             'identity' => $request->file('id_document')?->store('registration-documents/identity', 'public'),
             'conduct' => $request->file('conduct_document')?->store('registration-documents/conduct', 'public'),
-        ];
+            'profile_photo' => $request->file('profile_photo')?->store('registration-documents/personal-photos', 'public'),
 
         try {
             $user = DB::transaction(function () use ($validated, $documentPaths) {
@@ -63,7 +62,7 @@ class RegisteredUserController extends Controller
                     'housing_type' => $validated['housing_type'] ?? null,
                     'extra_info' => $validated['extra_info'] ?? null,
                     'identity_document_path' => $documentPaths['identity'],
-                    'conduct_document_path' => $documentPaths['conduct'],
+                    'profile_photo_path' => $documentPaths['profile_photo'],
                 ]);
 
                 return $user;

@@ -54,7 +54,34 @@ test('elderly registration details are stored', function () {
         'phone' => '0591234567',
         'city' => 'Gaza',
         'housing_type' => 'apartment',
+        'identity_document_path' => null,
+        'profile_photo_path' => null,
     ]);
+});
+
+test('elderly registration with optional documents and profile photo', function () {
+    Storage::fake('public');
+
+    $this->post('/register', [
+        'name' => 'Elderly With Docs',
+        'email' => 'elderly.docs@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+        'account_type' => 'elderly',
+        'dob' => '1955-05-05',
+        'phone' => '0599998877',
+        'city' => 'Riyadh',
+        'address' => 'King Fahd Road',
+        'housing_type' => 'house',
+        'id_document' => UploadedFile::fake()->image('elderly_id.png'),
+        'profile_photo' => UploadedFile::fake()->image('elderly_avatar.jpg'),
+    ])->assertRedirect(route('dashboard', absolute: false));
+
+    $profile = RegistrationProfile::where('phone', '0599998877')->firstOrFail();
+    expect($profile->identity_document_path)->not->toBeNull();
+    expect($profile->profile_photo_path)->not->toBeNull();
+    Storage::disk('public')->assertExists($profile->identity_document_path);
+    Storage::disk('public')->assertExists($profile->profile_photo_path);
 });
 
 test('volunteer details and documents are stored', function () {

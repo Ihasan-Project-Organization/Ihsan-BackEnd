@@ -19,6 +19,7 @@ class RegistrationProfile extends Model
         'housing_type',
         'extra_info',
         'identity_document_path',
+        'profile_photo_path',
         'conduct_document_path',
     ];
 
