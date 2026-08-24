@@ -43,6 +43,7 @@ class RegisteredUserController extends Controller
             'identity' => $request->file('id_document')?->store('registration-documents/identity', 'public'),
             'conduct' => $request->file('conduct_document')?->store('registration-documents/conduct', 'public'),
             'profile_photo' => $request->file('profile_photo')?->store('registration-documents/personal-photos', 'public'),
+        ];
 
         try {
             $user = DB::transaction(function () use ($validated, $documentPaths) {
