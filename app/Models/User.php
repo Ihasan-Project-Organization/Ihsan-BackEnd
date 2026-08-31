@@ -56,6 +56,38 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(RegistrationProfile::class);
     }
 
+    /**
+     * طلبات الخدمة المنشأة من قبل هذا المستخدم (كبير السن).
+     */
+    public function serviceRequests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ServiceRequest::class, 'user_id');
+    }
+
+    /**
+     * طلبات الخدمة المسندة إلى هذا المستخدم (المتطوع).
+     */
+    public function assignedServiceRequests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ServiceRequest::class, 'assigned_provider_id');
+    }
+
+    /**
+     * التقييمات المعطاة.
+     */
+    public function givenReviews(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ServiceReview::class, 'elderly_id');
+    }
+
+    /**
+     * التقييمات المستلمة.
+     */
+    public function receivedReviews(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ServiceReview::class, 'provider_id');
+    }
+
     public function sendPasswordResetNotification($token): void
     {
         $this->notify(new EhsanResetPasswordNotification($token));
