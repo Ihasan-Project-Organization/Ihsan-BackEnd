@@ -75,11 +75,38 @@ class ServiceRequestController extends Controller
         $serviceRequest = DB::transaction(function () use ($request, $validated) {
             $publicId = ServiceRequest::generatePublicId();
 
+            $titleLower = mb_strtolower($validated['title']);
+            $serviceType = 'grocery';
+            if (str_contains($titleLower, 'دواء') || str_contains($titleLower, 'صيدلية')) {
+                $serviceType = 'medicine';
+            } elseif (str_contains($titleLower, 'مرافقة') || str_contains($titleLower, 'طبي') || str_contains($titleLower, 'مستشفى') || str_contains($titleLower, 'عيادة')) {
+                $serviceType = 'medical_escort';
+            } elseif (str_contains($titleLower, 'منزل') || str_contains($titleLower, 'تنظيف') || str_contains($titleLower, 'ترتيب')) {
+                $serviceType = 'home_help';
+            }
+
+            $district = 'حي الرمال';
+            $loc = $validated['location'];
+            if (str_contains($loc, 'النصر')) {
+                $district = 'حي النصر';
+            } elseif (str_contains($loc, 'الشيخ رضوان')) {
+                $district = 'الشيخ رضوان';
+            } elseif (str_contains($loc, 'تل الهوا')) {
+                $district = 'تل الهوا';
+            } elseif (str_contains($loc, 'دير البلح')) {
+                $district = 'دير البلح';
+            } elseif (str_contains($loc, 'خانيونس')) {
+                $district = 'خانيونس';
+            }
+
             $serviceRequest = $request->user()->serviceRequests()->create([
                 'public_id' => $publicId,
                 'title' => $validated['title'],
+                'service_type' => $serviceType,
                 'description' => $validated['description'],
                 'location' => $validated['location'],
+                'district' => $district,
+                'distance_km' => round(mt_rand(12, 45) / 10, 1),
                 'scheduled_at' => $validated['scheduled_at'],
                 'status' => ServiceRequest::STATUS_PENDING_ACCEPTANCE,
                 'attempts_count' => 1,

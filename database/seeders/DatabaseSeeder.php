@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ProviderSetting;
 use App\Models\RequestAttempt;
 use App\Models\ServiceRequest;
 use App\Models\ServiceReview;
@@ -17,8 +18,48 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. حساب كبير سن رئيسي للتجربة
-        $elderly = User::firstOrCreate(
+        // 1. حساب مقدم الخدمة الرئيسي (محمد أحمد) كما في وثيقة ولقطات النظام
+        $providerMain = User::updateOrCreate(
+            ['email' => 'mohammed@ihsan.com'],
+            [
+                'name' => 'محمد أحمد',
+                'password' => Hash::make('password'),
+                'account_type' => 'volunteer',
+                'email_verified_at' => now(),
+            ]
+        );
+
+        $providerMain->registrationProfile()->updateOrCreate(
+            ['user_id' => $providerMain->id],
+            [
+                'date_of_birth' => '1995-06-15',
+                'phone' => '0599112233',
+                'identity_number' => '402891234',
+                'city' => 'مدينة غزة',
+                'address' => 'حي الرمال',
+            ]
+        );
+
+        // إعدادات التوفر ومؤشرات الالتزام لمحمد أحمد (مطابقة لصفحات 4 و 20 و 21)
+        ProviderSetting::updateOrCreate(
+            ['user_id' => $providerMain->id],
+            [
+                'available_days' => ['sat', 'sun', 'mon', 'tue', 'wed', 'thu'],
+                'available_from' => '08:00:00',
+                'available_to' => '18:00:00',
+                'is_available' => true,
+                'offered_services' => ['grocery', 'medical_escort', 'medicine', 'home_help'],
+                'service_city' => 'مدينة غزة',
+                'coverage_radius_km' => 5,
+                'commitment_score' => 92,
+                'punctuality_rate' => 94,
+                'completion_rate' => 97,
+                'response_rate' => 88,
+            ]
+        );
+
+        // 2. حساب كبير السن الرئيسي (أبو أحمد التميمي)
+        $elderly = User::updateOrCreate(
             ['email' => 'elderly@ihsan.com'],
             [
                 'name' => 'الحاج أبو أحمد التميمي',
@@ -33,306 +74,285 @@ class DatabaseSeeder extends Seeder
             [
                 'date_of_birth' => '1952-04-15',
                 'phone' => '0599123456',
-                'city' => 'غزة',
+                'city' => 'مدينة غزة',
                 'address' => 'حي الرمال - شارع الوحدة بجوار صيدلية الشفاء',
                 'housing_type' => 'apartment',
-                'extra_info' => 'أعاني من صعوبة طفيفة في الحركة وأحتاج مساعدة دورية في إحضار الأدوية.',
+                'extra_info' => 'أعاني من صعوبة طفيفة في الحركة وأحتاج مساعدة دورية في إحضار الأدوية والتسوق.',
             ]
         );
 
-        // 2. حسابات متطوعين للتجربة
-        $volunteer1 = User::firstOrCreate(
-            ['email' => 'volunteer1@ihsan.com'],
+        // كبير سن إضافي
+        $elderly2 = User::updateOrCreate(
+            ['email' => 'elderly2@ihsan.com'],
             [
-                'name' => 'ليان محمود',
+                'name' => 'الحاجة أم إبراهيم النجار',
                 'password' => Hash::make('password'),
-                'account_type' => 'volunteer',
+                'account_type' => 'elderly',
                 'email_verified_at' => now(),
             ]
         );
 
-        $volunteer1->registrationProfile()->updateOrCreate(
-            ['user_id' => $volunteer1->id],
+        $elderly2->registrationProfile()->updateOrCreate(
+            ['user_id' => $elderly2->id],
             [
-                'date_of_birth' => '1998-07-20',
-                'phone' => '0599887766',
-                'identity_number' => '402198765',
-                'city' => 'غزة',
-                'address' => 'حي النصر',
+                'date_of_birth' => '1950-09-20',
+                'phone' => '0599654321',
+                'city' => 'مدينة غزة',
+                'address' => 'حي النصر - بالقرب من العيادة الصحية',
+                'housing_type' => 'house',
             ]
         );
 
-        $volunteer2 = User::firstOrCreate(
-            ['email' => 'volunteer2@ihsan.com'],
-            [
-                'name' => 'يوسف خالد',
-                'password' => Hash::make('password'),
-                'account_type' => 'volunteer',
-                'email_verified_at' => now(),
-            ]
-        );
-
-        $volunteer2->registrationProfile()->updateOrCreate(
-            ['user_id' => $volunteer2->id],
-            [
-                'date_of_birth' => '1996-03-12',
-                'phone' => '0599112233',
-                'identity_number' => '401987654',
-                'city' => 'غزة',
-                'address' => 'حي تل الهوى',
-            ]
-        );
-
-        $volunteer3 = User::firstOrCreate(
-            ['email' => 'volunteer3@ihsan.com'],
-            [
-                'name' => 'سامر علي',
-                'password' => Hash::make('password'),
-                'account_type' => 'volunteer',
-                'email_verified_at' => now(),
-            ]
-        );
-
-        $volunteer3->registrationProfile()->updateOrCreate(
-            ['user_id' => $volunteer3->id],
-            [
-                'date_of_birth' => '1995-11-05',
-                'phone' => '0599334455',
-                'identity_number' => '403456789',
-                'city' => 'غزة',
-                'address' => 'حي الدرج',
-            ]
-        );
-
-        // 3. إدخال طلبات تغطي كافة التبويبات والمسارات الـ 5 المذكورة في ملفات النظام
-
-        // -------------------------------------------------------------
-        // مسار 1: بانتظار قبول مقدم خدمة (تبويب: النشطة)
-        // -------------------------------------------------------------
-        $req1 = ServiceRequest::updateOrCreate(
-            ['public_id' => '#REQ-1045'],
+        // 3. طلبات متاحة بانتظار مقدمي خدمة (صفحة 6 بالملف)
+        $avail1 = ServiceRequest::updateOrCreate(
+            ['public_id' => '#REQ-1050'],
             [
                 'user_id' => $elderly->id,
-                'title' => 'شراء أغراض واحتياجات منزلية',
-                'description' => 'شراء بعض الاحتياجات المنزلية الأساسية من السوبرماركت (خضار وحليب وخبز).',
-                'location' => 'حي النصر - بالقرب من مسجد النصر',
-                'scheduled_at' => Carbon::now()->addDays(2)->setHour(11)->setMinute(0),
+                'title' => 'شراء أغراض منزلية',
+                'service_type' => 'grocery',
+                'description' => 'شراء أدوية وبعض الاحتياجات من متجر قريب وتسليم الفاتورة.',
+                'location' => 'حي الرمال - شارع الوحدة',
+                'district' => 'حي الرمال',
+                'distance_km' => 1.8,
+                'scheduled_at' => Carbon::today()->setTime(16, 30),
                 'status' => ServiceRequest::STATUS_PENDING_ACCEPTANCE,
                 'attempts_count' => 1,
             ]
         );
-        $req1->attempts()->updateOrCreate(['attempt_number' => 1], [
-            'scheduled_at' => $req1->scheduled_at,
-            'location' => $req1->location,
+        $avail1->attempts()->updateOrCreate(['attempt_number' => 1], [
+            'scheduled_at' => $avail1->scheduled_at,
+            'location' => $avail1->location,
             'outcome' => 'pending',
-            'notes' => 'المحاولة الأولى لإنشاء ونشر الطلب',
+            'notes' => 'المحاولة الأولى لنشر الطلب',
         ]);
 
-        // -------------------------------------------------------------
-        // مسار 2: تم قبول الطلب (تبويب: النشطة)
-        // -------------------------------------------------------------
-        $req2 = ServiceRequest::updateOrCreate(
-            ['public_id' => '#REQ-1044'],
+        $avail2 = ServiceRequest::updateOrCreate(
+            ['public_id' => '#REQ-1051'],
             [
-                'user_id' => $elderly->id,
-                'assigned_provider_id' => $volunteer1->id,
-                'title' => 'زيارة اجتماعية وقراءة بعض الرسائل',
-                'description' => 'زيارة ودية ومساعدة في قراءة بعض الخطابات العائلية والجريدة.',
-                'location' => 'حي الرمال - شارع الوحدة',
-                'scheduled_at' => Carbon::now()->addDay()->setHour(17)->setMinute(0),
-                'status' => ServiceRequest::STATUS_ACCEPTED,
+                'user_id' => $elderly2->id,
+                'title' => 'مرافقة إلى موعد طبي',
+                'service_type' => 'medical_escort',
+                'description' => 'مرافقة المستفيد إلى عيادة قريبة والعودة إلى المنزل بعد الفحص.',
+                'location' => 'حي النصر - العيادة المركزية',
+                'district' => 'حي النصر',
+                'distance_km' => 2.4,
+                'scheduled_at' => Carbon::tomorrow()->setTime(9, 0),
+                'status' => ServiceRequest::STATUS_PENDING_ACCEPTANCE,
                 'attempts_count' => 1,
-                'accepted_at' => Carbon::now()->subHours(2),
             ]
         );
-        $req2->attempts()->updateOrCreate(['attempt_number' => 1], [
-            'provider_id' => $volunteer1->id,
-            'scheduled_at' => $req2->scheduled_at,
-            'location' => $req2->location,
+        $avail2->attempts()->updateOrCreate(['attempt_number' => 1], [
+            'scheduled_at' => $avail2->scheduled_at,
+            'location' => $avail2->location,
             'outcome' => 'pending',
-            'notes' => 'تم قبول الطلب من قبل المتطوعة ليان محمود',
+            'notes' => 'المحاولة الأولى لنشر الطلب',
         ]);
 
-        // -------------------------------------------------------------
-        // مسار 3: قيد التنفيذ (تبويب: النشطة)
-        // -------------------------------------------------------------
-        $req3 = ServiceRequest::updateOrCreate(
-            ['public_id' => '#REQ-1040'],
+        $avail3 = ServiceRequest::updateOrCreate(
+            ['public_id' => '#REQ-1052'],
             [
                 'user_id' => $elderly->id,
-                'assigned_provider_id' => $volunteer2->id,
-                'title' => 'مرافقة للمستشفى للعيادة الخارجية',
-                'description' => 'المساعدة في الوصول إلى مجمع الشفاء الطبي والعودة إلى المنزل بعد مراجعة الطبيب.',
-                'location' => 'حي الرمال - شارع الوحدة إلى مجمع الشفاء',
-                'scheduled_at' => Carbon::now()->setHour(9)->setMinute(15),
-                'status' => ServiceRequest::STATUS_IN_PROGRESS,
-                'attempts_count' => 1,
-                'accepted_at' => Carbon::now()->subHours(3),
-                'started_at' => Carbon::now()->subMinutes(20),
-            ]
-        );
-        $req3->attempts()->updateOrCreate(['attempt_number' => 1], [
-            'provider_id' => $volunteer2->id,
-            'scheduled_at' => $req3->scheduled_at,
-            'location' => $req3->location,
-            'outcome' => 'in_progress',
-            'notes' => 'بدأ المتطوع يوسف خالد في تنفيذ المهمة والمرافقة',
-        ]);
-
-        // -------------------------------------------------------------
-        // مسار 4: بانتظار تأكيد كبير السن (تبويب: النشطة)
-        // -------------------------------------------------------------
-        $req4 = ServiceRequest::updateOrCreate(
-            ['public_id' => '#REQ-1034'],
-            [
-                'user_id' => $elderly->id,
-                'assigned_provider_id' => $volunteer3->id,
-                'title' => 'مساعدة منزلية في ترتيب الاحتياجات',
-                'description' => 'أنهى مقدم الخدمة المهمة ومساعدة الحاج في ترتيب الأغراض المنزلية الثقيلة.',
-                'location' => 'حي الدرج',
-                'scheduled_at' => Carbon::now()->subHour(),
-                'status' => ServiceRequest::STATUS_PENDING_CONFIRMATION,
-                'attempts_count' => 1,
-                'accepted_at' => Carbon::now()->subHours(4),
-                'started_at' => Carbon::now()->subHour(),
-            ]
-        );
-        $req4->attempts()->updateOrCreate(['attempt_number' => 1], [
-            'provider_id' => $volunteer3->id,
-            'scheduled_at' => $req4->scheduled_at,
-            'location' => $req4->location,
-            'outcome' => 'pending_confirmation',
-            'notes' => 'المتطوع سامر علي أتم المساعدة وبانتظار تأكيد الحاج',
-        ]);
-
-        // -------------------------------------------------------------
-        // مسار 5: لم يتم العثور على مقدم خدمة (تبويب: بحاجة إلى إجراء)
-        // -------------------------------------------------------------
-        $req5 = ServiceRequest::updateOrCreate(
-            ['public_id' => '#REQ-1042'],
-            [
-                'user_id' => $elderly->id,
-                'title' => 'شراء دواء الضغط من صيدلية الشفاء',
-                'description' => 'إحضار دواء الضغط والسكري من صيدلية الشفاء مع إحضار الفاتورة.',
-                'location' => 'حي الرمال - شارع الوحدة',
-                'scheduled_at' => Carbon::now()->subHours(5),
-                'status' => ServiceRequest::STATUS_NO_PROVIDER_FOUND,
+                'title' => 'إحضار دواء',
+                'service_type' => 'medicine',
+                'description' => 'إحضار وصفة طبية شهرية من الصيدلية المركزية.',
+                'location' => 'حي الرمال - صيدلية الشفاء',
+                'district' => 'حي الرمال',
+                'distance_km' => 3.1,
+                'scheduled_at' => Carbon::tomorrow()->setTime(14, 0),
+                'status' => ServiceRequest::STATUS_PENDING_ACCEPTANCE,
                 'attempts_count' => 1,
             ]
         );
-        $req5->attempts()->updateOrCreate(['attempt_number' => 1], [
-            'scheduled_at' => $req5->scheduled_at,
-            'location' => $req5->location,
-            'outcome' => 'no_provider',
-            'notes' => 'انتهى موعد التنفيذ دون قبول من أي متطوع',
-        ]);
 
-        // -------------------------------------------------------------
-        // مسار 6: اعتذر مقدم الخدمة (تبويب: بحاجة إلى إجراء)
-        // -------------------------------------------------------------
-        $req6 = ServiceRequest::updateOrCreate(
-            ['public_id' => '#REQ-1036'],
+        $avail4 = ServiceRequest::updateOrCreate(
+            ['public_id' => '#REQ-1053'],
             [
-                'user_id' => $elderly->id,
-                'title' => 'مساعدة بسيطة في ترتيب الاحتياجات',
-                'description' => 'اعتذر مقدم الخدمة عمر ناصر لظرف طارئ بعد القبول.',
+                'user_id' => $elderly2->id,
+                'title' => 'مساعدة منزلية خفيفة',
+                'service_type' => 'home_help',
+                'description' => 'المساعدة في إعادة ترتيب بعض الصناديق والاحتياجات المنزلية الخفيفة.',
                 'location' => 'حي النصر',
-                'scheduled_at' => Carbon::now()->subDay(),
-                'status' => ServiceRequest::STATUS_PROVIDER_APOLOGIZED,
+                'district' => 'حي النصر',
+                'distance_km' => 4.0,
+                'scheduled_at' => Carbon::today()->addDays(2)->setTime(11, 0),
+                'status' => ServiceRequest::STATUS_PENDING_ACCEPTANCE,
                 'attempts_count' => 1,
             ]
         );
-        $req6->attempts()->updateOrCreate(['attempt_number' => 1], [
-            'provider_id' => $volunteer2->id,
-            'scheduled_at' => $req6->scheduled_at,
-            'location' => $req6->location,
-            'outcome' => 'apologized',
-            'notes' => 'اعتذر المتطوع بسبب ظرف صحي طارئ',
-        ]);
 
-        // -------------------------------------------------------------
-        // مسار 7: مقدم الخدمة متأخر (تبويب: بحاجة إلى إجراء)
-        // -------------------------------------------------------------
-        $req7 = ServiceRequest::updateOrCreate(
-            ['public_id' => '#REQ-1039'],
+        // 4. مهام قادمة وجارية مسندة لمحمد أحمد (مطابقة للصور 8، 10، 13، 14)
+        
+        // مهمة 1: تم القبول (طلب رقم #1048 - شراء أغراض منزلية)
+        $taskAccepted = ServiceRequest::updateOrCreate(
+            ['public_id' => '#REQ-1048'],
             [
                 'user_id' => $elderly->id,
-                'assigned_provider_id' => $volunteer3->id,
-                'title' => 'مرافقة إلى العيادة الخارجية',
-                'description' => 'مرافقة لموعد في العيادة القريبة، انتهت مهلة الوصول المحددة دون بدء.',
-                'location' => 'حي الرمال',
-                'scheduled_at' => Carbon::now()->subMinutes(45),
-                'status' => ServiceRequest::STATUS_PROVIDER_DELAYED,
+                'assigned_provider_id' => $providerMain->id,
+                'title' => 'شراء أغراض منزلية',
+                'service_type' => 'grocery',
+                'description' => 'مساعدة في شراء خضراوات وفواكه وبعض المعلبات من المتجر القريب.',
+                'location' => 'حي الرمال - شارع الوحدة - عمارة الأمل ط3',
+                'district' => 'حي الرمال',
+                'distance_km' => 1.8,
+                'scheduled_at' => Carbon::now()->addMinutes(45),
+                'status' => ServiceRequest::STATUS_ACCEPTED,
+                'accepted_at' => Carbon::now()->subMinutes(15),
                 'attempts_count' => 1,
+            ]
+        );
+        $taskAccepted->attempts()->updateOrCreate(['attempt_number' => 1], [
+            'provider_id' => $providerMain->id,
+            'scheduled_at' => $taskAccepted->scheduled_at,
+            'location' => $taskAccepted->location,
+            'outcome' => 'accepted',
+            'notes' => 'تم قبول الطلب وإسناده لمحمد أحمد',
+        ]);
+
+        // مهمة 2: قيد التنفيذ (طلب رقم #1041 - مرافقة إلى موعد طبي)
+        $taskInProgress = ServiceRequest::updateOrCreate(
+            ['public_id' => '#REQ-1041'],
+            [
+                'user_id' => $elderly2->id,
+                'assigned_provider_id' => $providerMain->id,
+                'title' => 'مرافقة إلى موعد طبي',
+                'service_type' => 'medical_escort',
+                'description' => 'مرافقة الحاجة أم إبراهيم إلى عيادة العيون والانتظار معها حتى انتهاء الفحص.',
+                'location' => 'حي النصر - العيادة التخصصية',
+                'district' => 'حي النصر',
+                'distance_km' => 2.4,
+                'scheduled_at' => Carbon::now()->subMinutes(30),
+                'status' => ServiceRequest::STATUS_IN_PROGRESS,
                 'accepted_at' => Carbon::now()->subHours(2),
+                'on_the_way_at' => Carbon::now()->subMinutes(45),
+                'arrived_at' => Carbon::now()->subMinutes(30),
+                'started_at' => Carbon::now()->subMinutes(25),
+                'attempts_count' => 1,
             ]
         );
-        $req7->attempts()->updateOrCreate(['attempt_number' => 1], [
-            'provider_id' => $volunteer3->id,
-            'scheduled_at' => $req7->scheduled_at,
-            'location' => $req7->location,
-            'outcome' => 'delayed',
-            'notes' => 'تأخر المتطوع عن موعد الوصول المحدد',
+        $taskInProgress->attempts()->updateOrCreate(['attempt_number' => 1], [
+            'provider_id' => $providerMain->id,
+            'scheduled_at' => $taskInProgress->scheduled_at,
+            'location' => $taskInProgress->location,
+            'outcome' => 'in_progress',
+            'notes' => 'الخدمة جارية الآن مع الحاجة أم إبراهيم',
         ]);
 
-        // -------------------------------------------------------------
-        // مسار 8: تم تنفيذ الطلب مع تقييم (تبويب: المكتملة)
-        // -------------------------------------------------------------
-        $req8 = ServiceRequest::updateOrCreate(
-            ['public_id' => '#REQ-1028'],
+        // مهمة 3: بانتظار التأكيد (طلب رقم #1038 - إحضار دواء)
+        $taskPendingConfirm = ServiceRequest::updateOrCreate(
+            ['public_id' => '#REQ-1038'],
             [
                 'user_id' => $elderly->id,
-                'assigned_provider_id' => $volunteer1->id,
-                'title' => 'طلب دعم ومراجعة بعض الأوراق',
-                'description' => 'مساعدة في مراجعة وتنسيق بعض المعاملات والأوراق الرسمية.',
-                'location' => 'حي الرمال',
-                'scheduled_at' => Carbon::now()->subDays(3),
-                'status' => ServiceRequest::STATUS_COMPLETED,
+                'assigned_provider_id' => $providerMain->id,
+                'title' => 'إحضار دواء',
+                'service_type' => 'medicine',
+                'description' => 'إحضار أدوية السكري والضغط وتسليم الفاتورة للحاج.',
+                'location' => 'حي الرمال - شارع الوحدة',
+                'district' => 'حي الرمال',
+                'distance_km' => 1.5,
+                'scheduled_at' => Carbon::now()->subHours(2),
+                'status' => ServiceRequest::STATUS_PENDING_CONFIRMATION,
+                'accepted_at' => Carbon::now()->subHours(3),
+                'started_at' => Carbon::now()->subHours(2),
+                'completion_notes' => 'تم شراء كافة الأدوية الموصوفة وتسليم الإيصال للحاج أبو أحمد.',
                 'attempts_count' => 1,
-                'accepted_at' => Carbon::now()->subDays(3)->subHours(2),
-                'started_at' => Carbon::now()->subDays(3),
-                'completed_at' => Carbon::now()->subDays(3)->addHours(1),
             ]
         );
-        $req8->attempts()->updateOrCreate(['attempt_number' => 1], [
-            'provider_id' => $volunteer1->id,
-            'scheduled_at' => $req8->scheduled_at,
-            'location' => $req8->location,
-            'outcome' => 'completed',
-            'notes' => 'تم إنجاز المهمة بنجاح تام',
+        $taskPendingConfirm->attempts()->updateOrCreate(['attempt_number' => 1], [
+            'provider_id' => $providerMain->id,
+            'scheduled_at' => $taskPendingConfirm->scheduled_at,
+            'location' => $taskPendingConfirm->location,
+            'outcome' => 'pending_confirmation',
+            'notes' => 'أنهى محمد أحمد المهمة وبانتظار تأكيد المستفيد',
         ]);
+
+        // 5. مهام مكتملة مع تقييمات لمحمد أحمد (صفحة 20)
+        $completed1 = ServiceRequest::updateOrCreate(
+            ['public_id' => '#REQ-1030'],
+            [
+                'user_id' => $elderly->id,
+                'assigned_provider_id' => $providerMain->id,
+                'title' => 'مرافقة إلى موعد طبي',
+                'service_type' => 'medical_escort',
+                'description' => 'مرافقة المستفيد إلى عيادة الأسنان والعودة.',
+                'location' => 'حي الرمال',
+                'district' => 'حي الرمال',
+                'distance_km' => 2.0,
+                'scheduled_at' => Carbon::now()->subDays(2),
+                'status' => ServiceRequest::STATUS_COMPLETED,
+                'accepted_at' => Carbon::now()->subDays(2)->subHours(2),
+                'started_at' => Carbon::now()->subDays(2),
+                'completed_at' => Carbon::now()->subDays(2)->addHour(),
+                'completion_notes' => 'تمت المرافقة بنجاح وعودة الحاج إلى منزله بسلام.',
+                'attempts_count' => 1,
+            ]
+        );
         ServiceReview::updateOrCreate(
-            ['service_request_id' => $req8->id],
+            ['service_request_id' => $completed1->id],
             [
                 'elderly_id' => $elderly->id,
-                'provider_id' => $volunteer1->id,
+                'provider_id' => $providerMain->id,
                 'rating' => 5,
-                'comment' => 'متطوعة ممتازة ومهذبة جداً وساعدتني بكل أمانة وإخلاص، جزاها الله كل خير.',
+                'comment' => 'شاب خلوق ومحترم جداً، وصل قبل الموعد وساعدني بكل أدب وصبر. جزاه الله خيراً.',
             ]
         );
 
-        // -------------------------------------------------------------
-        // مسار 9: تم إلغاء الطلب (تبويب: ملفاة / ملغاة)
-        // -------------------------------------------------------------
-        $req9 = ServiceRequest::updateOrCreate(
-            ['public_id' => '#REQ-1021'],
+        $completed2 = ServiceRequest::updateOrCreate(
+            ['public_id' => '#REQ-1025'],
             [
-                'user_id' => $elderly->id,
-                'title' => 'شراء أغراض منزلية خفيفة',
-                'description' => 'طلب سابق تم إلغاؤه قبل أن يبدأ تنفيذه.',
-                'location' => 'حي الرمال - شارع الوحدة',
-                'scheduled_at' => Carbon::now()->subDays(5),
-                'status' => ServiceRequest::STATUS_CANCELLED,
+                'user_id' => $elderly2->id,
+                'assigned_provider_id' => $providerMain->id,
+                'title' => 'شراء أغراض منزلية',
+                'service_type' => 'grocery',
+                'description' => 'إحضار مواد غذائية ومستلزمات منزلية.',
+                'location' => 'حي النصر',
+                'district' => 'حي النصر',
+                'distance_km' => 2.5,
+                'scheduled_at' => Carbon::now()->subDays(4),
+                'status' => ServiceRequest::STATUS_COMPLETED,
+                'accepted_at' => Carbon::now()->subDays(4)->subHours(3),
+                'started_at' => Carbon::now()->subDays(4),
+                'completed_at' => Carbon::now()->subDays(4)->addHours(1),
+                'completion_notes' => 'تم تسليم كافة الأغراض بدقة.',
                 'attempts_count' => 1,
-                'cancelled_at' => Carbon::now()->subDays(5),
-                'cancellation_reason' => 'تمت المساعدة من أحد الأقارب ولم تعد الخدمة مطلوبة',
             ]
         );
-        $req9->attempts()->updateOrCreate(['attempt_number' => 1], [
-            'scheduled_at' => $req9->scheduled_at,
-            'location' => $req9->location,
-            'outcome' => 'cancelled',
-            'notes' => 'ألغي الطلب من قبل كبير السن',
-        ]);
+        ServiceReview::updateOrCreate(
+            ['service_request_id' => $completed2->id],
+            [
+                'elderly_id' => $elderly2->id,
+                'provider_id' => $providerMain->id,
+                'rating' => 5,
+                'comment' => 'خدمة ممتازة وسريعة، أمين جداً وأحضر كل شيء بدقة.',
+            ]
+        );
+
+        $completed3 = ServiceRequest::updateOrCreate(
+            ['public_id' => '#REQ-1018'],
+            [
+                'user_id' => $elderly->id,
+                'assigned_provider_id' => $providerMain->id,
+                'title' => 'إحضار دواء',
+                'service_type' => 'medicine',
+                'description' => 'إحضار أدوية من الصيدلية.',
+                'location' => 'حي الرمال',
+                'district' => 'حي الرمال',
+                'distance_km' => 1.2,
+                'scheduled_at' => Carbon::now()->subDays(7),
+                'status' => ServiceRequest::STATUS_COMPLETED,
+                'accepted_at' => Carbon::now()->subDays(7)->subHours(2),
+                'started_at' => Carbon::now()->subDays(7),
+                'completed_at' => Carbon::now()->subDays(7)->addMinutes(45),
+                'attempts_count' => 1,
+            ]
+        );
+        ServiceReview::updateOrCreate(
+            ['service_request_id' => $completed3->id],
+            [
+                'elderly_id' => $elderly->id,
+                'provider_id' => $providerMain->id,
+                'rating' => 4,
+                'comment' => 'بارك الله فيك، خدمة طيبة وتعامل ممتاز.',
+            ]
+        );
     }
 }

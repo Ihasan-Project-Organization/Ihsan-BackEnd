@@ -88,6 +88,55 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(ServiceReview::class, 'provider_id');
     }
 
+    /**
+     * إعدادات ومؤشرات مقدم الخدمة (المتطوع).
+     */
+    public function providerSetting(): HasOne
+    {
+        return $this->hasOne(ProviderSetting::class);
+    }
+
+    /**
+     * الطلبات المتجاوزة من قبل هذا المتطوع.
+     */
+    public function dismissedRequests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProviderDismissedRequest::class);
+    }
+
+    /**
+     * جلب أو إنشاء إعدادات التوفر والالتزام لمقدم الخدمة.
+     */
+    public function getOrCreateProviderSetting(): ProviderSetting
+    {
+        return $this->providerSetting()->firstOrCreate(
+            ['user_id' => $this->id],
+            [
+                'available_days' => ['sat', 'sun', 'mon', 'tue', 'wed', 'thu'],
+                'available_from' => '08:00:00',
+                'available_to' => '18:00:00',
+                'is_available' => true,
+                'offered_services' => ['grocery', 'medical_escort', 'medicine', 'home_help'],
+                'service_city' => 'مدينة غزة',
+                'coverage_radius_km' => 5,
+                'commitment_score' => 92,
+                'punctuality_rate' => 94,
+                'completion_rate' => 97,
+                'response_rate' => 88,
+            ]
+        );
+    }
+
+    public function isVolunteer(): bool
+    {
+        return $this->account_type === 'volunteer';
+    }
+
+    public function isElderly(): bool
+    {
+        return $this->account_type === 'elderly';
+    }
+
     public function sendPasswordResetNotification($token): void
     {
         $this->notify(new EhsanResetPasswordNotification($token));
