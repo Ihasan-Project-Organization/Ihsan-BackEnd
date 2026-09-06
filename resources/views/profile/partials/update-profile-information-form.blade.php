@@ -25,7 +25,6 @@
                 <x-input-error class="mt-2" :messages="$errors->get('email')" />
             </div>
 
-            {{-- TODO: reconnect in stage 3.2/3.3 --}}
         </div>
 
         @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())

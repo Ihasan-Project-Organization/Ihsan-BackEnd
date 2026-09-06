@@ -154,5 +154,37 @@ test('provider can access all provider main pages without any view errors', func
     $this->actingAs($provider)->get(route('provider.available'))->assertOk();
     $this->actingAs($provider)->get(route('provider.tasks'))->assertOk();
     $this->actingAs($provider)->get(route('provider.performance'))->assertOk();
+    $this->actingAs($provider)->get(route('provider.certificates'))->assertOk();
     $this->actingAs($provider)->get(route('provider.availability'))->assertOk();
+});
+
+test('provider can request and view volunteer certificate', function () {
+    $provider = makeApprovedProvider();
+    $elder = makeApprovedElder();
+
+    // إتمام خدمة تطوعية
+    \App\Models\ServiceRequest::create([
+        'public_id' => '#REQ-CERT-1',
+        'elder_id' => $elder->elderProfile->id,
+        'provider_id' => $provider->serviceProviderProfile->id,
+        'title' => 'مهمة منجزة للتطوع',
+        'service_type' => 'grocery',
+        'description' => 'وصف',
+        'location' => 'غزة',
+        'status' => \App\Models\ServiceRequest::STATUS_COMPLETED,
+        'scheduled_at' => now()->subDay(),
+        'completed_at' => now()->subHours(2),
+    ]);
+
+    // طلب إصدار الشهادة
+    $response = $this->actingAs($provider)->post(route('provider.certificates.request'));
+    $response->assertRedirect(route('provider.certificates'));
+    $response->assertSessionHas('status', 'certificate-issued');
+
+    expect($provider->serviceProviderProfile->volunteerCertificates()->count())->toBe(1);
+
+    // التحقق من عرض الشهادة في الصفحة
+    $viewResponse = $this->actingAs($provider)->get(route('provider.certificates'));
+    $viewResponse->assertOk();
+    $viewResponse->assertSee('CERT-');
 });

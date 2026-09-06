@@ -238,11 +238,10 @@ class DatabaseSeeder extends Seeder
             ]
         );
         Rating::updateOrCreate(
-            ['service_request_id' => $completed1->id],
+            ['service_request_id' => $completed1->id, 'rater_role' => 'elder'],
             [
                 'elderly_id' => $elderly->id,
                 'provider_id' => $providerMain->id,
-                'rater_role' => 'elder',
                 'stars' => 5,
                 'comment' => 'شاب خلوق ومحترم جداً، وصل قبل الموعد وساعدني بكل أدب وصبر. جزاه الله خيراً.',
                 'visible_to_provider' => true,
@@ -270,11 +269,10 @@ class DatabaseSeeder extends Seeder
             ]
         );
         Rating::updateOrCreate(
-            ['service_request_id' => $completed2->id],
+            ['service_request_id' => $completed2->id, 'rater_role' => 'elder'],
             [
                 'elderly_id' => $elderly2->id,
                 'provider_id' => $providerMain->id,
-                'rater_role' => 'elder',
                 'stars' => 5,
                 'comment' => 'خدمة ممتازة وسريعة، أمين جداً وأحضر كل شيء بدقة.',
                 'visible_to_provider' => true,
@@ -302,11 +300,10 @@ class DatabaseSeeder extends Seeder
             ]
         );
         Rating::updateOrCreate(
-            ['service_request_id' => $completed3->id],
+            ['service_request_id' => $completed3->id, 'rater_role' => 'elder'],
             [
                 'elderly_id' => $elderly->id,
                 'provider_id' => $providerMain->id,
-                'rater_role' => 'elder',
                 'stars' => 4,
                 'comment' => 'بارك الله فيك، خدمة طيبة وتعامل ممتاز.',
                 'visible_to_provider' => true,

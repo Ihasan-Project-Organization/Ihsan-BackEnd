@@ -54,6 +54,8 @@ Route::prefix('provider')->name('provider.')->middleware(['auth', 'verified', 'r
     Route::get('/available', [VolunteerTaskController::class, 'available'])->name('available');
     Route::get('/tasks', [VolunteerTaskController::class, 'myTasks'])->name('tasks');
     Route::get('/performance', [VolunteerTaskController::class, 'performance'])->name('performance');
+    Route::get('/certificates', [VolunteerTaskController::class, 'certificates'])->name('certificates');
+    Route::post('/certificates/request', [VolunteerTaskController::class, 'requestCertificate'])->name('certificates.request');
     Route::get('/availability', [VolunteerTaskController::class, 'availability'])->name('availability');
     Route::post('/availability', [VolunteerTaskController::class, 'updateAvailability'])->name('availability.update');
 

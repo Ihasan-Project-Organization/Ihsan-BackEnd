@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 
 class ServiceRequest extends Model
 {
@@ -169,11 +170,27 @@ class ServiceRequest extends Model
     }
 
     /**
-     * تقييم الخدمة للطلب المكتمل (توافقية مع الكود القديم).
+     * تقييم الخدمة للطلب المكتمل من كبير السن (توافقية مع الكود القديم).
      */
     public function review(): HasOne
     {
-        return $this->hasOne(Rating::class, 'service_request_id');
+        return $this->hasOne(Rating::class, 'service_request_id')->where('rater_role', 'elder');
+    }
+
+    /**
+     * تقييم كبير السن لمقدم الخدمة.
+     */
+    public function elderRating(): HasOne
+    {
+        return $this->hasOne(Rating::class, 'service_request_id')->where('rater_role', 'elder');
+    }
+
+    /**
+     * تقييم مقدم الخدمة لكبير السن.
+     */
+    public function providerRating(): HasOne
+    {
+        return $this->hasOne(Rating::class, 'service_request_id')->where('rater_role', 'provider');
     }
 
     /**
@@ -238,8 +255,46 @@ class ServiceRequest extends Model
      */
     public static function generatePublicId(): string
     {
-        $last = self::max('id') ?? 0;
-        $next = 1040 + $last + 1;
+        $driver = DB::connection()->getDriverName();
+        $maxNum = null;
+
+        try {
+            if ($driver === 'mysql') {
+                $maxNum = DB::table('requests')
+                    ->where('public_id', 'like', '#REQ-%')
+                    ->selectRaw('MAX(CAST(SUBSTRING(public_id, 6) AS UNSIGNED)) as max_num')
+                    ->value('max_num');
+            } elseif ($driver === 'sqlite') {
+                $maxNum = DB::table('requests')
+                    ->where('public_id', 'like', '#REQ-%')
+                    ->selectRaw('MAX(CAST(SUBSTR(public_id, 6) AS INTEGER)) as max_num')
+                    ->value('max_num');
+            }
+        } catch (\Throwable) {
+            $maxNum = null;
+        }
+
+        if ($maxNum === null || (int) $maxNum < 1000) {
+            $recentPublicIds = self::where('public_id', 'like', '#REQ-%')->pluck('public_id');
+            $highest = 1000;
+            foreach ($recentPublicIds as $pid) {
+                if (preg_match('/^#REQ-(\d+)$/', $pid, $m)) {
+                    $val = (int) $m[1];
+                    if ($val > $highest) {
+                        $highest = $val;
+                    }
+                }
+            }
+            $next = $highest + 1;
+        } else {
+            $next = (int) $maxNum + 1;
+        }
+
+        // ضمان عدم حدوث أي تكرار مع أي سجل حالي
+        while (self::where('public_id', '#REQ-' . $next)->exists()) {
+            $next++;
+        }
+
         return '#REQ-' . $next;
     }
 

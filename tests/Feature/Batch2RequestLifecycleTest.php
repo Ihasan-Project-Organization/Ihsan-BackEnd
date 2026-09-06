@@ -356,3 +356,65 @@ test('2.8 provider can optionally rate elder with visible_to_provider = false', 
         ->and($rating->visible_to_provider)->toBeFalse()
         ->and($rating->elderly_id)->toBe($elderUser->id);
 });
+
+test('2.9 elder can confirm completion and rate provider even when provider has already rated elder (both ratings coexist on same request)', function () {
+    [$elderUser, $elderProfile] = createElderUser();
+    [$providerUser, $providerProfile] = createProviderUser();
+
+    $req = ServiceRequest::create([
+        'public_id' => '#REQ-DUAL-RATING',
+        'elder_id' => $elderProfile->id,
+        'provider_id' => $providerProfile->id,
+        'title' => 'طلب تقييم مزدوج',
+        'service_type' => 'grocery',
+        'description' => 'شرح',
+        'location' => 'غزة',
+        'scheduled_at' => now()->subHours(2),
+        'status' => ServiceRequest::STATUS_PENDING_CONFIRMATION,
+    ]);
+
+    // Provider rates elder first
+    Rating::create([
+        'service_request_id' => $req->id,
+        'elderly_id' => $elderUser->id,
+        'provider_id' => $providerUser->id,
+        'rater_role' => 'provider',
+        'stars' => 4,
+        'comment' => 'متعاون جدا',
+        'visible_to_provider' => false,
+    ]);
+
+    // Elder now confirms completion and rates provider
+    $response = $this->actingAs($elderUser)
+        ->patch("/requests/{$req->id}/confirm", [
+            'stars' => 5,
+            'comment' => 'خدمة ممتازة وسريعة بارك الله فيك',
+        ]);
+
+    $response->assertRedirect('/requests?tab=completed');
+    $response->assertSessionHas('status', 'request-completed');
+
+    $req->refresh();
+    expect($req->status)->toBe(ServiceRequest::STATUS_COMPLETED);
+
+    // Both ratings should coexist on the same service request
+    $ratings = Rating::where('service_request_id', $req->id)->get();
+    expect($ratings)->toHaveCount(2);
+
+    $elderRating = $ratings->firstWhere('rater_role', 'elder');
+    $providerRating = $ratings->firstWhere('rater_role', 'provider');
+
+    expect($elderRating)->not->toBeNull()
+        ->and($elderRating->stars)->toBe(5)
+        ->and($elderRating->visible_to_provider)->toBeTrue();
+
+    expect($providerRating)->not->toBeNull()
+        ->and($providerRating->stars)->toBe(4)
+        ->and($providerRating->visible_to_provider)->toBeFalse();
+
+    // Verify model relationships
+    expect($req->review->id)->toBe($elderRating->id);
+    expect($req->elderRating->id)->toBe($elderRating->id);
+    expect($req->providerRating->id)->toBe($providerRating->id);
+});
+

@@ -51,6 +51,32 @@ test('elderly user can create a new service request', function () {
     expect($serviceRequest->public_id)->toStartWith('#REQ-');
 });
 
+test('consecutive requests generate unique sequential public_ids without collision', function () {
+    $user = User::factory()->create();
+    $elderProfile = ElderProfile::create([
+        'user_id' => $user->id,
+        'full_name' => $user->name,
+        'city' => 'غزة',
+    ]);
+
+    // Create 3 consecutive requests via POST
+    for ($i = 1; $i <= 3; $i++) {
+        $response = $this->actingAs($user)->post(route('service-requests.store'), [
+            'title' => "طلب رقم {$i}",
+            'description' => "تفاصيل الطلب {$i}",
+            'location' => 'حي الرمال',
+            'scheduled_at' => now()->addDays($i)->format('Y-m-d H:i:s'),
+        ]);
+        $response->assertSessionHas('status', 'request-created');
+    }
+
+    $requests = ServiceRequest::where('elder_id', $elderProfile->id)->get();
+    expect($requests)->toHaveCount(3);
+
+    $publicIds = $requests->pluck('public_id')->toArray();
+    expect(count(array_unique($publicIds)))->toBe(3);
+});
+
 test('rescheduling request maintains public_id', function () {
     $user = User::factory()->create();
     $elderProfile = ElderProfile::create([

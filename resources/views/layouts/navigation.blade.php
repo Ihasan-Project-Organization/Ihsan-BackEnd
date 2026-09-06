@@ -42,6 +42,11 @@
                         الأداء والتقييم
                     </a>
 
+                    <a href="{{ route('provider.certificates') }}"
+                        class="rounded-xl px-3 py-2 text-xs font-bold transition {{ request()->routeIs('provider.certificates*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
+                        شهادات التطوع
+                    </a>
+
                     <a href="{{ route('provider.availability') }}"
                         class="rounded-xl px-3 py-2 text-xs font-bold transition {{ request()->routeIs('provider.availability') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
                         التوفر والإعدادات
@@ -162,6 +167,10 @@
                 <a href="{{ route('provider.performance') }}"
                     class="flex items-center justify-between rounded-xl px-4 py-2.5 text-xs font-bold {{ request()->routeIs('provider.performance') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
                     <span>⭐ الأداء والتقييم</span>
+                </a>
+                <a href="{{ route('provider.certificates') }}"
+                    class="flex items-center justify-between rounded-xl px-4 py-2.5 text-xs font-bold {{ request()->routeIs('provider.certificates*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
+                    <span>📜 شهادات التطوع</span>
                 </a>
                 <a href="{{ route('provider.availability') }}"
                     class="flex items-center justify-between rounded-xl px-4 py-2.5 text-xs font-bold {{ request()->routeIs('provider.availability') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">

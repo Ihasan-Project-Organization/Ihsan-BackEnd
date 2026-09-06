@@ -10,7 +10,7 @@ window.openCreateRequestModal = function() {
     step: 1,
     title: '',
     description: '',
-    location: '', {{-- TODO: reconnect in stage 3.2/3.3 --}}
+    location: '',
     scheduled_at: '',
     serviceTypes: [
         { label: '💊 شراء دواء', val: 'شراء دواء من الصيدلية' },

@@ -7,6 +7,7 @@ use App\Models\Rating;
 use App\Models\ServiceProviderProfile;
 use App\Models\ServiceRequest;
 use App\Models\User;
+use App\Models\VolunteerCertificate;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -59,6 +60,11 @@ class VolunteerTaskController extends Controller
             ->take(3)
             ->get();
 
+        $tier = (int) ($setting?->tier ?? 1);
+        $nextTierTarget = $tier === 1 ? 10 : ($tier === 2 ? 30 : null);
+        $tasksToNextTier = $nextTierTarget ? max(0, $nextTierTarget - $completedCount) : 0;
+        $tierProgress = $nextTierTarget ? min(100, (int)(($completedCount / $nextTierTarget) * 100)) : 100;
+
         return view('provider.dashboard', compact(
             'provider',
             'setting',
@@ -69,7 +75,10 @@ class VolunteerTaskController extends Controller
             'availableCount',
             'nextTask',
             'recentTasks',
-            'previewAvailable'
+            'previewAvailable',
+            'tier',
+            'tasksToNextTier',
+            'tierProgress'
         ));
     }
 
@@ -204,19 +213,91 @@ class VolunteerTaskController extends Controller
 
         $avgRating = $provider->receivedReviews()->avg('stars') ?? 5.0;
 
+        $profile = $provider->serviceProviderProfile;
+        $tier = (int) ($profile?->tier ?? 1);
+        $nextTierTarget = $tier === 1 ? 10 : ($tier === 2 ? 30 : null);
+        $nextTierRatingTarget = $tier === 1 ? 4.0 : ($tier === 2 ? 4.3 : null);
+        $tasksToNextTier = $nextTierTarget ? max(0, $nextTierTarget - $totalServices) : 0;
+        $tierProgress = $nextTierTarget ? min(100, (int)(($totalServices / $nextTierTarget) * 100)) : 100;
+
         return view('provider.performance', compact(
             'provider',
+            'profile',
             'reviews',
             'totalServices',
             'fiveStarsCount',
             'onTimeCount',
             'apologiesCount',
-            'avgRating'
+            'avgRating',
+            'tier',
+            'nextTierTarget',
+            'nextTierRatingTarget',
+            'tasksToNextTier',
+            'tierProgress'
         ));
     }
 
     /**
-     * 5. إعدادات التوفر والتشغيل.
+     * 5. صفحة شهادات التطوع الرقمية.
+     */
+    public function certificates(Request $request): View
+    {
+        $provider = $request->user();
+        $profile = $provider->serviceProviderProfile;
+
+        $completedCount = $profile ? ServiceRequest::where('provider_id', $profile->id)
+            ->where('status', ServiceRequest::STATUS_COMPLETED)
+            ->count() : 0;
+
+        $certificates = $profile ? $profile->volunteerCertificates()->latest()->get() : collect();
+
+        // الساعات التقديرية (ساعة واحدة لكل مهمة مكتملة وفق المرجع)
+        $estimatedHours = $completedCount * 1;
+
+        return view('provider.certificates', compact(
+            'provider',
+            'profile',
+            'completedCount',
+            'estimatedHours',
+            'certificates'
+        ));
+    }
+
+    /**
+     * طلب إصدار شهادة تطوع رقمية جديدة.
+     */
+    public function requestCertificate(Request $request): RedirectResponse
+    {
+        $provider = $request->user();
+        $profile = $provider->serviceProviderProfile;
+
+        if (! $profile) {
+            return back()->with('error', 'الملف الشخصي لمقدم الخدمة غير مكتمل.');
+        }
+
+        $completedCount = ServiceRequest::where('provider_id', $profile->id)
+            ->where('status', ServiceRequest::STATUS_COMPLETED)
+            ->count();
+
+        if ($completedCount < 1) {
+            return back()->with('error', 'يجب إكمال خدمة تطوعية واحدة على الأقل لإصدار شهادة التطوع.');
+        }
+
+        // توليد رقم تسلسلي فريد للشهادة
+        $nextNum = ($profile->volunteerCertificates()->count() + 1);
+        $certNumber = 'CERT-' . strtoupper(substr(md5($profile->id . '_' . time()), 0, 6)) . '-' . str_pad((string)$nextNum, 3, '0', STR_PAD_LEFT);
+
+        $profile->volunteerCertificates()->create([
+            'certificate_number' => $certNumber,
+            'issued_at' => now(),
+        ]);
+
+        return redirect()->route('provider.certificates')
+            ->with('status', 'certificate-issued');
+    }
+
+    /**
+     * 6. إعدادات التوفر والتشغيل.
      */
     public function availability(Request $request): View
     {

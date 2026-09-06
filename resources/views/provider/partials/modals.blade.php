@@ -1,13 +1,13 @@
 {{-- Modal 1: إنهاء الخدمة وإرسال ملخص التنفيذ --}}
 <div id="finishServiceModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm transition-opacity" aria-modal="true" role="dialog">
     <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:p-8">
+        <div class="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:p-8 animate-fadeIn">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div class="flex items-center gap-3">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800 text-lg">✓</div>
+                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800 text-lg font-black">✓</div>
                     <div>
-                        <h3 class="text-xl font-black text-[#31421e]">إنهاء الخدمة</h3>
-                        <p class="text-xs text-slate-500">إرسال ملخص التنفيذ إلى كبير السن للتأكيد</p>
+                        <h3 class="text-lg font-black text-[#31421e]">إكمال وإنهاء الخدمة</h3>
+                        <p class="text-xs text-slate-500">إشعار كبير السن باكتمال الخدمة وبانتظار تأكيده</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeFinishServiceModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer">✕</button>
@@ -19,18 +19,18 @@
                 <div class="rounded-2xl bg-[#f8faf6] p-4 border border-[#dfe6d5]">
                     <div class="flex items-center gap-2 text-xs font-bold text-[#31421e]">
                         <span>ℹ️</span>
-                        <span>ملاحظة هامة</span>
+                        <span>ملاحظة تشغيلية</span>
                     </div>
                     <p class="mt-1 text-xs leading-5 text-slate-600">
-                        إنهاء الخدمة من طرفك سينقل الطلب إلى حالة "بانتظار التأكيد"، وسيتم إغلاق الطلب وتحديث سجلك بمجرد تأكيد كبير السن.
+                        إنهاء الخدمة سينقل الطلب إلى حالة "بانتظار التأكيد"، ويتم إغلاق الطلب رسمياً واحتسابه في سجلك فور تأكيد كبير السن.
                     </p>
                 </div>
 
                 <div class="flex items-center gap-3 pt-2">
-                    <button type="submit" class="flex-1 rounded-2xl bg-[#31421e] py-3 text-sm font-bold text-white shadow-md hover:bg-[#52643a] transition cursor-pointer">
+                    <button type="submit" class="flex-1 rounded-2xl bg-[#31421e] py-3 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-[#52643a] transition cursor-pointer">
                         تأكيد إكمال الخدمة
                     </button>
-                    <button type="button" onclick="closeFinishServiceModal()" class="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
+                    <button type="button" onclick="closeFinishServiceModal()" class="rounded-2xl border border-slate-200 px-5 py-3 text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
                         إلغاء
                     </button>
                 </div>
@@ -39,15 +39,15 @@
     </div>
 </div>
 
-{{-- Modal 2: الإبلاغ عن تأخير --}}
+{{-- Modal 2: الإبلاغ عن تأخير متوقع --}}
 <div id="reportDelayModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm transition-opacity" aria-modal="true" role="dialog">
     <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:p-8">
+        <div class="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:p-8 animate-fadeIn">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-800 text-lg">⏳</div>
                     <div>
-                        <h3 class="text-xl font-black text-slate-800">الإبلاغ عن تأخير متوقع</h3>
+                        <h3 class="text-lg font-black text-slate-800">الإبلاغ عن تأخير متوقع</h3>
                         <p class="text-xs text-slate-500">إشعار كبير السن بالموعد الجديد المتوقع للوصول</p>
                     </div>
                 </div>
@@ -58,34 +58,33 @@
                 @csrf
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1.5">المدة المتوقعة للتأخير</label>
-                    <select name="delay_minutes" required class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-800 focus:border-[#52643a] focus:bg-white focus:ring-2 focus:ring-[#52643a]/20">
-                        <option value="10">10 دقائق (دون تأثير على الالتزام)</option>
-                        <option value="20" selected>20 دقيقة (خصم نقطتين من مؤشر الالتزام)</option>
-                        <option value="30">30 دقيقة (خصم نقطتين من مؤشر الالتزام)</option>
-                        <option value="45">45 دقيقة (خصم 5 نقاط من مؤشر الالتزام)</option>
+                    <select name="delay_minutes" required class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-800 focus:border-[#52643a] focus:bg-white focus:ring-2 focus:ring-[#52643a]/20">
+                        <option value="15">15 دقيقة</option>
+                        <option value="30" selected>30 دقيقة</option>
+                        <option value="45">45 دقيقة</option>
+                        <option value="60">ساعة كاملة</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5">سبب التأخير</label>
-                    <textarea name="delay_reason" required rows="2" placeholder="اذكر سبب التأخير (ازدحام مروري، طارئ في الطريق...)"
-                        class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-[#52643a] focus:bg-white focus:ring-2 focus:ring-[#52643a]/20"></textarea>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">سبب التأخير التقديري</label>
+                    <textarea name="delay_reason" required rows="2" placeholder="مثال: ازدحام مروري، طارئ في الطريق..."
+                        class="w-full rounded-2xl border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs focus:border-[#52643a] focus:bg-white focus:ring-2 focus:ring-[#52643a]/20"></textarea>
                 </div>
 
-                <div class="rounded-2xl bg-amber-50 p-4 border border-amber-200">
-                    <p class="text-xs font-bold text-amber-900">قواعد التأخير المعتمدة:</p>
-                    <ul class="mt-1 list-disc list-inside text-xs text-amber-800 space-y-1">
-                        <li>أقل من 15 دقيقة: دون خصم.</li>
-                        <li>من 15 إلى 30 دقيقة: خصم نقطتين من مؤشر الالتزام.</li>
-                        <li>سيتاح لكبير السن مهلة انتظار 30 دقيقة مع عداد مباشر أو طلب بديل.</li>
+                <div class="rounded-2xl bg-amber-50 p-3.5 border border-amber-200 text-xs text-amber-900 leading-5">
+                    <p class="font-bold mb-1">📌 الضوابط التشغيلية للتأخير:</p>
+                    <ul class="list-disc list-inside text-[11px] text-amber-800 space-y-0.5">
+                        <li>يتم إشعار كبير السن فوراً بالموعد الجديد لانتظارك.</li>
+                        <li>يُتاح للمستفيد حرية الانتظار أو طلب البحث عن متطوع بديل.</li>
                     </ul>
                 </div>
 
                 <div class="flex items-center gap-3 pt-2">
-                    <button type="submit" class="flex-1 rounded-2xl bg-amber-600 py-3 text-sm font-bold text-white shadow-md hover:bg-amber-700 transition cursor-pointer">
+                    <button type="submit" class="flex-1 rounded-2xl bg-amber-600 py-3 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-amber-700 transition cursor-pointer">
                         إرسال إشعار التأخير
                     </button>
-                    <button type="button" onclick="closeReportDelayModal()" class="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
+                    <button type="button" onclick="closeReportDelayModal()" class="rounded-2xl border border-slate-200 px-5 py-3 text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
                         إلغاء
                     </button>
                 </div>
@@ -94,16 +93,16 @@
     </div>
 </div>
 
-{{-- Modal 3: الاعتذار عن الطلب والبحث عن بديل --}}
+{{-- Modal 3: الاعتذار عن الطلب --}}
 <div id="apologizeModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm transition-opacity" aria-modal="true" role="dialog">
     <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:p-8">
+        <div class="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:p-8 animate-fadeIn">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-100 text-rose-800 text-lg">⚠️</div>
                     <div>
-                        <h3 class="text-xl font-black text-slate-800">الاعتذار عن الطلب</h3>
-                        <p class="text-xs text-slate-500">سيُعاد نشر الطلب فوراً للبحث عن متطوع بديل</p>
+                        <h3 class="text-lg font-black text-slate-800">الاعتذار عن المهمة</h3>
+                        <p class="text-xs text-slate-500">سيُعاد نشر الطلب فوراً للبحث عن متطوع بديل لكبير السن</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeApologizeModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer">✕</button>
@@ -113,25 +112,24 @@
                 @csrf
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1.5">سبب الاعتذار</label>
-                    <textarea name="apology_reason" required rows="3" placeholder="يرجى توضيح سبب الاعتذار..."
-                        class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-rose-400 focus:bg-white focus:ring-2 focus:ring-rose-200"></textarea>
+                    <textarea name="apology_reason" required rows="3" placeholder="يرجى توضيح سبب عدم تمكنك من تنفيذ المهمة..."
+                        class="w-full rounded-2xl border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs focus:border-rose-400 focus:bg-white focus:ring-2 focus:ring-rose-200"></textarea>
                 </div>
 
-                <div class="rounded-2xl bg-rose-50 p-4 border border-rose-200">
-                    <p class="text-xs font-bold text-rose-900">تأثير الاعتذار على مؤشر الالتزام:</p>
-                    <ul class="mt-1 list-disc list-inside text-xs text-rose-800 space-y-1">
-                        <li>قبل أكثر من 24 ساعة: خصم نقطتين (-2).</li>
-                        <li>خلال 24 ساعة: خصم 5 نقاط (-5).</li>
-                        <li>قبل ساعتين أو أثناء التنفيذ: خصم 10 نقاط (-10).</li>
-                        <li>في حال وجود ظرف طارئ موثق، يمكنك مراجعة الإدارة لإلغاء الخصم.</li>
+                <div class="rounded-2xl bg-rose-50 p-3.5 border border-rose-200 text-xs text-rose-900 leading-5">
+                    <p class="font-bold mb-1">⚠️ ضوابط الاعتذار المعتمدة:</p>
+                    <ul class="list-disc list-inside text-[11px] text-rose-800 space-y-0.5">
+                        <li>يؤدي الاعتذار إلى فصل إسنادك عن الطلب فوراً وإشعار المستفيد لإعادة الجدولة.</li>
+                        <li>يُسجل الاعتذار كحادثة عدم موثوقية في سجل الحساب لدى الإدارة.</li>
+                        <li>تكرار 3 حوادث خلال 30 يوماً يرسل تنبيهاً للإدارة لمراجعة الحساب.</li>
                     </ul>
                 </div>
 
                 <div class="flex items-center gap-3 pt-2">
-                    <button type="submit" class="flex-1 rounded-2xl bg-rose-600 py-3 text-sm font-bold text-white shadow-md hover:bg-rose-700 transition cursor-pointer">
+                    <button type="submit" class="flex-1 rounded-2xl bg-rose-600 py-3 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-rose-700 transition cursor-pointer">
                         تأكيد الاعتذار وفصل الإسناد
                     </button>
-                    <button type="button" onclick="closeApologizeModal()" class="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
+                    <button type="button" onclick="closeApologizeModal()" class="rounded-2xl border border-slate-200 px-5 py-3 text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
                         رجوع
                     </button>
                 </div>
@@ -140,46 +138,46 @@
     </div>
 </div>
 
-{{-- Modal 4: تفاصيل الطلب الكاملة --}}
+{{-- Modal 4: تفاصيل الطلب المتاح --}}
 <div id="requestDetailsModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm transition-opacity" aria-modal="true" role="dialog">
     <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="relative w-full max-w-2xl rounded-3xl bg-white p-6 shadow-2xl sm:p-8">
+        <div class="relative w-full max-w-2xl rounded-3xl bg-white p-6 shadow-2xl sm:p-8 animate-fadeIn">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div class="flex items-center gap-3">
-                    <div id="detailIcon" class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef2e8] text-2xl">🤝</div>
+                    <div id="detailIcon" class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef2e8] text-2xl shadow-sm">🤝</div>
                     <div>
-                        <span id="detailId" class="text-xs font-bold text-slate-400">#REQ-1048</span>
-                        <h3 id="detailTitle" class="text-xl font-black text-[#31421e]">شراء أغراض منزلية</h3>
+                        <span id="detailId" class="text-xs font-mono font-bold text-slate-400">#REQ-1000</span>
+                        <h3 id="detailTitle" class="text-lg font-black text-[#31421e]">تفاصيل الطلب</h3>
                     </div>
                 </div>
                 <button type="button" onclick="closeDetailsModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer">✕</button>
             </div>
 
-            <div class="mt-6 space-y-4">
-                <div class="rounded-2xl bg-slate-50 p-4 border border-slate-100">
-                    <h4 class="text-xs font-bold text-slate-400">وصف الطلب والاحتياج</h4>
-                    <p id="detailDescription" class="mt-1 text-sm leading-6 text-slate-700"></p>
+            <div class="mt-5 space-y-4">
+                <div class="rounded-2xl bg-slate-50 p-4 border border-slate-100 text-xs">
+                    <h4 class="font-bold text-slate-400 mb-1">وصف الطلب والاحتياج المطلوب:</h4>
+                    <p id="detailDescription" class="leading-relaxed text-slate-700"></p>
                 </div>
 
-                <div class="grid gap-3 sm:grid-cols-2">
-                    <div class="rounded-2xl bg-slate-50 p-4 border border-slate-100">
-                        <span class="text-xs font-bold text-slate-400">الموقع والمنطقة</span>
-                        <p id="detailLocation" class="mt-1 text-sm font-bold text-slate-800"></p>
+                <div class="grid gap-3 sm:grid-cols-2 text-xs">
+                    <div class="rounded-2xl bg-[#f8faf6] p-3.5 border border-[#dfe6d5]">
+                        <span class="font-bold text-slate-400 block">الموقع التقريبي:</span>
+                        <p id="detailLocation" class="font-bold text-slate-800 mt-0.5"></p>
                     </div>
-                    <div class="rounded-2xl bg-slate-50 p-4 border border-slate-100">
-                        <span class="text-xs font-bold text-slate-400">الموعد المحدد</span>
-                        <p id="detailSchedule" class="mt-1 text-sm font-bold text-slate-800"></p>
+                    <div class="rounded-2xl bg-[#f8faf6] p-3.5 border border-[#dfe6d5]">
+                        <span class="font-bold text-slate-400 block">الموعد المحدد:</span>
+                        <p id="detailSchedule" class="font-bold text-slate-800 mt-0.5"></p>
                     </div>
                 </div>
 
                 <div id="detailPrivacyNotice" class="rounded-2xl bg-amber-50 p-3.5 border border-amber-200 flex items-center gap-2 text-xs text-amber-800">
-                    <span>🔒</span>
-                    <span>يظهر العنوان الدقيق ورقم التواصل بعد قبول الطلب ونقله إلى قائمة طلباتي.</span>
+                    <span class="text-base">🔒</span>
+                    <span>يظهر العنوان الدقيق ورقم هاتف المستفيد في قائمة "طلباتي" فور قبول الطلب وتوكيله.</span>
                 </div>
             </div>
 
             <div class="mt-6 flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
-                <button type="button" onclick="closeDetailsModal()" class="rounded-2xl border border-slate-200 px-6 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
+                <button type="button" onclick="closeDetailsModal()" class="rounded-2xl border border-slate-200 px-6 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
                     إغلاق
                 </button>
             </div>
@@ -190,13 +188,13 @@
 {{-- Modal 5: تقييم كبير السن (اختياري، خاص بالإدارة) --}}
 <div id="rateElderModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm transition-opacity" aria-modal="true" role="dialog">
     <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="relative w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl sm:p-8">
+        <div class="relative w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl sm:p-8 animate-fadeIn">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-800 text-lg">⭐</div>
                     <div>
-                        <h3 class="text-xl font-black text-slate-800">تقييم المستفيد</h3>
-                        <p class="text-xs text-slate-500">خاص ببيانات الإدارة لضمان جودة البيئة لكبار السن والمقدمين</p>
+                        <h3 class="text-lg font-black text-slate-800">تقييم المستفيد</h3>
+                        <p class="text-xs text-slate-500">تقييم داخلي للإدارة لضمان سلامة بيئة العمل</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeRateElderModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer">✕</button>
@@ -205,8 +203,8 @@
             <form id="rateElderForm" method="POST" action="" class="mt-5 space-y-4">
                 @csrf
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5">التقييم العام</label>
-                    <select name="stars" class="w-full rounded-xl border-slate-300 px-3 py-2 text-sm focus:border-[#718256] focus:ring-[#718256]">
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">التقييم العام للتعامل</label>
+                    <select name="stars" class="w-full rounded-2xl border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-800 focus:border-[#718256] focus:bg-white focus:ring-2 focus:ring-[#718256]/20">
                         <option value="5">⭐⭐⭐⭐⭐ ممتاز وسلس جداً</option>
                         <option value="4">⭐⭐⭐⭐ جيد جداً</option>
                         <option value="3">⭐⭐⭐ متوسط</option>
@@ -218,19 +216,19 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1.5">ملاحظاتك للإدارة (اختياري)</label>
                     <textarea name="comment" rows="3"
-                        placeholder="أي ملاحظات تود مشاركتها مع الإدارة بشأن التعامل وبيئة الخدمة..."
-                        class="w-full rounded-xl border-slate-300 px-3.5 py-2.5 text-xs focus:border-[#718256] focus:ring-[#718256]"></textarea>
+                        placeholder="أي ملاحظات تود مشاركتها مع إدارة المنصة بشأن بيئة الخدمة..."
+                        class="w-full rounded-2xl border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs focus:border-[#718256] focus:bg-white focus:ring-2 focus:ring-[#718256]/20"></textarea>
                 </div>
 
-                <div class="rounded-xl bg-slate-50 p-3 text-[11px] text-slate-500 leading-5">
-                    🔒 هذا التقييم اختياري ومحفوظ للإدارة فقط ولا يظهر لأي مقدم خدمة آخر أو في الملف العلني لكبير السن.
+                <div class="rounded-2xl bg-slate-50 p-3 text-[11px] text-slate-500 leading-5 border border-slate-200">
+                    🔒 هذا التقييم اختياري ومحفوظ للإدارة حصراً ولا يظهر لكبير السن أو في ملفه العام.
                 </div>
 
                 <div class="flex items-center gap-3 pt-2">
-                    <button type="submit" class="flex-1 rounded-2xl bg-[#31421e] py-3 text-sm font-bold text-white shadow-md hover:bg-[#52643a] transition cursor-pointer">
+                    <button type="submit" class="flex-1 rounded-2xl bg-[#31421e] py-3 text-xs font-bold text-white shadow-md hover:bg-[#52643a] transition cursor-pointer">
                         إرسال التقييم
                     </button>
-                    <button type="button" onclick="closeRateElderModal()" class="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
+                    <button type="button" onclick="closeRateElderModal()" class="rounded-2xl border border-slate-200 px-5 py-3 text-xs font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
                         إلغاء
                     </button>
                 </div>
@@ -285,4 +283,3 @@
         document.getElementById('requestDetailsModal').classList.add('hidden');
     }
 </script>
-

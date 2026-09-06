@@ -66,7 +66,11 @@
             </div>
             <div class="flex items-center gap-1 sm:gap-3">
                 @auth
-                    <a href="{{ route('dashboard') }}" class="rounded-xl bg-[#24472f] px-4 py-3 text-xs font-semibold text-white transition hover:bg-[#315f40] sm:px-6 sm:text-sm">لوحة التحكم</a>
+                    @if (Auth::user()->isProvider())
+                        <a href="{{ route('provider.dashboard') }}" class="rounded-xl bg-[#24472f] px-4 py-3 text-xs font-semibold text-white transition hover:bg-[#315f40] sm:px-6 sm:text-sm">لوحة التحكم</a>
+                    @else
+                        <a href="{{ route('dashboard') }}" class="rounded-xl bg-[#24472f] px-4 py-3 text-xs font-semibold text-white transition hover:bg-[#315f40] sm:px-6 sm:text-sm">لوحة التحكم</a>
+                    @endif
                 @else
                     <a href="{{ route('login') }}" class="rounded-xl px-2.5 py-3 text-xs font-semibold text-[#24472f] transition hover:bg-[#edf1e9] sm:px-5 sm:text-sm">دخول</a>
                     <a href="{{ route('register.choose') }}" class="rounded-xl bg-[#24472f] px-3 py-3 text-xs font-semibold text-white shadow-[0_8px_24px_rgba(36,71,47,0.16)] transition hover:-translate-y-0.5 hover:bg-[#315f40] sm:px-6 sm:text-sm">انضم إلينا</a>
