@@ -50,6 +50,22 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        $user = Auth::user();
+
+        if ($user && $user->status === 'rejected') {
+            Auth::logout();
+            $this->session()->invalidate();
+            $this->session()->regenerateToken();
+
+            $reason = $user->rejection_reason
+                ? "السبب: {$user->rejection_reason}"
+                : 'يرجى التواصل مع إدارة المنصة للمزيد من التفاصيل.';
+
+            throw ValidationException::withMessages([
+                'email' => "تم رفض حسابك من قِبل الإدارة. {$reason}",
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

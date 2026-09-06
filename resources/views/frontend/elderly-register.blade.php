@@ -49,7 +49,7 @@
             <form id="registrationForm" method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="mx-auto w-full min-w-0 max-w-4xl">
 
                 @csrf
-                <input type="hidden" name="account_type" value="elderly">
+                <input type="hidden" name="role" value="elder">
 
                 {{-- المرحلة الأولى: المعلومات والسكن --}}
                 <section class="form-step" data-step="1">

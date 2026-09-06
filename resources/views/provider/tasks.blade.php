@@ -131,29 +131,20 @@
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <span class="font-bold text-slate-500">رقم الهاتف:</span>
-                                    <span class="font-bold text-slate-800" dir="ltr">{{ $req->user->registrationProfile?->phone ?? '0599000000' }}</span>
+                                    <span class="font-bold text-slate-800" dir="ltr">0599000000 {{-- TODO: reconnect in stage 3.2/3.3 --}}</span>
                                 </div>
                             </div>
                         </div>
 
-                        {{-- إذا تم الإبلاغ عن تأخير (صفحة 11) --}}
+                        {{-- إذا تم الإبلاغ عن تأخير --}}
                         @if ($req->status === \App\Models\ServiceRequest::STATUS_PROVIDER_DELAYED)
                             <div class="rounded-2xl bg-amber-50 p-4 border border-amber-200 flex items-center justify-between">
                                 <div class="flex items-center gap-2 text-xs text-amber-900">
                                     <span class="text-base">⏳</span>
                                     <div>
-                                        <span class="font-bold">تم إشعار المستفيد بالتأخير:</span>
-                                        <span>{{ $req->delay_reason }} (الوصول المتوقع: {{ $req->expected_arrival_at?->format('h:i A') ?? 'قريباً' }})</span>
+                                        <span class="font-bold">تم إشعار المستفيد بالتأخير.</span>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
-
-                        {{-- إذا كانت هناك ملاحظات إنهاء مقدمة --}}
-                        @if ($req->completion_notes)
-                            <div class="rounded-2xl bg-emerald-50 p-3.5 border border-emerald-200 text-xs text-emerald-900">
-                                <span class="font-bold">ملخص التنفيذ المرسل:</span>
-                                <span>{{ $req->completion_notes }}</span>
                             </div>
                         @endif
 
@@ -165,68 +156,67 @@
                                     <p class="mt-1 text-xs text-slate-700 font-semibold">{{ $req->review->comment ?? 'خدمة ممتازة، بارك الله فيك.' }}</p>
                                 </div>
                                 <div class="flex items-center gap-1 text-amber-500 font-bold">
-                                    <span>{{ $req->review->rating }}</span>
+                                    <span>{{ $req->review->stars }}</span>
                                     <span>★</span>
                                 </div>
                             </div>
                         @endif
 
-                        {{-- أزرار وسير العمليات التفاعلية (صفحات 8، 10، 13، 17) --}}
+                        {{-- أزرار وسير العمليات التفاعلية --}}
                         <div class="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
                             <div class="flex flex-wrap items-center gap-2">
-                                {{-- 1. حالة تم القبول أو متأخر: زر ابدأ التوجه --}}
+                                {{-- 1. حالة تم القبول أو متأخر: زر بدء الخدمة --}}
                                 @if (in_array($req->status, [\App\Models\ServiceRequest::STATUS_ACCEPTED, \App\Models\ServiceRequest::STATUS_PROVIDER_DELAYED]))
-                                    <form method="POST" action="{{ route('provider.tasks.start-heading', $req) }}">
-                                        @csrf
-                                        <button type="submit" class="rounded-2xl bg-[#31421e] px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#52643a] transition cursor-pointer">
-                                            🚗 ابدأ التوجه
-                                        </button>
-                                    </form>
-
-                                    <button type="button" onclick="openReportDelayModal('{{ route('provider.tasks.report-delay', $req) }}')"
-                                        class="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-xs font-bold text-amber-800 hover:bg-amber-100 transition cursor-pointer">
-                                        ⏳ توقع تأخير
-                                    </button>
-                                @endif
-
-                                {{-- 2. حالة في الطريق: زر تأكيد الوصول --}}
-                                @if ($req->status === \App\Models\ServiceRequest::STATUS_ON_THE_WAY)
-                                    <form method="POST" action="{{ route('provider.tasks.confirm-arrival', $req) }}">
-                                        @csrf
-                                        <button type="submit" class="rounded-2xl bg-teal-700 px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-teal-800 transition cursor-pointer">
-                                            📍 تأكيد الوصول للموقع
-                                        </button>
-                                    </form>
-
-                                    <button type="button" onclick="openReportDelayModal('{{ route('provider.tasks.report-delay', $req) }}')"
-                                        class="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-xs font-bold text-amber-800 hover:bg-amber-100 transition cursor-pointer">
-                                        ⏳ توقع تأخير
-                                    </button>
-                                @endif
-
-                                {{-- 3. حالة وصل: زر بدء الخدمة --}}
-                                @if ($req->status === \App\Models\ServiceRequest::STATUS_ARRIVED)
                                     <form method="POST" action="{{ route('provider.tasks.start-service', $req) }}">
                                         @csrf
-                                        <button type="submit" class="rounded-2xl bg-purple-700 px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-purple-800 transition cursor-pointer">
-                                            ⚡ بدء الخدمة
+                                        <button type="submit" class="rounded-2xl bg-[#31421e] px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#52643a] transition cursor-pointer">
+                                            ⚡ بدء تقديم الخدمة
+                                        </button>
+                                    </form>
+
+                                    <button type="button" onclick="openReportDelayModal('{{ route('provider.tasks.report-delay', $req) }}')"
+                                        class="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-xs font-bold text-amber-800 hover:bg-amber-100 transition cursor-pointer">
+                                        ⏳ توقع تأخير
+                                    </button>
+                                @endif
+
+                                {{-- 2. حالة قيد التنفيذ: زر إنهاء الخدمة --}}
+                                @if ($req->status === \App\Models\ServiceRequest::STATUS_IN_PROGRESS)
+                                    <form method="POST" action="{{ route('provider.tasks.finish-service', $req) }}">
+                                        @csrf
+                                        <button type="submit" class="rounded-2xl bg-emerald-700 px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-emerald-800 transition cursor-pointer">
+                                            ✓ إنهاء الخدمة
                                         </button>
                                     </form>
                                 @endif
 
-                                {{-- 4. حالة قيد التنفيذ: زر إنهاء الخدمة --}}
-                                @if ($req->status === \App\Models\ServiceRequest::STATUS_IN_PROGRESS)
-                                    <button type="button" onclick="openFinishServiceModal('{{ route('provider.tasks.finish-service', $req) }}')"
-                                        class="rounded-2xl bg-emerald-700 px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-emerald-800 transition cursor-pointer">
-                                        ✓ إنهاء الخدمة
-                                    </button>
+                                {{-- تواصل مع المستفيد (فقط عند توفر شروط إظهار الهاتف: assigned فأعلى) --}}
+                                @php
+                                    $elderPhone = $req->elderProfile?->phone_number ?? $req->elder?->elderProfile?->phone_number;
+                                @endphp
+                                @if ($req->canRevealContactPhone() && $elderPhone)
+                                    <a href="tel:{{ $elderPhone }}"
+                                        class="rounded-2xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition">
+                                        📞 تواصل مع المستفيد (<span dir="ltr">{{ $elderPhone }}</span>)
+                                    </a>
                                 @endif
 
-                                {{-- تواصل مع المستفيد --}}
-                                <a href="tel:{{ $req->user->registrationProfile?->phone ?? '0599000000' }}"
-                                    class="rounded-2xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition">
-                                    📞 تواصل مع المستفيد
-                                </a>
+                                {{-- تقييم اختياري لكبير السن بعد إنهاء الخدمة --}}
+                                @if (in_array($req->status, [\App\Models\ServiceRequest::STATUS_COMPLETED, \App\Models\ServiceRequest::STATUS_PENDING_CONFIRMATION], true))
+                                    @php
+                                        $providerReview = $req->ratings()->where('rater_role', 'provider')->first();
+                                    @endphp
+                                    @if ($providerReview)
+                                        <span class="rounded-2xl bg-amber-50 border border-amber-200 px-3 py-2 text-xs font-bold text-amber-800">
+                                            تقييمك للمستفيد: {{ str_repeat('★', $providerReview->stars) }}
+                                        </span>
+                                    @else
+                                        <button type="button" onclick="openRateElderModal('{{ route('provider.tasks.rate-elder', $req) }}')"
+                                            class="rounded-2xl border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-bold text-amber-800 hover:bg-amber-100 transition cursor-pointer">
+                                            ⭐ تقييم المستفيد (خاص بالإدارة)
+                                        </button>
+                                    @endif
+                                @endif
                             </div>
 
                             {{-- زر الاعتذار (يختفي فقط عند إنهاء الخدمة) --}}

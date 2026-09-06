@@ -10,7 +10,7 @@ window.openCreateRequestModal = function() {
     step: 1,
     title: '',
     description: '',
-    location: {{ json_encode(auth()->user()?->registrationProfile?->address ?? '') }},
+    location: '', {{-- TODO: reconnect in stage 3.2/3.3 --}}
     scheduled_at: '',
     serviceTypes: [
         { label: '💊 شراء دواء', val: 'شراء دواء من الصيدلية' },

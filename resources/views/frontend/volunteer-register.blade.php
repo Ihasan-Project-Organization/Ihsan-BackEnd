@@ -48,7 +48,7 @@
                 class="mx-auto w-full min-w-0 max-w-4xl">
 
                 @csrf
-                <input type="hidden" name="account_type" value="volunteer">
+                <input type="hidden" name="role" value="provider">
                 <section class="form-step" data-step="1">
                     <div class="grid gap-5 md:grid-cols-2">
                         <div>

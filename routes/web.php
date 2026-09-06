@@ -30,15 +30,12 @@ Route::middleware('guest')->group(function () {
     });
 });
 
-Route::get('/dashboard', function () {
-    if (auth()->user()->account_type === 'volunteer') {
-        return redirect()->route('provider.dashboard');
-    }
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 // مسارات كبير السن (المستفيد)
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:elder'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
     Route::get('/requests', [ServiceRequestController::class, 'index'])->name('service-requests.index');
     Route::post('/requests', [ServiceRequestController::class, 'store'])->name('service-requests.store');
     Route::patch('/requests/{serviceRequest}/reschedule', [ServiceRequestController::class, 'reschedule'])->name('service-requests.reschedule');
@@ -46,11 +43,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/requests/{serviceRequest}/confirm', [ServiceRequestController::class, 'confirmCompletion'])->name('service-requests.confirm');
     Route::patch('/requests/{serviceRequest}/search-alternative', [ServiceRequestController::class, 'searchAlternative'])->name('service-requests.search-alternative');
     Route::delete('/requests/{serviceRequest}/cancel', [ServiceRequestController::class, 'cancel'])->name('service-requests.cancel');
+    Route::post('/requests/{serviceRequest}/report-problem', [ServiceRequestController::class, 'reportProblem'])->name('service-requests.report-problem');
     Route::post('/requests/{serviceRequest}/reviews', [ServiceRequestController::class, 'storeReview'])->name('service-requests.reviews.store');
 });
 
 // مسارات مقدم الخدمة الكاملة (المتطوع)
-Route::prefix('provider')->name('provider.')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('provider')->name('provider.')->middleware(['auth', 'verified', 'role:provider'])->group(function () {
     // الشاشات الرئيسية
     Route::get('/dashboard', [VolunteerTaskController::class, 'dashboard'])->name('dashboard');
     Route::get('/available', [VolunteerTaskController::class, 'available'])->name('available');
@@ -62,16 +60,15 @@ Route::prefix('provider')->name('provider.')->middleware(['auth', 'verified'])->
     // إجراءات مسار العمليات (Workflow Actions)
     Route::post('/tasks/{serviceRequest}/accept', [VolunteerTaskController::class, 'accept'])->name('tasks.accept');
     Route::post('/tasks/{serviceRequest}/dismiss', [VolunteerTaskController::class, 'dismiss'])->name('tasks.dismiss');
-    Route::post('/tasks/{serviceRequest}/start-heading', [VolunteerTaskController::class, 'startHeading'])->name('tasks.start-heading');
-    Route::post('/tasks/{serviceRequest}/confirm-arrival', [VolunteerTaskController::class, 'confirmArrival'])->name('tasks.confirm-arrival');
     Route::post('/tasks/{serviceRequest}/start-service', [VolunteerTaskController::class, 'startService'])->name('tasks.start-service');
     Route::post('/tasks/{serviceRequest}/finish-service', [VolunteerTaskController::class, 'finishService'])->name('tasks.finish-service');
     Route::post('/tasks/{serviceRequest}/report-delay', [VolunteerTaskController::class, 'reportDelay'])->name('tasks.report-delay');
     Route::post('/tasks/{serviceRequest}/apologize', [VolunteerTaskController::class, 'apologize'])->name('tasks.apologize');
+    Route::post('/tasks/{serviceRequest}/rate-elder', [VolunteerTaskController::class, 'rateElder'])->name('tasks.rate-elder');
 });
 
 // توافقية مسارات volunteer.tasks القديمة
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:provider'])->group(function () {
     Route::get('/volunteer/tasks', [VolunteerTaskController::class, 'myTasks'])->name('volunteer.tasks.index');
 });
 

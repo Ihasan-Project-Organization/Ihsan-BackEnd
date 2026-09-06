@@ -1,6 +1,6 @@
 <nav x-data="{ open: false }" class="sticky top-0 z-40 border-b border-[#dfe6d5] bg-white/95 backdrop-blur">
     @php($user = Auth::user())
-    @php($isVolunteer = $user?->account_type === 'volunteer')
+    @php($isVolunteer = $user?->isProvider() ?? false)
 
     <div class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div class="flex items-center gap-6 lg:gap-8">
@@ -25,7 +25,8 @@
                         @endif
                     </a>
 
-                    @php($activeTasksCount = \App\Models\ServiceRequest::where('assigned_provider_id', $user->id)->whereIn('status', [\App\Models\ServiceRequest::STATUS_ACCEPTED, \App\Models\ServiceRequest::STATUS_ON_THE_WAY, \App\Models\ServiceRequest::STATUS_ARRIVED, \App\Models\ServiceRequest::STATUS_IN_PROGRESS, \App\Models\ServiceRequest::STATUS_PENDING_CONFIRMATION, \App\Models\ServiceRequest::STATUS_PROVIDER_DELAYED])->count())
+                    @php($providerProfileId = $user->serviceProviderProfile?->id)
+                    @php($activeTasksCount = $providerProfileId ? \App\Models\ServiceRequest::where('provider_id', $providerProfileId)->whereIn('status', [\App\Models\ServiceRequest::STATUS_ACCEPTED, \App\Models\ServiceRequest::STATUS_IN_PROGRESS, \App\Models\ServiceRequest::STATUS_PENDING_CONFIRMATION, \App\Models\ServiceRequest::STATUS_PROVIDER_DELAYED])->count() : 0)
                     <a href="{{ route('provider.tasks') }}"
                         class="relative rounded-xl px-3 py-2 text-xs font-bold transition {{ request()->routeIs('provider.tasks*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
                         طلباتي
@@ -95,7 +96,7 @@
 
             <div class="text-left">
                 <p class="text-xs font-bold text-slate-800">{{ $user->name }}</p>
-                <p class="text-[10px] text-slate-400">{{ $isVolunteer ? 'مقدم خدمة معتمد' : 'كبير سن' }}</p>
+                <p class="text-[10px] text-slate-400">{{ $user->isProvider() ? 'مقدم خدمة متطوع' : ($user->isAdmin() ? 'مدير النظام' : 'كبير السن / مستفيد') }}</p>
             </div>
 
             <form method="POST" action="{{ route('logout') }}">
@@ -137,7 +138,7 @@
                 <p class="text-xs text-slate-500 truncate">{{ $user->email }}</p>
             </div>
             <span class="rounded-full bg-[#eef2e8] px-2.5 py-1 text-[11px] font-bold text-[#31421e]">
-                {{ $isVolunteer ? 'مقدم خدمة' : 'كبير سن' }}
+                {{ $user->isProvider() ? 'مقدم خدمة متطوع' : ($user->isAdmin() ? 'مدير النظام' : 'كبير السن / مستفيد') }}
             </span>
         </div>
 

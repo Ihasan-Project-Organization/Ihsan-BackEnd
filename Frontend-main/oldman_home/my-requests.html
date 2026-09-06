@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طلباتي - احسان</title>
+    <link rel="stylesheet" href="css\style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- google font  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo">
+                    <h2>احسان</h2>
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                </div>
+                <p class="logo-subtitle">منصة ربط كبار السن بمقدمي الخدمة</p>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="OldMan.html" class="menu-item">
+                    <i class="fa-solid fa-house"></i>
+                    <span>الرئيسية</span>
+                </a>
+                <a href="request-help.html" class="menu-item">
+                    <i class="fa-solid fa-hand-holding-hand"></i>
+                    <span>طلب مساعدة</span>
+                </a>
+                <a href="my-requests.html" class="menu-item active">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <span>طلباتي</span>
+                </a>
+                <a href="notifications.html" class="menu-item">
+                    <i class="fa-regular fa-bell"></i>
+                    <span>اشعارات</span>
+                    <span class="badge">2</span>
+                </a>
+                <a href="settings.html" class="menu-item">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>اعدادات</span>
+                </a>
+            </nav>
+
+            <div class="support-card">
+                <p>نحن هنا لمساعدتك<br>فريق الدعم متاح دائما</p>
+                <i class="fa-solid fa-heart heart-icon" style="display:none;"></i>
+                <button class="contact-btn">تواصل معنا</button>
+            </div>
+
+            <a href="#" class="logout-btn">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>تسجيل خروج</span>
+            </a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-notification">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notification-badge">2</span>
+                </div>
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </header>
+
+            <!-- Page Content -->
+            <div class="requests-header-box">
+                <div class="requests-title-area">
+                    <h4 class="text-muted" style="margin-bottom: 5px;">لوحة التحكم</h4>
+                    <h1 style="margin-bottom: 10px;">طلباتي</h1>
+                    <p class="text-muted" style="font-size: 16px;">تابع/ي حالة جميع طلبات المساعدة</p>
+                </div>
+                <div class="requests-action-area">
+                    <button class="new-request-btn" id="open-new-request-modal">
+                        <span>+ طلب جديد</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="tabs-container">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="all">الكل</button>
+                    <button class="tab-btn" data-tab="active">نشطة</button>
+                    <button class="tab-btn" data-tab="action-required">بحاجة لإجراء</button>
+                    <button class="tab-btn" data-tab="completed">مكتملة</button>
+                    <button class="tab-btn" data-tab="cancelled">ملغاة</button>
+                </div>
+                <div class="tabs-line"></div>
+            </div>
+
+            <!-- Placeholder for requests list -->
+            <div class="requests-list">
+                <div class="status-card requests-empty-state" style="margin-top: 30px;">
+                    <i class="fa-solid fa-clipboard-list status-icon" style="color: #cbd5e0;"></i>
+                    <h4 style="color: var(--text-muted);">لا توجد طلبات لعرضها حالياً</h4>
+                </div>
+
+                <div class="active-requests" id="active-requests" hidden>
+                    <article class="active-request-card">
+                        <div class="request-card-top">
+                            <span class="request-icon"><i class="fa-solid fa-cart-shopping"></i></span>
+                            <div>
+                                <h3>شراء أغراض</h3>
+                                <span>رقم الطلب: REQ-1045</span>
+                            </div>
+                        </div>
+                        <span class="request-state waiting">بانتظار قبول مقدم الخدمة</span>
+                        <div class="request-meta"><span><i class="fa-regular fa-calendar"></i> غداً، ١١:٠٠ صباحاً</span><span><i class="fa-solid fa-location-dot"></i> حي النخيل</span></div>
+                        <p class="request-description">طلبك منشور حالياً لمقدمي الخدمة المناسبين</p>
+                    </article>
+
+                    <article class="active-request-card confirmed-card">
+                        <div class="request-card-top">
+                            <span class="request-icon"><i class="fa-solid fa-user-group"></i></span>
+                            <div>
+                                <h3>زيارة اجتماعية</h3>
+                                <span>رقم الطلب: REQ-1044</span>
+                            </div>
+                        </div>
+                        <span class="request-state confirmed">تم قبول الطلب</span>
+                        <div class="request-meta"><span><i class="fa-regular fa-calendar"></i> اليوم، ٥:١٥ مساءً</span><span><i class="fa-solid fa-user"></i> مقدم الخدمة: أحمد محمود</span></div>
+                        <p class="request-description">تم تأكيد الزيارة، وسيصلك إشعار عند بدء مقدم الخدمة بالطريق.</p>
+                    </article>
+
+                    <article class="active-request-card in-progress-card">
+                        <div class="request-card-top">
+                            <span class="request-icon"><i class="fa-solid fa-briefcase-medical"></i></span>
+                            <div>
+                                <h3>مرافقة للمستشفى</h3>
+                                <span>رقم الطلب: REQ-1040</span>
+                            </div>
+                        </div>
+                        <span class="request-state progress">قيد التنفيذ</span>
+                        <div class="request-meta"><span><i class="fa-regular fa-calendar"></i> اليوم، ٩:١٥ صباحاً</span><span><i class="fa-solid fa-user"></i> مقدم الخدمة: أحمد محمود</span></div>
+                        <p class="request-description">مقدم الخدمة في طريقه إليك الآن.</p>
+                    </article>
+                </div>
+
+                <!-- Requests that need a confirmation from the user -->
+                <section class="action-required-requests" id="action-required-requests" hidden aria-live="polite">
+                    <article class="action-required-card">
+                        <div class="action-card-accent"></div>
+                        <div class="action-card-heading">
+                            <span class="request-lock" aria-hidden="true"><i class="fa-solid fa-lock"></i></span>
+                            <div class="action-request-info">
+                                <span class="request-number">#REQ-3034</span>
+                                <h2>مساعدة منزلية</h2>
+                                <p>أحتاج مساعدة في ترتيب وتنظيف الاحتياجات المنزلية.</p>
+                            </div>
+                        </div>
+
+                        <div class="action-request-details">
+                            <span><i class="fa-regular fa-calendar"></i> الأربعاء 24 ديسمبر، 3:00 مساءً</span>
+                            <span><i class="fa-solid fa-location-dot"></i> حي النخيل، شارع صلاح</span>
+                        </div>
+
+                        <div class="action-alert">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <div>
+                                <strong>بانتظارك اتخاذ إجراء</strong>
+                                <p>يرجى تأكيد الموعد أو تعديله قبل بدء الخدمة.</p>
+                            </div>
+                        </div>
+
+                        <div class="action-card-footer">
+                            <button class="action-button schedule-and-repost" type="button"><i class="fa-solid fa-calendar-plus"></i> تعيين موعد جديد وإعادة النشر</button>
+                            <button class="action-button edit-and-repost" type="button">تعديل وإعادة النشر</button>
+                            <button class="action-button cancel-request" type="button"><i class="fa-regular fa-circle-xmark"></i> إلغاء الطلب</button>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="completed-requests" id="completed-requests" hidden aria-live="polite">
+                    <article class="completed-request-card">
+                        <div class="completed-card-top">
+                            <div class="completed-title">
+                                <span class="completed-icon green"><i class="fa-solid fa-square-plus"></i></span>
+                                <div><h2>مرافقة طبية</h2><p>موعد في مستشفى الملك فيصل التخصصي</p></div>
+                            </div>
+                            <span class="completed-badge"><i class="fa-solid fa-circle-check"></i> مكتمل</span>
+                        </div>
+                        <div class="completed-meta"><span><i class="fa-regular fa-calendar"></i><b>تاريخ الانتهاء</b> 15 أكتوبر 2023 - 10:30 صباحاً</span><span><i class="fa-solid fa-user"></i><b>المتطوع</b> عبدالله</span></div>
+                        <button class="rate-button" type="button"><i class="fa-solid fa-star"></i> قيّم المتطوع</button>
+                    </article>
+
+                    <article class="completed-request-card">
+                        <div class="completed-card-top">
+                            <div class="completed-title">
+                                <span class="completed-icon beige"><i class="fa-solid fa-cart-shopping"></i></span>
+                                <div><h2>تسوق مقاضي</h2><p>شراء مستلزمات من السوبرماركت</p></div>
+                            </div>
+                            <span class="completed-badge"><i class="fa-solid fa-circle-check"></i> مكتمل</span>
+                        </div>
+                        <div class="completed-meta"><span><i class="fa-regular fa-calendar"></i><b>تاريخ الانتهاء</b> 10 أكتوبر 2023 - 04:00 مساءً</span><span><i class="fa-solid fa-user"></i><b>المتطوع</b> فاطمة علي</span></div>
+                        <div class="rated-row"><span class="stars">★★★★★</span><span>لقد قمت بتقييم هذه الخدمة</span></div>
+                    </article>
+                </section>
+
+                <section class="cancelled-requests" id="cancelled-requests" hidden aria-live="polite">
+                    <article class="cancelled-request-card">
+                        <header class="cancelled-card-header">
+                            <div class="cancelled-request-info">
+                                <span class="cancelled-icon" aria-hidden="true"><i class="fa-solid fa-hospital"></i></span>
+                                <div>
+                                    <h2>توصيل للمستشفى</h2>
+                                    <span class="cancelled-request-id">REQ-0984</span>
+                                </div>
+                            </div>
+                            <span class="cancelled-status"><i class="fa-solid fa-circle-xmark"></i> ملغاة</span>
+                        </header>
+                    </article>
+                    <article class="cancelled-request-card">
+                        <header class="cancelled-card-header">
+                            <div class="cancelled-request-info">
+                                <span class="cancelled-icon" aria-hidden="true"><i class="fa-solid fa-cart-shopping"></i></span>
+                                <div>
+                                    <h2>شراء أغراض</h2>
+                                    <span class="cancelled-request-id">REQ-1021</span>
+                                </div>
+                            </div>
+                            <span class="cancelled-status"><i class="fa-solid fa-circle-xmark"></i> ملغاة</span>
+                        </header>
+                    </article>
+                    <article class="cancelled-request-card">
+                        <header class="cancelled-card-header">
+                            <div class="cancelled-request-info">
+                                <span class="cancelled-icon" aria-hidden="true"><i class="fa-solid fa-toolbox"></i></span>
+                                <div>
+                                    <h2>صيانة منزلية</h2>
+                                    <span class="cancelled-request-id">REQ-0855</span>
+                                </div>
+                            </div>
+                            <span class="cancelled-status"><i class="fa-solid fa-circle-xmark"></i> ملغاة</span>
+                        </header>
+                    </article>
+                </section>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="new-request-modal">
+        <div class="modal-box">
+            <h3 class="modal-title">طلب مساعدة جديد</h3>
+            
+            <!-- Stepper -->
+            <div class="stepper">
+                <div class="step" id="stepper-3">3</div>
+                <div class="step-line"></div>
+                <div class="step" id="stepper-2">2</div>
+                <div class="step-line"></div>
+                <div class="step active" id="stepper-1">1</div>
+            </div>
+
+            <!-- Step 1 Content -->
+            <div id="step-1">
+                <h4 class="step-question">ما نوع المساعدة التي تحتاجها؟</h4>
+
+                <!-- Options Grid -->
+                <div class="modal-options-grid">
+                    <div class="modal-option">
+                        <i class="fa-solid fa-kit-medical"></i>
+                        <span>شراء دواء</span>
+                    </div>
+                    <div class="modal-option">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span>شراء اغراض</span>
+                    </div>
+                    <div class="modal-option">
+                        <i class="fa-solid fa-person-walking"></i>
+                        <span>مرافقة</span>
+                    </div>
+                    <div class="modal-option">
+                        <i class="fa-solid fa-handshake-angle"></i>
+                        <span>طلب الدعم</span>
+                    </div>
+                    <div class="modal-option">
+                        <i class="fa-solid fa-users"></i>
+                        <span>زيارة اجتماعيه</span>
+                    </div>
+                    <div class="modal-option">
+                        <i class="fa-solid fa-star"></i>
+                        <span>اخرى</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 Content -->
+            <div id="step-2" style="display: none;">
+                <div class="input-group">
+                    <label>اشرح ما تحتاجه</label>
+                    <input type="text" id="req-desc" placeholder="مثال: احتاج دواء الضغط من الصيدلية الشفاء">
+                </div>
+                <div class="input-group">
+                    <label>أقصى موعد لتنفيذ الخدمة</label>
+                    <input type="datetime-local" id="req-time">
+                </div>
+                <div class="input-group">
+                    <label>العنوان</label>
+                    <input type="text" id="req-address" placeholder="حي الرمال_ شارع الوحدة">
+                </div>
+            </div>
+
+            <!-- Step 3 Content -->
+            <div id="step-3" style="display: none; text-align: center;">
+                <div class="ready-icon">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h3 style="margin-bottom: 10px; color: var(--sidebar-bg); font-size: 20px;">طلبك جاهز للارسال</h3>
+                <p style="color: var(--text-muted); margin-bottom: 25px; font-size: 14px;">سنرسل طلب <span id="summary-type" style="font-weight: bold; color: var(--sidebar-bg);">شراء اغراض</span> للمتطوعين والجمعيات القريبه منك</p>
+                
+                <div class="summary-box">
+                    <p id="summary-address" style="font-weight: bold; margin-bottom: 8px; color: var(--sidebar-bg);">حي الرمال _ شارع الوحدة</p>
+                    <p id="summary-time" style="color: var(--text-muted); font-size: 14px;">في اقرب وقت</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="modal-actions">
+                <button class="modal-btn cancel-btn" id="modal-prev-btn">الغاء</button>
+                <button class="modal-btn next-btn" id="modal-next-btn">التالي</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

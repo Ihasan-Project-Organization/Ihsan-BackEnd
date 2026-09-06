@@ -20,7 +20,7 @@
                     <h2 class="mt-4 text-xl font-black">{{ $user->name }}</h2>
                     <p class="mt-1 break-all text-sm text-[#dfe6d5]">{{ $user->email }}</p>
                     <span
-                        class="mt-4 inline-flex rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold">{{ $user->account_type === 'volunteer' ? 'متطوع' : 'كبير سن' }}</span>
+                        class="mt-4 inline-flex rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold">مستخدم منصة إحسان {{-- TODO: reconnect in stage 3.2/3.3 --}}</span>
                 </div>
                 <div class="rounded-2xl border border-red-100 bg-white p-6 shadow-sm">@include('profile.partials.delete-user-form')</div>
             </aside>

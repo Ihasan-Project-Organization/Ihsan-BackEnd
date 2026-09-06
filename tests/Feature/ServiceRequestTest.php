@@ -1,10 +1,17 @@
 <?php
 
+use App\Models\ElderProfile;
+use App\Models\ServiceProviderProfile;
 use App\Models\ServiceRequest;
 use App\Models\User;
 
 test('elderly user can view service requests index page', function () {
-    $user = User::factory()->create(['account_type' => 'elderly']);
+    $user = User::factory()->create();
+    ElderProfile::create([
+        'user_id' => $user->id,
+        'full_name' => $user->name,
+        'city' => 'غزة',
+    ]);
 
     $response = $this
         ->actingAs($user)
@@ -14,8 +21,13 @@ test('elderly user can view service requests index page', function () {
     $response->assertSee('طلباتي');
 });
 
-test('elderly user can create a new service request with initial attempt', function () {
-    $user = User::factory()->create(['account_type' => 'elderly']);
+test('elderly user can create a new service request', function () {
+    $user = User::factory()->create();
+    $elderProfile = ElderProfile::create([
+        'user_id' => $user->id,
+        'full_name' => $user->name,
+        'city' => 'غزة',
+    ]);
 
     $response = $this
         ->actingAs($user)
@@ -29,33 +41,43 @@ test('elderly user can create a new service request with initial attempt', funct
     $response->assertSessionHas('status', 'request-created');
     $response->assertRedirect(route('service-requests.index', ['tab' => 'active']));
 
-    $this->assertDatabaseHas('service_requests', [
-        'user_id' => $user->id,
+    $this->assertDatabaseHas('requests', [
+        'elder_id' => $elderProfile->id,
         'title' => 'شراء دواء من الصيدلية',
         'status' => ServiceRequest::STATUS_PENDING_ACCEPTANCE,
-        'attempts_count' => 1,
     ]);
 
-    $serviceRequest = ServiceRequest::where('user_id', $user->id)->firstOrFail();
+    $serviceRequest = ServiceRequest::where('elder_id', $elderProfile->id)->firstOrFail();
     expect($serviceRequest->public_id)->toStartWith('#REQ-');
-    expect($serviceRequest->attempts)->toHaveCount(1);
-    expect($serviceRequest->attempts->first()->attempt_number)->toBe(1);
 });
 
-test('rescheduling request maintains public_id and creates a new attempt', function () {
-    $user = User::factory()->create(['account_type' => 'elderly']);
-    $provider = User::factory()->create(['account_type' => 'volunteer']);
+test('rescheduling request maintains public_id', function () {
+    $user = User::factory()->create();
+    $elderProfile = ElderProfile::create([
+        'user_id' => $user->id,
+        'full_name' => $user->name,
+        'city' => 'غزة',
+    ]);
+
+    $provider = User::factory()->create();
+    $providerProfile = ServiceProviderProfile::create([
+        'user_id' => $provider->id,
+        'full_name' => $provider->name,
+        'birth_date' => '1995-01-01',
+        'id_document_path' => 'documents/id.png',
+        'good_conduct_cert_path' => 'documents/conduct.pdf',
+    ]);
 
     $serviceRequest = ServiceRequest::create([
         'public_id' => '#REQ-1045',
-        'user_id' => $user->id,
-        'assigned_provider_id' => $provider->id,
+        'elder_id' => $elderProfile->id,
+        'provider_id' => $providerProfile->id,
         'title' => 'شراء أغراض',
+        'service_type' => 'grocery',
         'description' => 'شراء بعض الاحتياجات المنزلية الأساسية.',
         'location' => 'حي النصر',
         'scheduled_at' => now()->addDay(),
         'status' => ServiceRequest::STATUS_PROVIDER_APOLOGIZED,
-        'attempts_count' => 1,
     ]);
 
     $newDate = now()->addDays(3)->format('Y-m-d H:i:s');
@@ -72,31 +94,44 @@ test('rescheduling request maintains public_id and creates a new attempt', funct
     $serviceRequest->refresh();
     expect($serviceRequest->public_id)->toBe('#REQ-1045');
     expect($serviceRequest->status)->toBe(ServiceRequest::STATUS_PENDING_ACCEPTANCE);
-    expect($serviceRequest->assigned_provider_id)->toBeNull();
-    expect($serviceRequest->attempts_count)->toBe(2);
-    expect($serviceRequest->attempts)->toHaveCount(1);
-    expect($serviceRequest->attempts->first()->attempt_number)->toBe(2);
+    expect($serviceRequest->provider_id)->toBeNull();
 });
 
 test('elderly user can confirm request completion', function () {
-    $user = User::factory()->create(['account_type' => 'elderly']);
-    $provider = User::factory()->create(['account_type' => 'volunteer']);
+    $user = User::factory()->create();
+    $elderProfile = ElderProfile::create([
+        'user_id' => $user->id,
+        'full_name' => $user->name,
+        'city' => 'غزة',
+    ]);
+
+    $provider = User::factory()->create();
+    $providerProfile = ServiceProviderProfile::create([
+        'user_id' => $provider->id,
+        'full_name' => $provider->name,
+        'birth_date' => '1995-01-01',
+        'id_document_path' => 'documents/id.png',
+        'good_conduct_cert_path' => 'documents/conduct.pdf',
+    ]);
 
     $serviceRequest = ServiceRequest::create([
         'public_id' => '#REQ-1034',
-        'user_id' => $user->id,
-        'assigned_provider_id' => $provider->id,
+        'elder_id' => $elderProfile->id,
+        'provider_id' => $providerProfile->id,
         'title' => 'مساعدة منزلية',
+        'service_type' => 'home_help',
         'description' => 'مساعدة بسيطة في ترتيب الاحتياجات.',
         'location' => 'حي الدرج',
         'scheduled_at' => now()->subHour(),
         'status' => ServiceRequest::STATUS_PENDING_CONFIRMATION,
-        'attempts_count' => 1,
     ]);
 
     $response = $this
         ->actingAs($user)
-        ->patch("/requests/{$serviceRequest->id}/confirm");
+        ->patch("/requests/{$serviceRequest->id}/confirm", [
+            'stars' => 5,
+            'comment' => 'خدمة ممتازة جزاكم الله خيراً',
+        ]);
 
     $response->assertSessionHas('status', 'request-completed');
     $response->assertRedirect(route('service-requests.index', ['tab' => 'completed']));
@@ -107,17 +142,22 @@ test('elderly user can confirm request completion', function () {
 });
 
 test('elderly user can cancel a service request with a reason', function () {
-    $user = User::factory()->create(['account_type' => 'elderly']);
+    $user = User::factory()->create();
+    $elderProfile = ElderProfile::create([
+        'user_id' => $user->id,
+        'full_name' => $user->name,
+        'city' => 'غزة',
+    ]);
 
     $serviceRequest = ServiceRequest::create([
         'public_id' => '#REQ-1021',
-        'user_id' => $user->id,
+        'elder_id' => $elderProfile->id,
         'title' => 'زيارة ودية',
+        'service_type' => 'companionship',
         'description' => 'زيارة ودية وقراءة بعض الرسائل.',
         'location' => 'حي الشيخ رضوان',
         'scheduled_at' => now()->addDays(2),
         'status' => ServiceRequest::STATUS_PENDING_ACCEPTANCE,
-        'attempts_count' => 1,
     ]);
 
     $response = $this
@@ -135,19 +175,32 @@ test('elderly user can cancel a service request with a reason', function () {
 });
 
 test('elderly user can submit a review for completed service request', function () {
-    $user = User::factory()->create(['account_type' => 'elderly']);
-    $provider = User::factory()->create(['account_type' => 'volunteer']);
+    $user = User::factory()->create();
+    $elderProfile = ElderProfile::create([
+        'user_id' => $user->id,
+        'full_name' => $user->name,
+        'city' => 'غزة',
+    ]);
+
+    $provider = User::factory()->create();
+    $providerProfile = ServiceProviderProfile::create([
+        'user_id' => $provider->id,
+        'full_name' => $provider->name,
+        'birth_date' => '1995-01-01',
+        'id_document_path' => 'documents/id.png',
+        'good_conduct_cert_path' => 'documents/conduct.pdf',
+    ]);
 
     $serviceRequest = ServiceRequest::create([
         'public_id' => '#REQ-1011',
-        'user_id' => $user->id,
-        'assigned_provider_id' => $provider->id,
+        'elder_id' => $elderProfile->id,
+        'provider_id' => $providerProfile->id,
         'title' => 'طلب دعم',
+        'service_type' => 'home_help',
         'description' => 'مساعدة في مراجعة الأوراق.',
         'location' => 'حي الرمال',
         'scheduled_at' => now()->subDay(),
         'status' => ServiceRequest::STATUS_COMPLETED,
-        'attempts_count' => 1,
         'completed_at' => now()->subDay(),
     ]);
 
@@ -160,22 +213,28 @@ test('elderly user can submit a review for completed service request', function 
 
     $response->assertSessionHas('status', 'review-submitted');
 
-    $this->assertDatabaseHas('service_reviews', [
+    $this->assertDatabaseHas('ratings', [
         'service_request_id' => $serviceRequest->id,
         'elderly_id' => $user->id,
         'provider_id' => $provider->id,
-        'rating' => 5,
+        'stars' => 5,
         'comment' => 'متطوع خلوق وسريع الاستجابة بارك الله فيه.',
     ]);
 });
 
 test('tabs filter requests properly by status', function () {
-    $user = User::factory()->create(['account_type' => 'elderly']);
+    $user = User::factory()->create();
+    $elderProfile = ElderProfile::create([
+        'user_id' => $user->id,
+        'full_name' => $user->name,
+        'city' => 'غزة',
+    ]);
 
     ServiceRequest::create([
         'public_id' => '#REQ-1001',
-        'user_id' => $user->id,
+        'elder_id' => $elderProfile->id,
         'title' => 'طلب نشط',
+        'service_type' => 'grocery',
         'description' => 'شرح الطلب',
         'location' => 'غزة',
         'scheduled_at' => now()->addDay(),
@@ -184,8 +243,9 @@ test('tabs filter requests properly by status', function () {
 
     ServiceRequest::create([
         'public_id' => '#REQ-1002',
-        'user_id' => $user->id,
+        'elder_id' => $elderProfile->id,
         'title' => 'طلب بحاجة لإجراء',
+        'service_type' => 'grocery',
         'description' => 'شرح الطلب',
         'location' => 'غزة',
         'scheduled_at' => now()->addDay(),
@@ -202,5 +262,3 @@ test('tabs filter requests properly by status', function () {
     $responseNeedsAction->assertSee('#REQ-1002');
     $responseNeedsAction->assertDontSee('#REQ-1001');
 });
-
-

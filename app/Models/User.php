@@ -7,6 +7,8 @@ use App\Notifications\EhsanVerifyEmailNotification;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -25,7 +27,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'account_type',
+        'status',
+        'rejection_reason',
+        'profile_picture_path',
     ];
 
     /**
@@ -51,90 +55,120 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function registrationProfile(): HasOne
+    /**
+     * ملف كبير السن.
+     */
+    public function elderProfile(): HasOne
     {
-        return $this->hasOne(RegistrationProfile::class);
+        return $this->hasOne(ElderProfile::class);
     }
 
     /**
-     * طلبات الخدمة المنشأة من قبل هذا المستخدم (كبير السن).
+     * ملف مقدم الخدمة.
      */
-    public function serviceRequests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function serviceProviderProfile(): HasOne
     {
-        return $this->hasMany(ServiceRequest::class, 'user_id');
+        return $this->hasOne(ServiceProviderProfile::class);
     }
 
     /**
-     * طلبات الخدمة المسندة إلى هذا المستخدم (المتطوع).
+     * حساب الإدارة.
      */
-    public function assignedServiceRequests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function admin(): HasOne
     {
-        return $this->hasMany(ServiceRequest::class, 'assigned_provider_id');
+        return $this->hasOne(Admin::class);
+    }
+
+    /**
+     * التحقق مما إذا كان المستخدم مديراً للنظام.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->relationLoaded('admin')
+            ? $this->admin !== null
+            : $this->admin()->exists();
+    }
+
+    /**
+     * هل المستخدم مقدم خدمة (متطوع)؟
+     */
+    public function isProvider(): bool
+    {
+        return $this->relationLoaded('serviceProviderProfile')
+            ? $this->serviceProviderProfile !== null
+            : $this->serviceProviderProfile()->exists();
+    }
+
+    /**
+     * هل المستخدم كبير سن (مستفيد)؟
+     */
+    public function isElder(): bool
+    {
+        return $this->getRoleAttribute() === 'elder';
+    }
+
+    /**
+     * تحديد الدور الفعلي للمستخدم: elder, provider, admin, super_admin.
+     */
+    public function getRoleAttribute(): string
+    {
+        if ($this->isAdmin()) {
+            return $this->admin?->admin_level ?? 'admin';
+        }
+
+        if ($this->isProvider()) {
+            return 'provider';
+        }
+
+        return 'elder';
+    }
+
+    /**
+     * الإشعارات الخاصة بالمستخدم.
+     */
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    /**
+     * الشكاوى المقدمة من قبل المستخدم.
+     */
+    public function complaints(): HasMany
+    {
+        return $this->hasMany(Complaint::class, 'reporter_id');
+    }
+
+    /**
+     * طلبات الخدمة المنشأة من قبل هذا المستخدم (كبير السن عبر ملفه).
+     */
+    public function serviceRequests(): HasManyThrough
+    {
+        return $this->hasManyThrough(ServiceRequest::class, ElderProfile::class, 'user_id', 'elder_id');
+    }
+
+    /**
+     * طلبات الخدمة المسندة إلى هذا المستخدم (مقدم الخدمة عبر ملفه).
+     */
+    public function assignedServiceRequests(): HasManyThrough
+    {
+        return $this->hasManyThrough(ServiceRequest::class, ServiceProviderProfile::class, 'user_id', 'provider_id');
     }
 
     /**
      * التقييمات المعطاة.
      */
-    public function givenReviews(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function givenReviews(): HasMany
     {
-        return $this->hasMany(ServiceReview::class, 'elderly_id');
+        return $this->hasMany(Rating::class, 'elderly_id');
     }
 
     /**
      * التقييمات المستلمة.
      */
-    public function receivedReviews(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function receivedReviews(): HasMany
     {
-        return $this->hasMany(ServiceReview::class, 'provider_id');
-    }
-
-    /**
-     * إعدادات ومؤشرات مقدم الخدمة (المتطوع).
-     */
-    public function providerSetting(): HasOne
-    {
-        return $this->hasOne(ProviderSetting::class);
-    }
-
-    /**
-     * الطلبات المتجاوزة من قبل هذا المتطوع.
-     */
-    public function dismissedRequests(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(ProviderDismissedRequest::class);
-    }
-
-    /**
-     * جلب أو إنشاء إعدادات التوفر والالتزام لمقدم الخدمة.
-     */
-    public function getOrCreateProviderSetting(): ProviderSetting
-    {
-        return $this->providerSetting()->firstOrCreate(
-            ['user_id' => $this->id],
-            [
-                'available_days' => ['sat', 'sun', 'mon', 'tue', 'wed', 'thu'],
-                'available_from' => '08:00:00',
-                'available_to' => '18:00:00',
-                'is_available' => true,
-                'offered_services' => ['grocery', 'medical_escort', 'medicine', 'home_help'],
-                'service_city' => 'مدينة غزة',
-                'coverage_radius_km' => 5,
-                'commitment_score' => 92,
-                'punctuality_rate' => 94,
-                'completion_rate' => 97,
-                'response_rate' => 88,
-            ]
-        );
-    }
-
-    public function isVolunteer(): bool
-    {
-        return $this->account_type === 'volunteer';
-    }
-
-    public function isElderly(): bool
-    {
-        return $this->account_type === 'elderly';
+        return $this->hasMany(Rating::class, 'provider_id');
     }
 
     public function sendPasswordResetNotification($token): void

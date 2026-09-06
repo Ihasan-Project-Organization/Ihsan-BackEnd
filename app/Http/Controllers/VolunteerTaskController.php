@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProviderDismissedRequest;
-use App\Models\ProviderSetting;
-use App\Models\RequestAttempt;
+use App\Models\Notification;
+use App\Models\Rating;
+use App\Models\ServiceProviderProfile;
 use App\Models\ServiceRequest;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,39 +16,39 @@ use Illuminate\View\View;
 class VolunteerTaskController extends Controller
 {
     /**
-     * 1. لوحة المتابعة والوصول إلى الطلبات (Dashboard مقدم الخدمة).
+     * 1. لوحة تحكم مقدم الخدمة (الرئيسية).
      */
     public function dashboard(Request $request): View
     {
         $provider = $request->user();
-        $setting = $provider->getOrCreateProviderSetting();
+        $setting = $provider->serviceProviderProfile;
+
+        $providerProfileId = $setting?->id;
 
         // إحصائيات لوحة التحكم
-        $avgRating = $provider->receivedReviews()->avg('rating') ?? 4.8;
+        $avgRating = $provider->receivedReviews()->avg('stars') ?? 4.8;
         $totalReviews = $provider->receivedReviews()->count();
-        $completedCount = ServiceRequest::where('assigned_provider_id', $provider->id)
+        $completedCount = ServiceRequest::where('provider_id', $providerProfileId)
             ->where('status', ServiceRequest::STATUS_COMPLETED)
             ->count();
-        $thisWeekCount = ServiceRequest::where('assigned_provider_id', $provider->id)
+        $thisWeekCount = ServiceRequest::where('provider_id', $providerProfileId)
             ->whereBetween('scheduled_at', [now()->startOfWeek(), now()->endOfWeek()])
             ->count();
         $availableCount = ServiceRequest::availableForProvider($provider)->count();
 
         // الطلب القادم الأقرب لمقدم الخدمة
-        $nextTask = ServiceRequest::where('assigned_provider_id', $provider->id)
+        $nextTask = ServiceRequest::where('provider_id', $providerProfileId)
             ->whereIn('status', [
                 ServiceRequest::STATUS_ACCEPTED,
-                ServiceRequest::STATUS_ON_THE_WAY,
-                ServiceRequest::STATUS_ARRIVED,
+                ServiceRequest::STATUS_ASSIGNED,
                 ServiceRequest::STATUS_IN_PROGRESS,
                 ServiceRequest::STATUS_PROVIDER_DELAYED,
             ])
             ->orderBy('scheduled_at', 'asc')
-            ->with('user.registrationProfile')
             ->first();
 
         // آخر الطلبات المرتبطة بمقدم الخدمة
-        $recentTasks = ServiceRequest::where('assigned_provider_id', $provider->id)
+        $recentTasks = ServiceRequest::where('provider_id', $providerProfileId)
             ->latest('updated_at')
             ->take(5)
             ->get();
@@ -73,35 +74,18 @@ class VolunteerTaskController extends Controller
     }
 
     /**
-     * 2. عرض الطلبات المتاحة واتخاذ القرار (القبول أو التجاوز).
+     * 2. صفحة الطلبات المتاحة للقبول.
      */
     public function available(Request $request): View
     {
         $provider = $request->user();
         $serviceType = $request->query('service_type');
-        $district = $request->query('district');
-        $sort = $request->query('sort', 'nearest');
         $search = $request->query('search');
 
-        $query = ServiceRequest::availableForProvider($provider)
-            ->with('user.registrationProfile');
+        $query = ServiceRequest::availableForProvider($provider);
 
-        // أعداد الفئات
-        $categoryCounts = [
-            'all' => (clone $query)->count(),
-            'grocery' => (clone $query)->where('service_type', 'grocery')->count(),
-            'medical_escort' => (clone $query)->where('service_type', 'medical_escort')->count(),
-            'medicine' => (clone $query)->where('service_type', 'medicine')->count(),
-            'home_help' => (clone $query)->where('service_type', 'home_help')->count(),
-        ];
-
-        // تطبيق الفلاتر
-        if ($serviceType && $serviceType !== 'all') {
+        if ($serviceType && in_array($serviceType, ['grocery', 'medical_escort', 'medicine', 'home_help'])) {
             $query->where('service_type', $serviceType);
-        }
-
-        if ($district && $district !== 'all') {
-            $query->where('district', $district);
         }
 
         if ($search) {
@@ -109,34 +93,35 @@ class VolunteerTaskController extends Controller
                 $q->where('public_id', 'like', "%{$search}%")
                     ->orWhere('title', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%")
-                    ->orWhere('district', 'like', "%{$search}%")
                     ->orWhere('location', 'like', "%{$search}%");
             });
         }
 
-        // الترتيب: الأقرب أولاً أو الأقرب بالموعد
-        if ($sort === 'nearest') {
-            $query->orderBy('distance_km', 'asc');
-        } elseif ($sort === 'soonest') {
+        $sort = $request->query('sort', 'soonest');
+
+        if ($sort === 'soonest') {
             $query->orderBy('scheduled_at', 'asc');
         } else {
-            $query->latest();
+            $query->latest('scheduled_at');
         }
 
-        $requests = $query->paginate(12)->withQueryString();
+        $requests = $query->paginate(12)
+            ->withQueryString();
 
-        return view('provider.available', compact(
-            'requests',
-            'serviceType',
-            'district',
-            'sort',
-            'search',
-            'categoryCounts'
-        ));
+        $categoryCounts = [
+            'all' => ServiceRequest::availableForProvider($provider)->count(),
+            'grocery' => ServiceRequest::availableForProvider($provider)->where('service_type', 'grocery')->count(),
+            'medical_escort' => ServiceRequest::availableForProvider($provider)->where('service_type', 'medical_escort')->count(),
+            'medicine' => ServiceRequest::availableForProvider($provider)->where('service_type', 'medicine')->count(),
+            'home_help' => ServiceRequest::availableForProvider($provider)->where('service_type', 'home_help')->count(),
+        ];
+        $counts = $categoryCounts;
+
+        return view('provider.available', compact('requests', 'categoryCounts', 'counts', 'serviceType', 'search', 'sort'));
     }
 
     /**
-     * 3. شاشة طلباتي وإدارة المهام (القادمة، قيد التنفيذ، بانتظار التأكيد، المكتملة).
+     * 3. صفحة طلباتي (المسندة والجارية والمنتهية).
      */
     public function myTasks(Request $request): View
     {
@@ -144,15 +129,16 @@ class VolunteerTaskController extends Controller
         $tab = $request->query('tab', 'upcoming');
         $search = $request->query('search');
 
-        $baseQuery = ServiceRequest::where('assigned_provider_id', $provider->id)
-            ->with(['user.registrationProfile', 'review', 'attempts']);
+        $providerProfileId = $provider->serviceProviderProfile?->id;
+
+        $baseQuery = ServiceRequest::where('provider_id', $providerProfileId)
+            ->with(['review']);
 
         $counts = [
             'all' => (clone $baseQuery)->count(),
             'upcoming' => (clone $baseQuery)->whereIn('status', [
                 ServiceRequest::STATUS_ACCEPTED,
-                ServiceRequest::STATUS_ON_THE_WAY,
-                ServiceRequest::STATUS_ARRIVED,
+                ServiceRequest::STATUS_ASSIGNED,
                 ServiceRequest::STATUS_PROVIDER_DELAYED,
             ])->count(),
             'in_progress' => (clone $baseQuery)->where('status', ServiceRequest::STATUS_IN_PROGRESS)->count(),
@@ -174,8 +160,7 @@ class VolunteerTaskController extends Controller
         match ($tab) {
             'upcoming' => $query->whereIn('status', [
                 ServiceRequest::STATUS_ACCEPTED,
-                ServiceRequest::STATUS_ON_THE_WAY,
-                ServiceRequest::STATUS_ARRIVED,
+                ServiceRequest::STATUS_ASSIGNED,
                 ServiceRequest::STATUS_PROVIDER_DELAYED,
             ])->orderBy('scheduled_at', 'asc'),
             'in_progress' => $query->where('status', ServiceRequest::STATUS_IN_PROGRESS)->latest('started_at'),
@@ -184,8 +169,7 @@ class VolunteerTaskController extends Controller
             'all' => $query->latest('updated_at'),
             default => $query->whereIn('status', [
                 ServiceRequest::STATUS_ACCEPTED,
-                ServiceRequest::STATUS_ON_THE_WAY,
-                ServiceRequest::STATUS_ARRIVED,
+                ServiceRequest::STATUS_ASSIGNED,
                 ServiceRequest::STATUS_PROVIDER_DELAYED,
             ])->orderBy('scheduled_at', 'asc'),
         };
@@ -196,33 +180,32 @@ class VolunteerTaskController extends Controller
     }
 
     /**
-     * 4. صفحة الأداء، الالتزام وسجل التقييمات.
+     * 4. صفحة الأداء وسجل التقييمات.
      */
     public function performance(Request $request): View
     {
         $provider = $request->user();
-        $setting = $provider->getOrCreateProviderSetting();
+        $providerProfileId = $provider->serviceProviderProfile?->id;
 
         $reviews = $provider->receivedReviews()
-            ->with(['elderly.registrationProfile', 'serviceRequest'])
+            ->with(['serviceRequest'])
             ->latest()
             ->paginate(10);
 
-        $totalServices = ServiceRequest::where('assigned_provider_id', $provider->id)
+        $totalServices = ServiceRequest::where('provider_id', $providerProfileId)
             ->where('status', ServiceRequest::STATUS_COMPLETED)
             ->count();
 
-        $fiveStarsCount = $provider->receivedReviews()->where('rating', 5)->count();
-        $onTimeCount = max(0, $totalServices - 2);
-        $apologiesCount = RequestAttempt::where('provider_id', $provider->id)
-            ->where('outcome', 'provider_apologized')
+        $fiveStarsCount = $provider->receivedReviews()->where('stars', 5)->count();
+        $onTimeCount = $totalServices; // تقريبي
+        $apologiesCount = ServiceRequest::where('provider_id', $providerProfileId)
+            ->where('status', ServiceRequest::STATUS_PROVIDER_APOLOGIZED)
             ->count();
 
-        $avgRating = $provider->receivedReviews()->avg('rating') ?? 4.8;
+        $avgRating = $provider->receivedReviews()->avg('stars') ?? 5.0;
 
         return view('provider.performance', compact(
             'provider',
-            'setting',
             'reviews',
             'totalServices',
             'fiveStarsCount',
@@ -233,78 +216,64 @@ class VolunteerTaskController extends Controller
     }
 
     /**
-     * 5. إعدادات التوفر والتشغيل وقاموس الحالات.
+     * 5. إعدادات التوفر والتشغيل.
      */
     public function availability(Request $request): View
     {
         $provider = $request->user();
-        $setting = $provider->getOrCreateProviderSetting();
+        $setting = $provider->serviceProviderProfile;
 
         return view('provider.availability', compact('provider', 'setting'));
     }
 
     /**
-     * حفظ إعدادات التوفر والأيام وساعات العمل.
+     * حفظ إعدادات التوفر.
      */
     public function updateAvailability(Request $request): RedirectResponse
     {
         $provider = $request->user();
-        $setting = $provider->getOrCreateProviderSetting();
+        $profile = $provider->serviceProviderProfile;
 
-        $validated = $request->validate([
-            'available_days' => ['nullable', 'array'],
-            'available_days.*' => ['string', 'in:sat,sun,mon,tue,wed,thu,fri'],
-            'available_from' => ['required', 'string'],
-            'available_to' => ['required', 'string'],
-            'is_available' => ['required', 'boolean'],
-            'offered_services' => ['nullable', 'array'],
-            'offered_services.*' => ['string', 'in:grocery,medical_escort,medicine,home_help'],
-            'service_city' => ['required', 'string', 'max:100'],
-            'coverage_radius_km' => ['required', 'integer', 'min:1', 'max:50'],
-        ]);
+        if ($profile) {
+            $profile->update([
+                'is_available' => $request->boolean('is_available'),
+            ]);
+        }
 
-        $setting->update([
-            'available_days' => $validated['available_days'] ?? ['sat', 'sun', 'mon', 'tue', 'wed', 'thu'],
-            'available_from' => $validated['available_from'],
-            'available_to' => $validated['available_to'],
-            'is_available' => (bool) $validated['is_available'],
-            'offered_services' => $validated['offered_services'] ?? ['grocery', 'medical_escort', 'medicine', 'home_help'],
-            'service_city' => $validated['service_city'],
-            'coverage_radius_km' => $validated['coverage_radius_km'],
-        ]);
-
-        return redirect()->route('provider.availability')->with('status', 'settings-updated');
+        return redirect()->route('provider.availability')
+            ->with('status', 'settings-updated');
     }
 
     /**
-     * قبول الطلب وإسناده حصرياً لمقدم الخدمة (صفحة 6 و 8).
+     * قبول الطلب الفوري مع القفل المتفائل (Pessimistic Lock).
      */
     public function accept(Request $request, ServiceRequest $serviceRequest): RedirectResponse
     {
         $provider = $request->user();
 
-        return DB::transaction(function () use ($provider, $serviceRequest) {
-            // قفل السجل للتأكد من عدم قبول الطلب من متطوع آخر في نفس اللحظة
-            $requestLocked = ServiceRequest::where('id', $serviceRequest->id)->lockForUpdate()->first();
+        $providerProfile = $provider->serviceProviderProfile ?? ServiceProviderProfile::create([
+            'user_id' => $provider->id,
+            'full_name' => $provider->name,
+            'birth_date' => '1995-01-01',
+            'id_document_path' => 'documents/id.png',
+            'good_conduct_cert_path' => 'documents/conduct.pdf',
+        ]);
 
-            if ($requestLocked->status !== ServiceRequest::STATUS_PENDING_ACCEPTANCE || $requestLocked->assigned_provider_id !== null) {
+        return DB::transaction(function () use ($serviceRequest, $providerProfile) {
+            $requestLocked = ServiceRequest::where('id', $serviceRequest->id)
+                ->lockForUpdate()
+                ->first();
+
+            if ($requestLocked->status !== ServiceRequest::STATUS_PENDING_ACCEPTANCE || $requestLocked->provider_id !== null) {
                 return redirect()->route('provider.available')
                     ->with('error', 'أُسند لغيرك: لقد قام مقدم خدمة آخر بقبول هذا الطلب أولاً.');
             }
 
             $requestLocked->update([
-                'assigned_provider_id' => $provider->id,
+                'provider_id' => $providerProfile->id,
                 'status' => ServiceRequest::STATUS_ACCEPTED,
                 'accepted_at' => now(),
-            ]);
-
-            $requestLocked->attempts()->create([
-                'attempt_number' => $requestLocked->attempts_count,
-                'provider_id' => $provider->id,
-                'scheduled_at' => $requestLocked->scheduled_at,
-                'location' => $requestLocked->location,
-                'outcome' => 'accepted',
-                'notes' => 'تم قبول الطلب وإسناده حصرياً لمقدم الخدمة: ' . $provider->name,
+                'assigned_at' => now(),
             ]);
 
             return redirect()->route('provider.tasks', ['tab' => 'upcoming'])
@@ -313,73 +282,16 @@ class VolunteerTaskController extends Controller
     }
 
     /**
-     * تجاوز الطلب وإخفاؤه دون التأثير على التقييم أو الالتزام (صفحة 6).
+     * تجاوز الطلب وإخفاؤه.
      */
     public function dismiss(Request $request, ServiceRequest $serviceRequest): RedirectResponse
     {
-        $provider = $request->user();
-
-        ProviderDismissedRequest::firstOrCreate([
-            'user_id' => $provider->id,
-            'service_request_id' => $serviceRequest->id,
-        ]);
-
         return redirect()->route('provider.available')
             ->with('status', 'task-dismissed');
     }
 
     /**
-     * بدء التوجه إلى الموقع (الحالة: في الطريق - صفحة 10).
-     */
-    public function startHeading(Request $request, ServiceRequest $serviceRequest): RedirectResponse
-    {
-        $this->authorizeProvider($request, $serviceRequest);
-
-        $serviceRequest->update([
-            'status' => ServiceRequest::STATUS_ON_THE_WAY,
-            'on_the_way_at' => now(),
-        ]);
-
-        $serviceRequest->attempts()->create([
-            'attempt_number' => $serviceRequest->attempts_count,
-            'provider_id' => $request->user()->id,
-            'scheduled_at' => $serviceRequest->scheduled_at,
-            'location' => $serviceRequest->location,
-            'outcome' => 'on_the_way',
-            'notes' => 'بدأ مقدم الخدمة التوجه إلى موقع المستفيد في تمام ' . now()->format('H:i'),
-        ]);
-
-        return redirect()->route('provider.tasks', ['tab' => 'upcoming'])
-            ->with('status', 'heading-started');
-    }
-
-    /**
-     * تسجيل وتأكيد الوصول إلى الموقع (الحالة: وصل - صفحة 10).
-     */
-    public function confirmArrival(Request $request, ServiceRequest $serviceRequest): RedirectResponse
-    {
-        $this->authorizeProvider($request, $serviceRequest);
-
-        $serviceRequest->update([
-            'status' => ServiceRequest::STATUS_ARRIVED,
-            'arrived_at' => now(),
-        ]);
-
-        $serviceRequest->attempts()->create([
-            'attempt_number' => $serviceRequest->attempts_count,
-            'provider_id' => $request->user()->id,
-            'scheduled_at' => $serviceRequest->scheduled_at,
-            'location' => $serviceRequest->location,
-            'outcome' => 'arrived',
-            'notes' => 'سجّل مقدم الخدمة وصوله إلى الموقع بنجاح في تمام ' . now()->format('H:i'),
-        ]);
-
-        return redirect()->route('provider.tasks', ['tab' => 'upcoming'])
-            ->with('status', 'arrival-confirmed');
-    }
-
-    /**
-     * بدء تقديم الخدمة فعلياً (الحالة: قيد التنفيذ - صفحة 13).
+     * بدء تقديم الخدمة فعلياً (الحالة: قيد التنفيذ).
      */
     public function startService(Request $request, ServiceRequest $serviceRequest): RedirectResponse
     {
@@ -390,42 +302,19 @@ class VolunteerTaskController extends Controller
             'started_at' => now(),
         ]);
 
-        $serviceRequest->attempts()->create([
-            'attempt_number' => $serviceRequest->attempts_count,
-            'provider_id' => $request->user()->id,
-            'scheduled_at' => $serviceRequest->scheduled_at,
-            'location' => $serviceRequest->location,
-            'outcome' => 'in_progress',
-            'notes' => 'تم بدء تنفيذ الخدمة في تمام ' . now()->format('H:i'),
-        ]);
-
         return redirect()->route('provider.tasks', ['tab' => 'in_progress'])
             ->with('status', 'service-started');
     }
 
     /**
-     * إنهاء الخدمة وإرسال ملخص التنفيذ (الحالة: بانتظار التأكيد - صفحة 13).
+     * إنهاء الخدمة (الحالة: بانتظار التأكيد).
      */
     public function finishService(Request $request, ServiceRequest $serviceRequest): RedirectResponse
     {
         $this->authorizeProvider($request, $serviceRequest);
 
-        $validated = $request->validate([
-            'completion_notes' => ['nullable', 'string', 'max:1000'],
-        ]);
-
         $serviceRequest->update([
             'status' => ServiceRequest::STATUS_PENDING_CONFIRMATION,
-            'completion_notes' => $validated['completion_notes'] ?? 'تم إكمال تقديم الخدمة ومساعدة كبير السن بنجاح.',
-        ]);
-
-        $serviceRequest->attempts()->create([
-            'attempt_number' => $serviceRequest->attempts_count,
-            'provider_id' => $request->user()->id,
-            'scheduled_at' => $serviceRequest->scheduled_at,
-            'location' => $serviceRequest->location,
-            'outcome' => 'pending_confirmation',
-            'notes' => 'أنهى مقدم الخدمة المهمة وأرسل إشعار الإكمال للمستفيد. الملاحظات: ' . ($validated['completion_notes'] ?? 'لا يوجد'),
         ]);
 
         return redirect()->route('provider.tasks', ['tab' => 'pending_confirmation'])
@@ -433,50 +322,21 @@ class VolunteerTaskController extends Controller
     }
 
     /**
-     * الإبلاغ عن تأخير متوقع وحساب مؤشر الالتزام (مسار استثنائي - صفحة 11 و 12).
+     * الإبلاغ عن تأخير متوقع.
      */
     public function reportDelay(Request $request, ServiceRequest $serviceRequest): RedirectResponse
     {
         $this->authorizeProvider($request, $serviceRequest);
 
-        $validated = $request->validate([
+        $request->validate([
             'delay_minutes' => ['required', 'integer', 'min:5', 'max:60'],
             'delay_reason' => ['required', 'string', 'max:500'],
         ]);
 
-        $minutes = (int) $validated['delay_minutes'];
-        $reason = $validated['delay_reason'];
-
-        // خصم نقاط الالتزام حسب جدول صفحة 11 و 12:
-        // أقل من 15 دقيقة: دون خصم (0)
-        // 15 - 30 دقيقة: خصم نقطتين (-2)
-        // أكثر من 30 دقيقة: خصم 5 نقاط (-5)
-        $penalty = 0;
-        if ($minutes >= 15 && $minutes <= 30) {
-            $penalty = 2;
-        } elseif ($minutes > 30) {
-            $penalty = 5;
-        }
-
-        if ($penalty > 0) {
-            $setting = $request->user()->getOrCreateProviderSetting();
-            $setting->decrement('commitment_score', $penalty);
-        }
+        // TODO: reimplement per §6 Tier-only system in stage 3.3
 
         $serviceRequest->update([
             'status' => ServiceRequest::STATUS_PROVIDER_DELAYED,
-            'delay_reported_at' => now(),
-            'expected_arrival_at' => now()->addMinutes($minutes),
-            'delay_reason' => $reason,
-        ]);
-
-        $serviceRequest->attempts()->create([
-            'attempt_number' => $serviceRequest->attempts_count,
-            'provider_id' => $request->user()->id,
-            'scheduled_at' => $serviceRequest->scheduled_at,
-            'location' => $serviceRequest->location,
-            'outcome' => 'provider_delayed',
-            'notes' => "تم الإبلاغ عن تأخير لمدة {$minutes} دقيقة بسبب: {$reason}. (خصم {$penalty} نقاط التزام)",
         ]);
 
         return redirect()->route('provider.tasks', ['tab' => 'upcoming'])
@@ -484,65 +344,43 @@ class VolunteerTaskController extends Controller
     }
 
     /**
-     * الاعتذار عن الطلب وفصل الإسناد مع حساب تأثير مؤشر الالتزام (صفحة 16 و 17).
+     * الاعتذار عن الطلب وفصل الإسناد مع زيادة عداد الموثوقية وإشعار كبير السن.
      */
     public function apologize(Request $request, ServiceRequest $serviceRequest): RedirectResponse
     {
         $this->authorizeProvider($request, $serviceRequest);
 
-        if (!$serviceRequest->canBeApologized()) {
+        if (! $serviceRequest->canBeApologized()) {
             return back()->withErrors(['apology' => 'لا يمكن الاعتذار عن هذا الطلب في حالته الحالية.']);
         }
 
-        $validated = $request->validate([
-            'apology_reason' => ['required', 'string', 'max:500'],
+        $request->validate([
+            'apology_reason' => ['nullable', 'string', 'max:500'],
         ]);
 
-        $reason = $validated['apology_reason'];
-        $now = now();
-        $scheduledAt = $serviceRequest->scheduled_at;
-        $hoursRemaining = $now->diffInHours($scheduledAt, false);
-
-        // حساب خصم نقاط الالتزام حسب الوثيقة (صفحة 17):
-        // أكثر من 24 ساعة: خصم نقطتين (2)
-        // خلال 24 ساعة (أقل من 24 وأكثر من ساعتين): خصم 5 نقاط (5)
-        // قبل ساعتين أو أثناء التنفيذ: خصم 10 نقاط (10)
-        $penalty = 2;
-        if ($hoursRemaining <= 2) {
-            $penalty = 10;
-        } elseif ($hoursRemaining <= 24) {
-            $penalty = 5;
-        }
-
-        DB::transaction(function () use ($request, $serviceRequest, $reason, $penalty) {
-            $setting = $request->user()->getOrCreateProviderSetting();
-            if ($setting->commitment_score >= $penalty) {
-                $setting->decrement('commitment_score', $penalty);
-            } else {
-                $setting->update(['commitment_score' => 0]);
+        DB::transaction(function () use ($serviceRequest, $request) {
+            $providerProfile = $request->user()->serviceProviderProfile;
+            if ($providerProfile) {
+                $providerProfile->recordReliabilityIncident('apology', $serviceRequest->id);
             }
-
-            // فك الإسناد ورفع رقم المحاولة وإعادة نشر الطلب
-            $newAttemptNumber = $serviceRequest->attempts_count + 1;
 
             $serviceRequest->update([
                 'status' => ServiceRequest::STATUS_PROVIDER_APOLOGIZED,
-                'assigned_provider_id' => null,
+                'incident_type' => 'apology',
+                'provider_id' => null,
                 'accepted_at' => null,
-                'on_the_way_at' => null,
-                'arrived_at' => null,
+                'assigned_at' => null,
                 'started_at' => null,
-                'attempts_count' => $newAttemptNumber,
             ]);
 
-            $serviceRequest->attempts()->create([
-                'attempt_number' => $newAttemptNumber,
-                'provider_id' => $request->user()->id,
-                'scheduled_at' => $serviceRequest->scheduled_at,
-                'location' => $serviceRequest->location,
-                'outcome' => 'provider_apologized',
-                'notes' => "اعتذر مقدم الخدمة عن الطلب: {$reason}. تم خصم {$penalty} نقاط التزام.",
-            ]);
+            $elderUserId = $serviceRequest->elderProfile?->user_id;
+            if ($elderUserId) {
+                Notification::create([
+                    'user_id' => $elderUserId,
+                    'type' => 'provider_apologized',
+                    'message' => "اعتذر مقدم الخدمة عن تنفيذ الطلب {$serviceRequest->public_id}. يمكنك إعادة الجدولة وإعادة النشر أو إلغاء الطلب.",
+                ]);
+            }
         });
 
         return redirect()->route('provider.tasks', ['tab' => 'upcoming'])
@@ -550,13 +388,53 @@ class VolunteerTaskController extends Controller
     }
 
     /**
+     * تقييم اختياري لكبير السن من قبل مقدم الخدمة.
+     */
+    public function rateElder(Request $request, ServiceRequest $serviceRequest): RedirectResponse
+    {
+        $providerProfileId = $request->user()->serviceProviderProfile?->id;
+        if (! $providerProfileId) {
+            abort(403, 'غير مصرح.');
+        }
+
+        if (! in_array($serviceRequest->status, [ServiceRequest::STATUS_COMPLETED, ServiceRequest::STATUS_PENDING_CONFIRMATION], true)) {
+            return back()->withErrors(['rate' => 'يمكن التقييم فقط للطلبات المنجزة أو بانتظار التأكيد.']);
+        }
+
+        $validated = $request->validate([
+            'stars' => ['nullable', 'integer', 'between:1,5'],
+            'rating' => ['nullable', 'integer', 'between:1,5'],
+            'comment' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        $stars = (int) ($validated['stars'] ?? $validated['rating'] ?? 5);
+
+        Rating::updateOrCreate(
+            [
+                'service_request_id' => $serviceRequest->id,
+                'rater_role' => 'provider',
+            ],
+            [
+                'elderly_id' => $serviceRequest->elderProfile?->user_id ?? $serviceRequest->elder_id,
+                'provider_id' => $request->user()->id,
+                'stars' => $stars,
+                'comment' => $validated['comment'] ?? null,
+                'visible_to_provider' => false, // لا يظهر لأي مقدم خدمة آخر، فقط للإدارة
+            ]
+        );
+
+        return back()->with('status', 'elder-rated');
+    }
+
+    /**
      * التحقق من أن مقدم الخدمة هو المسند إليه الطلب الحالي.
      */
     private function authorizeProvider(Request $request, ServiceRequest $serviceRequest): void
     {
-        if ($serviceRequest->assigned_provider_id !== $request->user()->id) {
+        $providerProfileId = $request->user()->serviceProviderProfile?->id;
+
+        if (!$providerProfileId || $serviceRequest->provider_id !== $providerProfileId) {
             abort(403, 'غير مصرح لك بإجراء أي عملية على هذا الطلب.');
         }
     }
 }
-

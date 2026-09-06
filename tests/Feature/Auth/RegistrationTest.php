@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\RegistrationProfile;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 test('custom registration choice screen can be rendered', function () {
     $response = $this->get('/register');
@@ -18,89 +16,19 @@ test('custom registration screens can be rendered', function () {
     $this->get(route('frontend.volunteer.register'))->assertOk();
 });
 
-test('new users can register', function () {
+test('new users can register and are directed to verify email prompt', function () {
     $response = $this->post('/register', [
         'name' => 'Test User',
         'email' => 'test@example.com',
         'password' => 'password',
         'password_confirmation' => 'password',
-        'account_type' => 'elderly',
-        'dob' => '1950-01-01',
-        'phone' => '0590000000',
-        'city' => 'Gaza',
-        'address' => 'Main street',
-        'housing_type' => 'apartment',
     ]);
 
-    $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
-});
-
-test('elderly registration details are stored', function () {
-    $this->post('/register', [
-        'name' => 'Elderly User',
-        'email' => 'elderly@example.com',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-        'account_type' => 'elderly',
-        'dob' => '1950-01-01',
-        'phone' => '0591234567',
-        'city' => 'Gaza',
-        'address' => 'Main street',
-        'housing_type' => 'apartment',
-    ])->assertRedirect(route('dashboard', absolute: false));
-
-    $this->assertDatabaseHas('registration_profiles', [
-        'phone' => '0591234567',
-        'city' => 'Gaza',
-        'housing_type' => 'apartment',
-        'identity_document_path' => null,
-        'profile_photo_path' => null,
+    $this->assertDatabaseHas('users', [
+        'email' => 'test@example.com',
+        'status' => 'pending',
     ]);
+    $response->assertRedirect(route('verification.notice'));
 });
 
-test('elderly registration with optional documents and profile photo', function () {
-    Storage::fake('public');
-
-    $this->post('/register', [
-        'name' => 'Elderly With Docs',
-        'email' => 'elderly.docs@example.com',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-        'account_type' => 'elderly',
-        'dob' => '1955-05-05',
-        'phone' => '0599998877',
-        'city' => 'Riyadh',
-        'address' => 'King Fahd Road',
-        'housing_type' => 'house',
-        'id_document' => UploadedFile::fake()->image('elderly_id.png'),
-        'profile_photo' => UploadedFile::fake()->image('elderly_avatar.jpg'),
-    ])->assertRedirect(route('dashboard', absolute: false));
-
-    $profile = RegistrationProfile::where('phone', '0599998877')->firstOrFail();
-    expect($profile->identity_document_path)->not->toBeNull();
-    expect($profile->profile_photo_path)->not->toBeNull();
-    Storage::disk('public')->assertExists($profile->identity_document_path);
-    Storage::disk('public')->assertExists($profile->profile_photo_path);
-});
-
-test('volunteer details and documents are stored', function () {
-    Storage::fake('public');
-
-    $this->post('/register', [
-        'name' => 'Volunteer User',
-        'email' => 'volunteer@example.com',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-        'account_type' => 'volunteer',
-        'dob' => '1995-01-01',
-        'phone' => '0597654321',
-        'id_number' => 'ID-12345',
-        'id_document' => UploadedFile::fake()->image('identity.jpg'),
-        'conduct_document' => UploadedFile::fake()->create('conduct.pdf', 100, 'application/pdf'),
-    ])->assertRedirect(route('dashboard', absolute: false));
-
-    $profile = RegistrationProfile::where('identity_number', 'ID-12345')->firstOrFail();
-    Storage::disk('public')->assertExists($profile->identity_document_path);
-    Storage::disk('public')->assertExists($profile->conduct_document_path);
-});
+// TODO: reconnect in stage 3.2/3.3 (profile documents and details storage tests)

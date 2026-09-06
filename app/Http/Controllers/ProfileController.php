@@ -18,7 +18,7 @@ class ProfileController extends Controller
     public function edit(Request $request): View
     {
         return view('profile.edit', [
-            'user' => $request->user()->load('registrationProfile'),
+            'user' => $request->user(), // TODO: reconnect in stage 3.2/3.3
         ]);
     }
 
@@ -39,15 +39,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        $request->user()->registrationProfile()->updateOrCreate([], [
-            'date_of_birth' => $validated['dob'],
-            'phone' => $validated['phone'],
-            'identity_number' => $validated['id_number'] ?? null,
-            'city' => $validated['city'] ?? null,
-            'address' => $validated['address'] ?? null,
-            'housing_type' => $validated['housing_type'] ?? null,
-            'extra_info' => $validated['extra_info'] ?? null,
-        ]);
+        // TODO: reconnect in stage 3.2/3.3
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -63,16 +55,11 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        $documentPaths = array_filter([
-            $user->registrationProfile?->identity_document_path,
-            $user->registrationProfile?->conduct_document_path,
-        ]);
+        // TODO: reconnect in stage 3.2/3.3
 
         Auth::logout();
 
         $user->delete();
-
-        Storage::disk('public')->delete($documentPaths);
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

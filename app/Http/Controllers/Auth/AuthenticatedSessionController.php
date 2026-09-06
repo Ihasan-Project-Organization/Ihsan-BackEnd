@@ -28,6 +28,23 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $user = $request->user();
+
+        // 1. فحص تأكيد البريد الإلكتروني أولاً:
+        if (! $user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
+        }
+
+        // 2. فحص حالة الاعتماد الإداري ثانياً:
+        if ($user->status === 'pending') {
+            return redirect()->route('auth.pending');
+        }
+
+        // 3. توجيه المستخدم حسب دوره (Role):
+        if ($user->isProvider()) {
+            return redirect()->intended(route('provider.dashboard', absolute: false));
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

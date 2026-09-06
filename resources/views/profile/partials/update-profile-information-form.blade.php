@@ -9,7 +9,7 @@
     <form method="POST" action="{{ route('profile.update') }}" class="mt-7">
         @csrf
         @method('patch')
-        @php($profile = $user->registrationProfile)
+        
         <div class="grid gap-5 sm:grid-cols-2">
             <div>
                 <label for="name" class="mb-2 block text-sm font-bold">الاسم الكامل</label>
@@ -24,57 +24,8 @@
                     class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
                 <x-input-error class="mt-2" :messages="$errors->get('email')" />
             </div>
-            <div>
-                <label for="dob" class="mb-2 block text-sm font-bold">تاريخ الميلاد</label>
-                <input id="dob" name="dob" type="date"
-                    value="{{ old('dob', $profile?->date_of_birth?->format('Y-m-d')) }}" required
-                    class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
-                <x-input-error class="mt-2" :messages="$errors->get('dob')" />
-            </div>
-            <div>
-                <label for="phone" class="mb-2 block text-sm font-bold">رقم الجوال</label>
-                <input id="phone" name="phone" value="{{ old('phone', $profile?->phone) }}" required
-                    class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
-                <x-input-error class="mt-2" :messages="$errors->get('phone')" />
-            </div>
 
-            @if ($user->account_type === 'volunteer')
-                <div class="sm:col-span-2">
-                    <label for="id_number" class="mb-2 block text-sm font-bold">رقم الهوية</label>
-                    <input id="id_number" name="id_number" value="{{ old('id_number', $profile?->identity_number) }}"
-                        required
-                        class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
-                    <x-input-error class="mt-2" :messages="$errors->get('id_number')" />
-                </div>
-            @else
-                <div>
-                    <label for="city" class="mb-2 block text-sm font-bold">المدينة</label>
-                    <input id="city" name="city" value="{{ old('city', $profile?->city) }}" required
-                        class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
-                    <x-input-error class="mt-2" :messages="$errors->get('city')" />
-                </div>
-                <div>
-                    <label for="housing_type" class="mb-2 block text-sm font-bold">نوع السكن</label>
-                    <select id="housing_type" name="housing_type" required
-                        class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">
-                        <option value="apartment" @selected(old('housing_type', $profile?->housing_type) === 'apartment')>شقة</option>
-                        <option value="house" @selected(old('housing_type', $profile?->housing_type) === 'house')>منزل مستقل</option>
-                        <option value="family" @selected(old('housing_type', $profile?->housing_type) === 'family')>سكن مع العائلة</option>
-                    </select>
-                </div>
-                <div class="sm:col-span-2">
-                    <label for="address" class="mb-2 block text-sm font-bold">العنوان التفصيلي</label>
-                    <textarea id="address" name="address" required rows="3"
-                        class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">{{ old('address', $profile?->address) }}</textarea>
-                    <x-input-error class="mt-2" :messages="$errors->get('address')" />
-                </div>
-            @endif
-
-            <div class="sm:col-span-2">
-                <label for="extra_info" class="mb-2 block text-sm font-bold">معلومات إضافية</label>
-                <textarea id="extra_info" name="extra_info" rows="3"
-                    class="w-full rounded-xl border-slate-300 px-4 py-3 focus:border-[#718256] focus:ring-[#718256]">{{ old('extra_info', $profile?->extra_info) }}</textarea>
-            </div>
+            {{-- TODO: reconnect in stage 3.2/3.3 --}}
         </div>
 
         @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())

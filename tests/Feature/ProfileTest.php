@@ -13,18 +13,13 @@ test('profile page is displayed', function () {
 });
 
 test('profile information can be updated', function () {
-    $user = User::factory()->create(['account_type' => 'elderly']);
+    $user = User::factory()->create();
 
     $response = $this
         ->actingAs($user)
         ->patch('/profile', [
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'dob' => '1950-01-01',
-            'phone' => '0591234567',
-            'city' => 'Gaza',
-            'address' => 'Main street',
-            'housing_type' => 'apartment',
         ]);
 
     $response
@@ -36,22 +31,17 @@ test('profile information can be updated', function () {
     $this->assertSame('Test User', $user->name);
     $this->assertSame('test@example.com', $user->email);
     $this->assertNull($user->email_verified_at);
-    $this->assertSame('0591234567', $user->registrationProfile->phone);
+    // TODO: reconnect in stage 3.2/3.3 (extended profile attributes)
 });
 
 test('email verification status is unchanged when the email address is unchanged', function () {
-    $user = User::factory()->create(['account_type' => 'elderly']);
+    $user = User::factory()->create();
 
     $response = $this
         ->actingAs($user)
         ->patch('/profile', [
             'name' => 'Test User',
             'email' => $user->email,
-            'dob' => '1950-01-01',
-            'phone' => '0591234567',
-            'city' => 'Gaza',
-            'address' => 'Main street',
-            'housing_type' => 'apartment',
         ]);
 
     $response

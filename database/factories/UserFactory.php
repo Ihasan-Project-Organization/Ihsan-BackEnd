@@ -28,9 +28,31 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'status' => 'approved',
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
+    }
+
+    /**
+     * Indicate that the user account is pending approval.
+     */
+    public function pending(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => 'pending',
+        ]);
+    }
+
+    /**
+     * Indicate that the user account is rejected.
+     */
+    public function rejected(?string $reason = 'مخالفة الشروط والأحكام'): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => 'rejected',
+            'rejection_reason' => $reason,
+        ]);
     }
 
     /**

@@ -84,12 +84,9 @@
                                     </span>
                                     <div>
                                         <h3 class="text-base font-black text-slate-900">{{ $req->service_type_label }}</h3>
-                                        <p class="text-xs font-bold text-[#718256]">📍 {{ $req->district ?? 'حي الرمال' }}</p>
+                                        <p class="text-xs font-bold text-[#718256]">📍 {{ $req->location }}</p>
                                     </div>
                                 </div>
-                                <span class="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-bold text-slate-600">
-                                    + {{ $req->distance_km ?? 2.0 }} كم
-                                </span>
                             </div>
 
                             {{-- وصف مختصر --}}
@@ -124,7 +121,7 @@
                             </form>
 
                             <button type="button"
-                                onclick="openDetailsModal('{{ $req->public_id }}', '{{ $req->service_type_label }}', '{{ addslashes($req->description) }}', '{{ $req->district ?? $req->location }} (الموقع التقريبي)', '{{ $req->scheduled_at->translatedFormat('l، d F - h:i A') }}', '{{ $req->service_type_icon }}')"
+                                onclick="openDetailsModal('{{ $req->public_id }}', '{{ $req->service_type_label }}', '{{ addslashes($req->description) }}', '{{ $req->location }} (الموقع التقريبي)', '{{ $req->scheduled_at->translatedFormat('l، d F - h:i A') }}', '{{ $req->service_type_icon }}')"
                                 class="rounded-2xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition cursor-pointer">
                                 عرض التفاصيل
                             </button>

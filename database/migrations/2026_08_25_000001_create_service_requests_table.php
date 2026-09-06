@@ -20,7 +20,6 @@ return new class extends Migration {
             $table->string('location');
             $table->dateTime('scheduled_at');
             $table->string('status')->default('pending_acceptance');
-            $table->unsignedInteger('attempts_count')->default(1);
             $table->dateTime('accepted_at')->nullable();
             $table->dateTime('started_at')->nullable();
             $table->dateTime('completed_at')->nullable();

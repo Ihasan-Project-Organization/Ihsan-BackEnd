@@ -65,7 +65,7 @@
                         </div>
                         <h2 class="mt-2 text-base font-black text-white">العطاء يبدأ بخطوة</h2>
                         <p class="mt-1 text-xs leading-5 text-[#dfe6d5]">
-                            لديك طلب <span class="font-bold text-white">"{{ $nextTask->service_type_label }}"</span> في {{ $nextTask->district ?? $nextTask->location }}، تأكد من بدء التوجه في الوقت المناسب.
+                            لديك طلب <span class="font-bold text-white">"{{ $nextTask->service_type_label }}"</span> في {{ $nextTask->location }}، تأكد من بدء التوجه في الوقت المناسب.
                         </p>
                         <div class="mt-3 flex items-center gap-2">
                             <a href="{{ route('provider.tasks', ['tab' => 'upcoming']) }}" class="inline-flex items-center gap-1 rounded-xl bg-white px-4 py-2 text-xs font-bold text-[#31421e] hover:bg-[#eef2e8] transition">
@@ -186,41 +186,29 @@
                             </div>
                             <div class="rounded-2xl bg-[#f8faf6] p-3.5 border border-[#dfe6d5]">
                                 <span class="text-[11px] font-bold text-slate-400">رقم الهاتف للتواصل</span>
-                                <p class="text-sm font-bold text-slate-800 mt-0.5" dir="ltr">{{ $nextTask->user->registrationProfile?->phone ?? '0599000000' }}</p>
+                                <p class="text-sm font-bold text-slate-800 mt-0.5" dir="ltr">0599000000 {{-- TODO: reconnect in stage 3.2/3.3 --}}</p>
                             </div>
                         </div>
 
                         {{-- أزرار الإجراء السريع للمهمة --}}
                         <div class="flex flex-wrap items-center gap-3 pt-2">
                             @if ($nextTask->status === \App\Models\ServiceRequest::STATUS_ACCEPTED || $nextTask->status === \App\Models\ServiceRequest::STATUS_PROVIDER_DELAYED)
-                                <form method="POST" action="{{ route('provider.tasks.start-heading', $nextTask) }}">
-                                    @csrf
-                                    <button type="submit" class="rounded-2xl bg-[#31421e] px-6 py-3 text-xs font-bold text-white shadow-md hover:bg-[#52643a] transition cursor-pointer">
-                                        🚗 ابدأ التوجه الآن
-                                    </button>
-                                </form>
-                            @elseif ($nextTask->status === \App\Models\ServiceRequest::STATUS_ON_THE_WAY)
-                                <form method="POST" action="{{ route('provider.tasks.confirm-arrival', $nextTask) }}">
-                                    @csrf
-                                    <button type="submit" class="rounded-2xl bg-teal-700 px-6 py-3 text-xs font-bold text-white shadow-md hover:bg-teal-800 transition cursor-pointer">
-                                        📍 تأكيد الوصول للموقع
-                                    </button>
-                                </form>
-                            @elseif ($nextTask->status === \App\Models\ServiceRequest::STATUS_ARRIVED)
                                 <form method="POST" action="{{ route('provider.tasks.start-service', $nextTask) }}">
                                     @csrf
-                                    <button type="submit" class="rounded-2xl bg-purple-700 px-6 py-3 text-xs font-bold text-white shadow-md hover:bg-purple-800 transition cursor-pointer">
+                                    <button type="submit" class="rounded-2xl bg-[#31421e] px-6 py-3 text-xs font-bold text-white shadow-md hover:bg-[#52643a] transition cursor-pointer">
                                         ⚡ بدء تقديم الخدمة
                                     </button>
                                 </form>
                             @elseif ($nextTask->status === \App\Models\ServiceRequest::STATUS_IN_PROGRESS)
-                                <button type="button" onclick="openFinishServiceModal('{{ route('provider.tasks.finish-service', $nextTask) }}')"
-                                    class="rounded-2xl bg-emerald-700 px-6 py-3 text-xs font-bold text-white shadow-md hover:bg-emerald-800 transition cursor-pointer">
-                                    ✓ إنهاء الخدمة
-                                </button>
+                                <form method="POST" action="{{ route('provider.tasks.finish-service', $nextTask) }}">
+                                    @csrf
+                                    <button type="submit" class="rounded-2xl bg-emerald-700 px-6 py-3 text-xs font-bold text-white shadow-md hover:bg-emerald-800 transition cursor-pointer">
+                                        ✓ إنهاء الخدمة
+                                    </button>
+                                </form>
                             @endif
 
-                            <a href="tel:{{ $nextTask->user->registrationProfile?->phone ?? '0599000000' }}"
+                            <a href="tel:0599000000" {{-- TODO: reconnect in stage 3.2/3.3 --}}
                                 class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs font-bold text-slate-700 hover:bg-slate-50 transition">
                                 📞 اتصال بالمستفيد
                             </a>

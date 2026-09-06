@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>احسان - الإعدادات</title>
+    <link rel="stylesheet" href="css\style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- google font  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo">
+                    <h2> احسان </h2>
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                </div>
+                <p class="logo-subtitle">منصة ربط كبار السن بمقدمي الخدمة</p>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="OldMan.html" class="menu-item">
+                    <i class="fa-solid fa-house"></i>
+                    <span>الرئيسية</span>
+                </a>
+                <a href="request-help.html" class="menu-item">
+                    <i class="fa-solid fa-hand-holding-hand"></i>
+                    <span>طلب مساعدة</span>
+                </a>
+                <a href="my-requests.html" class="menu-item">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <span>طلباتي</span>
+                </a>
+                <a href="notifications.html" class="menu-item">
+                    <i class="fa-regular fa-bell"></i>
+                    <span>اشعارات</span>
+                    <span class="badge">2</span>
+                </a>
+                <a href="settings.html" class="menu-item active">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>اعدادات</span>
+                </a>
+            </nav>
+
+            <div class="support-card">
+                <p>نحن هنا لخدمتك<br>بكل اهتمام وحب</p>
+                <i class="fa-solid fa-heart heart-icon"></i>
+                <button class="contact-btn">تواصل معنا</button>
+            </div>
+
+            <a href="#" class="logout-btn">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>تسجيل خروج</span>
+            </a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-notification">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notification-badge">2</span>
+                </div>
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </header>
+            
+            <!-- Page Content -->
+            <div class="requests-header-box">
+                <div class="requests-title-area">
+                    <h4 class="text-muted" style="margin-bottom: 5px;">لوحة التحكم</h4>
+                    <h1 style="margin-bottom: 10px;">الإعدادات</h1>
+                    <p class="text-muted" style="font-size: 16px;">إدارة معلومات حسابك وتفضيلاتك</p>
+                </div>
+            </div>
+
+            <div class="settings-container">
+                <div class="settings-profile-banner">
+                    <img src="../assets\images\profile.jpg" alt="صورة الملف الشخصي" onerror="this.src='https://via.placeholder.com/600x200'">
+                </div>
+
+                <div class="settings-list">
+                    <a href="#" class="settings-item">
+                        <div class="settings-item-content">
+                            <div class="settings-item-icon bg-light-green">
+                                <i class="fa-solid fa-user text-dark-green"></i>
+                            </div>
+                            <div class="settings-item-text">
+                                <h3>الملف الشخصي</h3>
+                                <p>تعديل معلوماتك الشخصية وصورتك</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-left settings-chevron"></i>
+                    </a>
+
+                    <div class="settings-item has-slider">
+                        <div class="settings-item-content">
+                            <div class="settings-item-icon bg-light-orange">
+                                <span class="text-orange">TT</span>
+                            </div>
+                            <div class="settings-item-text">
+                                <h3>حجم الخط</h3>
+                                <p>اجعل القراءة أسهل لعينيك</p>
+                            </div>
+                        </div>
+                        <div class="slider-container">
+                            <span class="slider-label">كبير جداً</span>
+                            <input type="range" min="1" max="100" value="50" class="font-slider">
+                        </div>
+                    </div>
+
+                    <div class="settings-item">
+                        <div class="settings-item-content">
+                            <div class="settings-item-icon bg-light-green">
+                                <i class="fa-solid fa-volume-high text-dark-green"></i>
+                            </div>
+                            <div class="settings-item-text">
+                                <h3>إشعارات الصوت</h3>
+                                <p>تشغيل أو إيقاف صوت التنبيهات</p>
+                            </div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider round"></span>
+                        </label>
+                    </div>
+
+                    <a href="#" class="settings-item">
+                        <div class="settings-item-content">
+                            <div class="settings-item-icon bg-light-gray">
+                                <i class="fa-regular fa-circle-question text-gray"></i>
+                            </div>
+                            <div class="settings-item-text">
+                                <h3>المساعدة</h3>
+                                <p>تواصل مع الدعم الفني أو اقرأ التعليمات</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-left settings-chevron"></i>
+                    </a>
+                </div>
+
+                <button class="settings-logout-btn">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    تسجيل الخروج
+                </button>
+            </div>
+            
+        </main>
+    </div>
+
+    <!-- Bottom Navigation Bar (Mobile) -->
+    <div class="bottom-nav-bar">
+        <a href="OldMan.html" class="nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>الرئيسية</span>
+        </a>
+        <a href="my-requests.html" class="nav-item">
+            <i class="fa-solid fa-clipboard-list"></i>
+            <span>الطلبات</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fa-solid fa-users"></i>
+            <span>المتطوعون</span>
+        </a>
+        <a href="settings.html" class="nav-item active">
+            <i class="fa-solid fa-user"></i>
+            <span>الحساب</span>
+        </a>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>احسان</title>
+    <link rel="stylesheet" href="css\style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div style="font-size: 50px; color: red;">
+    <i class="fa-solid fa-house"></i>
+    <i class="fa-solid fa-heart"></i>
+    <i class="fa-solid fa-bell"></i>
+</div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar (copied from notifications.html as requested) -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <div class="logo">
+                    <h2>احسان</h2>
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                </div>
+                <p class="logo-subtitle">منصة ربط كبار السن بمقدمي الخدمة</p>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="OldMan.html" class="menu-item active">
+                    <i class="fa-solid fa-house"></i>
+                    <span>الرئيسية</span>
+                </a>
+                <a href="request-help.html" class="menu-item">
+                    <i class="fa-solid fa-hand-holding-hand"></i>
+                    <span>طلب مساعدة</span>
+                </a>
+                <a href="my-requests.html" class="menu-item">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <span>طلباتي</span>
+                </a>
+                <a href="notifications.html" class="menu-item">
+                    <i class="fa-regular fa-bell"></i>
+                    <span>اشعارات</span>
+                    <span class="badge">2</span>
+                </a>
+                <a href="settings.html" class="menu-item">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>اعدادات</span>
+                </a>
+            </nav>
+
+            <div class="support-card">
+                <p>نحن هنا لمساعدتك<br>فريق الدعم متاح دائما</p>
+                <i class="fa-solid fa-heart heart-icon" style="display:none;"></i>
+                <button class="contact-btn">تواصل معنا</button>
+            </div>
+
+            <a href="#" class="logout-btn">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>تسجيل خروج</span>
+            </a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div style="display:flex; align-items:center; gap:15px; margin-right:auto;">
+                    <div class="header-notification">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </div>
+                    <button class="mobile-menu-btn" id="mobile-menu-btn">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Hero Banner -->
+            <section class="hero-banner">
+                <div class="hero-content">
+                    <h1>مرحبا بك</h1>
+                    <p>نبدأ يوما جديدا من العطاء والراحة معاً. خدماتنا مصممة لتلبية احتياجاتك وتسهيل حياتك لكل اهتمام.</p>
+                </div>
+                <div class="hero-image-placeholder">
+                    <img src="..\assets\images\profile.jpg" alt="hero image">
+                </div>
+            </section>
+
+            <!-- Actions -->
+            <div class="section-header space-between">
+                <h3>ماذا تريد أن تفعل؟</h3>
+            </div>
+
+            <div class="action-cards">
+                <a href="request-help.html" class="action-card">
+                    <div class="action-text">
+                        <h4>طلب مساعدة</h4>
+                        <p>اطلب أي مساعدة في أي وقت</p>
+                    </div>
+                    <div class="action-icon">
+                        <i class="fa-solid fa-hand-holding-hand"></i>
+                    </div>
+                </a>
+
+                <a href="my-requests.html" class="action-card">
+                    <div class="action-text">
+                        <h4>طلباتي</h4>
+                        <p>عرض وإدارة طلباتي</p>
+                    </div>
+                    <div class="action-icon">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                    </div>
+                </a>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

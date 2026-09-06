@@ -137,12 +137,6 @@
                                             <span>مقدم الخدمة: {{ $item->assignedProvider->name }}</span>
                                         </span>
                                     @endif
-
-                                    @if ($item->attempts_count > 1)
-                                        <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold text-slate-500">
-                                            المحاولة رقم {{ $item->attempts_count }}
-                                        </span>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -165,78 +159,95 @@
                                 إلغاء الطلب
                             </button>
 
-                        {{-- 2. حالة تم قبول الطلب --}}
+                        {{-- 2. حالة تم قبول الطلب (قبل التوكيل الرسمي - لا يظهر رقم هاتف مقدم الخدمة) --}}
                         @elseif ($item->status === \App\Models\ServiceRequest::STATUS_ACCEPTED)
                             <div class="flex items-center gap-2 text-xs font-bold text-emerald-700">
                                 <span>✓</span>
-                                <span>تم قبول الطلب — تم إسناد الطلب لمقدم الخدمة وسيتوجه في الموعد.</span>
+                                <span>تم قبول الطلب مبدئياً — بانتظار التوكيل الرسمي لمقدم الخدمة.</span>
                             </div>
-                            @if ($item->assignedProvider)
+
+                        {{-- 2.ب حالة تم التوكيل الرسمي (assigned) --}}
+                        @elseif ($item->status === \App\Models\ServiceRequest::STATUS_ASSIGNED)
+                            <div class="flex items-center gap-2 text-xs font-bold text-emerald-700">
+                                <span>✓</span>
+                                <span>تم توكيل مقدم الخدمة رسمياً وسيتوجه في الموعد المحدد.</span>
+                            </div>
+                            @php
+                                $provPhone = $item->serviceProviderProfile?->phone_number ?? $item->assignedProvider?->serviceProviderProfile?->phone_number;
+                                $provName = $item->serviceProviderProfile?->full_name ?? $item->assignedProvider?->name ?? 'مقدم الخدمة';
+                            @endphp
+                            @if ($item->canRevealContactPhone() && $provPhone)
                                 <button type="button"
-                                    onclick="openContactModal('{{ addslashes($item->assignedProvider->name) }}', '{{ addslashes($item->assignedProvider->registrationProfile?->phone ?? '0599000000') }}')"
+                                    onclick="openContactModal('{{ addslashes($provName) }}', '{{ $provPhone }}')"
                                     class="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 transition cursor-pointer">
                                     📞 تواصل معه
                                 </button>
                             @endif
 
-                        {{-- 3. حالة في الطريق --}}
-                        @elseif ($item->status === \App\Models\ServiceRequest::STATUS_ON_THE_WAY)
-                            <div class="flex items-center gap-2 text-xs font-bold text-indigo-700">
-                                <span class="h-2.5 w-2.5 rounded-full bg-indigo-500 animate-ping"></span>
-                                <span>مقدم الخدمة في الطريق إليك الآن.</span>
-                            </div>
-                            @if ($item->assignedProvider)
-                                <button type="button"
-                                    onclick="openContactModal('{{ addslashes($item->assignedProvider->name) }}', '{{ addslashes($item->assignedProvider->registrationProfile?->phone ?? '0599000000') }}')"
-                                    class="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 transition cursor-pointer">
-                                    📞 تواصل معه
-                                </button>
-                            @endif
-
-                        {{-- 4. حالة وصل إلى الموقع --}}
-                        @elseif ($item->status === \App\Models\ServiceRequest::STATUS_ARRIVED)
-                            <div class="flex items-center gap-2 text-xs font-bold text-teal-700">
-                                <span>📍</span>
-                                <span>وصل مقدم الخدمة إلى موقعك وسيتم بدء الخدمة.</span>
-                            </div>
-                            @if ($item->assignedProvider)
-                                <button type="button"
-                                    onclick="openContactModal('{{ addslashes($item->assignedProvider->name) }}', '{{ addslashes($item->assignedProvider->registrationProfile?->phone ?? '0599000000') }}')"
-                                    class="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 transition cursor-pointer">
-                                    📞 تواصل معه
-                                </button>
-                            @endif
-
-                        {{-- 5. حالة قيد التنفيذ --}}
+                        {{-- 3. حالة قيد التنفيذ --}}
                         @elseif ($item->status === \App\Models\ServiceRequest::STATUS_IN_PROGRESS)
                             <div class="flex items-center gap-2 text-xs font-bold text-purple-700">
                                 <span class="h-2.5 w-2.5 rounded-full bg-purple-500 animate-ping"></span>
                                 <span>قيد التنفيذ — تقديم الخدمة جارٍ الآن.</span>
                             </div>
-                            @if ($item->assignedProvider)
+                            @php
+                                $provPhone = $item->serviceProviderProfile?->phone_number ?? $item->assignedProvider?->serviceProviderProfile?->phone_number;
+                                $provName = $item->serviceProviderProfile?->full_name ?? $item->assignedProvider?->name ?? 'مقدم الخدمة';
+                            @endphp
+                            @if ($item->canRevealContactPhone() && $provPhone)
                                 <button type="button"
-                                    onclick="openContactModal('{{ addslashes($item->assignedProvider->name) }}', '{{ addslashes($item->assignedProvider->registrationProfile?->phone ?? '0599000000') }}')"
+                                    onclick="openContactModal('{{ addslashes($provName) }}', '{{ $provPhone }}')"
                                     class="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 transition cursor-pointer">
                                     📞 تواصل معه
                                 </button>
                             @endif
 
-                        {{-- 6. حالة بانتظار تأكيد كبير السن --}}
+                        {{-- 4. حالة بانتظار تأكيد كبير السن --}}
                         @elseif ($item->status === \App\Models\ServiceRequest::STATUS_PENDING_CONFIRMATION)
                             <div class="flex items-center gap-2 text-xs font-bold text-orange-800">
                                 <span>⏳</span>
-                                <span>أنهى مقدم الخدمة المهمة وبانتظار تأكيدك لإغلاق الطلب وتقييم الخدمة.</span>
+                                <span>أنهى مقدم الخدمة المهمة وبانتظار تقييمك وتأكيدك لإغلاق الطلب.</span>
                             </div>
-                            <form method="POST" action="{{ route('service-requests.confirm', $item) }}">
-                                @csrf
-                                @method('patch')
-                                <button type="submit"
-                                    class="rounded-2xl bg-[#31421e] px-5 py-2.5 text-xs font-bold text-white shadow-md hover:bg-[#52643a] transition cursor-pointer">
-                                    ✓ تأكيد اكتمال الخدمة
+                            <div class="flex items-center gap-2">
+                                <button type="button"
+                                    onclick="openConfirmModal({{ $item->id }}, '{{ addslashes($item->serviceProviderProfile?->full_name ?? $item->assignedProvider?->name ?? 'مقدم الخدمة') }}', '{{ route('service-requests.confirm', $item) }}')"
+                                    class="rounded-2xl bg-[#31421e] px-4 py-2.5 text-xs font-bold text-white shadow-md hover:bg-[#52643a] transition cursor-pointer">
+                                    ✓ تأكيد الخدمة والتقييم
                                 </button>
-                            </form>
+                                <button type="button"
+                                    onclick="openReportProblemModal({{ $item->id }}, '{{ $item->public_id }}', '{{ route('service-requests.report-problem', $item) }}')"
+                                    class="rounded-2xl border border-rose-300 bg-rose-50 px-3 py-2 text-xs font-bold text-rose-700 hover:bg-rose-100 transition cursor-pointer">
+                                    ⚠️ هناك مشكلة
+                                </button>
+                            </div>
 
-                        {{-- 7. حالة تم تنفيذ الطلب (المكتملة) --}}
+                        {{-- حالة تحت المراجعة (اعتراض / مشكلة) --}}
+                        @elseif ($item->status === \App\Models\ServiceRequest::STATUS_UNDER_REVIEW)
+                            <div class="flex items-center gap-2 text-xs font-bold text-rose-700">
+                                <span class="h-2.5 w-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+                                <span>تحت المراجعة والتدقيق الإداري — تم رفع بلاغ الشكوى وجارٍ متابعته.</span>
+                            </div>
+
+                        {{-- حالة لم يتم العثور على مقدم خدمة --}}
+                        @elseif ($item->status === \App\Models\ServiceRequest::STATUS_NO_PROVIDER_FOUND)
+                            <div class="flex items-center gap-2 text-xs font-bold text-amber-800">
+                                <span>⚠️</span>
+                                <span>لم يتوفر مقدم خدمة قبل الموعد — يمكنك اختيار موعد جديد أو إلغاء الطلب.</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button type="button"
+                                    onclick="openRescheduleModal({{ $item->id }}, '{{ $item->public_id }}', '{{ route('service-requests.reschedule', $item) }}')"
+                                    class="rounded-2xl bg-[#31421e] px-4 py-2 text-xs font-bold text-white hover:bg-[#52643a] transition cursor-pointer">
+                                    🔄 موعد جديد وإعادة النشر
+                                </button>
+                                <button type="button"
+                                    onclick="openCancelModal({{ $item->id }}, '{{ $item->public_id }}', '{{ route('service-requests.cancel', $item) }}')"
+                                    class="rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-bold text-red-700 hover:bg-red-100 transition cursor-pointer">
+                                    🚫 إلغاء الطلب
+                                </button>
+                            </div>
+
+                        {{-- 5. حالة تم تنفيذ الطلب (المكتملة) --}}
                         @elseif ($item->status === \App\Models\ServiceRequest::STATUS_COMPLETED)
                             <div class="flex items-center gap-2 text-xs font-bold text-emerald-800">
                                 <span>✓</span>
@@ -246,7 +257,7 @@
                                 @if ($item->review)
                                     <div class="flex items-center gap-1 text-amber-500 font-bold text-xs bg-amber-50 px-3 py-1.5 rounded-2xl border border-amber-200">
                                         <span>تقييمك:</span>
-                                        <span>{{ str_repeat('★', $item->review->rating) }}</span>
+                                        <span>{{ str_repeat('★', $item->review->stars) }}</span>
                                     </div>
                                 @else
                                     <button type="button"
@@ -291,9 +302,13 @@
                                         🔍 البحث عن بديل
                                     </button>
                                 </form>
-                                @if ($item->assignedProvider)
+                                @php
+                                    $provDelayedPhone = $item->serviceProviderProfile?->phone_number ?? $item->assignedProvider?->serviceProviderProfile?->phone_number;
+                                    $provDelayedName = $item->serviceProviderProfile?->full_name ?? $item->assignedProvider?->name ?? 'مقدم الخدمة';
+                                @endphp
+                                @if ($item->canRevealContactPhone() && $provDelayedPhone)
                                     <button type="button"
-                                        onclick="openContactModal('{{ addslashes($item->assignedProvider->name) }}', '{{ addslashes($item->assignedProvider->registrationProfile?->phone ?? '0599000000') }}')"
+                                        onclick="openContactModal('{{ addslashes($provDelayedName) }}', '{{ $provDelayedPhone }}')"
                                         class="rounded-2xl border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 transition cursor-pointer">
                                         📞 تواصل معه
                                     </button>

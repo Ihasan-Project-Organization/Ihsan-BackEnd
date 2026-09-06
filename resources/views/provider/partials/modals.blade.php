@@ -15,11 +15,6 @@
 
             <form id="finishServiceForm" method="POST" action="" class="mt-5 space-y-4">
                 @csrf
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5">ملخص التنفيذ والملاحظات (اختياري)</label>
-                    <textarea name="completion_notes" rows="3" placeholder="اكتب ملخصاً لما تم تنفيذه (مثل: تم شراء كافة الأغراض المطلوبة وتسليم الإيصال...)"
-                        class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-[#52643a] focus:bg-white focus:ring-2 focus:ring-[#52643a]/20"></textarea>
-                </div>
 
                 <div class="rounded-2xl bg-[#f8faf6] p-4 border border-[#dfe6d5]">
                     <div class="flex items-center gap-2 text-xs font-bold text-[#31421e]">
@@ -192,6 +187,58 @@
     </div>
 </div>
 
+{{-- Modal 5: تقييم كبير السن (اختياري، خاص بالإدارة) --}}
+<div id="rateElderModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm transition-opacity" aria-modal="true" role="dialog">
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="relative w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl sm:p-8">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-800 text-lg">⭐</div>
+                    <div>
+                        <h3 class="text-xl font-black text-slate-800">تقييم المستفيد</h3>
+                        <p class="text-xs text-slate-500">خاص ببيانات الإدارة لضمان جودة البيئة لكبار السن والمقدمين</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeRateElderModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer">✕</button>
+            </div>
+
+            <form id="rateElderForm" method="POST" action="" class="mt-5 space-y-4">
+                @csrf
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">التقييم العام</label>
+                    <select name="stars" class="w-full rounded-xl border-slate-300 px-3 py-2 text-sm focus:border-[#718256] focus:ring-[#718256]">
+                        <option value="5">⭐⭐⭐⭐⭐ ممتاز وسلس جداً</option>
+                        <option value="4">⭐⭐⭐⭐ جيد جداً</option>
+                        <option value="3">⭐⭐⭐ متوسط</option>
+                        <option value="2">⭐⭐ واجهت بعض الصعوبات</option>
+                        <option value="1">⭐ تجربة صعبة</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">ملاحظاتك للإدارة (اختياري)</label>
+                    <textarea name="comment" rows="3"
+                        placeholder="أي ملاحظات تود مشاركتها مع الإدارة بشأن التعامل وبيئة الخدمة..."
+                        class="w-full rounded-xl border-slate-300 px-3.5 py-2.5 text-xs focus:border-[#718256] focus:ring-[#718256]"></textarea>
+                </div>
+
+                <div class="rounded-xl bg-slate-50 p-3 text-[11px] text-slate-500 leading-5">
+                    🔒 هذا التقييم اختياري ومحفوظ للإدارة فقط ولا يظهر لأي مقدم خدمة آخر أو في الملف العلني لكبير السن.
+                </div>
+
+                <div class="flex items-center gap-3 pt-2">
+                    <button type="submit" class="flex-1 rounded-2xl bg-[#31421e] py-3 text-sm font-bold text-white shadow-md hover:bg-[#52643a] transition cursor-pointer">
+                        إرسال التقييم
+                    </button>
+                    <button type="button" onclick="closeRateElderModal()" class="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
+                        إلغاء
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     function openFinishServiceModal(actionUrl) {
         document.getElementById('finishServiceForm').action = actionUrl;
@@ -215,6 +262,14 @@
     }
     function closeApologizeModal() {
         document.getElementById('apologizeModal').classList.add('hidden');
+    }
+
+    function openRateElderModal(actionUrl) {
+        document.getElementById('rateElderForm').action = actionUrl;
+        document.getElementById('rateElderModal').classList.remove('hidden');
+    }
+    function closeRateElderModal() {
+        document.getElementById('rateElderModal').classList.add('hidden');
     }
 
     function openDetailsModal(id, title, desc, loc, sched, icon) {
