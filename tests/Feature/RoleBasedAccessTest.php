@@ -214,3 +214,20 @@ test('login screen hides quick-fill testing buttons in non-local environments an
     ]);
     $response->assertRedirect(route('admin.dashboard'));
 });
+
+test('login screen displays quick-fill testing buttons when show_test_buttons config is enabled', function () {
+    config(['app.show_test_buttons' => true]);
+
+    // Temporarily mock environment to production to verify Render behavior
+    $loginPage = $this->get(route('login'));
+    $loginPage->assertOk();
+    $loginPage->assertSee('نظام الأزرار للاختبار والدخول السريع');
+    $loginPage->assertSee('superadmin@ihsan.com');
+    $loginPage->assertSee('admin@ihsan.com');
+    $loginPage->assertSee('mohammed@ihsan.com');
+    $loginPage->assertSee('elderly@ihsan.com');
+    $loginPage->assertSee('pending@ihsan.com');
+    $loginPage->assertSee('suspended@ihsan.com');
+    $loginPage->assertSee('دخول ⚡');
+});
+

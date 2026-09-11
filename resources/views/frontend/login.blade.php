@@ -222,6 +222,15 @@
       color: #31421e;
     }
 
+    .quick-fill-card {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .quick-fill-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
     .register-option {
       margin-top: 16px;
       text-align: center;
@@ -336,79 +345,121 @@
           </div>
         @endif
 
-        @if (app()->environment('local'))
+        @if (config('app.show_test_buttons', env('SHOW_TEST_BUTTONS', app()->environment(['local', 'production']))))
         <!-- ======================================================== -->
-        <!-- [مؤقت للاختبار فقط] أزرار التعبئة السريعة لحسابات النظام -->
+        <!-- [نظام الأزرار السريعة لحسابات الاختبار والتجربة] -->
         <!-- ======================================================== -->
         <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 16px; padding: 14px; margin-bottom: 20px;">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
             <div style="display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 12px; color: #1e293b;">
               <span style="font-size: 14px;">⚡</span>
-              <span>حسابات تجريبية للاختبار السريع:</span>
+              <span>نظام الأزرار للاختبار والدخول السريع:</span>
             </div>
-            <span style="font-size: 10px; background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 10px; font-weight: 700;">مؤقت للاختبار</span>
+            <span style="font-size: 10px; background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 10px; font-weight: 700;">نقرة للتعبئة أو دخول فوري</span>
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
             <!-- 1. مدير أعلى -->
-            <button type="button" class="quick-fill-btn" onclick="fillCredentials('superadmin@ihsan.com', 'password', 'مدير النظام الأعلى (Super Admin)')"
-              style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; font-family: inherit;">
-              <div style="font-weight: 800; font-size: 11.5px; color: #92400e; display: flex; align-items: center; gap: 5px;">
-                <span>👑</span>
-                <span>مدير أعلى (Super)</span>
+            <div class="quick-fill-card" onclick="fillCredentials('superadmin@ihsan.com', 'password', 'مدير النظام الأعلى (Super Admin)', false)"
+              style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; position: relative;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 800; font-size: 11.5px; color: #92400e; display: flex; align-items: center; gap: 5px;">
+                  <span>👑</span>
+                  <span>مدير أعلى (Super)</span>
+                </div>
+                <button type="button" onclick="event.stopPropagation(); fillCredentials('superadmin@ihsan.com', 'password', 'مدير النظام الأعلى (Super Admin)', true)"
+                  title="تسجيل دخول فوري"
+                  style="background: #fef3c7; border: 1px solid #f59e0b; color: #92400e; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; cursor: pointer;">
+                  دخول ⚡
+                </button>
               </div>
-              <div style="font-size: 9.5px; color: #b45309; margin-top: 2px; direction: ltr; text-align: right;">superadmin@ihsan.com</div>
-            </button>
+              <div style="font-size: 9.5px; color: #b45309; margin-top: 3px; direction: ltr; text-align: right;">superadmin@ihsan.com</div>
+            </div>
 
             <!-- 2. مدير نظام -->
-            <button type="button" class="quick-fill-btn" onclick="fillCredentials('admin@ihsan.com', 'password', 'مدير نظام (Admin)')"
-              style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; font-family: inherit;">
-              <div style="font-weight: 800; font-size: 11.5px; color: #1e40af; display: flex; align-items: center; gap: 5px;">
-                <span>🛡️</span>
-                <span>مدير نظام (Admin)</span>
+            <div class="quick-fill-card" onclick="fillCredentials('admin@ihsan.com', 'password', 'مدير نظام (Admin)', false)"
+              style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; position: relative;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 800; font-size: 11.5px; color: #1e40af; display: flex; align-items: center; gap: 5px;">
+                  <span>🛡️</span>
+                  <span>مدير نظام (Admin)</span>
+                </div>
+                <button type="button" onclick="event.stopPropagation(); fillCredentials('admin@ihsan.com', 'password', 'مدير نظام (Admin)', true)"
+                  title="تسجيل دخول فوري"
+                  style="background: #dbeafe; border: 1px solid #3b82f6; color: #1e40af; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; cursor: pointer;">
+                  دخول ⚡
+                </button>
               </div>
-              <div style="font-size: 9.5px; color: #2563eb; margin-top: 2px; direction: ltr; text-align: right;">admin@ihsan.com</div>
-            </button>
+              <div style="font-size: 9.5px; color: #2563eb; margin-top: 3px; direction: ltr; text-align: right;">admin@ihsan.com</div>
+            </div>
 
             <!-- 3. مقدم خدمة (متطوع) -->
-            <button type="button" class="quick-fill-btn" onclick="fillCredentials('mohammed@ihsan.com', 'password', 'مقدم الخدمة (متطوع)')"
-              style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; font-family: inherit;">
-              <div style="font-weight: 800; font-size: 11.5px; color: #166534; display: flex; align-items: center; gap: 5px;">
-                <span>🤝</span>
-                <span>مقدم خدمة (متطوع)</span>
+            <div class="quick-fill-card" onclick="fillCredentials('mohammed@ihsan.com', 'password', 'مقدم الخدمة (متطوع)', false)"
+              style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; position: relative;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 800; font-size: 11.5px; color: #166534; display: flex; align-items: center; gap: 5px;">
+                  <span>🤝</span>
+                  <span>مقدم خدمة (متطوع)</span>
+                </div>
+                <button type="button" onclick="event.stopPropagation(); fillCredentials('mohammed@ihsan.com', 'password', 'مقدم الخدمة (متطوع)', true)"
+                  title="تسجيل دخول فوري"
+                  style="background: #dcfce7; border: 1px solid #22c55e; color: #166534; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; cursor: pointer;">
+                  دخول ⚡
+                </button>
               </div>
-              <div style="font-size: 9.5px; color: #15803d; margin-top: 2px; direction: ltr; text-align: right;">mohammed@ihsan.com</div>
-            </button>
+              <div style="font-size: 9.5px; color: #15803d; margin-top: 3px; direction: ltr; text-align: right;">mohammed@ihsan.com</div>
+            </div>
 
             <!-- 4. كبير سن (مستفيد) -->
-            <button type="button" class="quick-fill-btn" onclick="fillCredentials('elderly@ihsan.com', 'password', 'كبير سن (مستفيد)')"
-              style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; font-family: inherit;">
-              <div style="font-weight: 800; font-size: 11.5px; color: #6b21a8; display: flex; align-items: center; gap: 5px;">
-                <span>🧓</span>
-                <span>كبير سن (مستفيد)</span>
+            <div class="quick-fill-card" onclick="fillCredentials('elderly@ihsan.com', 'password', 'كبير سن (مستفيد)', false)"
+              style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; position: relative;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 800; font-size: 11.5px; color: #6b21a8; display: flex; align-items: center; gap: 5px;">
+                  <span>🧓</span>
+                  <span>كبير سن (مستفيد)</span>
+                </div>
+                <button type="button" onclick="event.stopPropagation(); fillCredentials('elderly@ihsan.com', 'password', 'كبير سن (مستفيد)', true)"
+                  title="تسجيل دخول فوري"
+                  style="background: #f3e8ff; border: 1px solid #a855f7; color: #6b21a8; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; cursor: pointer;">
+                  دخول ⚡
+                </button>
               </div>
-              <div style="font-size: 9.5px; color: #7e22ce; margin-top: 2px; direction: ltr; text-align: right;">elderly@ihsan.com</div>
-            </button>
+              <div style="font-size: 9.5px; color: #7e22ce; margin-top: 3px; direction: ltr; text-align: right;">elderly@ihsan.com</div>
+            </div>
 
             <!-- 5. بانتظار الاعتماد -->
-            <button type="button" class="quick-fill-btn" onclick="fillCredentials('pending@ihsan.com', 'password', 'حساب بانتظار الاعتماد')"
-              style="background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; font-family: inherit;">
-              <div style="font-weight: 800; font-size: 11.5px; color: #9a3412; display: flex; align-items: center; gap: 5px;">
-                <span>⏳</span>
-                <span>بانتظار الاعتماد</span>
+            <div class="quick-fill-card" onclick="fillCredentials('pending@ihsan.com', 'password', 'حساب بانتظار الاعتماد', false)"
+              style="background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; position: relative;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 800; font-size: 11.5px; color: #9a3412; display: flex; align-items: center; gap: 5px;">
+                  <span>⏳</span>
+                  <span>بانتظار الاعتماد</span>
+                </div>
+                <button type="button" onclick="event.stopPropagation(); fillCredentials('pending@ihsan.com', 'password', 'حساب بانتظار الاعتماد', true)"
+                  title="تسجيل دخول فوري"
+                  style="background: #ffedd5; border: 1px solid #f97316; color: #9a3412; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; cursor: pointer;">
+                  دخول ⚡
+                </button>
               </div>
-              <div style="font-size: 9.5px; color: #c2410c; margin-top: 2px; direction: ltr; text-align: right;">pending@ihsan.com</div>
-            </button>
+              <div style="font-size: 9.5px; color: #c2410c; margin-top: 3px; direction: ltr; text-align: right;">pending@ihsan.com</div>
+            </div>
 
             <!-- 6. حساب موقوف -->
-            <button type="button" class="quick-fill-btn" onclick="fillCredentials('suspended@ihsan.com', 'password', 'حساب موقوف')"
-              style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; font-family: inherit;">
-              <div style="font-weight: 800; font-size: 11.5px; color: #991b1b; display: flex; align-items: center; gap: 5px;">
-                <span>🚫</span>
-                <span>حساب موقوف</span>
+            <div class="quick-fill-card" onclick="fillCredentials('suspended@ihsan.com', 'password', 'حساب موقوف', false)"
+              style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; position: relative;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 800; font-size: 11.5px; color: #991b1b; display: flex; align-items: center; gap: 5px;">
+                  <span>🚫</span>
+                  <span>حساب موقوف</span>
+                </div>
+                <button type="button" onclick="event.stopPropagation(); fillCredentials('suspended@ihsan.com', 'password', 'حساب موقوف', true)"
+                  title="تسجيل دخول فوري"
+                  style="background: #fee2e2; border: 1px solid #ef4444; color: #991b1b; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; cursor: pointer;">
+                  دخول ⚡
+                </button>
               </div>
-              <div style="font-size: 9.5px; color: #b91c1c; margin-top: 2px; direction: ltr; text-align: right;">suspended@ihsan.com</div>
-            </button>
+              <div style="font-size: 9.5px; color: #b91c1c; margin-top: 3px; direction: ltr; text-align: right;">suspended@ihsan.com</div>
+            </div>
           </div>
 
           <div id="quickFillNotice" style="display:none; margin-top: 10px; font-size: 11px; font-weight: 700; color: #065f46; text-align: center; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 6px 10px;">
@@ -457,16 +508,29 @@
     </div>
   </div>
 
-  @if (app()->environment('local'))
+  @if (config('app.show_test_buttons', env('SHOW_TEST_BUTTONS', app()->environment(['local', 'production']))))
   <script>
-    function fillCredentials(email, password, roleName) {
+    function fillCredentials(email, password, roleName, autoSubmit = false) {
       const emailInput = document.getElementById('email');
       const passwordInput = document.getElementById('password');
       const notice = document.getElementById('quickFillNotice');
+      const form = document.getElementById('loginForm');
 
       if (emailInput && passwordInput) {
         emailInput.value = email;
         passwordInput.value = password;
+
+        if (autoSubmit && form) {
+          if (notice) {
+            notice.innerHTML = '⚡ جاري تسجيل الدخول كـ <strong>' + roleName + '</strong>...';
+            notice.style.display = 'block';
+            notice.style.background = '#e0f2fe';
+            notice.style.borderColor = '#7dd3fc';
+            notice.style.color = '#0369a1';
+          }
+          form.submit();
+          return;
+        }
 
         emailInput.style.borderColor = '#10b981';
         passwordInput.style.borderColor = '#10b981';
@@ -476,8 +540,11 @@
         }, 1500);
 
         if (notice) {
-          notice.innerHTML = '✓ تم اختيار حساب: <strong>' + roleName + '</strong>. اضغط الآن على زر تسجيل الدخول أدناه.';
+          notice.innerHTML = '✓ تم تعبئة بيانات: <strong>' + roleName + '</strong>. اضغط الآن على زر "تسجيل الدخول" أو "دخول ⚡".';
           notice.style.display = 'block';
+          notice.style.background = '#ecfdf5';
+          notice.style.borderColor = '#a7f3d0';
+          notice.style.color = '#065f46';
         }
       }
     }
