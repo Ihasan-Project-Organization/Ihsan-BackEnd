@@ -14,7 +14,10 @@ FROM richarvey/nginx-php-fpm:3.1.6
 COPY . .
 COPY --from=frontend /app/public/build /var/www/html/public/build
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress && \
-    chmod +x /var/www/html/scripts/00-laravel-deploy.sh
+    chmod +x /var/www/html/scripts/00-laravel-deploy.sh && \
+    mkdir -p /var/www/html/database /var/www/html/storage /var/www/html/bootstrap/cache && \
+    touch /var/www/html/database/database.sqlite && \
+    chmod -R 777 /var/www/html/database /var/www/html/storage /var/www/html/bootstrap/cache
 
 ENV SKIP_COMPOSER=1
 ENV WEBROOT=/var/www/html/public
