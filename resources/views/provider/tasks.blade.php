@@ -97,8 +97,8 @@
                         @php($step = $req->step_index)
                         <div class="hidden sm:block">
                             <div class="relative flex items-center justify-between">
-                                <div class="absolute left-0 top-1/2 -z-0 h-1 w-full -translate-y-1/2 bg-slate-100 rounded-full"></div>
-                                <div class="absolute left-0 top-1/2 -z-0 h-1 -translate-y-1/2 bg-[#52643a] transition-all duration-500 rounded-full"
+                                <div class="absolute right-0 top-1/2 -z-0 h-1 w-full -translate-y-1/2 bg-slate-100 rounded-full"></div>
+                                <div class="absolute right-0 top-1/2 -z-0 h-1 -translate-y-1/2 bg-[#52643a] transition-all duration-500 rounded-full"
                                     style="width: {{ $step >= 5 ? '100%' : (($step - 1) / 4 * 100) . '%' }}"></div>
 
                                 @php($steps = [

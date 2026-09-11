@@ -198,6 +198,13 @@ test('elderly user can confirm request completion', function () {
     $serviceRequest->refresh();
     expect($serviceRequest->status)->toBe(ServiceRequest::STATUS_COMPLETED);
     expect($serviceRequest->completed_at)->not->toBeNull();
+
+    $this->assertDatabaseHas('ratings', [
+        'service_request_id' => $serviceRequest->id,
+        'elderly_id' => $user->id,
+        'stars' => 5,
+        'comment' => 'خدمة ممتازة جزاكم الله خيراً',
+    ]);
 });
 
 test('elderly user can cancel a service request with a reason', function () {
@@ -231,54 +238,6 @@ test('elderly user can cancel a service request with a reason', function () {
     $serviceRequest->refresh();
     expect($serviceRequest->status)->toBe(ServiceRequest::STATUS_CANCELLED);
     expect($serviceRequest->cancellation_reason)->toBe('لم تعد الخدمة مطلوبة');
-});
-
-test('elderly user can submit a review for completed service request', function () {
-    $user = User::factory()->create();
-    $elderProfile = ElderProfile::create([
-        'user_id' => $user->id,
-        'full_name' => $user->name,
-        'city' => 'غزة',
-    ]);
-
-    $provider = User::factory()->create();
-    $providerProfile = ServiceProviderProfile::create([
-        'user_id' => $provider->id,
-        'full_name' => $provider->name,
-        'birth_date' => '1995-01-01',
-        'id_document_path' => 'documents/id.png',
-        'good_conduct_cert_path' => 'documents/conduct.pdf',
-    ]);
-
-    $serviceRequest = ServiceRequest::create([
-        'public_id' => '#REQ-1011',
-        'elder_id' => $elderProfile->id,
-        'provider_id' => $providerProfile->id,
-        'title' => 'طلب دعم',
-        'service_type' => 'home_help',
-        'description' => 'مساعدة في مراجعة الأوراق.',
-        'location' => 'حي الرمال',
-        'scheduled_at' => now()->subDay(),
-        'status' => ServiceRequest::STATUS_COMPLETED,
-        'completed_at' => now()->subDay(),
-    ]);
-
-    $response = $this
-        ->actingAs($user)
-        ->post("/requests/{$serviceRequest->id}/reviews", [
-            'rating' => 5,
-            'comment' => 'متطوع خلوق وسريع الاستجابة بارك الله فيه.',
-        ]);
-
-    $response->assertSessionHas('status', 'review-submitted');
-
-    $this->assertDatabaseHas('ratings', [
-        'service_request_id' => $serviceRequest->id,
-        'elderly_id' => $user->id,
-        'provider_id' => $provider->id,
-        'stars' => 5,
-        'comment' => 'متطوع خلوق وسريع الاستجابة بارك الله فيه.',
-    ]);
 });
 
 test('tabs filter requests properly by status', function () {

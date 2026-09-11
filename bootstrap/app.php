@@ -13,7 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->appendToGroup('web', \App\Http\Middleware\EnsureAccountApproved::class);
         $middleware->alias([
-            'role' => \App\Http\Middleware\EnsureUserRole::class,
+            'role'         => \App\Http\Middleware\EnsureUserRole::class,
+            'ensure.admin' => \App\Http\Middleware\EnsureAdmin::class,
+            'ensure.super' => \App\Http\Middleware\EnsureSuperAdmin::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

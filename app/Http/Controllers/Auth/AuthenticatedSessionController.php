@@ -41,6 +41,10 @@ class AuthenticatedSessionController extends Controller
         }
 
         // 3. توجيه المستخدم حسب دوره (Role):
+        if ($user->isAdmin()) {
+            return redirect()->intended(route('admin.dashboard', absolute: false));
+        }
+
         if ($user->isProvider()) {
             return redirect()->intended(route('provider.dashboard', absolute: false));
         }

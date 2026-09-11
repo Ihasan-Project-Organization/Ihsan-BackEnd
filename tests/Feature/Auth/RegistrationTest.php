@@ -30,5 +30,3 @@ test('new users can register and are directed to verify email prompt', function 
     ]);
     $response->assertRedirect(route('verification.notice'));
 });
-
-// TODO: reconnect in stage 3.2/3.3 (profile documents and details storage tests)

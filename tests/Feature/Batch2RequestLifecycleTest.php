@@ -154,9 +154,10 @@ test('2.3 provider apology unassigns provider, increments incidents count, and n
     $req->refresh();
     $providerProfile->refresh();
 
-    expect($req->status)->toBe(ServiceRequest::STATUS_PROVIDER_APOLOGIZED)
+    expect($req->status)->toBe(ServiceRequest::STATUS_PENDING_ACCEPTANCE)
         ->and($req->incident_type)->toBe('apology')
-        ->and($req->provider_id)->toBeNull();
+        ->and($req->provider_id)->toBeNull()
+        ->and($req->previous_provider_id)->toBe($providerProfile->id);
 
     expect($providerProfile->reliability_incidents_count)->toBe(1);
 
@@ -166,15 +167,12 @@ test('2.3 provider apology unassigns provider, increments incidents count, and n
         ->first();
     expect($notif)->not->toBeNull();
 
-    // Elder can now reschedule request back to pending_acceptance
-    $rescheduleResponse = $this->actingAs($elderUser)
-        ->patch("/requests/{$req->id}/reschedule", [
-            'scheduled_at' => now()->addDays(2)->format('Y-m-d H:i:s'),
-        ]);
+    // Apologizing provider CANNOT see the request in available
+    expect(ServiceRequest::availableForProvider($providerUser)->where('id', $req->id)->exists())->toBeFalse();
 
-    $rescheduleResponse->assertSessionHas('status', 'request-rescheduled');
-    $req->refresh();
-    expect($req->status)->toBe(ServiceRequest::STATUS_PENDING_ACCEPTANCE);
+    // Another provider CAN see the request in available
+    [$otherProviderUser] = createProviderUser();
+    expect(ServiceRequest::availableForProvider($otherProviderUser)->where('id', $req->id)->exists())->toBeTrue();
 });
 
 test('2.4 delay workflow marks delayed, elder can search alternative which penalizes delayed provider', function () {
@@ -417,4 +415,131 @@ test('2.9 elder can confirm completion and rate provider even when provider has 
     expect($req->elderRating->id)->toBe($elderRating->id);
     expect($req->providerRating->id)->toBe($providerRating->id);
 });
+
+test('2.6 real HTTP accept workflow atomically assigns request, hides cancel button from elder, and reveals contact phone', function () {
+    [$elderUser, $elderProfile] = createElderUser();
+    [$providerUser, $providerProfile] = createProviderUser();
+
+    $req = ServiceRequest::create([
+        'public_id' => '#REQ-ACCEPT-LIFECYCLE',
+        'elder_id' => $elderProfile->id,
+        'title' => 'طلب تسوق خضار',
+        'service_type' => 'grocery',
+        'pricing_type' => 'volunteer',
+        'timing_type' => 'scheduled',
+        'gender_preference' => 'any',
+        'description' => 'شراء احتياجات ضرورية',
+        'location' => 'حي النصر',
+        'scheduled_at' => now()->addHours(5),
+        'status' => ServiceRequest::STATUS_PENDING_ACCEPTANCE,
+    ]);
+
+    // 1. قبل القبول: كبير السن يرى زر الإلغاء للطلب ولا يرى هاتف مقدم الخدمة
+    $elderViewBefore = $this->actingAs($elderUser)->get('/requests');
+    $elderViewBefore->assertOk();
+    $elderViewBefore->assertSee("openCancelModal({$req->id}");
+    $elderViewBefore->assertDontSee('تواصل مع المتطوع');
+    $elderViewBefore->assertDontSee($providerProfile->phone_number);
+
+    // 2. استدعاء مسار accept() الحقيقي عبر HTTP POST
+    $acceptResponse = $this->actingAs($providerUser)
+        ->post("/provider/tasks/{$req->id}/accept");
+
+    $acceptResponse->assertRedirect(route('provider.tasks', ['tab' => 'upcoming']));
+    $acceptResponse->assertSessionHas('status', 'task-accepted');
+
+    $req->refresh();
+
+    // التحقق من أن الحالة أصبحت assigned مباشرة مع توثيق accepted_at و assigned_at
+    expect($req->status)->toBe(ServiceRequest::STATUS_ASSIGNED)
+        ->and($req->provider_id)->toBe($providerProfile->id)
+        ->and($req->accepted_at)->not->toBeNull()
+        ->and($req->assigned_at)->not->toBeNull();
+
+    // 3. بعد القبول مباشرة: كبير السن لا يرى زر الإلغاء، ويظهر له زر التواصل ورقم هاتف المتطوع
+    $elderViewAfter = $this->actingAs($elderUser)->get('/requests');
+    $elderViewAfter->assertOk();
+    $elderViewAfter->assertDontSee("openCancelModal({$req->id}");
+    $elderViewAfter->assertSee('تواصل مع المتطوع');
+    $elderViewAfter->assertSee($providerProfile->phone_number);
+
+    // التحقق أيضاً من منع كبير السن من الإلغاء برمجياً عبر الـ endpoint
+    $cancelAttempt = $this->actingAs($elderUser)->delete("/requests/{$req->id}/cancel", [
+        'cancellation_reason' => 'محاولة إلغاء بعد التوكيل',
+    ]);
+    $cancelAttempt->assertStatus(403);
+});
+
+test('2.7 accept() strictly enforces tier requirements and rejects unqualified providers with 403', function () {
+    [$elderUser, $elderProfile] = createElderUser();
+    [$tier1User, $tier1Profile] = createProviderUser();
+    $tier1Profile->update(['tier' => 1]);
+
+    // طلب مرافقة طبية يتطلب Tier 3
+    $escortReq = ServiceRequest::create([
+        'public_id' => '#REQ-ESCORT-TIER3',
+        'elder_id' => $elderProfile->id,
+        'title' => 'مرافقة إلى المستشفى',
+        'service_type' => 'medical_escort',
+        'pricing_type' => 'volunteer',
+        'timing_type' => 'scheduled',
+        'gender_preference' => 'any',
+        'description' => 'مرافقة لموعد عيادة',
+        'location' => 'مستشفى الشفاء',
+        'scheduled_at' => now()->addHours(6),
+        'status' => ServiceRequest::STATUS_PENDING_ACCEPTANCE,
+    ]);
+
+    // محاولة قبول من Tier 1 -> مرفوض بـ 403
+    $t1Attempt = $this->actingAs($tier1User)->post("/provider/tasks/{$escortReq->id}/accept");
+    $t1Attempt->assertStatus(403);
+    expect($escortReq->fresh()->status)->toBe(ServiceRequest::STATUS_PENDING_ACCEPTANCE);
+
+    // ترقية إلى Tier 2 ومحاولة قبول مرافقة طبية -> لا يزال مرفوضاً بـ 403
+    $tier1Profile->update(['tier' => 2]);
+    $tier1User->refresh();
+    $t2Attempt = $this->actingAs($tier1User)->post("/provider/tasks/{$escortReq->id}/accept");
+    $t2Attempt->assertStatus(403);
+
+    // ترقية إلى Tier 3 -> يُقبل بنجاح
+    $tier1Profile->update(['tier' => 3]);
+    $tier1User->refresh();
+    $t3Attempt = $this->actingAs($tier1User)->post("/provider/tasks/{$escortReq->id}/accept");
+    $t3Attempt->assertRedirect(route('provider.tasks', ['tab' => 'upcoming']));
+    expect($escortReq->fresh()->status)->toBe(ServiceRequest::STATUS_ASSIGNED);
+});
+
+test('2.8 accept() strictly enforces gender preference matching and rejects mismatch with 403', function () {
+    [$elderUser, $elderProfile] = createElderUser();
+    [$maleUser, $maleProfile] = createProviderUser();
+    $maleUser->gender = 'male';
+
+    // طلب يشترط مقدمة خدمة أنثى
+    $femaleReq = ServiceRequest::create([
+        'public_id' => '#REQ-FEMALE-ONLY',
+        'elder_id' => $elderProfile->id,
+        'title' => 'مساعدة منزلية خفيفة',
+        'service_type' => 'grocery',
+        'pricing_type' => 'volunteer',
+        'timing_type' => 'scheduled',
+        'gender_preference' => 'female',
+        'description' => 'تسوق خضار',
+        'location' => 'الرمال',
+        'scheduled_at' => now()->addHours(4),
+        'status' => ServiceRequest::STATUS_PENDING_ACCEPTANCE,
+    ]);
+
+    // مقدم خدمة ذكر يحاول قبول طلب يشترط أنثى -> مرفوض بـ 403
+    $mismatchAttempt = $this->actingAs($maleUser)->post("/provider/tasks/{$femaleReq->id}/accept");
+    $mismatchAttempt->assertStatus(403);
+    expect($femaleReq->fresh()->status)->toBe(ServiceRequest::STATUS_PENDING_ACCEPTANCE);
+
+    // أنثى تقبل الطلب -> نجاح
+    [$femaleUser, $femaleProfile] = createProviderUser();
+    $femaleUser->gender = 'female';
+    $matchAttempt = $this->actingAs($femaleUser)->post("/provider/tasks/{$femaleReq->id}/accept");
+    $matchAttempt->assertRedirect(route('provider.tasks', ['tab' => 'upcoming']));
+    expect($femaleReq->fresh()->status)->toBe(ServiceRequest::STATUS_ASSIGNED);
+});
+
 

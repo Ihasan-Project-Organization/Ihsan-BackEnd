@@ -698,8 +698,8 @@
         <div class="requests-list">
             @forelse ($requests as $item)
                 @php
-                    $provPhone = $item->serviceProviderProfile?->phone_number ?? $item->assignedProvider?->serviceProviderProfile?->phone_number;
-                    $provName = $item->serviceProviderProfile?->full_name ?? $item->assignedProvider?->name ?? 'مقدم الخدمة';
+                    $provPhone = $item->serviceProviderProfile?->phone_number;
+                    $provName = $item->serviceProviderProfile?->full_name ?? $item->serviceProviderProfile?->user?->name ?? 'مقدم الخدمة';
                 @endphp
 
                 {{-- ========================================================= --}}
@@ -726,7 +726,7 @@
                         <div class="request-meta" style="margin-top: 10px;">
                             <span><i class="fa-regular fa-calendar"></i> {{ $item->scheduled_at->translatedFormat('l d F Y - h:i A') }}</span>
                             <span><i class="fa-solid fa-location-dot"></i> {{ $item->location }}</span>
-                            @if ($item->assignedProvider)
+                            @if ($item->serviceProviderProfile)
                                 <span><i class="fa-solid fa-user"></i> المتطوع: {{ $provName }}</span>
                             @endif
                         </div>
@@ -838,7 +838,7 @@
 
                         <div class="completed-meta">
                             <span><i class="fa-regular fa-calendar"></i> <b>تاريخ الإنجاز:</b> {{ $item->completed_at?->translatedFormat('d F Y - h:i A') ?? $item->updated_at->translatedFormat('d F Y') }}</span>
-                            @if ($item->assignedProvider)
+                            @if ($item->serviceProviderProfile)
                                 <span><i class="fa-solid fa-user"></i> <b>المتطوع:</b> {{ $provName }}</span>
                             @endif
                             <span class="font-mono text-slate-400 mr-auto">{{ $item->public_id }}</span>
@@ -850,16 +850,6 @@
                                 <div class="rated-row">
                                     <span class="stars">{{ str_repeat('★', $item->review->stars) }}</span>
                                     <span>لقد قمت بتقييم هذه الخدمة ({{ $item->review->stars }}/5)</span>
-                                </div>
-                            @else
-                                <div class="flex items-center justify-between mt-3">
-                                    <span class="text-xs text-slate-500">لم تقم بتقييم هذه الخدمة بعد:</span>
-                                    <button type="button"
-                                        onclick="openReviewModal({{ $item->id }}, '{{ addslashes($provName) }}', '{{ route('service-requests.reviews.store', $item) }}')"
-                                        class="rate-button">
-                                        <i class="fa-solid fa-star"></i>
-                                        <span>قيّم المتطوع الآن</span>
-                                    </button>
                                 </div>
                             @endif
                         </div>
@@ -947,7 +937,7 @@
                         <div class="request-meta">
                             <span><i class="fa-regular fa-calendar"></i> {{ $item->scheduled_at->translatedFormat('l d F - h:i A') }}</span>
                             <span><i class="fa-solid fa-location-dot"></i> {{ $item->location }}</span>
-                            @if ($item->assignedProvider)
+                            @if ($item->serviceProviderProfile)
                                 <span><i class="fa-solid fa-user"></i> المتطوع: {{ $provName }}</span>
                             @endif
                         </div>

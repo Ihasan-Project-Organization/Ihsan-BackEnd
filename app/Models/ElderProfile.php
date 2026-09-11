@@ -14,9 +14,17 @@ class ElderProfile extends Model
     protected $fillable = [
         'user_id',
         'full_name',
+        'id_number',
+        'birth_date',
         'city',
+        'address',
+        'housing_type',
         'phone_number',
         'id_document_path',
+    ];
+
+    protected $casts = [
+        'birth_date' => 'date',
     ];
 
     protected $attributes = [

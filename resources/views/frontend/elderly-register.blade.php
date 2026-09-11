@@ -269,6 +269,22 @@
       box-shadow: 0 0 0 3px rgba(59, 82, 40, 0.15);
     }
 
+    .input-wrapper input.is-invalid,
+    .input-wrapper select.is-invalid {
+      border-color: #ef4444 !important;
+      background-color: #fef2f2 !important;
+    }
+
+    .field-error-msg {
+      color: #b91c1c;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
     .input-wrapper .field-icon {
       position: absolute;
       right: 14px;
@@ -530,54 +546,83 @@
               <label for="name">الاسم بالكامل <span class="text-red-500">*</span></label>
               <div class="input-wrapper">
                 <i class="fa-regular fa-user field-icon"></i>
-                <input type="text" id="name" name="name" value="{{ old('name') }}" placeholder="ادخل اسمك الكامل" required autofocus>
+                <input type="text" id="name" name="name" value="{{ old('name') }}" placeholder="ادخل اسمك الكامل" class="{{ $errors->has('name') ? 'is-invalid' : '' }}" required autofocus>
               </div>
+              @error('name')
+                <div class="field-error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</div>
+              @enderror
+            </div>
+
+            <div class="input-group">
+              <label for="id_number">رقم الهوية الوطنية <span class="text-red-500">*</span></label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-id-card field-icon"></i>
+                <input type="text" id="id_number" name="id_number" value="{{ old('id_number') }}" placeholder="أدخل رقم الهوية الشخصية (9 أرقام)" class="{{ $errors->has('id_number') ? 'is-invalid' : '' }}" required>
+              </div>
+              @error('id_number')
+                <div class="field-error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</div>
+              @enderror
             </div>
 
             <div class="input-group">
               <label for="email">البريد الإلكتروني <span class="text-red-500">*</span></label>
               <div class="input-wrapper">
                 <i class="fa-regular fa-envelope field-icon"></i>
-                <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="example@email.com" required autocomplete="username">
+                <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="example@email.com" class="{{ $errors->has('email') ? 'is-invalid' : '' }}" required autocomplete="username">
               </div>
+              @error('email')
+                <div class="field-error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</div>
+              @enderror
             </div>
 
             <div class="input-group">
               <label for="password">كلمة المرور <span class="text-red-500">*</span></label>
               <div class="input-wrapper">
                 <i class="fa-solid fa-lock field-icon"></i>
-                <input type="password" id="password" name="password" placeholder="٨ خانات على الأقل" minlength="8" required autocomplete="new-password">
+                <input type="password" id="password" name="password" placeholder="٨ خانات على الأقل" minlength="8" class="{{ $errors->has('password') ? 'is-invalid' : '' }}" required autocomplete="new-password">
                 <i class="fa-regular fa-eye toggle-password" onclick="togglePassword('password', this)"></i>
               </div>
+              @error('password')
+                <div class="field-error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</div>
+              @enderror
             </div>
 
             <div class="input-group">
               <label for="password_confirmation">تأكيد كلمة المرور <span class="text-red-500">*</span></label>
               <div class="input-wrapper">
                 <i class="fa-solid fa-lock field-icon"></i>
-                <input type="password" id="password_confirmation" name="password_confirmation" placeholder="أعد كتابة كلمة المرور" minlength="8" required autocomplete="new-password">
+                <input type="password" id="password_confirmation" name="password_confirmation" placeholder="أعد كتابة كلمة المرور" minlength="8" class="{{ $errors->has('password_confirmation') ? 'is-invalid' : '' }}" required autocomplete="new-password">
                 <i class="fa-regular fa-eye toggle-password" onclick="togglePassword('password_confirmation', this)"></i>
               </div>
+              @error('password_confirmation')
+                <div class="field-error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</div>
+              @enderror
             </div>
 
             <div class="input-group">
               <label for="dob">تاريخ الميلاد</label>
               <div class="input-wrapper">
                 <i class="fa-regular fa-calendar field-icon"></i>
-                <input type="date" id="dob" name="dob" value="{{ old('dob') }}">
+                <input type="date" id="dob" name="dob" value="{{ old('dob') }}" class="{{ $errors->has('dob') ? 'is-invalid' : '' }}">
               </div>
+              @error('dob')
+                <div class="field-error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</div>
+              @enderror
             </div>
 
             <div class="input-group">
               <label for="gender">الجنس</label>
               <div class="input-wrapper">
                 <i class="fa-solid fa-venus-mars field-icon"></i>
-                <select id="gender" name="gender">
+                <select id="gender" name="gender" class="{{ $errors->has('gender') ? 'is-invalid' : '' }}">
                   <option value="">اختر الجنس</option>
                   <option value="male" {{ old('gender') === 'male' ? 'selected' : '' }}>ذكر</option>
                   <option value="female" {{ old('gender') === 'female' ? 'selected' : '' }}>أنثى</option>
                 </select>
               </div>
+              @error('gender')
+                <div class="field-error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</div>
+              @enderror
             </div>
           </div>
 
@@ -596,39 +641,54 @@
               <label for="city">المدينة / المحافظة <span class="text-red-500">*</span></label>
               <div class="input-wrapper">
                 <i class="fa-solid fa-city field-icon"></i>
-                <input type="text" id="city" name="city" value="{{ old('city') }}" placeholder="مثال: غزة، خانيونس، رام الله" required>
+                <input type="text" id="city" name="city" value="{{ old('city') }}" placeholder="مثال: غزة، خانيونس، رام الله" class="{{ $errors->has('city') ? 'is-invalid' : '' }}" required>
               </div>
+              @error('city')
+                <div class="field-error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</div>
+              @enderror
             </div>
 
             <div class="input-group">
               <label for="phone_number">رقم الهاتف / الجوال <span class="text-red-500">*</span></label>
               <div class="input-wrapper">
                 <i class="fa-solid fa-phone field-icon"></i>
-                <input type="tel" id="phone_number" name="phone_number" value="{{ old('phone_number') ?? old('phone') }}" placeholder="059XXXXXXX" required>
+                <input type="tel" id="phone_number" name="phone_number" value="{{ old('phone_number') ?? old('phone') }}" placeholder="059XXXXXXX" class="{{ $errors->has('phone_number') || $errors->has('phone') ? 'is-invalid' : '' }}" required>
                 {{-- إبقاء اسم phone احتياطياً لتوافقية الاختبارات السابقة --}}
                 <input type="hidden" id="phone" name="phone" value="{{ old('phone_number') ?? old('phone') }}">
               </div>
+              @error('phone_number')
+                <div class="field-error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</div>
+              @enderror
+              @error('phone')
+                <div class="field-error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</div>
+              @enderror
             </div>
 
             <div class="input-group">
               <label for="address">العنوان التفصيلي</label>
               <div class="input-wrapper">
                 <i class="fa-solid fa-location-dot field-icon"></i>
-                <input type="text" id="address" name="address" value="{{ old('address') }}" placeholder="الحي، الشارع، أقرب معلم">
+                <input type="text" id="address" name="address" value="{{ old('address') }}" placeholder="الحي، الشارع، أقرب معلم" class="{{ $errors->has('address') ? 'is-invalid' : '' }}">
               </div>
+              @error('address')
+                <div class="field-error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</div>
+              @enderror
             </div>
 
             <div class="input-group">
               <label for="housing_type">نوع السكن</label>
               <div class="input-wrapper">
                 <i class="fa-solid fa-building field-icon"></i>
-                <select id="housing_type" name="housing_type">
+                <select id="housing_type" name="housing_type" class="{{ $errors->has('housing_type') ? 'is-invalid' : '' }}">
                   <option value="">اختر نوع السكن</option>
                   <option value="independent" {{ old('housing_type') === 'independent' ? 'selected' : '' }}>منزل مستقل</option>
                   <option value="apartment" {{ old('housing_type') === 'apartment' ? 'selected' : '' }}>شقة سكنية</option>
                   <option value="with_family" {{ old('housing_type') === 'with_family' ? 'selected' : '' }}>مع العائلة</option>
                 </select>
               </div>
+              @error('housing_type')
+                <div class="field-error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</div>
+              @enderror
             </div>
           </div>
 
@@ -656,6 +716,10 @@
                 <span class="value" id="summary-name">—</span>
               </div>
               <div class="summary-item">
+                <span class="label">رقم الهوية:</span>
+                <span class="value" id="summary-id-number">—</span>
+              </div>
+              <div class="summary-item">
                 <span class="label">البريد الإلكتروني:</span>
                 <span class="value" id="summary-email">—</span>
               </div>
@@ -677,6 +741,9 @@
               <input type="file" id="id_document" name="id_document" accept=".png,.jpg,.jpeg,.pdf" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#e4ebd9] file:text-[#3b5228] hover:file:bg-[#d6ded0]">
               <p class="text-xs text-slate-400 mt-2">الملفات المسموحة: JPG, PNG, PDF (الحد الأقصى: 5 ميجابايت)</p>
             </div>
+            @error('id_document')
+              <div class="field-error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</div>
+            @enderror
           </div>
 
           <div class="terms-group">
@@ -718,6 +785,9 @@
 
     function updateSummary() {
       document.getElementById('summary-name').textContent = document.getElementById('name').value || '—';
+      const idNumEl = document.getElementById('id_number');
+      const sumIdEl = document.getElementById('summary-id-number');
+      if (idNumEl && sumIdEl) sumIdEl.textContent = idNumEl.value || '—';
       document.getElementById('summary-email').textContent = document.getElementById('email').value || '—';
       document.getElementById('summary-city').textContent = document.getElementById('city').value || '—';
       document.getElementById('summary-phone').textContent = document.getElementById('phone_number').value || '—';
@@ -805,11 +875,13 @@
       }
     }
 
-    // إذا وُجدت أخطاء بالخطوة الثانية عند العودة من السيرفر
-    @if ($errors->has('city') || $errors->has('phone') || $errors->has('phone_number'))
-      showStep(2);
-    @elseif ($errors->has('id_document'))
+    // إذا وُجدت أخطاء بالتحقق عند العودة من السيرفر، نبقى في الخطوة المعنية
+    @if ($errors->has('id_document'))
       showStep(3);
+    @elseif ($errors->has('city') || $errors->has('phone') || $errors->has('phone_number') || $errors->has('address') || $errors->has('housing_type'))
+      showStep(2);
+    @elseif ($errors->any())
+      showStep(1);
     @endif
   </script>
 

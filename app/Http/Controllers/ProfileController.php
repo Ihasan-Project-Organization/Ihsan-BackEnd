@@ -18,7 +18,7 @@ class ProfileController extends Controller
     public function edit(Request $request): View
     {
         return view('profile.edit', [
-            'user' => $request->user(), // TODO: reconnect in stage 3.2/3.3
+            'user' => $request->user(),
         ]);
     }
 
@@ -67,8 +67,6 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
-
-        // TODO: reconnect in stage 3.2/3.3
 
         Auth::logout();
 

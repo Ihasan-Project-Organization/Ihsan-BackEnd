@@ -51,6 +51,7 @@ class ServiceRequest extends Model
         'public_id',
         'elder_id',
         'provider_id',
+        'previous_provider_id',
         'title',
         'service_type',
         'pricing_type',
@@ -242,11 +243,18 @@ class ServiceRequest extends Model
     public function scopeAvailableForProvider(Builder $query, User $provider): Builder
     {
         $providerProfileId = $provider->serviceProviderProfile?->id;
+        $providerElderId = $provider->elderProfile?->id;
 
         return $query->where('status', self::STATUS_PENDING_ACCEPTANCE)
             ->whereNull('provider_id')
+            ->when($providerElderId, function ($q) use ($providerElderId) {
+                $q->where('elder_id', '!=', $providerElderId);
+            })
             ->when($providerProfileId, function ($q) use ($providerProfileId) {
-                $q->where('elder_id', '!=', $providerProfileId);
+                $q->where(function ($sub) use ($providerProfileId) {
+                    $sub->whereNull('previous_provider_id')
+                        ->orWhere('previous_provider_id', '!=', $providerProfileId);
+                });
             });
     }
 

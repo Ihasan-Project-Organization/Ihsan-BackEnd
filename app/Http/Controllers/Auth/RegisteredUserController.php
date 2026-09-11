@@ -62,12 +62,13 @@ class RegisteredUserController extends Controller
                     'status' => 'pending',
                 ]);
 
-                $idDocPath = $request->file('id_document')->store('documents/ids', 'public');
-                $conductCertPath = $request->file('conduct_document')->store('documents/certificates', 'public');
+                $idDocPath = $request->file('id_document')->store('documents/ids', 'local');
+                $conductCertPath = $request->file('conduct_document')->store('documents/certificates', 'local');
 
                 ServiceProviderProfile::create([
                     'user_id' => $user->id,
                     'full_name' => $validated['name'],
+                    'id_number' => $request->input('id_number'),
                     'birth_date' => $validated['dob'],
                     'phone_number' => $phoneNumber,
                     'id_document_path' => $idDocPath,
@@ -115,13 +116,17 @@ class RegisteredUserController extends Controller
                 }
 
                 $idDocPath = $request->hasFile('id_document')
-                    ? $request->file('id_document')->store('documents/ids', 'public')
+                    ? $request->file('id_document')->store('documents/ids', 'local')
                     : null;
 
                 ElderProfile::create([
                     'user_id' => $user->id,
                     'full_name' => $validated['name'],
+                    'id_number' => $request->input('id_number'),
+                    'birth_date' => $request->input('dob'),
                     'city' => $city,
+                    'address' => $request->input('address'),
+                    'housing_type' => $request->input('housing_type'),
                     'phone_number' => $phoneNumber,
                     'id_document_path' => $idDocPath,
                 ]);

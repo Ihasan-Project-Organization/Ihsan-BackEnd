@@ -28,33 +28,37 @@ window.openCreateRequestModal = function() {
         { id: 'support_request', title: 'طلب الدعم', desc: 'تواصل مع جهة داعمة أو خدمة أخرى', icon: 'fa-handshake-angle' }
     ],
 
+    errorMessage: '',
+
     selectService(srv) {
         this.service_type = srv.id;
         this.title = srv.title;
+        this.errorMessage = '';
     },
 
     nextStep() {
+        this.errorMessage = '';
         if (this.step === 1) {
             if (!this.title.trim()) {
-                alert('يرجى كتابة أو اختيار عنوان للخدمة.');
+                this.errorMessage = 'يرجى كتابة أو اختيار عنوان للخدمة.';
                 return;
             }
             if (!this.description.trim()) {
-                alert('يرجى كتابة شرح مختصر لما تحتاجه.');
+                this.errorMessage = 'يرجى كتابة شرح مختصر لما تحتاجه.';
                 return;
             }
             this.step = 2;
         } else if (this.step === 2) {
             if (this.timing_type === 'scheduled' && !this.scheduled_at) {
-                alert('يرجى تحديد موعد وتاريخ تنفيذ الخدمة.');
+                this.errorMessage = 'يرجى تحديد موعد وتاريخ تنفيذ الخدمة.';
                 return;
             }
             if (this.pricing_type === 'paid' && (!this.proposed_price || this.proposed_price <= 0)) {
-                alert('يرجى تحديد السعر المقترح بالرقم.');
+                this.errorMessage = 'يرجى تحديد السعر المقترح بالرقم.';
                 return;
             }
             if (!this.location.trim()) {
-                alert('يرجى إدخال العنوان أو موقع التنفيذ.');
+                this.errorMessage = 'يرجى إدخال العنوان أو موقع التنفيذ.';
                 return;
             }
             this.step = 3;
@@ -62,6 +66,7 @@ window.openCreateRequestModal = function() {
     },
 
     prevStep() {
+        this.errorMessage = '';
         if (this.step > 1) {
             this.step--;
         }
@@ -69,6 +74,7 @@ window.openCreateRequestModal = function() {
 
     resetForm() {
         this.step = 1;
+        this.errorMessage = '';
         this.service_type = 'grocery';
         this.title = 'شراء أغراض منزلية';
         this.description = '';
@@ -140,6 +146,13 @@ style="font-family: 'Alexandria', sans-serif;">
 
         <form method="POST" action="{{ route('service-requests.store') }}" enctype="multipart/form-data" class="mt-4 overflow-y-auto pr-1">
             @csrf
+
+            {{-- رسالة خطأ التحقق المضمنة داخل الواجهة --}}
+            <div x-show="errorMessage" x-cloak
+                class="mb-3 rounded-xl bg-rose-50 border border-rose-200 p-2.5 text-xs text-rose-800 font-bold flex items-center gap-2 animate-fadeIn">
+                <i class="fa-solid fa-circle-exclamation text-rose-600 shrink-0 text-sm"></i>
+                <span x-text="errorMessage"></span>
+            </div>
 
             {{-- ════════════════ الخطوة 1: اختيار نوع الخدمة والشرح ════════════════ --}}
             <div x-show="step === 1" class="space-y-4">
@@ -214,7 +227,7 @@ style="font-family: 'Alexandria', sans-serif;">
                         <label class="flex items-center gap-2.5 p-2.5 rounded-xl border cursor-pointer transition text-xs font-bold"
                             :class="timing_type === 'immediate' ? 'bg-[#f2ede4] border-[#3b5228] text-[#3b5228]' : 'bg-slate-50 border-slate-200 text-slate-600'">
                             <input type="radio" name="timing_type" value="immediate" x-model="timing_type" class="accent-[#3b5228]">
-                            <span>⚡ طلب فوري (خلال 30 دقيقة)</span>
+                            <span>⚡ بدون مدة محددة (في أقرب وقت متاح)</span>
                         </label>
                         <label class="flex items-center gap-2.5 p-2.5 rounded-xl border cursor-pointer transition text-xs font-bold"
                             :class="timing_type === 'scheduled' ? 'bg-[#f2ede4] border-[#3b5228] text-[#3b5228]' : 'bg-slate-50 border-slate-200 text-slate-600'">

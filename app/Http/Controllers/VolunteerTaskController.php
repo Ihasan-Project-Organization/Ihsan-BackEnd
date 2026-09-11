@@ -61,7 +61,9 @@ class VolunteerTaskController extends Controller
             ->get();
 
         $tier = (int) ($setting?->tier ?? 1);
-        $nextTierTarget = $tier === 1 ? 10 : ($tier === 2 ? 30 : null);
+        $t2Tasks = (int) \App\Models\SystemSetting::get('tier_2_tasks_threshold', 10);
+        $t3Tasks = (int) \App\Models\SystemSetting::get('tier_3_tasks_threshold', 30);
+        $nextTierTarget = $tier === 1 ? $t2Tasks : ($tier === 2 ? $t3Tasks : null);
         $tasksToNextTier = $nextTierTarget ? max(0, $nextTierTarget - $completedCount) : 0;
         $tierProgress = $nextTierTarget ? min(100, (int)(($completedCount / $nextTierTarget) * 100)) : 100;
 
@@ -93,7 +95,7 @@ class VolunteerTaskController extends Controller
 
         $query = ServiceRequest::availableForProvider($provider);
 
-        if ($serviceType && in_array($serviceType, ['grocery', 'medical_escort', 'medicine', 'home_help'])) {
+        if ($serviceType && in_array($serviceType, ['grocery', 'medical_escort', 'medicine', 'home_help', 'social_visit', 'support_request'])) {
             $query->where('service_type', $serviceType);
         }
 
@@ -123,6 +125,8 @@ class VolunteerTaskController extends Controller
             'medical_escort' => ServiceRequest::availableForProvider($provider)->where('service_type', 'medical_escort')->count(),
             'medicine' => ServiceRequest::availableForProvider($provider)->where('service_type', 'medicine')->count(),
             'home_help' => ServiceRequest::availableForProvider($provider)->where('service_type', 'home_help')->count(),
+            'social_visit' => ServiceRequest::availableForProvider($provider)->where('service_type', 'social_visit')->count(),
+            'support_request' => ServiceRequest::availableForProvider($provider)->where('service_type', 'support_request')->count(),
         ];
         $counts = $categoryCounts;
 
@@ -215,8 +219,12 @@ class VolunteerTaskController extends Controller
 
         $profile = $provider->serviceProviderProfile;
         $tier = (int) ($profile?->tier ?? 1);
-        $nextTierTarget = $tier === 1 ? 10 : ($tier === 2 ? 30 : null);
-        $nextTierRatingTarget = $tier === 1 ? 4.0 : ($tier === 2 ? 4.3 : null);
+        $t2Tasks = (int) \App\Models\SystemSetting::get('tier_2_tasks_threshold', 10);
+        $t3Tasks = (int) \App\Models\SystemSetting::get('tier_3_tasks_threshold', 30);
+        $t2Rating = (float) \App\Models\SystemSetting::get('tier_2_rating_threshold', 4.0);
+        $t3Rating = (float) \App\Models\SystemSetting::get('tier_3_rating_threshold', 4.3);
+        $nextTierTarget = $tier === 1 ? $t2Tasks : ($tier === 2 ? $t3Tasks : null);
+        $nextTierRatingTarget = $tier === 1 ? $t2Rating : ($tier === 2 ? $t3Rating : null);
         $tasksToNextTier = $nextTierTarget ? max(0, $nextTierTarget - $totalServices) : 0;
         $tierProgress = $nextTierTarget ? min(100, (int)(($totalServices / $nextTierTarget) * 100)) : 100;
 
@@ -326,19 +334,39 @@ class VolunteerTaskController extends Controller
     }
 
     /**
-     * قبول الطلب الفوري مع القفل المتفائل (Pessimistic Lock).
+     * قبول الطلب الفوري مع فحص الصلاحيات والقفل المتفائل (Pessimistic Lock).
      */
     public function accept(Request $request, ServiceRequest $serviceRequest): RedirectResponse
     {
         $provider = $request->user();
 
-        $providerProfile = $provider->serviceProviderProfile ?? ServiceProviderProfile::create([
+        $providerProfile = $provider->serviceProviderProfile()->first() ?? ServiceProviderProfile::create([
             'user_id' => $provider->id,
             'full_name' => $provider->name,
             'birth_date' => '1995-01-01',
             'id_document_path' => 'documents/id.png',
             'good_conduct_cert_path' => 'documents/conduct.pdf',
         ]);
+
+        // 1. فحص التطابق لمستوى مقدم الخدمة (Tier Eligibility)
+        $providerTier = (int) ($providerProfile->tier ?? 1);
+        $requiredTier = match ($serviceRequest->service_type) {
+            'medical_escort' => 3,
+            'home_help' => 2,
+            default => 1,
+        };
+
+        if ($providerTier < $requiredTier) {
+            abort(403, 'هذا الطلب غير متاح لمستوى حسابك الحالي.');
+        }
+
+        // 2. فحص تطابق تفضيل الجنس (Gender Preference Matching)
+        $providerGender = $provider->gender ?? $providerProfile->gender ?? $request->input('gender') ?? null;
+        if ($serviceRequest->gender_preference && $serviceRequest->gender_preference !== 'any') {
+            if ($providerGender && $providerGender !== $serviceRequest->gender_preference) {
+                abort(403, 'هذا الطلب غير متاح لك (تفضيل الجنس غير متطابق).');
+            }
+        }
 
         return DB::transaction(function () use ($serviceRequest, $providerProfile) {
             $requestLocked = ServiceRequest::where('id', $serviceRequest->id)
@@ -352,7 +380,7 @@ class VolunteerTaskController extends Controller
 
             $requestLocked->update([
                 'provider_id' => $providerProfile->id,
-                'status' => ServiceRequest::STATUS_ACCEPTED,
+                'status' => ServiceRequest::STATUS_ASSIGNED,
                 'accepted_at' => now(),
                 'assigned_at' => now(),
             ]);
@@ -414,8 +442,6 @@ class VolunteerTaskController extends Controller
             'delay_reason' => ['required', 'string', 'max:500'],
         ]);
 
-        // TODO: reimplement per §6 Tier-only system in stage 3.3
-
         $serviceRequest->update([
             'status' => ServiceRequest::STATUS_PROVIDER_DELAYED,
         ]);
@@ -446,8 +472,9 @@ class VolunteerTaskController extends Controller
             }
 
             $serviceRequest->update([
-                'status' => ServiceRequest::STATUS_PROVIDER_APOLOGIZED,
+                'status' => ServiceRequest::STATUS_PENDING_ACCEPTANCE,
                 'incident_type' => 'apology',
+                'previous_provider_id' => $providerProfile?->id,
                 'provider_id' => null,
                 'accepted_at' => null,
                 'assigned_at' => null,
@@ -459,7 +486,7 @@ class VolunteerTaskController extends Controller
                 Notification::create([
                     'user_id' => $elderUserId,
                     'type' => 'provider_apologized',
-                    'message' => "اعتذر مقدم الخدمة عن تنفيذ الطلب {$serviceRequest->public_id}. يمكنك إعادة الجدولة وإعادة النشر أو إلغاء الطلب.",
+                    'message' => "اعتذر مقدم الخدمة عن تنفيذ الطلب {$serviceRequest->public_id}، وتمت إعادة طرح الطلب فوراً للبحث عن متطوع آخر.",
                 ]);
             }
         });

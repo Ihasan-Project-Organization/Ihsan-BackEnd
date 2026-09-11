@@ -188,3 +188,29 @@ test('provider can request and view volunteer certificate', function () {
     $viewResponse->assertOk();
     $viewResponse->assertSee('CERT-');
 });
+
+test('login screen hides quick-fill testing buttons in non-local environments and admin logs into admin dashboard', function () {
+    $loginPage = $this->get(route('login'));
+    $loginPage->assertOk();
+    $loginPage->assertDontSee('حسابات تجريبية للاختبار السريع');
+    $loginPage->assertDontSee('superadmin@ihsan.com');
+    $loginPage->assertDontSee('mohammed@ihsan.com');
+    $loginPage->assertDontSee('elderly@ihsan.com');
+
+    // Test Admin login redirects to admin.dashboard
+    $adminUser = User::factory()->create([
+        'status' => 'approved',
+        'email_verified_at' => now(),
+        'password' => bcrypt('password123'),
+    ]);
+    \App\Models\Admin::create([
+        'user_id' => $adminUser->id,
+        'admin_level' => 'admin',
+    ]);
+
+    $response = $this->post(route('login'), [
+        'email' => $adminUser->email,
+        'password' => 'password123',
+    ]);
+    $response->assertRedirect(route('admin.dashboard'));
+});

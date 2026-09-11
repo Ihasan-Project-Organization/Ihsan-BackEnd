@@ -5,9 +5,6 @@ window.openRescheduleModal = function(id, publicId, url) {
 window.openEditModal = function(id, title, description, location, scheduledAt, url) {
     window.dispatchEvent(new CustomEvent('open-edit-modal', { detail: { id: id, title: title, description: description, location: location, scheduledAt: scheduledAt, url: url } }));
 };
-window.openReviewModal = function(id, providerName, url) {
-    window.dispatchEvent(new CustomEvent('open-review-modal', { detail: { id: id, providerName: providerName, url: url } }));
-};
 window.openCancelModal = function(id, publicId, url) {
     window.dispatchEvent(new CustomEvent('open-cancel-modal', { detail: { id: id, publicId: publicId, url: url } }));
 };

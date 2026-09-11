@@ -6,7 +6,6 @@ use App\Models\Complaint;
 use App\Models\Notification;
 use App\Models\Rating;
 use App\Models\ServiceRequest;
-use App\Models\ServiceReview;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +27,7 @@ class ServiceRequestController extends Controller
 
         // استعلام الطلبات الخاصة بالمستخدم
         $query = $user->serviceRequests()
-            ->with(['assignedProvider', 'review'])
+            ->with(['serviceProviderProfile.user', 'review'])
             ->latest('updated_at');
 
         // حساب أعداد الطلبات لكل تبويب
@@ -192,14 +191,18 @@ class ServiceRequestController extends Controller
             'scheduled_at' => ['required', 'date', 'after:now'],
         ]);
 
+        $previousProviderId = $serviceRequest->provider_id ?? $serviceRequest->previous_provider_id;
+
         $serviceRequest->update([
             'title' => $validated['title'],
             'description' => $validated['description'],
             'location' => $validated['location'],
             'scheduled_at' => $validated['scheduled_at'],
             'status' => ServiceRequest::STATUS_PENDING_ACCEPTANCE,
+            'previous_provider_id' => $previousProviderId,
             'provider_id' => null,
             'accepted_at' => null,
+            'assigned_at' => null,
             'started_at' => null,
         ]);
 
@@ -287,9 +290,15 @@ class ServiceRequestController extends Controller
         $validated = $request->validate([
             'problem_description' => ['nullable', 'string', 'max:2000'],
             'description' => ['nullable', 'string', 'max:2000'],
+            'reason' => ['nullable', 'string', 'max:2000'],
         ]);
 
-        $description = $validated['problem_description'] ?? $validated['description'];
+        $description = $validated['problem_description'] 
+            ?? $validated['description'] 
+            ?? $validated['reason'] 
+            ?? $request->input('problem_description') 
+            ?? $request->input('description') 
+            ?? $request->input('reason');
         if (empty($description)) {
             return back()->withErrors(['problem_description' => 'يرجى كتابة تفاصيل المشكلة التي واجهتك.']);
         }
@@ -349,6 +358,7 @@ class ServiceRequestController extends Controller
                 'scheduled_at' => $scheduledAt,
                 'status' => ServiceRequest::STATUS_PENDING_ACCEPTANCE,
                 'incident_type' => 'delay',
+                'previous_provider_id' => $providerProfile?->id,
                 'provider_id' => null,
                 'accepted_at' => null,
                 'assigned_at' => null,
@@ -384,38 +394,6 @@ class ServiceRequestController extends Controller
 
         return redirect()->route('service-requests.index', ['tab' => 'cancelled'])
             ->with('status', 'request-cancelled');
-    }
-
-    /**
-     * إضافة تقييم للخدمة المكتملة.
-     */
-    public function storeReview(Request $request, ServiceRequest $serviceRequest): RedirectResponse
-    {
-        $this->authorizeOwner($request, $serviceRequest);
-
-        if ($serviceRequest->status !== ServiceRequest::STATUS_COMPLETED) {
-            return back()->withErrors(['review' => 'لا يمكن تقييم طلب غير مكتمل.']);
-        }
-
-        $validated = $request->validate([
-            'rating' => ['required', 'integer', 'between:1,5'],
-            'comment' => ['nullable', 'string', 'max:1000'],
-        ]);
-
-        $serviceRequest->review()->updateOrCreate(
-            ['service_request_id' => $serviceRequest->id],
-            [
-                'elderly_id' => $request->user()->id,
-                'provider_id' => $serviceRequest->provider?->user_id ?? $request->user()->id,
-                'rater_role' => 'elder',
-                'stars' => $validated['rating'],
-                'comment' => $validated['comment'] ?? null,
-                'visible_to_provider' => true,
-            ]
-        );
-
-        return redirect()->route('service-requests.index', ['tab' => 'completed'])
-            ->with('status', 'review-submitted');
     }
 
     /**

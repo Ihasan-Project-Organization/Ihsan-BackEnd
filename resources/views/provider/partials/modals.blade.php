@@ -239,26 +239,32 @@
 
 <script>
     function openFinishServiceModal(actionUrl) {
+        resetModalSubmitBtn('finishServiceForm');
         document.getElementById('finishServiceForm').action = actionUrl;
         document.getElementById('finishServiceModal').classList.remove('hidden');
     }
     function closeFinishServiceModal() {
+        resetModalSubmitBtn('finishServiceForm');
         document.getElementById('finishServiceModal').classList.add('hidden');
     }
 
     function openReportDelayModal(actionUrl) {
+        resetModalSubmitBtn('reportDelayForm');
         document.getElementById('reportDelayForm').action = actionUrl;
         document.getElementById('reportDelayModal').classList.remove('hidden');
     }
     function closeReportDelayModal() {
+        resetModalSubmitBtn('reportDelayForm');
         document.getElementById('reportDelayModal').classList.add('hidden');
     }
 
     function openApologizeModal(actionUrl) {
+        resetModalSubmitBtn('apologizeForm');
         document.getElementById('apologizeForm').action = actionUrl;
         document.getElementById('apologizeModal').classList.remove('hidden');
     }
     function closeApologizeModal() {
+        resetModalSubmitBtn('apologizeForm');
         document.getElementById('apologizeModal').classList.add('hidden');
     }
 
@@ -282,4 +288,40 @@
     function closeDetailsModal() {
         document.getElementById('requestDetailsModal').classList.add('hidden');
     }
+
+    function resetModalSubmitBtn(formId) {
+        var form = document.getElementById(formId);
+        if (form) {
+            var submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn && submitBtn.disabled) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                if (submitBtn.dataset.originalText) {
+                    submitBtn.innerHTML = submitBtn.dataset.originalText;
+                }
+            }
+        }
+    }
+
+    // منع النقر المزدوج وتعطيل زر الإرسال فور الضغط عليه
+    document.addEventListener('DOMContentLoaded', function() {
+        ['finishServiceForm', 'reportDelayForm', 'apologizeForm'].forEach(function(formId) {
+            var form = document.getElementById(formId);
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    var submitBtn = form.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        if (submitBtn.disabled) {
+                            e.preventDefault();
+                            return false;
+                        }
+                        submitBtn.disabled = true;
+                        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                        submitBtn.dataset.originalText = submitBtn.innerHTML;
+                        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin ml-2"></i> جاري المعالجة...';
+                    }
+                });
+            }
+        });
+    });
 </script>

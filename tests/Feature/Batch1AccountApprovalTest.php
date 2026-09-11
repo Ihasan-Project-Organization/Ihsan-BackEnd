@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
     Storage::fake('public');
+    Storage::fake('local');
 });
 
 test('1.1 elder registration sets status to pending and redirects to verification notice', function () {
@@ -66,8 +67,8 @@ test('1.1 provider registration sets status to pending and redirects to verifica
         ->and($profile->id_document_path)->not->toBeNull()
         ->and($profile->good_conduct_cert_path)->not->toBeNull();
 
-    Storage::disk('public')->assertExists($profile->id_document_path);
-    Storage::disk('public')->assertExists($profile->good_conduct_cert_path);
+    Storage::disk('local')->assertExists($profile->id_document_path);
+    Storage::disk('local')->assertExists($profile->good_conduct_cert_path);
 });
 
 test('1.1 pending user login is allowed but strictly confined to pending-approval screen', function () {
@@ -194,8 +195,8 @@ test('1.3 good conduct certificate and id document paths are saved in service_pr
     expect($profile->good_conduct_cert_path)->not->toBeEmpty()
         ->and($profile->id_document_path)->not->toBeEmpty();
 
-    Storage::disk('public')->assertExists($profile->good_conduct_cert_path);
-    Storage::disk('public')->assertExists($profile->id_document_path);
+    Storage::disk('local')->assertExists($profile->good_conduct_cert_path);
+    Storage::disk('local')->assertExists($profile->id_document_path);
 });
 
 test('1.4 phone number column is present and required on profiles', function () {

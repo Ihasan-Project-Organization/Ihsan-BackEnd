@@ -52,6 +52,8 @@
                         <option value="medical_escort" {{ $serviceType === 'medical_escort' ? 'selected' : '' }}>🚶‍♂️ مرافقة إلى موعد طبي ({{ $categoryCounts['medical_escort'] ?? $counts['medical_escort'] ?? 0 }})</option>
                         <option value="medicine" {{ $serviceType === 'medicine' ? 'selected' : '' }}>💊 إحضار دواء ({{ $categoryCounts['medicine'] ?? $counts['medicine'] ?? 0 }})</option>
                         <option value="home_help" {{ $serviceType === 'home_help' ? 'selected' : '' }}>🧹 مساعدة منزلية خفيفة ({{ $categoryCounts['home_help'] ?? $counts['home_help'] ?? 0 }})</option>
+                        <option value="social_visit" {{ $serviceType === 'social_visit' ? 'selected' : '' }}>👥 زيارة اجتماعية ومؤانسة ({{ $categoryCounts['social_visit'] ?? 0 }})</option>
+                        <option value="support_request" {{ $serviceType === 'support_request' ? 'selected' : '' }}>🤝 طلب دعم ومساندة ({{ $categoryCounts['support_request'] ?? 0 }})</option>
                     </select>
                 </div>
 

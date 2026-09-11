@@ -14,6 +14,7 @@ class ServiceProviderProfile extends Model
     protected $fillable = [
         'user_id',
         'full_name',
+        'id_number',
         'birth_date',
         'phone_number',
         'id_document_path',
@@ -93,9 +94,14 @@ class ServiceProviderProfile extends Model
         $oldTier = (int) $this->tier;
         $newTier = 1;
 
-        if ($tasks >= 30 && $rating >= 4.3) {
+        $tier3Tasks = (int) SystemSetting::get('tier_3_tasks_threshold', 30);
+        $tier3Rating = (float) SystemSetting::get('tier_3_rating_threshold', 4.3);
+        $tier2Tasks = (int) SystemSetting::get('tier_2_tasks_threshold', 10);
+        $tier2Rating = (float) SystemSetting::get('tier_2_rating_threshold', 4.0);
+
+        if ($tasks >= $tier3Tasks && $rating >= $tier3Rating) {
             $newTier = 3;
-        } elseif ($tasks >= 10 && $rating >= 4.0) {
+        } elseif ($tasks >= $tier2Tasks && $rating >= $tier2Rating) {
             $newTier = 2;
         } else {
             $newTier = 1;
@@ -148,7 +154,9 @@ class ServiceProviderProfile extends Model
             ->where('created_at', '>=', now()->subDays(30))
             ->count();
 
-        if ($recentCount >= 3) {
+        $threshold = (int) SystemSetting::get('reliability_incidents_threshold', 3);
+
+        if ($recentCount >= $threshold) {
             $admins = User::whereHas('admin')->get();
             foreach ($admins as $admin) {
                 Notification::create([

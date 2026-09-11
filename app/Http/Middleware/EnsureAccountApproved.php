@@ -33,6 +33,20 @@ class EnsureAccountApproved
                 ]);
             }
 
+            if ($user->status === 'suspended') {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                $reason = $user->suspension_reason
+                    ? "السبب: {$user->suspension_reason}"
+                    : 'يرجى التواصل مع إدارة المنصة للمزيد من التفاصيل.';
+
+                return redirect()->route('login')->withErrors([
+                    'email' => "تم إيقاف حسابك من قِبل إدارة المنصة. {$reason}",
+                ]);
+            }
+
             // 1. فحص تأكيد البريد الإلكتروني أولاً:
             // يجب توثيق البريد أولاً قبل أي فحص لحالة الاعتماد الإداري
             if (! $user->hasVerifiedEmail()) {
@@ -45,8 +59,8 @@ class EnsureAccountApproved
 
             // 2. فحص حالة الاعتماد الإداري ثانياً (بعد التأكد التام من توثيق البريد):
             if ($user->status === 'pending') {
-                // اسمح فقط لشاشة قيد المراجعة وتسجيل الخروج
-                if (! $request->routeIs('auth.pending') && ! $request->routeIs('logout')) {
+                // اسمح فقط لشاشة قيد المراجعة وتسجيل الخروج ومسارات الإدارة للمديرين
+                if (! $request->routeIs('auth.pending') && ! $request->routeIs('logout') && ! ($user->admin && $request->routeIs('admin.*'))) {
                     return redirect()->route('auth.pending');
                 }
             }
