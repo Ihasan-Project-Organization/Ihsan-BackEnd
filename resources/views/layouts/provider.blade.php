@@ -4,15 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'إحسان') }} - بوابة كبير السن</title>
+    <title>{{ config('app.name', 'إحسان') }} - بوابة مقدم الخدمة</title>
 
-    {{-- الخطوط والأيقونات --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    {{-- استرجاع وتطبيق مقياس الخط المفضل فورياً --}}
     <script>
         (function() {
             try {
@@ -23,6 +16,12 @@
             } catch (e) {}
         })();
     </script>
+
+    {{-- Fonts & Icons --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -75,7 +74,7 @@
 
         .logo-section {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 30px;
         }
 
         .logo {
@@ -152,23 +151,6 @@
 
         .menu-item.active i {
             color: #ffffff;
-        }
-
-        .sidebar-cta-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px dashed rgba(255, 255, 255, 0.35);
-            color: #ffffff;
-            font-weight: 700;
-        }
-
-        .sidebar-cta-btn:hover {
-            background: #ffffff;
-            color: var(--sidebar-bg);
-            border-color: #ffffff;
-        }
-
-        .sidebar-cta-btn:hover i {
-            color: var(--sidebar-bg);
         }
 
         .sidebar-badge {
@@ -277,19 +259,26 @@
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
         .header-btn {
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            background: #f8faf6;
+            border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 7px 14px;
+            padding: 6px 12px;
             font-size: 12px;
             font-weight: 700;
+            color: #354e20;
             text-decoration: none;
             transition: all 0.2s;
+        }
+
+        .header-btn:hover {
+            background: #eef2e8;
         }
 
         .notification-icon-btn {
@@ -351,7 +340,7 @@
 
         .content-body {
             flex: 1;
-            padding: 24px 28px;
+            padding: 28px;
             max-width: 1400px;
             width: 100%;
             margin: 0 auto;
@@ -384,9 +373,18 @@
 <body x-data="{ mobileSidebarOpen: false }">
     @php
         $user = Auth::user();
-        $elderProfile = $user?->elderProfile;
-        $activeCount = $user ? $user->serviceRequests()->active()->count() : 0;
-        $needsActionCount = $user ? $user->serviceRequests()->needsAction()->count() : 0;
+        $providerProfile = $user?->serviceProviderProfile;
+        $tier = (int) ($providerProfile?->tier ?? 1);
+        $isAvailable = (bool) ($providerProfile?->is_available ?? false);
+        $availableCount = \App\Models\ServiceRequest::availableForProvider($user)->count();
+        $activeTasksCount = $providerProfile ? \App\Models\ServiceRequest::where('provider_id', $providerProfile->id)
+            ->whereIn('status', [
+                \App\Models\ServiceRequest::STATUS_ACCEPTED,
+                \App\Models\ServiceRequest::STATUS_ASSIGNED,
+                \App\Models\ServiceRequest::STATUS_IN_PROGRESS,
+                \App\Models\ServiceRequest::STATUS_PENDING_CONFIRMATION,
+                \App\Models\ServiceRequest::STATUS_PROVIDER_DELAYED
+            ])->count() : 0;
         $unreadNotificationsCount = $user ? $user->notifications()->where('is_read', false)->count() : 0;
     @endphp
 
@@ -394,46 +392,60 @@
     <div class="sidebar-backdrop" :class="{ 'mobile-open': mobileSidebarOpen }" @click="mobileSidebarOpen = false"></div>
 
     <div class="dashboard-container">
-        {{-- الشريط الجانبي (Sidebar) مطابق لتصميم oldman_home المعتمد --}}
+        {{-- الشريط الجانبي (Sidebar) مطابق لتصميم oldman_home ومعدل لأقسام مقدم الخدمة --}}
         <aside class="sidebar" :class="{ 'mobile-open': mobileSidebarOpen }">
             <div class="logo-section">
                 <div class="logo">
                     <h2>إحسان</h2>
                     <i class="fa-solid fa-hand-holding-heart"></i>
                 </div>
-                <p class="logo-subtitle">منصة رعاية ومساندة كبار السن</p>
-                <span class="role-pill">كبير السن / مستفيد</span>
+                <p class="logo-subtitle">منصة ربط كبار السن بمقدمي الخدمة</p>
+                <span class="role-pill">مقدم خدمة متطوع</span>
             </div>
 
             <nav class="sidebar-menu">
-                {{-- 1. الرئيسية --}}
-                <a href="{{ route('dashboard') }}" 
-                    class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <a href="{{ route('provider.dashboard') }}" 
+                    class="menu-item {{ request()->routeIs('provider.dashboard') ? 'active' : '' }}">
                     <i class="fa-solid fa-house"></i>
                     <span>الرئيسية</span>
                 </a>
 
-                {{-- 2. زر سريع: طلب مساعدة جديد --}}
-                <button type="button" onclick="openCreateRequestModal()" 
-                    class="menu-item sidebar-cta-btn text-right cursor-pointer w-full">
+                <a href="{{ route('provider.available') }}" 
+                    class="menu-item {{ request()->routeIs('provider.available') ? 'active' : '' }}">
                     <i class="fa-solid fa-hand-holding-hand"></i>
-                    <span>طلب مساعدة جديد</span>
-                    <span class="sidebar-badge bg-white/20">+</span>
-                </button>
-
-                {{-- 3. سجل طلباتي ومتابعة الخدمات --}}
-                <a href="{{ route('service-requests.index') }}" 
-                    class="menu-item {{ request()->routeIs('service-requests.*') ? 'active' : '' }}">
-                    <i class="fa-solid fa-clipboard-list"></i>
-                    <span>طلباتي</span>
-                    @if ($needsActionCount > 0)
-                        <span class="sidebar-badge bg-amber-500 text-white animate-pulse" title="طلبات بحاجة لإجراء">{{ $needsActionCount }}</span>
-                    @elseif ($activeCount > 0)
-                        <span class="sidebar-badge">{{ $activeCount }}</span>
+                    <span>الطلبات المتاحة</span>
+                    @if ($availableCount > 0)
+                        <span class="sidebar-badge">{{ $availableCount }}</span>
                     @endif
                 </a>
 
-                {{-- 4. الإشعارات --}}
+                <a href="{{ route('provider.tasks') }}" 
+                    class="menu-item {{ request()->routeIs('provider.tasks*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <span>مهامي</span>
+                    @if ($activeTasksCount > 0)
+                        <span class="sidebar-badge">{{ $activeTasksCount }}</span>
+                    @endif
+                </a>
+
+                <a href="{{ route('provider.performance') }}" 
+                    class="menu-item {{ request()->routeIs('provider.performance') ? 'active' : '' }}">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>الأداء والتقييم</span>
+                </a>
+
+                <a href="{{ route('provider.certificates') }}" 
+                    class="menu-item {{ request()->routeIs('provider.certificates*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-award"></i>
+                    <span>شهادات التطوع</span>
+                </a>
+
+                <a href="{{ route('provider.availability') }}" 
+                    class="menu-item {{ request()->routeIs('provider.availability') ? 'active' : '' }}">
+                    <i class="fa-solid fa-clock"></i>
+                    <span>التوفر والإعدادات</span>
+                </a>
+
                 <a href="{{ route('notifications.index') }}" 
                     class="menu-item {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
                     <i class="fa-regular fa-bell"></i>
@@ -443,7 +455,6 @@
                     @endif
                 </a>
 
-                {{-- 5. الملف الشخصي والإعدادات --}}
                 <a href="{{ route('profile.edit') }}" 
                     class="menu-item {{ request()->routeIs('profile.*') ? 'active' : '' }}">
                     <i class="fa-regular fa-user"></i>
@@ -451,13 +462,11 @@
                 </a>
             </nav>
 
-            {{-- كرت الدعم الفني المباشر لكبير السن --}}
             <div class="support-card">
                 <p>نحن هنا لمساعدتك<br>فريق الدعم متاح دائماً</p>
                 <a href="mailto:support@ihsan.app" class="contact-btn">تواصل معنا</a>
             </div>
 
-            {{-- تسجيل الخروج الآمن --}}
             <form method="POST" action="{{ route('logout') }}" class="logout-form">
                 @csrf
                 <button type="submit" class="logout-btn">
@@ -476,11 +485,15 @@
                         <i class="fa-solid fa-bars"></i>
                     </button>
                     <div>
-                        <span class="text-xs font-bold text-slate-400">بوابة كبير السن والمستفيد</span>
+                        <span class="text-xs font-bold text-slate-400">بوابة مقدم الخدمة</span>
                         <h2 class="text-sm font-black text-[#354e20]">
                             {{ match(true) {
-                                request()->routeIs('dashboard') => 'الرئيسية ولوحة المتابعة',
-                                request()->routeIs('service-requests.*') => 'سجل طلباتي ومتابعة الخدمات',
+                                request()->routeIs('provider.dashboard') => 'لوحة التحكم والمتابعة',
+                                request()->routeIs('provider.available') => 'فرص المساعدة والطلبات المتاحة',
+                                request()->routeIs('provider.tasks*') => 'سجل ومتابعة المهام',
+                                request()->routeIs('provider.performance') => 'مستوى الأداء والتقييم',
+                                request()->routeIs('provider.certificates*') => 'شهادات وساعات التطوع الرقمية',
+                                request()->routeIs('provider.availability') => 'إعدادات التوفر والخدمة',
                                 request()->routeIs('notifications.*') => 'مركز الإشعارات والتنبيهات',
                                 request()->routeIs('profile.*') => 'الملف الشخصي والإعدادات',
                                 default => 'منصة إحسان'
@@ -490,12 +503,21 @@
                 </div>
 
                 <div class="header-actions">
-                    {{-- زر إنشاء طلب جديد سريع في الهيدر --}}
-                    <button type="button" onclick="openCreateRequestModal()"
-                        class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#354e20] text-white hover:bg-[#4e6b35] transition shadow-xs cursor-pointer">
-                        <i class="fa-solid fa-plus text-[10px]"></i>
-                        <span>طلب مساعدة جديد</span>
-                    </button>
+                    {{-- شارة المستوى Tier --}}
+                    <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black border {{ $tier === 3 ? 'bg-amber-100 text-amber-900 border-amber-300' : ($tier === 2 ? 'bg-emerald-100 text-emerald-900 border-emerald-300' : 'bg-slate-100 text-slate-800 border-slate-300') }}">
+                        <span>🏆</span>
+                        <span>المستوى {{ $tier }}</span>
+                    </span>
+
+                    {{-- زر التوفر السريع --}}
+                    <form method="POST" action="{{ route('provider.availability.update') }}" class="hidden sm:inline">
+                        @csrf
+                        <input type="hidden" name="is_available" value="{{ $isAvailable ? '0' : '1' }}">
+                        <button type="submit" class="header-btn" title="اضغط لتغيير حالة التوفر سريعاً">
+                            <span class="h-2 w-2 rounded-full {{ $isAvailable ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500' }}"></span>
+                            <span>{{ $isAvailable ? 'متاح' : 'غير متاح' }}</span>
+                        </button>
+                    </form>
 
                     {{-- جرس الإشعارات --}}
                     <a href="{{ route('notifications.index') }}" class="notification-icon-btn" title="الإشعارات">
@@ -508,9 +530,9 @@
                     {{-- الاسم والملف الشخصي --}}
                     <a href="{{ route('profile.edit') }}" class="hidden md:flex items-center gap-2 pr-2 border-r border-slate-200">
                         <div class="w-8 h-8 rounded-full bg-[#354e20] text-white flex items-center justify-center font-bold text-xs">
-                            {{ mb_substr($user?->name ?? 'إ', 0, 1) }}
+                            {{ mb_substr($user->name, 0, 1) }}
                         </div>
-                        <span class="text-xs font-bold text-slate-800">{{ $user?->name }}</span>
+                        <span class="text-xs font-bold text-slate-800">{{ $user->name }}</span>
                     </a>
                 </div>
             </header>
@@ -527,10 +549,7 @@
         </main>
     </div>
 
-    {{-- المودالات الأساسية لكبير السن --}}
-    @auth
-        @include('service-requests.partials.create-modal')
-        @include('service-requests.partials.action-modals')
-    @endauth
+    {{-- مودالات مقدم الخدمة لتأكيد الإنجاز، التأخير، الاعتذار، وتقييم كبير السن --}}
+    @include('provider.partials.modals')
 </body>
 </html>

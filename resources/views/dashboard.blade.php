@@ -2,7 +2,7 @@
     @php($user = auth()->user())
     @php($elderProfile = $user->elderProfile)
 
-    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+    <div class="space-y-6">
         {{-- بطاقة الترحيب الرئيسية لكبير السن --}}
         <section class="relative overflow-hidden rounded-3xl bg-[#31421e] px-6 py-9 text-white shadow-xl sm:px-10 lg:px-12 lg:py-12">
             <div class="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">

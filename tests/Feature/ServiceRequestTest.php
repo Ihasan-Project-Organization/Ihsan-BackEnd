@@ -51,6 +51,39 @@ test('elderly user can create a new service request', function () {
     expect($serviceRequest->public_id)->toStartWith('#REQ-');
 });
 
+test('elderly user can create request with expanded fields including timing, gender preference, pricing, and attachments', function () {
+    \Illuminate\Support\Facades\Storage::fake('public');
+    $user = User::factory()->create();
+    $elderProfile = ElderProfile::create([
+        'user_id' => $user->id,
+        'full_name' => $user->name,
+        'city' => 'غزة',
+    ]);
+
+    $file = \Illuminate\Http\UploadedFile::fake()->create('prescription.pdf', 100);
+
+    $response = $this->actingAs($user)->post(route('service-requests.store'), [
+        'service_type' => 'medicine',
+        'title' => 'شراء دواء للضغط',
+        'description' => 'وصفة طبية مرفقة',
+        'location' => 'غزة، الرمال',
+        'timing_type' => 'immediate',
+        'gender_preference' => 'female',
+        'pricing_type' => 'paid',
+        'proposed_price' => 25.50,
+        'attachments' => [$file],
+    ]);
+
+    $response->assertSessionHas('status', 'request-created');
+    $request = ServiceRequest::where('elder_id', $elderProfile->id)->firstOrFail();
+    expect($request->service_type)->toBe('medicine')
+        ->and($request->timing_type)->toBe('immediate')
+        ->and($request->gender_preference)->toBe('female')
+        ->and($request->pricing_type)->toBe('paid')
+        ->and((float) $request->proposed_price)->toBe(25.50)
+        ->and($request->attachments)->toHaveCount(1);
+});
+
 test('consecutive requests generate unique sequential public_ids without collision', function () {
     $user = User::factory()->create();
     $elderProfile = ElderProfile::create([

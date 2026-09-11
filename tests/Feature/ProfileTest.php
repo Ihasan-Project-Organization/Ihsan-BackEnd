@@ -84,3 +84,26 @@ test('correct password must be provided to delete account', function () {
 
     $this->assertNotNull($user->fresh());
 });
+
+test('provider views profile with provider sidebar layout', function () {
+    $user = User::factory()->create([
+        'status' => 'approved',
+        'email_verified_at' => now(),
+    ]);
+    \App\Models\ServiceProviderProfile::create([
+        'user_id' => $user->id,
+        'full_name' => $user->name,
+        'birth_date' => '1995-01-01',
+        'phone_number' => '0599333444',
+        'id_document_path' => 'docs/id.pdf',
+        'good_conduct_cert_path' => 'docs/conduct.pdf',
+        'tier' => 2,
+    ]);
+
+    $response = $this->actingAs($user)->get('/profile');
+
+    $response->assertOk();
+    $response->assertSee('بوابة مقدم الخدمة');
+    $response->assertSee('sidebar');
+    $response->assertSee('الملف الشخصي والإعدادات');
+});

@@ -74,6 +74,17 @@
                     class="rounded-xl px-3 py-2 text-xs font-bold {{ request()->routeIs('profile.*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-500 hover:bg-slate-50' }}">
                     الملف الشخصي
                 </a>
+
+                @php($unreadNotifsCount = $user?->notifications()->where('is_read', false)->count() ?? 0)
+                <a href="{{ route('notifications.index') }}"
+                    class="relative rounded-xl px-3 py-2 text-xs font-bold transition {{ request()->routeIs('notifications.*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-500 hover:bg-slate-50' }}">
+                    <span>🔔 الإشعارات</span>
+                    @if ($unreadNotifsCount > 0)
+                        <span class="mr-1 inline-flex items-center justify-center rounded-full bg-amber-500 px-1.5 py-0.5 text-[10px] font-black text-white">
+                            {{ $unreadNotifsCount }}
+                        </span>
+                    @endif
+                </a>
             </div>
         </div>
 
@@ -194,6 +205,16 @@
             <a href="{{ route('profile.edit') }}"
                 class="flex items-center rounded-xl px-4 py-2.5 text-xs font-bold {{ request()->routeIs('profile.*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
                 <span>👤 الملف الشخصي</span>
+            </a>
+
+            <a href="{{ route('notifications.index') }}"
+                class="flex items-center justify-between rounded-xl px-4 py-2.5 text-xs font-bold {{ request()->routeIs('notifications.*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
+                <span>🔔 الإشعارات</span>
+                @if (($unreadNotifsCount ?? 0) > 0)
+                    <span class="rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-black text-white">
+                        {{ $unreadNotifsCount }}
+                    </span>
+                @endif
             </a>
 
             <div class="mt-2 pt-2 border-t border-slate-100">

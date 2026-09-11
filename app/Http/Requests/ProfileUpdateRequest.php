@@ -26,7 +26,8 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
-            // TODO: reconnect in stage 3.2/3.3
+            'phone_number' => ['nullable', 'string', 'max:25'],
+            'profile_picture' => ['nullable', 'image', 'max:2048'],
         ];
     }
 }

@@ -70,25 +70,52 @@ class ServiceRequestController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        if (!$request->filled('location') && $request->filled('location_text')) {
+            $request->merge(['location' => $request->input('location_text')]);
+        }
+
+        $timingTypeInput = $request->input('timing_type', 'scheduled');
+        if ($timingTypeInput === 'immediate' && !$request->filled('scheduled_at')) {
+            $request->merge(['scheduled_at' => now()->addMinutes(30)->format('Y-m-d H:i:s')]);
+        }
+
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'service_type' => ['nullable', 'string', 'max:50'],
             'description' => ['required', 'string', 'max:2000'],
             'location' => ['required', 'string', 'max:255'],
+            'location_text' => ['nullable', 'string', 'max:255'],
+            'timing_type' => ['nullable', 'string', 'in:immediate,scheduled'],
             'scheduled_at' => ['required', 'date', 'after:now'],
+            'gender_preference' => ['nullable', 'string', 'in:male,female,any'],
+            'pricing_type' => ['nullable', 'string', 'in:volunteer,paid'],
+            'proposed_price' => ['nullable', 'numeric', 'min:0'],
+            'attachments' => ['nullable', 'array'],
+            'attachments.*' => ['nullable', 'file', 'mimes:jpeg,png,jpg,pdf,doc,docx', 'max:5120'],
         ]);
 
         DB::transaction(function () use ($request, $validated) {
             $publicId = ServiceRequest::generatePublicId();
 
-            $titleLower = mb_strtolower($validated['title']);
-            $serviceType = 'grocery';
-            if (str_contains($titleLower, 'دواء') || str_contains($titleLower, 'صيدلية')) {
-                $serviceType = 'medicine';
-            } elseif (str_contains($titleLower, 'مرافقة') || str_contains($titleLower, 'طبي') || str_contains($titleLower, 'مستشفى') || str_contains($titleLower, 'عيادة')) {
-                $serviceType = 'medical_escort';
-            } elseif (str_contains($titleLower, 'منزل') || str_contains($titleLower, 'تنظيف') || str_contains($titleLower, 'ترتيب')) {
-                $serviceType = 'home_help';
+            $serviceType = $validated['service_type'] ?? null;
+            if (!$serviceType || !in_array($serviceType, ['grocery', 'medicine', 'medical_escort', 'home_help', 'social_visit', 'support_request', 'other'])) {
+                $titleLower = mb_strtolower($validated['title']);
+                $serviceType = 'grocery';
+                if (str_contains($titleLower, 'دواء') || str_contains($titleLower, 'صيدلية')) {
+                    $serviceType = 'medicine';
+                } elseif (str_contains($titleLower, 'مرافقة') || str_contains($titleLower, 'طبي') || str_contains($titleLower, 'مستشفى') || str_contains($titleLower, 'عيادة')) {
+                    $serviceType = 'medical_escort';
+                } elseif (str_contains($titleLower, 'منزل') || str_contains($titleLower, 'تنظيف') || str_contains($titleLower, 'ترتيب')) {
+                    $serviceType = 'home_help';
+                } elseif (str_contains($titleLower, 'زيارة') || str_contains($titleLower, 'مؤانسة')) {
+                    $serviceType = 'social_visit';
+                }
             }
+
+            $timingType = $validated['timing_type'] ?? 'scheduled';
+            $genderPreference = $validated['gender_preference'] ?? 'any';
+            $pricingType = $validated['pricing_type'] ?? 'volunteer';
+            $proposedPrice = ($pricingType === 'paid') ? ($validated['proposed_price'] ?? null) : null;
 
             $elderProfile = $request->user()->elderProfile ?? \App\Models\ElderProfile::create([
                 'user_id' => $request->user()->id,
@@ -96,15 +123,32 @@ class ServiceRequestController extends Controller
                 'city' => 'مدينة غزة',
             ]);
 
-            return $elderProfile->serviceRequests()->create([
+            $serviceRequest = $elderProfile->serviceRequests()->create([
                 'public_id' => $publicId,
                 'title' => $validated['title'],
                 'service_type' => $serviceType,
+                'pricing_type' => $pricingType,
+                'proposed_price' => $proposedPrice,
+                'timing_type' => $timingType,
+                'gender_preference' => $genderPreference,
                 'description' => $validated['description'],
                 'location' => $validated['location'],
                 'scheduled_at' => $validated['scheduled_at'],
                 'status' => ServiceRequest::STATUS_PENDING_ACCEPTANCE,
             ]);
+
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    if ($file && $file->isValid()) {
+                        $path = $file->store('request_attachments', 'public');
+                        $serviceRequest->attachments()->create([
+                            'file_path' => $path,
+                        ]);
+                    }
+                }
+            }
+
+            return $serviceRequest;
         });
 
         return redirect()->route('service-requests.index', ['tab' => 'active'])

@@ -1,5 +1,5 @@
-<x-app-layout>
-    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
+<x-provider-layout>
+    <div class="space-y-6">
 
         {{-- رأس الصفحة --}}
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -266,6 +266,4 @@
         @endif
 
     </div>
-
-    @include('provider.partials.modals')
-</x-app-layout>
+</x-provider-layout>

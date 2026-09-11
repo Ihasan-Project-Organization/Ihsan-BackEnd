@@ -180,4 +180,28 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new EhsanVerifyEmailNotification());
     }
+
+    /**
+     * رابط الصورة الشخصية للمستخدم.
+     */
+    public function getProfilePhotoUrlAttribute(): ?string
+    {
+        if (! $this->profile_picture_path) {
+            return null;
+        }
+
+        if (str_starts_with($this->profile_picture_path, 'http')) {
+            return $this->profile_picture_path;
+        }
+
+        return asset('storage/' . $this->profile_picture_path);
+    }
+
+    /**
+     * رقم هاتف المستخدم المسجل على بروفايله.
+     */
+    public function getPhoneNumberAttribute(): ?string
+    {
+        return $this->elderProfile?->phone_number ?? $this->serviceProviderProfile?->phone_number;
+    }
 }

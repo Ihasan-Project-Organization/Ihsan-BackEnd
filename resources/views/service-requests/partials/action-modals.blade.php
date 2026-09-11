@@ -327,13 +327,14 @@ class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y
     </div>
 </div>
 
-{{-- 6. مودال تأكيد اكتمال الخدمة والتقييم الإجباري (Confirm Completion & Mandatory Rating Modal) --}}
+{{-- 6. مودال تأكيد اكتمال الخدمة والتقييم الإجباري (Confirm Completion & Mandatory Rating Modal - B4.2) --}}
 <div x-data="{
     open: false,
     requestId: null,
     providerName: '',
     actionUrl: '',
     stars: 5,
+    hoverStars: 0,
     comment: '',
     init() {
         window.addEventListener('open-confirm-modal', (e) => {
@@ -341,6 +342,7 @@ class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y
             this.providerName = e.detail.providerName;
             this.actionUrl = e.detail.url;
             this.stars = 5;
+            this.hoverStars = 0;
             this.comment = '';
             this.open = true;
         });
@@ -348,56 +350,74 @@ class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y
 }"
 x-show="open"
 x-cloak
-class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
+style="font-family: 'Alexandria', sans-serif;">
 
-    <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" @click="open = false"></div>
+    <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" @click="open = false"></div>
 
-    <div class="relative z-10 w-full max-w-sm overflow-hidden rounded-2xl sm:rounded-3xl bg-white p-5 sm:p-6 shadow-2xl text-center my-auto">
-        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
+    <div class="relative z-10 w-full max-w-md overflow-hidden rounded-3xl bg-[#fbf9f5] border border-[#e2dcd0] p-5 sm:p-7 shadow-2xl text-center my-auto">
+        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f2ede4] text-[#3b5228] shadow-sm">
+            <i class="fa-solid fa-medal text-2xl"></i>
         </div>
 
-        <h3 class="mt-3 text-lg font-black text-[#31421e]">تأكيد استلام واكتمال الخدمة</h3>
-        <p class="mt-1 text-xs text-slate-500">يرجى تقييم أداء مقدم الخدمة <span class="font-bold text-[#31421e]" x-text="providerName"></span> لإغلاق الطلب.</p>
+        <h3 class="mt-3.5 text-xl font-black text-[#3b5228]">تأكيد اكتمال الخدمة والتقييم</h3>
+        <p class="mt-1 text-xs text-[#6b7280]">
+            يرجى تقييم تجربة المساعدة مع مقدم الخدمة 
+            <span class="font-extrabold text-[#3b5228] bg-[#f2ede4] px-2 py-0.5 rounded-lg inline-block my-0.5" x-text="providerName"></span>
+            لإتمام إغلاق الطلب رسمياً.
+        </p>
 
-        <form method="POST" :action="actionUrl" class="mt-4">
+        <form method="POST" :action="actionUrl" class="mt-5 text-right">
             @csrf
             @method('patch')
 
-            <div class="mb-3">
-                <label class="block text-xs font-bold text-slate-700 mb-1.5">التقييم بالنجوم (إجباري)</label>
-                <div class="flex justify-center gap-2">
+            {{-- نجوم التقييم الإجباري 1 إلى 5 تفاعلية وواضحة --}}
+            <div class="bg-white rounded-2xl border border-[#e2dcd0] p-4 text-center mb-3.5">
+                <label class="block text-xs font-bold text-[#3b5228] mb-2">تقييم الخدمة (إجباري)</label>
+                <div class="flex justify-center items-center gap-2 sm:gap-3 py-1" @mouseleave="hoverStars = 0">
                     <template x-for="s in [1, 2, 3, 4, 5]" :key="s">
-                        <button type="button" @click="stars = s" class="text-2xl transition hover:scale-125 focus:outline-none"
-                            :class="s <= stars ? 'text-amber-400' : 'text-slate-200'">
+                        <button type="button" 
+                            @click="stars = s"
+                            @mouseenter="hoverStars = s"
+                            class="text-3xl transition-transform hover:scale-125 focus:outline-none cursor-pointer"
+                            :class="(hoverStars > 0 ? (s <= hoverStars) : (s <= stars)) ? 'text-amber-400' : 'text-slate-200'">
                             ★
                         </button>
                     </template>
                 </div>
+                <div class="mt-1 text-xs font-bold text-slate-500">
+                    <span x-show="(hoverStars || stars) === 5">ممتاز جداً - بارك الله في جهوده 🌟</span>
+                    <span x-show="(hoverStars || stars) === 4">جيد جداً - خدمة متميزة 👍</span>
+                    <span x-show="(hoverStars || stars) === 3">جيد - أدى المطلوب 🤝</span>
+                    <span x-show="(hoverStars || stars) === 2">مقبول - يحتاج لتحسين ⚠️</span>
+                    <span x-show="(hoverStars || stars) === 1">ضعيف - لم تكن التجربة مناسبة ❌</span>
+                </div>
                 <input type="hidden" name="stars" :value="stars">
             </div>
 
-            <textarea name="comment" x-model="comment" rows="2.5"
-                placeholder="أضف تعليقاً أو كلمة شكر لمقدم الخدمة (اختياري)..."
-                class="w-full rounded-xl border-slate-300 p-2.5 text-xs leading-5 focus:border-[#718256] focus:ring-[#718256]"></textarea>
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">كلمة شكر أو ملاحظة لمقدم الخدمة (اختياري)</label>
+                <textarea name="comment" x-model="comment" rows="2.5"
+                    placeholder="اكتب كلمة طيبة أو تعليق يساعد المتطوع على تطوير أدائه..."
+                    class="w-full rounded-xl border-[#e2dcd0] bg-white p-3 text-xs leading-5 focus:border-[#3b5228] focus:ring-1 focus:ring-[#3b5228]"></textarea>
+            </div>
 
-            <div class="mt-4 flex gap-2.5">
+            <div class="mt-5 flex gap-2.5">
                 <button type="submit"
-                    class="flex-1 rounded-xl bg-[#31421e] py-2.5 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-[#52643a] transition cursor-pointer">
-                    تأكيد وإغلاق الطلب
+                    class="flex-1 rounded-xl bg-[#3b5228] py-2.5 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-[#4e6b35] transition cursor-pointer flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-check-double text-xs"></i>
+                    <span>تأكيد الإكمال والتقييم</span>
                 </button>
                 <button type="button" @click="open = false"
-                    class="rounded-xl border border-slate-200 px-4 py-2.5 text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
-                    إلغاء
+                    class="rounded-xl border border-[#e2dcd0] bg-white px-4 py-2.5 text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
+                    تراجع
                 </button>
             </div>
         </form>
     </div>
 </div>
 
-{{-- 7. مودال الإبلاغ عن مشكلة / اعتراض (Report Problem Modal) --}}
+{{-- 7. مودال الإبلاغ عن مشكلة / اعتراض (Report Problem Modal - B4.3) --}}
 <div x-data="{
     open: false,
     requestId: null,
@@ -416,36 +436,45 @@ class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y
 }"
 x-show="open"
 x-cloak
-class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
+style="font-family: 'Alexandria', sans-serif;">
 
-    <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" @click="open = false"></div>
+    <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" @click="open = false"></div>
 
-    <div class="relative z-10 w-full max-w-sm overflow-hidden rounded-2xl sm:rounded-3xl bg-white p-5 sm:p-6 shadow-2xl text-center my-auto">
-        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-50 text-rose-600">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
+    <div class="relative z-10 w-full max-w-md overflow-hidden rounded-3xl bg-[#fbf9f5] border border-rose-200 p-5 sm:p-7 shadow-2xl text-center my-auto">
+        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-50 text-rose-600 shadow-sm">
+            <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
         </div>
 
-        <h3 class="mt-3 text-lg font-black text-rose-800">الإبلاغ عن مشكلة في الخدمة</h3>
-        <p class="mt-1 text-xs text-slate-500">سيتم نقل الطلب <span class="font-bold text-slate-800" x-text="publicId"></span> للمراجعة الإدارية والتحقق من الشكوى.</p>
+        <h3 class="mt-3.5 text-xl font-black text-rose-800">الإبلاغ عن مشكلة في الخدمة</h3>
+        <p class="mt-1 text-xs text-slate-600">
+            سيتم تحويل الطلب 
+            <span class="font-extrabold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-lg inline-block" x-text="publicId"></span>
+            إلى المراجعة الإدارية للتحقيق الفوري وحماية حقوقك.
+        </p>
 
-        <form method="POST" :action="actionUrl" class="mt-4 text-right">
+        <form method="POST" :action="actionUrl" class="mt-5 text-right">
             @csrf
             <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">تفاصيل المشكلة أو الاعتراض</label>
+                <label class="block text-xs font-bold text-slate-700 mb-1">تفاصيل المشكلة أو سبب الاعتراض</label>
                 <textarea name="problem_description" x-model="description" rows="3" required
-                    placeholder="اشرح المشكلة بالتفصيل لمساعدتنا في معالجتها وحماية حقوقك..."
-                    class="w-full rounded-xl border-slate-300 p-2.5 text-xs leading-5 focus:border-rose-500 focus:ring-rose-500"></textarea>
+                    placeholder="اشرح ما حدث بالتفصيل (مثل: عدم حضور المتطوع، نقص في المشتريات، خلاف في التعامل)..."
+                    class="w-full rounded-xl border-rose-200 bg-white p-3 text-xs leading-5 focus:border-rose-500 focus:ring-1 focus:ring-rose-500"></textarea>
             </div>
 
-            <div class="mt-4 flex gap-2.5">
+            <div class="mt-3 rounded-xl bg-amber-50 border border-amber-200 p-2.5 text-[11px] text-amber-800 flex items-center gap-2 text-right">
+                <i class="fa-solid fa-circle-info text-amber-600 shrink-0"></i>
+                <span>فريق الدعم سيراجع البلاغ ويتواصل معك أو مع مقدم الخدمة لمعالجة الأمر.</span>
+            </div>
+
+            <div class="mt-5 flex gap-2.5">
                 <button type="submit"
-                    class="flex-1 rounded-xl bg-rose-600 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-rose-700 transition cursor-pointer">
-                    إرسال البلاغ للإدارة
+                    class="flex-1 rounded-xl bg-rose-600 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-rose-700 transition cursor-pointer flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                    <span>إرسال البلاغ للإدارة</span>
                 </button>
                 <button type="button" @click="open = false"
-                    class="rounded-xl border border-slate-200 px-4 py-2.5 text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
+                    class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-50 transition cursor-pointer">
                     تراجع
                 </button>
             </div>

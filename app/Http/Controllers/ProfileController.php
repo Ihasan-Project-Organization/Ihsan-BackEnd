@@ -28,18 +28,31 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $request->user()->fill([
+        $user = $request->user();
+
+        $user->fill([
             'name' => $validated['name'],
             'email' => $validated['email'],
         ]);
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        if ($request->hasFile('profile_picture')) {
+            $path = $request->file('profile_picture')->store('profile-pictures', 'public');
+            $user->profile_picture_path = $path;
+        }
 
-        // TODO: reconnect in stage 3.2/3.3
+        $user->save();
+
+        if (array_key_exists('phone_number', $validated) && $validated['phone_number'] !== null) {
+            if ($user->elderProfile) {
+                $user->elderProfile->update(['phone_number' => $validated['phone_number']]);
+            } elseif ($user->serviceProviderProfile) {
+                $user->serviceProviderProfile->update(['phone_number' => $validated['phone_number']]);
+            }
+        }
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

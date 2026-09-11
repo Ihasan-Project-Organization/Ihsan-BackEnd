@@ -63,6 +63,7 @@ class LoginRequest extends FormRequest
 
             throw ValidationException::withMessages([
                 'email' => "تم رفض حسابك من قِبل الإدارة. {$reason}",
+                'rejection_reason' => $user->rejection_reason ?? $reason,
             ]);
         }
 
