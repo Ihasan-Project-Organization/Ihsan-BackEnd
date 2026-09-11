@@ -3,6 +3,8 @@
 set -e
 
 echo "Preparing Laravel..."
+mkdir -p /var/www/html/database
+touch /var/www/html/database/database.sqlite || true
 php artisan storage:link || true
 php artisan config:cache
 php artisan route:cache

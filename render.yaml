@@ -15,13 +15,13 @@ services:
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
-        value: "false"
+        value: "true"
       - key: APP_KEY
-        sync: false
+        value: base64:cca36xCX47WBAIKFXl8aUAAbn0iSzptH7dPlu/lrY+g=
       - key: APP_URL
-        value: https://ihsan-backend-ybyl.onrender.com
+        value: https://ihsan-backend-o34u.onrender.com
       - key: ASSET_URL
-        value: https://ihsan-backend-ybyl.onrender.com
+        value: https://ihsan-backend-o34u.onrender.com
       - key: LOG_CHANNEL
         value: stderr
       - key: LOG_LEVEL
