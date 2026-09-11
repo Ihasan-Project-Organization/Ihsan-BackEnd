@@ -12,12 +12,26 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('requests', function (Blueprint $table) {
-            if (Schema::getConnection()->getDriverName() === 'mysql') {
+            $driver = Schema::getConnection()->getDriverName();
+            if ($driver === 'sqlite') {
+                return;
+            }
+
+            // في كل من MySQL و PostgreSQL، تحتفظ المفاتيح الأجنبية بالاسم القديم قبل إعادة تسمية الجدول
+            try {
                 $table->dropForeign('service_requests_user_id_foreign');
+            } catch (\Throwable) {
+                try {
+                    $table->dropForeign(['user_id']);
+                } catch (\Throwable) {}
+            }
+
+            try {
                 $table->dropForeign('service_requests_assigned_provider_id_foreign');
-            } else {
-                $table->dropForeign(['user_id']);
-                $table->dropForeign(['assigned_provider_id']);
+            } catch (\Throwable) {
+                try {
+                    $table->dropForeign(['assigned_provider_id']);
+                } catch (\Throwable) {}
             }
         });
 
@@ -38,8 +52,18 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('requests', function (Blueprint $table) {
-            $table->dropForeign(['elder_id']);
-            $table->dropForeign(['provider_id']);
+            $driver = Schema::getConnection()->getDriverName();
+            if ($driver === 'sqlite') {
+                return;
+            }
+
+            try {
+                $table->dropForeign(['elder_id']);
+            } catch (\Throwable) {}
+
+            try {
+                $table->dropForeign(['provider_id']);
+            } catch (\Throwable) {}
         });
 
         Schema::table('requests', function (Blueprint $table) {
