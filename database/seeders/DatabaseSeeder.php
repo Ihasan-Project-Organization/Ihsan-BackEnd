@@ -14,52 +14,12 @@ use Illuminate\Support\Facades\Schema;
 class DatabaseSeeder extends Seeder
 {
     /**
-     * تهيئة قاعدة البيانات والإبقاء فقط على حسابات الاختبار الرسمية الستة.
+     * تهيئة قاعدة البيانات وضمان وجود حسابات الاختبار الرسمية الستة بشكل آمن (Idempotent).
      */
     public function run(): void
     {
-        $testEmails = [
-            'superadmin@ihsan.com',
-            'admin@ihsan.com',
-            'mohammed@ihsan.com',
-            'elderly@ihsan.com',
-            'pending@ihsan.com',
-            'suspended@ihsan.com',
-            'edaod887@gmail.com',
-            'edaod888@gmail.com',
-            'edaod889@gmail.com',
-            'edaod8810@gmail.com',
-        ];
-
-        // تعطيل قيود المفاتيح الأجنبية لتنظيف البيانات الوهمية القديمة بأمان
-        if (DB::getDriverName() === 'mysql') {
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        }
-
-        // 1. حذف كافة البيانات والطلبات والشكاوى الوهمية السابقة
-        DB::table('complaints')->truncate();
-        DB::table('ratings')->truncate();
-        DB::table('provider_reliability_incidents')->truncate();
-        DB::table('volunteer_certificates')->truncate();
-        DB::table('requests')->truncate();
-        DB::table('notifications')->truncate();
-        DB::table('admin_audit_logs')->truncate();
-
-        // 2. حذف كافة المستخدمين والملفات غير المنتمية لحسابات الاختبار الستة
-        $nonTestUserIds = DB::table('users')->whereNotIn('email', $testEmails)->pluck('id');
-        if ($nonTestUserIds->isNotEmpty()) {
-            DB::table('admins')->whereIn('user_id', $nonTestUserIds)->delete();
-            DB::table('service_provider_profiles')->whereIn('user_id', $nonTestUserIds)->delete();
-            DB::table('elder_profiles')->whereIn('user_id', $nonTestUserIds)->delete();
-            DB::table('users')->whereIn('id', $nonTestUserIds)->delete();
-        }
-
-        if (DB::getDriverName() === 'mysql') {
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-        }
-
         // ========================================================
-        // زراعة حسابات الاختبار الستة فقط
+        // زراعة وتحديث حسابات الاختبار الستة المعتمدة
         // ========================================================
 
         // 1. حساب مدير النظام الأعلى (Super Admin)

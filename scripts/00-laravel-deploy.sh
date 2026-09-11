@@ -13,3 +13,6 @@ php artisan view:cache
 
 echo "Applying database migrations..."
 php artisan migrate --force
+
+echo "Seeding initial and test accounts..."
+php artisan db:seed --force
