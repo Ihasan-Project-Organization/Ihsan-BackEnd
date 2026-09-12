@@ -69,7 +69,7 @@
                     @if (Auth::user()->isProvider())
                         <a href="{{ route('provider.dashboard') }}" class="rounded-xl bg-[#24472f] px-4 py-3 text-xs font-semibold text-white transition hover:bg-[#315f40] sm:px-6 sm:text-sm">لوحة التحكم</a>
                     @else
-                        <a href="{{ route('dashboard') }}" class="rounded-xl bg-[#24472f] px-4 py-3 text-xs font-semibold text-white transition hover:bg-[#315f40] sm:px-6 sm:text-sm">لوحة التحكم</a>
+                        <a href="{{ route('admin.dashboard') }}" class="rounded-xl bg-[#24472f] px-4 py-3 text-xs font-semibold text-white transition hover:bg-[#315f40] sm:px-6 sm:text-sm">لوحة التحكم</a>
                     @endif
                 @else
                     <a href="{{ route('login') }}" class="rounded-xl px-2.5 py-3 text-xs font-semibold text-[#24472f] transition hover:bg-[#edf1e9] sm:px-5 sm:text-sm">دخول</a>
