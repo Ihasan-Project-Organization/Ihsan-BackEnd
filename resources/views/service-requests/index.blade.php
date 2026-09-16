@@ -156,10 +156,17 @@
         .confirmed-card { border-color: #c9e29a; border-right: 5px solid var(--primary-color); }
         .in-progress-card { border-color: #dce6c9; border-right: 5px solid #8b5cf6; }
 
+        .request-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
         .request-card-top {
             display: flex;
+            min-width: 0;
             align-items: center;
-            justify-content: flex-start;
             gap: 14px;
         }
 
@@ -190,9 +197,9 @@
         }
 
         .request-state {
-            position: absolute;
-            top: 22px;
-            left: 24px;
+            position: static;
+            flex: 0 0 auto;
+            max-width: 48%;
             padding: 5px 12px;
             border-radius: 14px;
             font-size: 11px;
@@ -484,6 +491,17 @@
             text-decoration: none;
         }
 
+        .listen-status {
+            border-color: #cfe0bf;
+            background: #f2f7ed;
+            color: #3f5d2b;
+        }
+
+        .listen-status:hover {
+            border-color: #8eaa76;
+            background: #e8f1df;
+        }
+
         .action-button:hover {
             transform: translateY(-1px);
         }
@@ -526,6 +544,106 @@
         .phone-masked-notice i {
             color: #94a3b8;
             font-size: 11px;
+        }
+
+        /* Visual Service Stepper لكبير السن */
+        .service-stepper-wrapper {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 14px 18px;
+            margin: 14px 0;
+        }
+
+        .stepper-header-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #334155;
+            margin-bottom: 14px;
+        }
+
+        .service-stepper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            gap: 6px;
+        }
+
+        .stepper-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            text-align: center;
+        }
+
+        .stepper-icon-node {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .stepper-step.completed .stepper-icon-node {
+            background: #354e20;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(53, 78, 32, 0.2);
+        }
+
+        .stepper-step.active .stepper-icon-node {
+            background: #83a55b;
+            color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(131, 165, 91, 0.25), 0 4px 12px rgba(53, 78, 32, 0.25);
+            transform: scale(1.1);
+        }
+
+        .stepper-step.upcoming .stepper-icon-node {
+            background: #e2e8f0;
+            color: #94a3b8;
+        }
+
+        .stepper-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+            line-height: 1.3;
+        }
+
+        .stepper-step.active .stepper-label {
+            color: #263817;
+            font-weight: 900;
+            font-size: 12px;
+        }
+
+        .stepper-step.completed .stepper-label {
+            color: #354e20;
+        }
+
+        .stepper-line {
+            position: absolute;
+            top: 18px;
+            right: 12%;
+            left: 12%;
+            height: 3px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .stepper-line-progress {
+            height: 100%;
+            background: #83a55b;
+            transition: width 0.4s ease;
         }
 
         /* Empty State */
@@ -586,6 +704,38 @@
                 width: 100%;
             }
         }
+
+        /* Compact request page */
+        .requests-header-box{margin-bottom:16px;padding:16px 18px;border-radius:16px}
+        .requests-title-area h1{font-size:22px;margin:2px 0 4px}
+        .requests-title-area p{font-size:12px}
+        .requests-action-area{gap:8px}
+        .new-request-btn{padding:8px 15px;border-radius:11px;font-size:12px}
+        .tabs-container{margin-bottom:16px}
+        .tabs{gap:6px}
+        .tab-btn{gap:6px;padding:7px 13px;border-radius:11px;font-size:12px}
+        .requests-list{gap:12px}
+        .active-request-card{padding:16px 18px;border-radius:14px}
+        .request-card-header{gap:10px}
+        .request-card-top{gap:10px}
+        .request-card-top h3{font-size:15px}
+        .request-icon{width:38px;height:38px;border-radius:10px;font-size:17px}
+        .request-state{max-width:50%;padding:4px 10px;font-size:10px}
+        .request-meta{gap:13px;margin:10px 0;font-size:11px}
+        .request-description{margin-bottom:12px;font-size:13px}
+        .action-required-card{padding:16px 18px;border-radius:14px}
+        .action-card-heading{gap:11px}
+        .action-request-info h2{font-size:15px}
+        .action-request-info p{font-size:12px}
+        .action-alert{gap:9px;margin:10px 0;padding:9px 12px}
+        .completed-request-card{padding:15px 18px;border-radius:14px}
+        .completed-title h2{font-size:14px}
+        .completed-icon{width:38px;height:38px;font-size:17px}
+        .completed-meta{gap:14px;margin-top:10px;padding:8px 12px;font-size:11px}
+        .cancelled-request-card{padding:14px 18px;border-radius:14px}
+        .card-actions-bar{gap:8px;padding-top:11px}
+        .action-button{min-height:31px;padding:6px 13px;border-radius:10px;font-size:11px}
+        @media(max-width:640px){.request-card-header{align-items:stretch;flex-direction:column}.request-state{max-width:100%;align-self:flex-start}.card-actions-bar{align-items:stretch;flex-direction:column}.card-actions-bar>div{width:100%}.cancel-request{align-self:flex-start}}
     </style>
 
     <div class="space-y-6">
@@ -700,6 +850,21 @@
                 @php
                     $provPhone = $item->serviceProviderProfile?->phone_number;
                     $provName = $item->serviceProviderProfile?->full_name ?? $item->serviceProviderProfile?->user?->name ?? 'مقدم الخدمة';
+                    $statusLabels = [
+                        \App\Models\ServiceRequest::STATUS_PENDING_ACCEPTANCE => 'بانتظار قبول مقدم الخدمة',
+                        \App\Models\ServiceRequest::STATUS_ACCEPTED => 'تم قبول الطلب',
+                        \App\Models\ServiceRequest::STATUS_ASSIGNED => 'تم توكيل مقدم الخدمة',
+                        \App\Models\ServiceRequest::STATUS_IN_PROGRESS => 'الطلب قيد التنفيذ',
+                        \App\Models\ServiceRequest::STATUS_PENDING_CONFIRMATION => 'بانتظار تأكيد اكتمال الخدمة',
+                        \App\Models\ServiceRequest::STATUS_COMPLETED => 'مكتمل',
+                        \App\Models\ServiceRequest::STATUS_UNDER_REVIEW => 'قيد المراجعة الإدارية',
+                        \App\Models\ServiceRequest::STATUS_NO_PROVIDER_FOUND => 'لم يتوفر مقدم خدمة',
+                        \App\Models\ServiceRequest::STATUS_PROVIDER_APOLOGIZED => 'اعتذر مقدم الخدمة',
+                        \App\Models\ServiceRequest::STATUS_PROVIDER_DELAYED => 'مقدم الخدمة متأخر',
+                        \App\Models\ServiceRequest::STATUS_CANCELLED => 'ملغى',
+                    ];
+                    $spokenStatus = $statusLabels[$item->status] ?? 'قيد المتابعة';
+                    $spokenRequest = "طلب {$item->title}. الحالة: {$spokenStatus}. الموعد: {$item->scheduled_at->translatedFormat('l d F Y، h:i A')}. المكان: {$item->location}. التفاصيل: {$item->description}.";
                 @endphp
 
                 {{-- ========================================================= --}}
@@ -713,6 +878,14 @@
                 ], true))
 
                     <article class="action-required-card">
+                        <button type="button"
+                            data-tts-text="{{ $spokenRequest }}"
+                            data-voice-key="status_{{ $item->status }}"
+                            class="float-left mb-3 inline-flex min-h-11 items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 text-sm font-black text-blue-800"
+                            aria-label="قراءة حالة الطلب بصوت مرتفع">
+                            <span aria-hidden="true">🔊</span>
+                            <span>استمع للحالة</span>
+                        </button>
                         <div class="action-card-accent"></div>
                         <div class="action-card-heading">
                             <span class="request-lock" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></span>
@@ -825,6 +998,14 @@
                 @elseif ($item->status === \App\Models\ServiceRequest::STATUS_COMPLETED)
 
                     <article class="completed-request-card">
+                        <button type="button"
+                            data-tts-text="{{ $spokenRequest }}"
+                            data-voice-key="status_{{ $item->status }}"
+                            class="float-left mb-3 inline-flex min-h-11 items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 text-sm font-black text-blue-800"
+                            aria-label="قراءة حالة الطلب بصوت مرتفع">
+                            <span aria-hidden="true">🔊</span>
+                            <span>استمع للحالة</span>
+                        </button>
                         <div class="completed-card-top">
                             <div class="completed-title">
                                 <span class="completed-icon green"><i class="fa-solid fa-circle-check"></i></span>
@@ -861,6 +1042,14 @@
                 @elseif ($item->status === \App\Models\ServiceRequest::STATUS_CANCELLED)
 
                     <article class="cancelled-request-card">
+                        <button type="button"
+                            data-tts-text="{{ $spokenRequest }}"
+                            data-voice-key="status_{{ $item->status }}"
+                            class="float-left mb-3 inline-flex min-h-11 items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 text-sm font-black text-blue-800"
+                            aria-label="قراءة حالة الطلب بصوت مرتفع">
+                            <span aria-hidden="true">🔊</span>
+                            <span>استمع للحالة</span>
+                        </button>
                         <header class="cancelled-card-header">
                             <div class="cancelled-request-info">
                                 <span class="cancelled-icon" aria-hidden="true"><i class="fa-regular fa-circle-xmark"></i></span>
@@ -886,7 +1075,8 @@
                 @else
 
                     <article class="active-request-card {{ $item->status === \App\Models\ServiceRequest::STATUS_ASSIGNED ? 'confirmed-card' : '' }} {{ $item->status === \App\Models\ServiceRequest::STATUS_IN_PROGRESS ? 'in-progress-card' : '' }}">
-                        <div class="request-card-top">
+                        <div class="request-card-header">
+                            <div class="request-card-top">
                             <span class="request-icon">
                                 @if (str_contains($item->title, 'دواء') || str_contains($item->description, 'دواء') || $item->service_type === 'medical')
                                     <i class="fa-solid fa-kit-medical"></i>
@@ -912,12 +1102,7 @@
                                 <span class="h-2 w-2 rounded-full bg-amber-400 animate-pulse"></span>
                                 <span>بانتظار قبول مقدم الخدمة</span>
                             </span>
-                        @elseif ($item->status === \App\Models\ServiceRequest::STATUS_ACCEPTED)
-                            <span class="request-state confirmed">
-                                <i class="fa-solid fa-check"></i>
-                                <span>تم القبول (بانتظار التوكيل)</span>
-                            </span>
-                        @elseif ($item->status === \App\Models\ServiceRequest::STATUS_ASSIGNED)
+                        @elseif ($item->status === \App\Models\ServiceRequest::STATUS_ACCEPTED || $item->status === \App\Models\ServiceRequest::STATUS_ASSIGNED)
                             <span class="request-state confirmed">
                                 <i class="fa-solid fa-user-check"></i>
                                 <span>تم توكيل مقدم الخدمة</span>
@@ -933,6 +1118,7 @@
                                 <span>أنهيت المهمة — بانتظار تأكيدك</span>
                             </span>
                         @endif
+                        </div>
 
                         <div class="request-meta">
                             <span><i class="fa-regular fa-calendar"></i> {{ $item->scheduled_at->translatedFormat('l d F - h:i A') }}</span>
@@ -944,9 +1130,95 @@
 
                         <p class="request-description">{{ $item->description }}</p>
 
+                        {{-- مسار الخدمة البصري التفاعلي لكبير السن --}}
+                        @php
+                            $currentStep = match($item->status) {
+                                \App\Models\ServiceRequest::STATUS_PENDING_ACCEPTANCE => 1,
+                                \App\Models\ServiceRequest::STATUS_ACCEPTED, \App\Models\ServiceRequest::STATUS_ASSIGNED => 2,
+                                \App\Models\ServiceRequest::STATUS_IN_PROGRESS => 3,
+                                \App\Models\ServiceRequest::STATUS_PENDING_CONFIRMATION, \App\Models\ServiceRequest::STATUS_COMPLETED => 4,
+                                default => 1,
+                            };
+                            $progressPercent = match($currentStep) {
+                                1 => 0,
+                                2 => 33.3,
+                                3 => 66.6,
+                                4 => 100,
+                            };
+                        @endphp
+
+                        <div class="service-stepper-wrapper">
+                            <div class="stepper-header-title">
+                                <i class="fa-solid fa-route text-emerald-700"></i>
+                                <span>مسار الخدمة الحالي (مرحلة {{ $currentStep }} من 4):</span>
+                            </div>
+                            <div class="service-stepper">
+                                <div class="stepper-line">
+                                    <div class="stepper-line-progress" style="width: {{ $progressPercent }}%;"></div>
+                                </div>
+
+                                {{-- الخطوة 1 --}}
+                                <div class="stepper-step {{ $currentStep > 1 ? 'completed' : ($currentStep === 1 ? 'active' : 'upcoming') }}">
+                                    <div class="stepper-icon-node">
+                                        @if ($currentStep > 1)
+                                            <i class="fa-solid fa-check"></i>
+                                        @else
+                                            1
+                                        @endif
+                                    </div>
+                                    <span class="stepper-label">نشر الطلب</span>
+                                </div>
+
+                                {{-- الخطوة 2 --}}
+                                <div class="stepper-step {{ $currentStep > 2 ? 'completed' : ($currentStep === 2 ? 'active' : 'upcoming') }}">
+                                    <div class="stepper-icon-node">
+                                        @if ($currentStep > 2)
+                                            <i class="fa-solid fa-check"></i>
+                                        @else
+                                            2
+                                        @endif
+                                    </div>
+                                    <span class="stepper-label">تم التوكيل</span>
+                                </div>
+
+                                {{-- الخطوة 3 --}}
+                                <div class="stepper-step {{ $currentStep > 3 ? 'completed' : ($currentStep === 3 ? 'active' : 'upcoming') }}">
+                                    <div class="stepper-icon-node">
+                                        @if ($currentStep > 3)
+                                            <i class="fa-solid fa-check"></i>
+                                        @else
+                                            3
+                                        @endif
+                                    </div>
+                                    <span class="stepper-label">قيد التنفيذ</span>
+                                </div>
+
+                                {{-- الخطوة 4 --}}
+                                <div class="stepper-step {{ $currentStep === 4 ? 'active' : ($currentStep > 4 ? 'completed' : 'upcoming') }}">
+                                    <div class="stepper-icon-node">
+                                        @if ($currentStep >= 4 && $item->status === \App\Models\ServiceRequest::STATUS_COMPLETED)
+                                            <i class="fa-solid fa-check"></i>
+                                        @else
+                                            4
+                                        @endif
+                                    </div>
+                                    <span class="stepper-label">إنجاز الخدمة</span>
+                                </div>
+                            </div>
+                        </div>
+
                         {{-- أشرطة الإجراءات والتواصل والإلغاء --}}
                         <div class="card-actions-bar">
                             <div class="flex flex-wrap items-center gap-2">
+                                <button type="button"
+                                    data-tts-text="{{ $spokenRequest }}"
+                            data-voice-key="status_{{ $item->status }}"
+                                    class="action-button listen-status"
+                                    aria-label="قراءة حالة الطلب بصوت مرتفع">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                    <span>استمع للحالة</span>
+                                </button>
+
                                 {{-- أزرار تأكيد الإنجاز أو الإبلاغ عن مشكلة للحالة pending_confirmation --}}
                                 @if ($item->status === \App\Models\ServiceRequest::STATUS_PENDING_CONFIRMATION)
                                     <button type="button"

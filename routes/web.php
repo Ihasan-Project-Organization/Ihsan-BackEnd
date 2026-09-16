@@ -1,5 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAdminsController;
+use App\Http\Controllers\Admin\AdminApprovalsController;
+use App\Http\Controllers\Admin\AdminAuditLogsController;
+use App\Http\Controllers\Admin\AdminComplaintsController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminRequestsController;
+use App\Http\Controllers\Admin\AdminSettingsController;
+use App\Http\Controllers\Admin\AdminUsersController;
+use App\Http\Controllers\AssistantAppointmentController;
 use App\Http\Controllers\Frontend\RegistrationPageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -32,6 +41,10 @@ Route::middleware(['auth', 'verified', 'role:elder'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::post('/assistant/appointments/parse', AssistantAppointmentController::class)
+        ->middleware('throttle:10,1')
+        ->name('assistant.appointments.parse');
 
     Route::get('/requests', [ServiceRequestController::class, 'index'])->name('service-requests.index');
     Route::post('/requests', [ServiceRequestController::class, 'store'])->name('service-requests.store');
@@ -81,7 +94,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
 
 // ============================================================
 // مسارات لوحة الإدارة — الدفعة 0 والدفعة 1
@@ -91,60 +104,58 @@ Route::prefix('admin')
     ->middleware(['auth', 'ensure.admin'])
     ->group(function () {
         // 1.1 لوحة التحكم الرئيسية
-        Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         // استعراض المستندات المحمية
-        Route::get('/documents/{path}', [\App\Http\Controllers\Admin\AdminApprovalsController::class, 'viewDocument'])
+        Route::get('/documents/{path}', [AdminApprovalsController::class, 'viewDocument'])
             ->where('path', '.*')
             ->name('documents.view');
 
         // 1.2 مراجعة اعتماد الحسابات
         Route::prefix('approvals')->name('approvals.')->group(function () {
-            Route::get('/',                            [\App\Http\Controllers\Admin\AdminApprovalsController::class, 'index'])->name('index');
-            Route::get('/{user}',                      [\App\Http\Controllers\Admin\AdminApprovalsController::class, 'show'])->name('show');
-            Route::post('/{user}/approve',             [\App\Http\Controllers\Admin\AdminApprovalsController::class, 'approve'])->name('approve');
-            Route::post('/{user}/reject',              [\App\Http\Controllers\Admin\AdminApprovalsController::class, 'reject'])->name('reject');
-            Route::post('/{user}/request-resubmission', [\App\Http\Controllers\Admin\AdminApprovalsController::class, 'requestResubmission'])->name('request-resubmission');
+            Route::get('/', [AdminApprovalsController::class, 'index'])->name('index');
+            Route::get('/{user}', [AdminApprovalsController::class, 'show'])->name('show');
+            Route::post('/{user}/approve', [AdminApprovalsController::class, 'approve'])->name('approve');
+            Route::post('/{user}/reject', [AdminApprovalsController::class, 'reject'])->name('reject');
+            Route::post('/{user}/request-resubmission', [AdminApprovalsController::class, 'requestResubmission'])->name('request-resubmission');
         });
 
         // 2.1 إدارة كل الطلبات
         Route::prefix('requests')->name('requests.')->group(function () {
-            Route::get('/',                               [\App\Http\Controllers\Admin\AdminRequestsController::class, 'index'])->name('index');
-            Route::get('/{serviceRequest}',               [\App\Http\Controllers\Admin\AdminRequestsController::class, 'show'])->name('show');
-            Route::post('/{serviceRequest}/force-status', [\App\Http\Controllers\Admin\AdminRequestsController::class, 'forceStatus'])->name('force-status');
+            Route::get('/', [AdminRequestsController::class, 'index'])->name('index');
+            Route::get('/{serviceRequest}', [AdminRequestsController::class, 'show'])->name('show');
+            Route::post('/{serviceRequest}/force-status', [AdminRequestsController::class, 'forceStatus'])->name('force-status');
         });
 
         // 2.2 و 2.3 إدارة الشكاوى وتنبيهات الموثوقية
         Route::prefix('complaints')->name('complaints.')->group(function () {
-            Route::get('/',                     [\App\Http\Controllers\Admin\AdminComplaintsController::class, 'index'])->name('index');
-            Route::get('/{complaint}',          [\App\Http\Controllers\Admin\AdminComplaintsController::class, 'show'])->name('show');
-            Route::post('/{complaint}/resolve', [\App\Http\Controllers\Admin\AdminComplaintsController::class, 'resolve'])->name('resolve');
+            Route::get('/', [AdminComplaintsController::class, 'index'])->name('index');
+            Route::get('/{complaint}', [AdminComplaintsController::class, 'show'])->name('show');
+            Route::post('/{complaint}/resolve', [AdminComplaintsController::class, 'resolve'])->name('resolve');
         });
 
         // 3.1 & 3.2 إدارة حسابات المستخدمين
         Route::prefix('users')->name('users.')->group(function () {
-            Route::get('/',                   [\App\Http\Controllers\Admin\AdminUsersController::class, 'index'])->name('index');
-            Route::get('/{user}',             [\App\Http\Controllers\Admin\AdminUsersController::class, 'show'])->name('show');
-            Route::post('/{user}/suspend',    [\App\Http\Controllers\Admin\AdminUsersController::class, 'suspend'])->name('suspend');
-            Route::post('/{user}/reactivate', [\App\Http\Controllers\Admin\AdminUsersController::class, 'reactivate'])->name('reactivate');
+            Route::get('/', [AdminUsersController::class, 'index'])->name('index');
+            Route::get('/{user}', [AdminUsersController::class, 'show'])->name('show');
+            Route::post('/{user}/suspend', [AdminUsersController::class, 'suspend'])->name('suspend');
+            Route::post('/{user}/reactivate', [AdminUsersController::class, 'reactivate'])->name('reactivate');
         });
 
         // 4.1 إدارة المديرين ومسؤولي النظام (Super Admin فقط)
         Route::prefix('admins')->name('admins.')->middleware('ensure.super')->group(function () {
-            Route::get('/',            [\App\Http\Controllers\Admin\AdminAdminsController::class, 'index'])->name('index');
-            Route::get('/create',      [\App\Http\Controllers\Admin\AdminAdminsController::class, 'create'])->name('create');
-            Route::post('/',           [\App\Http\Controllers\Admin\AdminAdminsController::class, 'store'])->name('store');
-            Route::delete('/{admin}',  [\App\Http\Controllers\Admin\AdminAdminsController::class, 'destroy'])->name('destroy');
+            Route::get('/', [AdminAdminsController::class, 'index'])->name('index');
+            Route::get('/create', [AdminAdminsController::class, 'create'])->name('create');
+            Route::post('/', [AdminAdminsController::class, 'store'])->name('store');
+            Route::delete('/{admin}', [AdminAdminsController::class, 'destroy'])->name('destroy');
         });
 
         // 4.2 إعدادات النظام العامة وعتبات الترقية (Super Admin فقط)
         Route::prefix('settings')->name('settings.')->middleware('ensure.super')->group(function () {
-            Route::get('/',  [\App\Http\Controllers\Admin\AdminSettingsController::class, 'index'])->name('index');
-            Route::post('/', [\App\Http\Controllers\Admin\AdminSettingsController::class, 'update'])->name('update');
+            Route::get('/', [AdminSettingsController::class, 'index'])->name('index');
+            Route::post('/', [AdminSettingsController::class, 'update'])->name('update');
         });
 
         // 5.1 سجل النظام الإداري (Audit Log)
-        Route::get('/audit-log', [\App\Http\Controllers\Admin\AdminAuditLogsController::class, 'index'])->name('audit-log.index');
+        Route::get('/audit-log', [AdminAuditLogsController::class, 'index'])->name('audit-log.index');
     });
-
-

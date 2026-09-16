@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'إحسان') }} - بوابة كبير السن</title>
+    <title>أنيس - بوابة كبير السن</title>
 
     {{-- الخطوط والأيقونات --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,17 +28,24 @@
 
     <style>
         :root {
-            --bg-color: #f2ede4;
-            --sidebar-bg: #354e20;
-            --primary-color: #83a55b;
+            --bg-color: #f4f0e8;
+            --sidebar-bg: #2c4318;
+            --sidebar-bg-end: #3d5a26;
+            --primary-color: #7a9d50;
             --primary-hover: #4e6b35;
             --primary-light: #e6edd9;
             --text-main: #2d3748;
             --text-muted: #718096;
-            --border-color: #e2dcd0;
+            --border-color: #ddd8cd;
             --card-bg: #ffffff;
             --support-card-bg: #e8e3d3;
             --sidebar-text: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(44,67,24,.06);
+            --shadow-md: 0 4px 14px rgba(44,67,24,.08);
+            --shadow-lg: 0 8px 28px rgba(44,67,24,.10);
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 22px;
         }
 
         body {
@@ -48,6 +55,8 @@
             overflow-x: hidden;
             margin: 0;
             padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .dashboard-container {
@@ -56,98 +65,109 @@
             width: 100%;
         }
 
-        /* Sidebar Styles */
+        /* ══════════════ Sidebar ══════════════ */
         .sidebar {
-            width: 280px;
-            background-color: var(--sidebar-bg);
-            border-left: 1px solid rgba(255,255,255,0.1);
+            width: 260px;
+            background: linear-gradient(175deg, var(--sidebar-bg) 0%, var(--sidebar-bg-end) 100%);
+            border-left: 1px solid rgba(255,255,255,0.07);
             display: flex;
             flex-direction: column;
-            padding: 24px 20px;
+            padding: 20px 16px;
             position: fixed;
             height: 100vh;
             right: 0;
             top: 0;
             z-index: 100;
-            transition: transform 0.3s ease;
+            transition: transform 0.35s cubic-bezier(.4,0,.2,1);
             overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,.15) transparent;
         }
+        .sidebar::-webkit-scrollbar{width:5px}
+        .sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:10px}
 
         .logo-section {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 22px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
         }
 
         .logo {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            font-size: 26px;
+            gap: 9px;
+            font-size: 24px;
             font-weight: 900;
             color: var(--sidebar-text);
             margin-bottom: 4px;
         }
 
         .logo i {
-            font-size: 28px;
-            color: #b8cfa0;
+            font-size: 25px;
+            color: #a8c488;
         }
 
         .logo-subtitle {
-            font-size: 11px;
-            color: #dfe6d5;
+            font-size: 10px;
+            color: rgba(223,230,213,.8);
             margin-bottom: 8px;
+            letter-spacing: .2px;
         }
 
         .role-pill {
             display: inline-block;
-            background-color: rgba(255,255,255,0.15);
-            color: #ffffff;
-            font-size: 11px;
+            background: rgba(255,255,255,.1);
+            color: rgba(255,255,255,.85);
+            font-size: 10px;
             font-weight: 700;
-            padding: 3px 12px;
+            padding: 3px 11px;
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,.12);
+            letter-spacing: .15px;
         }
 
         .sidebar-menu {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 3px;
             flex: 1;
         }
 
         .menu-item {
             display: flex;
             align-items: center;
-            padding: 11px 16px;
+            padding: 10px 13px;
             text-decoration: none;
-            color: #e2ebd8;
-            border-radius: 20px;
+            color: rgba(226,235,216,.85);
+            border-radius: var(--radius-sm);
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
             transition: all 0.2s ease;
+            position: relative;
         }
 
         .menu-item i {
-            width: 24px;
-            font-size: 16px;
-            margin-left: 10px;
+            width: 22px;
+            font-size: 14px;
+            margin-left: 9px;
             text-align: center;
-            color: #b8cfa0;
+            color: rgba(168,196,136,.75);
+            transition: color .2s;
         }
 
         .menu-item:hover {
-            background-color: rgba(255, 255, 255, 0.12);
+            background-color: rgba(255, 255, 255, 0.09);
             color: #ffffff;
         }
+        .menu-item:hover i { color: rgba(168,196,136,1); }
 
         .menu-item.active {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color) 0%, #6e8e44 100%);
             color: #ffffff;
             font-weight: 800;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            box-shadow: 0 3px 12px rgba(122,157,80,.3);
         }
 
         .menu-item.active i {
@@ -155,8 +175,8 @@
         }
 
         .sidebar-cta-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px dashed rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px dashed rgba(255, 255, 255, 0.28);
             color: #ffffff;
             font-weight: 700;
         }
@@ -165,6 +185,7 @@
             background: #ffffff;
             color: var(--sidebar-bg);
             border-color: #ffffff;
+            border-style: solid;
         }
 
         .sidebar-cta-btn:hover i {
@@ -173,58 +194,59 @@
 
         .sidebar-badge {
             margin-right: auto;
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.15);
             color: #ffffff;
             font-size: 10px;
             font-weight: 800;
             padding: 2px 8px;
-            border-radius: 12px;
+            border-radius: 10px;
         }
 
         .menu-item.active .sidebar-badge {
-            background-color: #ffffff;
+            background-color: rgba(255,255,255,.92);
             color: var(--sidebar-bg);
         }
 
         .support-card {
-            background-color: var(--support-card-bg);
-            border-radius: 18px;
-            padding: 16px;
+            background: linear-gradient(145deg, #ece7d9 0%, #e0dace 100%);
+            border-radius: var(--radius-md);
+            padding: 14px;
             text-align: center;
-            margin-top: 20px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(0,0,0,0.05);
+            margin-top: 16px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(0,0,0,0.04);
         }
 
         .support-card p {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             color: #354e20;
-            line-height: 1.5;
-            margin-bottom: 10px;
+            line-height: 1.6;
+            margin-bottom: 9px;
         }
 
         .contact-btn {
             display: block;
             width: 100%;
-            background-color: var(--sidebar-bg);
+            background: var(--sidebar-bg);
             color: #ffffff;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 8px 12px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             cursor: pointer;
             text-decoration: none;
-            transition: background-color 0.2s;
+            transition: all 0.25s ease;
         }
 
         .contact-btn:hover {
             background-color: var(--primary-hover);
+            transform: translateY(-1px);
         }
 
         .logout-form {
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
         .logout-btn {
@@ -234,57 +256,59 @@
             gap: 8px;
             width: 100%;
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #dfe6d5;
-            padding: 9px 14px;
-            border-radius: 14px;
-            font-size: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(223,230,213,.75);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.25s ease;
         }
 
         .logout-btn:hover {
-            background-color: rgba(220, 38, 38, 0.2);
-            border-color: rgba(220, 38, 38, 0.4);
+            background-color: rgba(220, 38, 38, 0.15);
+            border-color: rgba(220, 38, 38, 0.35);
             color: #fca5a5;
         }
 
-        /* Main Content */
+        /* ══════════════ Main Content ══════════════ */
         .main-content {
             flex: 1;
-            margin-right: 280px;
+            margin-right: 260px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             background-color: var(--bg-color);
-            transition: margin-right 0.3s ease;
+            transition: margin-right 0.35s cubic-bezier(.4,0,.2,1);
         }
 
         .top-header {
-            background-color: #ffffff;
-            border-bottom: 1px solid var(--border-color);
-            padding: 14px 28px;
+            background: rgba(255,255,255,.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(221,216,205,.6);
+            padding: 12px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 90;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+            box-shadow: 0 1px 8px rgba(44,67,24,.04);
         }
 
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .header-btn {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 7px 14px;
             font-size: 12px;
             font-weight: 700;
@@ -294,29 +318,31 @@
 
         .notification-icon-btn {
             position: relative;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: #f8faf6;
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: rgba(248,250,246,.9);
             border: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #354e20;
-            font-size: 16px;
+            font-size: 15px;
             text-decoration: none;
-            transition: all 0.2s;
+            transition: all 0.25s ease;
         }
 
         .notification-icon-btn:hover {
-            background: #eef2e8;
+            background: #eaf0e4;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
         }
 
         .notification-badge-dot {
             position: absolute;
-            top: -3px;
-            left: -3px;
-            background-color: #e02424;
+            top: -4px;
+            left: -4px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             color: #ffffff;
             font-size: 10px;
             font-weight: 900;
@@ -327,7 +353,7 @@
             align-items: center;
             justify-content: center;
             padding: 0 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 6px rgba(220,38,38,.35);
         }
 
         .mobile-menu-btn {
@@ -344,21 +370,22 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.45);
             z-index: 95;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
         }
 
         .content-body {
             flex: 1;
-            padding: 24px 28px;
-            max-width: 1400px;
+            padding: 22px 24px;
+            max-width: 1300px;
             width: 100%;
             margin: 0 auto;
             box-sizing: border-box;
         }
 
-        /* Responsive */
+        /* ══════════════ Responsive ══════════════ */
         @media (max-width: 1024px) {
             .sidebar {
                 transform: translateX(100%);
@@ -379,6 +406,49 @@
                 padding: 16px;
             }
         }
+
+        @media(max-width:640px){
+            .top-header{padding:9px 14px}
+            .content-body{padding:12px}
+            .header-actions{gap:6px}
+        }
+
+        /* ══════════════ Global polish ══════════════ */
+        .content-body > .mb-6{margin-bottom:1rem}
+        .content-body input,.content-body textarea,.content-body select{
+            font-family:'Alexandria',Arial,sans-serif;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        :where(.content-body a,.content-body button,.sidebar a,.sidebar button):focus-visible{
+            outline:3px solid rgba(122,157,80,.35);
+            outline-offset:2px;
+        }
+
+        .content-body :where(input,textarea,select){border-color:#d8dfd0;border-radius:10px}
+        .content-body :where(input,textarea,select):focus{
+            border-color:#7a9d50;
+            box-shadow:0 0 0 3px rgba(122,157,80,.12);
+            outline:none;
+        }
+        .content-body :where(button,a){-webkit-tap-highlight-color:transparent}
+
+        .content-body::-webkit-scrollbar,.content-body ::-webkit-scrollbar{width:6px;height:6px}
+        .content-body::-webkit-scrollbar-thumb,.content-body ::-webkit-scrollbar-thumb{border-radius:20px;background:rgba(122,157,80,.25)}
+        .content-body::-webkit-scrollbar-track,.content-body ::-webkit-scrollbar-track{background:transparent}
+
+        /* ══════════════ Animations ══════════════ */
+        @keyframes ihsan-fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes ihsan-pulse-soft{0%,100%{opacity:1}50%{opacity:.7}}
+
+        .content-body > *{animation:ihsan-fadeIn .35s ease both}
+        .content-body > :nth-child(2){animation-delay:.05s}
+        .content-body > :nth-child(3){animation-delay:.1s}
+        .content-body > :nth-child(4){animation-delay:.15s}
+
+        @media(prefers-reduced-motion:reduce){
+            *{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-delay:0s!important}
+        }
     </style>
 </head>
 <body x-data="{ mobileSidebarOpen: false }">
@@ -398,7 +468,7 @@
         <aside class="sidebar" :class="{ 'mobile-open': mobileSidebarOpen }">
             <div class="logo-section">
                 <div class="logo">
-                    <h2>إحسان</h2>
+                    <h2>أنيس</h2>
                     <i class="fa-solid fa-hand-holding-heart"></i>
                 </div>
                 <p class="logo-subtitle">منصة رعاية ومساندة كبار السن</p>
@@ -408,9 +478,17 @@
             <nav class="sidebar-menu">
                 {{-- 1. الرئيسية --}}
                 <a href="{{ route('dashboard') }}" 
-                    class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    class="menu-item {{ request()->routeIs('dashboard') && !request()->boolean('assistant') ? 'active' : '' }}">
                     <i class="fa-solid fa-house"></i>
                     <span>الرئيسية</span>
+                </a>
+
+                {{-- صفحة المساعد الذكي المستقلة --}}
+                <a href="{{ route('dashboard', ['assistant' => 1]) }}"
+                    class="menu-item {{ request()->routeIs('dashboard') && request()->boolean('assistant') ? 'active' : '' }}">
+                    <i class="fa-solid fa-robot"></i>
+                    <span>المساعد الذكي</span>
+                    <span class="sidebar-badge bg-white/20">AI</span>
                 </a>
 
                 {{-- 2. زر سريع: طلب مساعدة جديد --}}
@@ -479,11 +557,12 @@
                         <span class="text-xs font-bold text-slate-400">بوابة كبير السن والمستفيد</span>
                         <h2 class="text-sm font-black text-[#354e20]">
                             {{ match(true) {
+                                request()->routeIs('dashboard') && request()->boolean('assistant') => 'المساعد الذكي',
                                 request()->routeIs('dashboard') => 'الرئيسية ولوحة المتابعة',
                                 request()->routeIs('service-requests.*') => 'سجل طلباتي ومتابعة الخدمات',
                                 request()->routeIs('notifications.*') => 'مركز الإشعارات والتنبيهات',
                                 request()->routeIs('profile.*') => 'الملف الشخصي والإعدادات',
-                                default => 'منصة إحسان'
+                                default => 'منصة أنيس'
                             } }}
                         </h2>
                     </div>
@@ -491,11 +570,19 @@
 
                 <div class="header-actions">
                     {{-- زر إنشاء طلب جديد سريع في الهيدر --}}
-                    <button type="button" onclick="openCreateRequestModal()"
-                        class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#354e20] text-white hover:bg-[#4e6b35] transition shadow-xs cursor-pointer">
-                        <i class="fa-solid fa-plus text-[10px]"></i>
-                        <span>طلب مساعدة جديد</span>
-                    </button>
+                    @if (request()->routeIs('dashboard') && request()->boolean('assistant'))
+                        <button type="button" onclick="window.dispatchEvent(new CustomEvent('assistant-start-request'))"
+                            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-[#354e20] text-white hover:bg-[#4e6b35] transition shadow-xs cursor-pointer">
+                            <i class="fa-solid fa-plus text-[9px]"></i>
+                            <span>ابدأ طلب خدمة</span>
+                        </button>
+                    @else
+                        <button type="button" onclick="openCreateRequestModal()"
+                            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-[#354e20] text-white hover:bg-[#4e6b35] transition shadow-xs cursor-pointer">
+                            <i class="fa-solid fa-plus text-[9px]"></i>
+                            <span>طلب مساعدة جديد</span>
+                        </button>
+                    @endif
 
                     {{-- جرس الإشعارات --}}
                     <a href="{{ route('notifications.index') }}" class="notification-icon-btn" title="الإشعارات">
