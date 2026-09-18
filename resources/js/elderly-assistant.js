@@ -2,6 +2,7 @@ import { RunnableLambda } from '@langchain/core/runnables';
 import { startArabicSpeechRecognition } from './speech-recognition';
 import { appointmentVoiceKeys, parseArabicAppointment } from './appointment-parser';
 import { parseAppointmentWithAI } from './appointment-ai';
+import { assistantReplies } from './assistant-replies';
 
 const services = [
     { id: 'grocery', title: 'شراء أغراض', icon: '🛒', keywords: ['اغراض', 'أغراض', 'تسوق', 'شراء', 'سوبرماركت'] },
@@ -81,7 +82,7 @@ window.elderlyAssistant = (profileCity = '') => ({
         try {
             const saved = JSON.parse(localStorage.getItem('ihsan_elderly_request_draft'));
             if (saved && typeof saved === 'object') this.draft = { ...this.draft, ...saved };
-        } catch (_) {}
+        } catch (_) { }
 
         this.addBot('أهلًا فيك! أنا مساعد أنيس الذكي. احكيلي شو بتحتاج، أو اختار واحد من الاقتراحات تحت.', 'welcome');
     },
@@ -108,7 +109,7 @@ window.elderlyAssistant = (profileCity = '') => ({
     },
 
     saveDraft() {
-        try { localStorage.setItem('ihsan_elderly_request_draft', JSON.stringify(this.draft)); } catch (_) {}
+        try { localStorage.setItem('ihsan_elderly_request_draft', JSON.stringify(this.draft)); } catch (_) { }
     },
 
     resetChat() {
@@ -122,7 +123,7 @@ window.elderlyAssistant = (profileCity = '') => ({
     },
 
     cancelDraft() {
-        try { localStorage.removeItem('ihsan_elderly_request_draft'); } catch (_) {}
+        try { localStorage.removeItem('ihsan_elderly_request_draft'); } catch (_) { }
         this.draft = {
             service_type: '',
             title: '',
@@ -187,7 +188,7 @@ window.elderlyAssistant = (profileCity = '') => ({
                 return;
             }
 
-            this.addBot('بقدر أساعدك بطلب خدمة، متابعة طلباتك، أو قراءة الإشعارات. جرّب تحكي: بدي أطلب دواء.');
+            this.addBot(assistantReplies.unknown.text, assistantReplies.unknown.voiceKey);
             return;
         }
 
@@ -431,7 +432,7 @@ window.elderlyAssistant = (profileCity = '') => ({
                 throw new Error(Array.isArray(firstError) ? firstError[0] : 'تعذر إرسال الطلب. حاول مرة أخرى.');
             }
 
-            try { localStorage.removeItem('ihsan_elderly_request_draft'); } catch (_) {}
+            try { localStorage.removeItem('ihsan_elderly_request_draft'); } catch (_) { }
             this.addBot('تم إرسال طلبك بنجاح. رح أحولك الآن لصفحة المتابعة.');
             await window.IhsanVoice?.playFixed('success', 'تم إرسال طلبك بنجاح');
             window.location.assign(response.url);

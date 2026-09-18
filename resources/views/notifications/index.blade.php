@@ -292,9 +292,12 @@
                                         <span class="notif-new-badge">جديد</span>
                                     @endif
                                 </div>
-                                <p class="notif-message">{{ $notification->message }}</p>
+                                @php
+                                    $cleanMessage = preg_replace('/#?REQ-?(\d+)/ui', 'رقم الطلب $1', $notification->message);
+                                    $spokenNotif = "{$title}. {$cleanMessage}";
+                                @endphp
                                 <button type="button"
-                                    data-tts-text="{{ $title }}. {{ $notification->message }}"
+                                    data-tts-text="{{ $spokenNotif }}"
                                     class="notif-listen-btn"
                                     aria-label="قراءة الإشعار بصوت مرتفع">
                                     <i class="fa-solid fa-volume-high"></i>

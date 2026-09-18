@@ -25,6 +25,7 @@ window.IhsanVoice = (() => {
         edit: '/audio/elderly-assistant/edit-question.mp3',
         success: '/audio/elderly-assistant/request-sent.mp3',
         cancel: '/audio/elderly-assistant/request-cancelled.mp3',
+        unknown_intent: '/audio/elderly-assistant/unknown-intent.mp3',
         status_pending_acceptance: '/audio/elderly-assistant/status-pending-acceptance.mp3',
         status_accepted: '/audio/elderly-assistant/status-accepted.mp3',
         status_assigned: '/audio/elderly-assistant/status-assigned.mp3',
@@ -85,36 +86,66 @@ window.IhsanVoice = (() => {
     const chooseArabicVoice = () => {
         if (!('speechSynthesis' in window)) return null;
 
-        const arabicVoices = window.speechSynthesis.getVoices()
-            .filter((voice) => /^ar(?:-|_)/i.test(voice.lang)
-                || /arabic|العربية|hـ?amed|maged|naayf|tarik|zeina/i.test(voice.name))
+        const allVoices = window.speechSynthesis.getVoices() || [];
+        if (!allVoices.length) return null;
+
+        const arabicVoices = allVoices
+            .filter((voice) => {
+                const lang = (voice.lang || '').toLowerCase().replace('_', '-');
+                const name = (voice.name || '').toLowerCase();
+                return lang.startsWith('ar')
+                    || name.includes('arabic')
+                    || name.includes('العربية')
+                    || name.includes('hamed')
+                    || name.includes('حامد')
+                    || name.includes('maged')
+                    || name.includes('naayf')
+                    || name.includes('نايف')
+                    || name.includes('hoda')
+                    || name.includes('هدى')
+                    || name.includes('salma')
+                    || name.includes('سلمى')
+                    || name.includes('shakir')
+                    || name.includes('شاكر')
+                    || name.includes('tarik')
+                    || name.includes('zeina');
+            })
             .sort((first, second) => {
                 const score = (voice) => {
                     const name = voice.name.toLowerCase();
-                    const language = voice.lang.toLowerCase();
+                    const language = (voice.lang || '').toLowerCase().replace('_', '-');
                     let value = 0;
                     if (language === 'ar-sa') value += 100;
-                    else if (language.startsWith('ar-')) value += 80;
-                    if (/hamed|حامد/.test(name)) value += 60;
-                    if (/maged|naayf|tarik|zeina/.test(name)) value += 45;
-                    if (/microsoft|google/.test(name)) value += 25;
+                    else if (language.startsWith('ar')) value += 80;
+                    if (/natural|online|google/.test(name)) value += 50;
+                    if (/hamed|حامد|naayf|نايف|salma|سلمى|shakir|شاكر|hoda|هدى/.test(name)) value += 40;
                     if (voice.localService) value += 10;
                     return value;
                 };
                 return score(second) - score(first);
             });
 
-        cachedArabicVoice = arabicVoices[0] || null;
-        return cachedArabicVoice;
+        if (arabicVoices.length > 0) {
+            cachedArabicVoice = arabicVoices[0];
+            return cachedArabicVoice;
+        }
+
+        return null;
     };
 
     const waitForArabicVoice = () => new Promise((resolve) => {
         const available = chooseArabicVoice();
-        if (available || window.speechSynthesis.getVoices().length) return resolve(available);
+        if (available) return resolve(available);
 
-        const finish = () => resolve(chooseArabicVoice());
-        window.speechSynthesis.addEventListener('voiceschanged', finish, { once: true });
-        window.setTimeout(finish, 700);
+        let finished = false;
+        const complete = () => {
+            if (finished) return;
+            finished = true;
+            resolve(chooseArabicVoice());
+        };
+
+        window.speechSynthesis.addEventListener('voiceschanged', complete, { once: true });
+        window.setTimeout(complete, 1200);
     });
 
     if ('speechSynthesis' in window) {
@@ -129,8 +160,10 @@ window.IhsanVoice = (() => {
         const arabicVoice = cachedArabicVoice || await waitForArabicVoice();
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = arabicVoice?.lang || 'ar-SA';
-        utterance.voice = arabicVoice || null;
-        utterance.rate = 0.82;
+        if (arabicVoice) {
+            utterance.voice = arabicVoice;
+        }
+        utterance.rate = 0.85;
         utterance.pitch = 1;
         utterance.volume = 1;
 
