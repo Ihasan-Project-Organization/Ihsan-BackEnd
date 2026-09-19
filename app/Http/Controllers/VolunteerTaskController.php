@@ -27,7 +27,7 @@ class VolunteerTaskController extends Controller
         $providerProfileId = $setting?->id;
 
         // إحصائيات لوحة التحكم
-        $avgRating = $provider->receivedReviews()->avg('stars') ?? 4.8;
+        $avgRating = $provider->getEffectiveRating(4.8);
         $totalReviews = $provider->receivedReviews()->count();
         $completedCount = ServiceRequest::where('provider_id', $providerProfileId)
             ->where('status', ServiceRequest::STATUS_COMPLETED)
@@ -218,7 +218,7 @@ class VolunteerTaskController extends Controller
             ->where('status', ServiceRequest::STATUS_PROVIDER_APOLOGIZED)
             ->count();
 
-        $avgRating = $provider->receivedReviews()->avg('stars') ?? 5.0;
+        $avgRating = $provider->getEffectiveRating(5.0);
 
         $profile = $provider->serviceProviderProfile;
         $tier = (int) ($profile?->tier ?? 1);

@@ -268,8 +268,11 @@ class ServiceRequestController extends Controller
                     ->where('rater_role', 'elder')
                     ->avg('stars');
 
+                $penalty = $providerProfile->reliability_incidents_count * 0.1;
+                $effectiveRating = max(1.0, round(($avg ?? $stars) - $penalty, 1));
+
                 $providerProfile->update([
-                    'average_rating' => round($avg ?? $stars, 1),
+                    'average_rating' => $effectiveRating,
                 ]);
 
                 $providerProfile->updateTier();
