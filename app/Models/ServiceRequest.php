@@ -187,14 +187,6 @@ class ServiceRequest extends Model
     }
 
     /**
-     * تقييم مقدم الخدمة لكبير السن.
-     */
-    public function providerRating(): HasOne
-    {
-        return $this->hasOne(Rating::class, 'service_request_id')->where('rater_role', 'provider');
-    }
-
-    /**
      * نطاق الطلبات النشطة من منظور كبير السن.
      */
     public function scopeActive(Builder $query): Builder

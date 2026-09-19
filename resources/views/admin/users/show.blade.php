@@ -185,7 +185,7 @@
             <div style="padding:16px 20px; border-bottom:1px solid #f3f4f6; display:flex; justify-content:space-between; align-items:center;">
                 <div style="display:flex; align-items:center; gap:8px;">
                     <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i>
-                    <h3 style="margin:0; font-size:14px; font-weight:900; color:#1a1f36;">الشكاوى المسجلة ضد المستخدم ({{ $complaintsAgainst->count() }})</h3>
+                    <h3 style="margin:0; font-size:14px; font-weight:900; color:#1a1f36;">البلاغات المرتبطة بطلبات المستخدم ({{ $complaintsAgainst->count() }})</h3>
                 </div>
             </div>
             <div style="padding:8px 0;">

@@ -321,15 +321,15 @@ test('2.7 elder can report problem to transition request to under_review and ope
         ->and($complaint->description)->toContain('لم يتم إحضار الفاتورة');
 });
 
-test('2.8 provider can optionally rate elder with visible_to_provider = false', function () {
+test('2.8 provider can report an issue to the administration without rating the elder', function () {
     [$elderUser, $elderProfile] = createElderUser();
     [$providerUser, $providerProfile] = createProviderUser();
 
     $req = ServiceRequest::create([
-        'public_id' => '#REQ-RATE-ELDER',
+        'public_id' => '#REQ-PROVIDER-REPORT',
         'elder_id' => $elderProfile->id,
         'provider_id' => $providerProfile->id,
-        'title' => 'طلب مكتمل للتقييم',
+        'title' => 'طلب مكتمل للبلاغ',
         'service_type' => 'grocery',
         'description' => 'شرح',
         'location' => 'غزة',
@@ -338,24 +338,26 @@ test('2.8 provider can optionally rate elder with visible_to_provider = false', 
     ]);
 
     $response = $this->actingAs($providerUser)
-        ->post("/provider/tasks/{$req->id}/rate-elder", [
-            'stars' => 5,
-            'comment' => 'الحاج متعاون جداً والتعامل معه مريح ومحترم.',
+        ->post("/provider/tasks/{$req->id}/report-issue", [
+            'issue_type' => 'information',
+            'description' => 'العنوان المكتوب في الطلب لا يطابق موقع التنفيذ.',
         ]);
 
-    $response->assertSessionHas('status', 'elder-rated');
+    $response->assertSessionHas('status', 'provider-issue-reported');
 
-    $rating = Rating::where('service_request_id', $req->id)
+    expect(Complaint::where('request_id', $req->id)
+        ->where('reporter_id', $providerUser->id)
+        ->where('status', 'open')
+        ->where('description', 'like', '%معلومات الطلب غير مطابقة%')
+        ->exists())->toBeTrue();
+
+    expect(Rating::where('service_request_id', $req->id)
         ->where('rater_role', 'provider')
-        ->first();
-
-    expect($rating)->not->toBeNull()
-        ->and($rating->stars)->toBe(5)
-        ->and($rating->visible_to_provider)->toBeFalse()
-        ->and($rating->elderly_id)->toBe($elderUser->id);
+        ->exists())->toBeFalse()
+        ->and($req->fresh()->status)->toBe(ServiceRequest::STATUS_COMPLETED);
 });
 
-test('2.9 elder can confirm completion and rate provider even when provider has already rated elder (both ratings coexist on same request)', function () {
+test('2.9 elder can confirm completion and rate provider after a provider issue report', function () {
     [$elderUser, $elderProfile] = createElderUser();
     [$providerUser, $providerProfile] = createProviderUser();
 
@@ -371,15 +373,11 @@ test('2.9 elder can confirm completion and rate provider even when provider has 
         'status' => ServiceRequest::STATUS_PENDING_CONFIRMATION,
     ]);
 
-    // Provider rates elder first
-    Rating::create([
-        'service_request_id' => $req->id,
-        'elderly_id' => $elderUser->id,
-        'provider_id' => $providerUser->id,
-        'rater_role' => 'provider',
-        'stars' => 4,
-        'comment' => 'متعاون جدا',
-        'visible_to_provider' => false,
+    Complaint::create([
+        'request_id' => $req->id,
+        'reporter_id' => $providerUser->id,
+        'description' => 'بلاغ مقدم الخدمة — تعذر التواصل.',
+        'status' => 'open',
     ]);
 
     // Elder now confirms completion and rates provider
@@ -395,25 +393,19 @@ test('2.9 elder can confirm completion and rate provider even when provider has 
     $req->refresh();
     expect($req->status)->toBe(ServiceRequest::STATUS_COMPLETED);
 
-    // Both ratings should coexist on the same service request
+    // Only the elder rates the provider; a provider issue report is not a rating.
     $ratings = Rating::where('service_request_id', $req->id)->get();
-    expect($ratings)->toHaveCount(2);
+    expect($ratings)->toHaveCount(1);
 
     $elderRating = $ratings->firstWhere('rater_role', 'elder');
-    $providerRating = $ratings->firstWhere('rater_role', 'provider');
 
     expect($elderRating)->not->toBeNull()
         ->and($elderRating->stars)->toBe(5)
         ->and($elderRating->visible_to_provider)->toBeTrue();
 
-    expect($providerRating)->not->toBeNull()
-        ->and($providerRating->stars)->toBe(4)
-        ->and($providerRating->visible_to_provider)->toBeFalse();
-
     // Verify model relationships
     expect($req->review->id)->toBe($elderRating->id);
     expect($req->elderRating->id)->toBe($elderRating->id);
-    expect($req->providerRating->id)->toBe($providerRating->id);
 });
 
 test('2.6 real HTTP accept workflow atomically assigns request, hides cancel button from elder, and reveals contact phone', function () {
@@ -541,5 +533,3 @@ test('2.8 accept() strictly enforces gender preference matching and rejects mism
     $matchAttempt->assertRedirect(route('provider.tasks', ['tab' => 'upcoming']));
     expect($femaleReq->fresh()->status)->toBe(ServiceRequest::STATUS_ASSIGNED);
 });
-
-

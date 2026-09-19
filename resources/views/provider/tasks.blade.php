@@ -25,7 +25,8 @@
                     'service-finished' => 'تم إرسال ملخص التنفيذ إلى كبير السن وبانتظار تأكيده.',
                     'delay-reported' => 'تم تسجيل إشعار التأخير بنجاح.',
                     'apology-completed' => 'تم تسجيل اعتذارك وفصل الإسناد بنجاح.',
-                    'elder-rated' => 'تم حفظ تقييمك للمستفيد لدى الإدارة بنجاح.',
+                    'provider-issue-reported' => 'تم إرسال البلاغ للإدارة للمراجعة. لا يؤثر البلاغ على تقييم أو حساب المستفيد.',
+                    'provider-issue-already-reported' => 'تم إرسال بلاغ سابق للإدارة بشأن هذا الطلب.',
                     default => 'تم تنفيذ الإجراء بنجاح.'
                 } }}</span>
                 <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer">✕</button>
@@ -217,17 +218,16 @@
                                     </a>
                                 @endif
 
-                                {{-- تقييم اختياري لكبير السن بعد إنهاء الخدمة --}}
-                                @if (in_array($req->status, [\App\Models\ServiceRequest::STATUS_COMPLETED, \App\Models\ServiceRequest::STATUS_PENDING_CONFIRMATION], true))
-                                    @php($providerReview = $req->ratings()->where('rater_role', 'provider')->first())
-                                    @if ($providerReview)
-                                        <span class="rounded-2xl bg-amber-50 border border-amber-200 px-3 py-2 text-xs font-bold text-amber-800">
-                                            ⭐ تقييمك للمستفيد: {{ $providerReview->stars }} / 5
+                                {{-- بلاغ للإدارة فقط؛ لا يمكن لمقدم الخدمة تقييم المستفيد. --}}
+                                @if (in_array($req->status, [\App\Models\ServiceRequest::STATUS_ACCEPTED, \App\Models\ServiceRequest::STATUS_ASSIGNED, \App\Models\ServiceRequest::STATUS_IN_PROGRESS, \App\Models\ServiceRequest::STATUS_PROVIDER_DELAYED, \App\Models\ServiceRequest::STATUS_PENDING_CONFIRMATION, \App\Models\ServiceRequest::STATUS_COMPLETED], true))
+                                    @if ($req->complaints->isNotEmpty())
+                                        <span class="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-600">
+                                            ✓ تم إرسال بلاغ للإدارة
                                         </span>
                                     @else
-                                        <button type="button" onclick="openRateElderModal('{{ route('provider.tasks.rate-elder', $req) }}')"
-                                            class="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-xs font-bold text-amber-800 hover:bg-amber-100 transition cursor-pointer">
-                                            ⭐ تقييم المستفيد (للإدارة)
+                                        <button type="button" onclick="openReportIssueModal('{{ route('provider.tasks.report-issue', $req) }}')"
+                                            class="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-xs font-bold text-rose-700 hover:bg-rose-100 transition cursor-pointer">
+                                            ⚑ إبلاغ عن مشكلة للإدارة
                                         </button>
                                     @endif
                                 @endif

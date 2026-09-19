@@ -46,6 +46,7 @@ Route::middleware(['auth', 'verified', 'role:elder'])->group(function () {
         ->middleware('throttle:10,1')
         ->name('assistant.appointments.parse');
 
+
     Route::get('/requests', [ServiceRequestController::class, 'index'])->name('service-requests.index');
     Route::post('/requests', [ServiceRequestController::class, 'store'])->name('service-requests.store');
     Route::patch('/requests/{serviceRequest}/reschedule', [ServiceRequestController::class, 'reschedule'])->name('service-requests.reschedule');
@@ -75,7 +76,7 @@ Route::prefix('provider')->name('provider.')->middleware(['auth', 'verified', 'r
     Route::post('/tasks/{serviceRequest}/finish-service', [VolunteerTaskController::class, 'finishService'])->name('tasks.finish-service');
     Route::post('/tasks/{serviceRequest}/report-delay', [VolunteerTaskController::class, 'reportDelay'])->name('tasks.report-delay');
     Route::post('/tasks/{serviceRequest}/apologize', [VolunteerTaskController::class, 'apologize'])->name('tasks.apologize');
-    Route::post('/tasks/{serviceRequest}/rate-elder', [VolunteerTaskController::class, 'rateElder'])->name('tasks.rate-elder');
+    Route::post('/tasks/{serviceRequest}/report-issue', [VolunteerTaskController::class, 'reportIssue'])->name('tasks.report-issue');
 });
 
 // توافقية مسارات volunteer.tasks القديمة

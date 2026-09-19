@@ -327,18 +327,18 @@ class E2EComprehensiveAuditTest extends TestCase
             'rater_role' => 'elder',
         ]);
 
-        // 8. Provider can also rate elder
-        $rateElderRes = $this->actingAs($this->providerUser1)->post("/provider/tasks/{$req->id}/rate-elder", [
-            'rating' => 5,
-            'comment' => 'كبير سن محترم ولطيف في التعامل',
+        // 8. Provider can report an issue to the administration, but cannot rate the elder.
+        $reportIssueRes = $this->actingAs($this->providerUser1)->post("/provider/tasks/{$req->id}/report-issue", [
+            'issue_type' => 'information',
+            'description' => 'معلومة تحتاج مراجعة من الإدارة.',
         ]);
-        $rateElderRes->assertRedirect();
-        $this->assertDatabaseHas('ratings', [
-            'service_request_id' => $req->id,
-            'stars' => 5,
-            'rater_role' => 'provider',
-            'visible_to_provider' => false,
+        $reportIssueRes->assertRedirect();
+        $this->assertDatabaseHas('complaints', [
+            'request_id' => $req->id,
+            'reporter_id' => $this->providerUser1->id,
+            'status' => 'open',
         ]);
+        $this->assertDatabaseMissing('ratings', ['service_request_id' => $req->id, 'rater_role' => 'provider']);
     }
 
     /** 8. Test Apology Workflow & Strict Reassignment Isolation */

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Complaint;
 use App\Models\Notification;
-use App\Models\Rating;
 use App\Models\ServiceProviderProfile;
 use App\Models\ServiceRequest;
 use App\Models\User;
@@ -145,7 +145,10 @@ class VolunteerTaskController extends Controller
         $providerProfileId = $provider->serviceProviderProfile?->id;
 
         $baseQuery = ServiceRequest::where('provider_id', $providerProfileId)
-            ->with(['review']);
+            ->with([
+                'review',
+                'complaints' => fn ($query) => $query->where('reporter_id', $provider->id),
+            ]);
 
         $counts = [
             'all' => (clone $baseQuery)->count(),
@@ -496,42 +499,63 @@ class VolunteerTaskController extends Controller
     }
 
     /**
-     * تقييم اختياري لكبير السن من قبل مقدم الخدمة.
+     * بلاغ خاص بالإدارة من مقدم الخدمة. لا يشكل تقييماً للمستفيد ولا يؤثر في حسابه.
      */
-    public function rateElder(Request $request, ServiceRequest $serviceRequest): RedirectResponse
+    public function reportIssue(Request $request, ServiceRequest $serviceRequest): RedirectResponse
     {
-        $providerProfileId = $request->user()->serviceProviderProfile?->id;
-        if (! $providerProfileId) {
-            abort(403, 'غير مصرح.');
-        }
+        $this->authorizeProvider($request, $serviceRequest);
 
-        if (! in_array($serviceRequest->status, [ServiceRequest::STATUS_COMPLETED, ServiceRequest::STATUS_PENDING_CONFIRMATION], true)) {
-            return back()->withErrors(['rate' => 'يمكن التقييم فقط للطلبات المنجزة أو بانتظار التأكيد.']);
+        if (! in_array($serviceRequest->status, [
+            ServiceRequest::STATUS_ACCEPTED,
+            ServiceRequest::STATUS_ASSIGNED,
+            ServiceRequest::STATUS_IN_PROGRESS,
+            ServiceRequest::STATUS_PROVIDER_DELAYED,
+            ServiceRequest::STATUS_PENDING_CONFIRMATION,
+            ServiceRequest::STATUS_COMPLETED,
+        ], true)) {
+            return back()->withErrors(['issue_type' => 'لا يمكن إرسال بلاغ لهذا الطلب في حالته الحالية.']);
         }
 
         $validated = $request->validate([
-            'stars' => ['nullable', 'integer', 'between:1,5'],
-            'rating' => ['nullable', 'integer', 'between:1,5'],
-            'comment' => ['nullable', 'string', 'max:1000'],
+            'issue_type' => ['required', 'in:contact,safety,conduct,information,other'],
+            'description' => ['nullable', 'string', 'max:2000', 'required_if:issue_type,other'],
         ]);
 
-        $stars = (int) ($validated['stars'] ?? $validated['rating'] ?? 5);
+        $issueLabels = [
+            'contact' => 'تعذر التواصل',
+            'safety' => 'ملاحظة تتعلق بالسلامة',
+            'conduct' => 'مشكلة في التعامل',
+            'information' => 'معلومات الطلب غير مطابقة',
+            'other' => 'ملاحظة أخرى',
+        ];
+        $details = trim((string) ($validated['description'] ?? ''));
+        $description = 'بلاغ مقدم الخدمة — ' . $issueLabels[$validated['issue_type']]
+            . ($details !== '' ? ": {$details}" : '.');
 
-        Rating::updateOrCreate(
+        $complaint = Complaint::firstOrCreate(
             [
-                'service_request_id' => $serviceRequest->id,
-                'rater_role' => 'provider',
+                'request_id' => $serviceRequest->id,
+                'reporter_id' => $request->user()->id,
             ],
             [
-                'elderly_id' => $serviceRequest->elderProfile?->user_id ?? $serviceRequest->elder_id,
-                'provider_id' => $request->user()->id,
-                'stars' => $stars,
-                'comment' => $validated['comment'] ?? null,
-                'visible_to_provider' => false, // لا يظهر لأي مقدم خدمة آخر، فقط للإدارة
+                'description' => $description,
+                'status' => 'open',
             ]
         );
 
-        return back()->with('status', 'elder-rated');
+        if (! $complaint->wasRecentlyCreated) {
+            return back()->with('status', 'provider-issue-already-reported');
+        }
+
+        User::whereHas('admin')->pluck('id')->each(function ($adminId) use ($serviceRequest, $issueLabels, $validated): void {
+            Notification::create([
+                'user_id' => $adminId,
+                'type' => 'provider_issue_reported',
+                'message' => "ورد بلاغ من مقدم الخدمة بشأن الطلب {$serviceRequest->public_id}: {$issueLabels[$validated['issue_type']]}.",
+            ]);
+        });
+
+        return back()->with('status', 'provider-issue-reported');
     }
 
     /**
