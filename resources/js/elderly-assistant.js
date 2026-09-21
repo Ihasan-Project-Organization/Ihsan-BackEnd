@@ -65,6 +65,7 @@ window.elderlyAssistant = (profileCity = '') => ({
     listening: false,
     errorMessage: '',
     appointmentTranscript: '',
+    understandingAppointment: false,
     profileCity,
     prepared: null,
     messages: [],
