@@ -23,7 +23,7 @@
     </div>
 </div>
 
-<div style="display:grid; grid-template-columns: 1fr 340px; gap:24px; align-items:start;">
+<div class="admin-detail-grid admin-detail-grid-sidebar-right">
 
     {{-- تفاصيل الشكوى والطلب المرتبط --}}
     <div style="display:flex; flex-direction:column; gap:20px;">

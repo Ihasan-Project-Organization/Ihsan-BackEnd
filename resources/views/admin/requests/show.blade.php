@@ -24,7 +24,7 @@
     $sc = $statusConfig[$serviceRequest->status] ?? ['bg'=>'#f3f4f6','color'=>'#6b7280','label'=>$serviceRequest->status];
 @endphp
 
-<div style="display:grid; grid-template-columns: 1fr 340px; gap:24px; align-items:start;">
+<div class="admin-detail-grid admin-detail-grid-sidebar-right">
 
     {{-- العمود الأيمن: تفاصيل الطلب والخط الزمني --}}
     <div style="display:flex; flex-direction:column; gap:20px;">

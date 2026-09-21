@@ -34,7 +34,7 @@
 </div>
 @endif
 
-<div style="display:grid; grid-template-columns: 340px 1fr; gap:24px; align-items:start;">
+<div class="admin-detail-grid admin-detail-grid-sidebar-left">
 
     {{-- العمود الأيمن: بيانات التسجيل والحساب --}}
     <div style="display:flex; flex-direction:column; gap:20px;">

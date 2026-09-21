@@ -290,6 +290,25 @@
             box-sizing: border-box;
         }
 
+        .admin-detail-grid {
+            display: grid;
+            gap: 24px;
+            align-items: start;
+        }
+        .admin-detail-grid-sidebar-right {
+            grid-template-columns: 1fr 340px;
+        }
+        .admin-detail-grid-sidebar-left {
+            grid-template-columns: 340px 1fr;
+        }
+
+        @media (max-width: 900px) {
+            .admin-detail-grid-sidebar-right,
+            .admin-detail-grid-sidebar-left {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
         @media (max-width: 1024px) {
             .sidebar { transform: translateX(100%); }
             .sidebar.mobile-open { transform: translateX(0); }
