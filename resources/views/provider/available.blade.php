@@ -1,8 +1,8 @@
 <x-provider-layout>
-    <div class="space-y-6">
+    <div class="provider-page provider-available-page space-y-6">
 
         {{-- رأس الصفحة --}}
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="provider-page-toolbar flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h1 class="text-2xl font-black text-[#31421e] sm:text-3xl">الطلبات المتاحة</h1>
                 <p class="mt-1 text-xs text-slate-500 sm:text-sm">طلبات مساعدة منشورة من المستفيدين وبانتظار مقدم خدمة مناسب.</p>
@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <section class='grid gap-3 sm:grid-cols-3' aria-label='خطوات قبول طلب المساعدة'>
+        <section class='provider-onboarding grid gap-3 sm:grid-cols-3' aria-label='خطوات قبول طلب المساعدة'>
             <div class='rounded-2xl border border-[#dfe6d5] bg-[#f8faf6] p-4'>
                 <span class='flex h-8 w-8 items-center justify-center rounded-xl bg-[#31421e] text-xs font-black text-white'>1</span>
                 <h2 class='mt-3 text-sm font-black text-[#31421e]'>اختر الطلب المناسب</h2>
@@ -54,7 +54,7 @@
         @endif
 
         {{-- شريط الفلاتر والبحث --}}
-        <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
+        <div class="provider-filter-bar rounded-3xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
             <form method="GET" action="{{ route('provider.available') }}" class="grid gap-3 md:grid-cols-[1.5fr_1fr_1fr_auto]">
                 {{-- حقل البحث --}}
                 <div class="relative">
@@ -98,9 +98,9 @@
 
         {{-- شبكة بطاقات الطلبات المتاحة --}}
         @if ($requests->count() > 0)
-            <div class="grid gap-6 md:grid-cols-2">
+            <div class="provider-request-grid grid gap-6 md:grid-cols-2">
                 @foreach ($requests as $req)
-                    <div class="flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:border-[#718256] hover:shadow-md transition">
+                    <div class="provider-request-card flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:border-[#718256] hover:shadow-md transition">
                         <div>
                             {{-- رأس البطاقة: نوع الخدمة والعنوان ورقم الطلب --}}
                             <div class="flex items-start justify-between gap-3 border-b border-slate-100 pb-4">
@@ -132,7 +132,7 @@
                             </div>
 
                             {{-- تنبيه الخصوصية المعتمد --}}
-                            <div class="mt-4 rounded-2xl bg-amber-50/80 p-3 border border-amber-200/60 flex items-center gap-2 text-[11px] text-amber-800">
+                            <div class="provider-privacy-note mt-4 rounded-2xl bg-amber-50/80 p-3 border border-amber-200/60 flex items-center gap-2 text-[11px] text-amber-800">
                                 <span class="text-sm"><i class="fa-solid fa-lock" aria-hidden="true"></i></span>
                                 <span>يظهر العنوان الدقيق وبيانات التواصل المباشر بعد قبول الطلب.</span>
                             </div>

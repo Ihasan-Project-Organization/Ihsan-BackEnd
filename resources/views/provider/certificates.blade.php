@@ -1,8 +1,8 @@
 <x-provider-layout>
-    <div class="space-y-8">
+    <div class="provider-page provider-certificates-page space-y-8">
 
         {{-- رأس الصفحة --}}
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="provider-page-toolbar flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h1 class="text-2xl font-black text-[#31421e] sm:text-3xl">شهادات التطوع الرقمية</h1>
                 <p class="mt-1 text-xs text-slate-500 sm:text-sm">توثيق رسمي ومعتمد لساعاتك وجهودك في تقديم خدمات المساعدة المجتمعية للمستفيدين.</p>
@@ -35,7 +35,7 @@
         @endif
 
         {{-- بطاقة الملخص وطلب إصدار شهادة جديدة --}}
-        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-l from-[#243516] via-[#31421e] to-[#455a2c] p-6 text-white shadow-xl sm:p-8">
+        <div class="provider-certificates-summary relative overflow-hidden rounded-3xl bg-gradient-to-l from-[#243516] via-[#31421e] to-[#455a2c] p-6 text-white shadow-xl sm:p-8">
             <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                     <span class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-[#dfe6d5] border border-white/10">
@@ -101,7 +101,7 @@
             </div>
 
             @if ($certificates->count() > 0)
-                <div class="grid gap-6 md:grid-cols-2">
+                <div class="provider-certificate-grid grid gap-6 md:grid-cols-2">
                     @foreach ($certificates as $cert)
                         <div class="relative overflow-hidden rounded-3xl border-2 border-[#dfe6d5] bg-[#fbfaf6] p-6 sm:p-8 shadow-md flex flex-col justify-between space-y-6">
                             {{-- إطار زخرفي ناعم للشهادة --}}
@@ -161,7 +161,7 @@
                     <div class="pt-2">
                         <a href="{{ route('provider.available') }}" class="inline-flex items-center gap-2 rounded-2xl bg-[#31421e] px-6 py-3 text-xs font-bold text-white shadow-sm hover:bg-[#52643a] transition">
                             <span>استعراض الفرص التطوعية المتاحة</span>
-                            <span>←</span>
+                            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
                         </a>
                     </div>
                 </div>

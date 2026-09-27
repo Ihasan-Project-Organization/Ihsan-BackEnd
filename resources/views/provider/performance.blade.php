@@ -1,14 +1,14 @@
 <x-provider-layout>
-    <div class="space-y-8">
+    <div class="provider-page provider-performance-page space-y-8">
 
         {{-- رأس الصفحة --}}
-        <div>
+        <div class="provider-page-intro">
             <h1 class="text-2xl font-black text-[#31421e] sm:text-3xl">الأداء والتقييم</h1>
             <p class="mt-1 text-xs text-slate-500 sm:text-sm">مستوى التميز والتقييمات الموثقة من المستفيدين وفق نظام المستويات المعتمد.</p>
         </div>
 
         {{-- بطاقة المستوى Tier الرئيسية المعتمدة --}}
-        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-l from-[#243516] via-[#31421e] to-[#4a5f31] p-6 text-white shadow-xl sm:p-8">
+        <div class="provider-performance-summary relative overflow-hidden rounded-3xl bg-gradient-to-l from-[#243516] via-[#31421e] to-[#4a5f31] p-6 text-white shadow-xl sm:p-8">
             <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                     <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-bold text-[#dfe6d5] border border-white/15 backdrop-blur-sm">
@@ -73,7 +73,7 @@
         </div>
 
         {{-- إحصائيات الأداء الثلاث --}}
-        <div class="grid gap-6 sm:grid-cols-3">
+        <div class="provider-performance-stats grid gap-6 sm:grid-cols-3">
             {{-- متوسط تقييم النجوم --}}
             <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col justify-between">
                 <div>
@@ -91,7 +91,7 @@
                     </div>
                 </div>
                 <div class="mt-5 rounded-2xl bg-[#f8faf6] p-3 border border-[#dfe6d5] text-[11px] text-slate-600">
-                    ⭐ تقييم إجباري بسيط (1 إلى 5 نجوم) يضعه المستفيدون عند تأكيد إتمام الخدمة.
+                    <i class="fa-solid fa-star" aria-hidden="true"></i> تقييم بسيط من نجمة إلى خمس نجوم يضعه المستفيد بعد تأكيد إتمام الخدمة.
                 </div>
             </div>
 
@@ -144,7 +144,7 @@
             </div>
 
             @if ($reviews->count() > 0)
-                <div class="space-y-3">
+                <div class="provider-review-list grid gap-3 lg:grid-cols-2">
                     @foreach ($reviews as $rev)
                         <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                             <div>
@@ -172,7 +172,7 @@
                 </div>
             @else
                 <div class="rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm space-y-2">
-                    <span class="text-4xl">⭐</span>
+                    <span class="text-4xl text-amber-400"><i class="fa-solid fa-star" aria-hidden="true"></i></span>
                     <h3 class="text-sm font-bold text-slate-700">لا توجد تقييمات مكتوبة حتى الآن</h3>
                     <p class="text-xs text-slate-400 max-w-sm mx-auto">ستظهر هنا التقييمات والرسائل فور تأكيد المستفيدين للمهام المنفذة.</p>
                 </div>

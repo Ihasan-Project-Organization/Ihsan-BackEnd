@@ -45,7 +45,7 @@
         <div class="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:p-8 animate-fadeIn">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div class="flex items-center gap-3">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-800 text-lg">⏳</div>
+                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-800 text-lg"><i class="fa-regular fa-clock" aria-hidden="true"></i></div>
                     <div>
                         <h3 class="text-lg font-black text-slate-800">الإبلاغ عن تأخير متوقع</h3>
                         <p class="text-xs text-slate-500">إشعار طالب المساعدة بالموعد الجديد المتوقع للوصول</p>

@@ -14,9 +14,32 @@
         .provider-dashboard-hero .provider-hero-side .text-slate-200{color:#e5eadf!important}
         .provider-dashboard-hero .provider-hero-side .text-\[\#dfe6d5\]{color:#dfe6d5!important}
         .provider-dashboard-hero>div.absolute{display:none!important}
+        .provider-dashboard .provider-dashboard-hero{padding:1.15rem 1.25rem;border-radius:1.1rem;box-shadow:0 8px 22px rgba(42,63,26,.07)}
+        .provider-dashboard-hero .provider-hero-copy>div:first-child{display:none}
+        .provider-dashboard-hero .provider-hero-copy{width:100%;max-width:none}
+        .provider-dashboard-hero .provider-hero-side{display:none}
+        .provider-dashboard-hero>div.relative{gap:1rem}
+        .provider-dashboard-hero .provider-hero-copy{max-width:46rem;padding-inline-start:.25rem}
+        .provider-dashboard-hero .provider-hero-title{margin-top:.7rem;font-size:clamp(1.55rem,2.2vw,2rem);line-height:1.2}
+        .provider-dashboard-hero .provider-hero-description{margin-top:.35rem;max-width:44rem;font-size:.72rem;line-height:1.7}
+        .provider-dashboard-hero .provider-hero-copy>div:first-child>span,
+        .provider-dashboard-hero .provider-hero-copy>div:first-child form button{padding:.3rem .65rem;font-size:.62rem}
+        .provider-dashboard-hero .provider-hero-copy .mt-6{display:none}
+        .provider-dashboard-hero .provider-hero-copy .mt-6 a{padding:.55rem .85rem;border-radius:.7rem;font-size:.68rem;box-shadow:none!important}
+        .provider-dashboard-hero .provider-hero-side{max-width:22rem;padding:.85rem!important;border-radius:.85rem!important;box-shadow:0 7px 18px rgba(42,63,26,.14)!important}
+        .provider-dashboard-hero .provider-hero-side h2{margin-top:.55rem;font-size:.82rem}
+        .provider-dashboard-hero .provider-hero-side p{font-size:.66rem;line-height:1.6}
+        .provider-dashboard-hero .provider-hero-side .mt-4{margin-top:.65rem}
+        .provider-dashboard .dashboard-stats{gap:.65rem}
+        .provider-dashboard .dashboard-stat-card{min-height:106px;padding:.8rem;border-radius:1rem}
+        .provider-dashboard .dashboard-stat-card .h-10{width:2.1rem;height:2.1rem;border-radius:.7rem;font-size:.9rem}
+        .provider-dashboard .dashboard-stat-card p.text-3xl{margin-top:.45rem;font-size:1.55rem;line-height:1}
+        .provider-dashboard .dashboard-main-grid{gap:1rem}
+        .provider-dashboard .dashboard-section-title{font-size:1rem;line-height:1.4}
+        @media(min-width:1025px){.provider-dashboard .dashboard-main-grid{grid-template-columns:minmax(0,1.55fr) minmax(260px,.45fr)}}
         @media(max-width:640px){.provider-dashboard-hero{padding:1.25rem;border-radius:1.35rem}.provider-dashboard-hero .provider-hero-title{font-size:1.65rem}.provider-dashboard-hero .provider-hero-side{border-radius:1.15rem!important}}
     </style>
-    <div class="space-y-8">
+    <div class="provider-dashboard space-y-8">
 
         {{-- تنبيهات النظام --}}
         @if (session('status'))
@@ -83,7 +106,7 @@
 
                     <h1 class="provider-hero-title mt-4 font-black">مرحبًا، {{ $displayProviderName }}</h1>
                     <p class="provider-hero-description mt-2">
-                        أهلًا بك في منصة أنيس. مساهمتك تصنع فرقًا حقيقيًا في حياة طالبي المساعدة من مبتوري الأطراف وذوي الإعاقة وكبار السن، وتعزز قيم التكافل والمروءة.
+                        من هنا تتابع مهامك وتصل إلى طلبات المساعدة المناسبة بسرعة ووضوح.
                     </p>
 
                     <div class="mt-6 flex flex-wrap items-center gap-3">
@@ -103,7 +126,7 @@
                     <div class="provider-hero-side rounded-3xl p-5 sm:p-6 max-w-md w-full">
                         <div class="flex items-center justify-between gap-4">
                             <span class="rounded-xl bg-amber-400/20 px-3 py-1 text-xs font-black text-amber-300 border border-amber-300/20">
-                                ⏳ الموعد {{ $nextTask->scheduled_at->diffForHumans() }}
+                                <i class="fa-regular fa-clock" aria-hidden="true"></i> الموعد {{ $nextTask->scheduled_at->diffForHumans() }}
                             </span>
                             <span class="text-xs font-bold text-slate-200 dir-ltr font-mono">{{ $nextTask->scheduled_at->translatedFormat('h:i A') }}</span>
                         </div>
@@ -115,7 +138,7 @@
                             <a href="{{ route('provider.tasks', ['tab' => 'upcoming']) }}"
                                 class="inline-flex items-center gap-1.5 rounded-xl bg-white px-4 py-2 text-xs font-bold text-[#31421e] hover:bg-[#eef2e8] transition shadow">
                                 <span>عرض وإدارة المهمة</span>
-                                <span>←</span>
+                                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
                             </a>
                         </div>
                     </div>
@@ -150,9 +173,9 @@
         </section>
 
         {{-- 2. بطاقات الإحصائيات الأربعة بتصميم حديث --}}
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="dashboard-stats grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {{-- طلبات متاحة --}}
-            <a href="{{ route('provider.available') }}" class="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm hover:border-[#718256] hover:shadow-md transition block">
+            <a href="{{ route('provider.available') }}" class="dashboard-stat-card group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm hover:border-[#718256] hover:shadow-md transition block">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-slate-400">فرص متاحة الآن</span>
                     <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 text-lg group-hover:scale-110 transition"><i class="fa-regular fa-eye" aria-hidden="true"></i></span>
@@ -162,7 +185,7 @@
             </a>
 
             {{-- طلبات هذا الأسبوع --}}
-            <a href="{{ route('provider.tasks', ['tab' => 'all']) }}" class="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm hover:border-blue-400 hover:shadow-md transition block">
+            <a href="{{ route('provider.tasks', ['tab' => 'all']) }}" class="dashboard-stat-card group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm hover:border-blue-400 hover:shadow-md transition block">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-slate-400">مهام هذا الأسبوع</span>
                     <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-700 text-lg group-hover:scale-110 transition"><i class="fa-regular fa-calendar" aria-hidden="true"></i></span>
@@ -172,7 +195,7 @@
             </a>
 
             {{-- خدمات مكتملة --}}
-            <a href="{{ route('provider.tasks', ['tab' => 'completed']) }}" class="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm hover:border-emerald-400 hover:shadow-md transition block">
+            <a href="{{ route('provider.tasks', ['tab' => 'completed']) }}" class="dashboard-stat-card group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm hover:border-emerald-400 hover:shadow-md transition block">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-slate-400">إجمالي الخدمات المكتملة</span>
                     <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 text-lg group-hover:scale-110 transition"><i class="fa-solid fa-check" aria-hidden="true"></i></span>
@@ -182,10 +205,10 @@
             </a>
 
             {{-- التقييم والمستوى --}}
-            <a href="{{ route('provider.performance') }}" class="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm hover:border-amber-400 hover:shadow-md transition block">
+            <a href="{{ route('provider.performance') }}" class="dashboard-stat-card group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm hover:border-amber-400 hover:shadow-md transition block">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-slate-400">التقييم والمستوى</span>
-                    <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 text-lg group-hover:scale-110 transition">⭐</span>
+                    <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 text-lg group-hover:scale-110 transition"><i class="fa-solid fa-star" aria-hidden="true"></i></span>
                 </div>
                 <div class="mt-3 flex items-baseline gap-2">
                     <span class="text-3xl font-black text-amber-500">{{ number_format($avgRating, 1) }}</span>
@@ -196,7 +219,7 @@
         </div>
 
         {{-- 3. القسم الرئيسي: تفاصيل الطلب القادم + لوحة النشاط والوصول السريع --}}
-        <div class="grid gap-8 lg:grid-cols-[1.4fr_.6fr]">
+        <div class="dashboard-main-grid grid gap-8 lg:grid-cols-[1.4fr_.6fr]">
 
             {{-- تفاصيل المهمة القادمة أو المجدولة الأقرب --}}
             <div class="space-y-6">
@@ -206,7 +229,7 @@
                         <p class="text-xs text-slate-500">تفاصيل الطلب الأقرب في جدولك وإجراءات التنفيذ</p>
                     </div>
                     <a href="{{ route('provider.tasks') }}" class="text-xs font-bold text-[#52643a] hover:underline">
-                        عرض جميع طلباتي ←
+                        عرض جميع طلباتي <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
                     </a>
                 </div>
 
@@ -278,7 +301,7 @@
 
                                 <button type="button" onclick="openReportDelayModal('{{ route('provider.tasks.report-delay', $nextTask) }}')"
                                     class="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-xs font-bold text-amber-800 hover:bg-amber-100 transition cursor-pointer">
-                                    ⏳ توقع تأخير
+                                    <i class="fa-regular fa-clock" aria-hidden="true"></i> توقع تأخير
                                 </button>
                             @elseif ($nextTask->status === \App\Models\ServiceRequest::STATUS_IN_PROGRESS)
                                 <button type="button" onclick="openFinishServiceModal('{{ route('provider.tasks.finish-service', $nextTask) }}')"
@@ -310,7 +333,7 @@
                         <a href="{{ route('provider.available') }}"
                             class="mt-5 inline-flex items-center gap-2 rounded-2xl bg-[#31421e] px-6 py-3 text-xs font-bold text-white shadow-sm hover:bg-[#52643a] transition">
                             <span>استعراض الطلبات المتاحة</span>
-                            <span>←</span>
+                            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
                         </a>
                     </div>
                 @endif
@@ -345,7 +368,7 @@
                                 <span><i class="fa-solid fa-certificate" aria-hidden="true"></i></span>
                                 <span>شهادات التطوع المعتمدة</span>
                             </span>
-                            <span>←</span>
+                            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
                         </a>
 
                         <a href="{{ route('provider.availability') }}"
@@ -354,7 +377,7 @@
                                 <span><i class="fa-solid fa-gears" aria-hidden="true"></i></span>
                                 <span>إعدادات التوفر والتشغيل</span>
                             </span>
-                            <span>←</span>
+                            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
                         </a>
                     </div>
                 </div>

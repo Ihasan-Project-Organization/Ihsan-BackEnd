@@ -1,8 +1,8 @@
 <x-provider-layout>
-    <div class="space-y-6">
+    <div class="provider-page provider-tasks-page space-y-6">
 
         {{-- رأس الصفحة --}}
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="provider-page-toolbar flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h1 class="text-2xl font-black text-[#31421e] sm:text-3xl">طلباتي</h1>
                 <p class="mt-1 text-xs text-slate-500 sm:text-sm">إدارة المهام الموكلة إليك ومتابعة مراحل التنفيذ وإغلاق الخدمات.</p>
@@ -41,7 +41,7 @@
         @endif
 
         {{-- شريط التبويبات الرئيسي --}}
-        <div class="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
+        <div class="provider-task-tabs flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
             <a href="{{ route('provider.tasks', ['tab' => 'all', 'search' => $search]) }}"
                 class="rounded-2xl px-4 py-2 text-xs font-bold transition {{ $tab === 'all' ? 'bg-[#31421e] text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200' }}">
                 الكل ({{ $counts['all'] }})
@@ -66,9 +66,9 @@
 
         {{-- قائمة الطلبات --}}
         @if ($requests->count() > 0)
-            <div class="space-y-6">
+            <div class="provider-task-list space-y-6">
                 @foreach ($requests as $req)
-                    <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:border-slate-300 transition space-y-6">
+                    <div class="provider-task-card rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:border-slate-300 transition space-y-6">
 
                         {{-- رأس البطاقة: نوع الخدمة والمعرف والحالة --}}
                         <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-100 pb-5">
@@ -96,7 +96,7 @@
 
                         {{-- المخطط المرحلي المتسلسل الدقيق (الستيبر: 5 مراحل معتمدة) --}}
                         @php($step = $req->step_index)
-                        <div class="hidden sm:block">
+                        <div class="provider-task-progress hidden sm:block">
                             <div class="relative flex items-center justify-between">
                                 <div class="absolute right-0 top-1/2 -z-0 h-1 w-full -translate-y-1/2 bg-slate-100 rounded-full"></div>
                                 <div class="absolute right-0 top-1/2 -z-0 h-1 -translate-y-1/2 bg-[#52643a] transition-all duration-500 rounded-full"
@@ -160,7 +160,7 @@
                         @if ($req->status === \App\Models\ServiceRequest::STATUS_PROVIDER_DELAYED)
                             <div class="rounded-2xl bg-amber-50 p-4 border border-amber-200 flex items-center justify-between">
                                 <div class="flex items-center gap-2 text-xs text-amber-900">
-                                    <span class="text-base">⏳</span>
+                                    <span class="text-base"><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
                                     <div>
                                         <span class="font-bold">تم إشعار طالب المساعدة بالتأخير.</span>
                                         <p class="text-[11px] text-amber-700 mt-0.5">يرجى المبادرة ببدء تقديم الخدمة فور وصولك.</p>
@@ -197,7 +197,7 @@
 
                                     <button type="button" onclick="openReportDelayModal('{{ route('provider.tasks.report-delay', $req) }}')"
                                         class="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-xs font-bold text-amber-800 hover:bg-amber-100 transition cursor-pointer">
-                                        ⏳ توقع تأخير
+                                        <i class="fa-regular fa-clock" aria-hidden="true"></i> توقع تأخير
                                     </button>
                                 @endif
 
@@ -259,7 +259,7 @@
                 <div class="pt-2">
                     <a href="{{ route('provider.available') }}" class="inline-flex items-center gap-2 rounded-2xl bg-[#31421e] px-6 py-3 text-xs font-bold text-white shadow-sm hover:bg-[#52643a] transition">
                         <span>استعراض الطلبات المتاحة</span>
-                        <span>←</span>
+                        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
                     </a>
                 </div>
             </div>
