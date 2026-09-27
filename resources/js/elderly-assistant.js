@@ -251,7 +251,8 @@ window.elderlyAssistant = (profileCity = '') => ({
         if (Number.isNaN(date.getTime())) return;
 
         for (const voiceKey of appointmentVoiceKeys(date)) {
-            await window.IhsanVoice?.playFixed(voiceKey, '');
+            const completed = await window.IhsanVoice?.playFixed(voiceKey, '');
+            if (completed === false) break;
         }
     },
 

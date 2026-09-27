@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إحسان - إنشاء حساب مقدم خدمة (متطوع)</title>
+  <title>أنيس - إنشاء حساب مقدم خدمة (متطوع)</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,15 +94,15 @@
     }
 
     .avatar-icon {
-      width: 44px;
-      height: 44px;
-      background-color: #d6ded0;
-      border-radius: 50%;
+      width: 76px;
+      height: 56px;
+      background-color: #fffdf9;
+      border-radius: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      color: #3b5228;
+      padding: 3px 7px;
+      box-shadow: 0 6px 18px rgba(49,66,30,.10);
       flex-shrink: 0;
     }
 
@@ -500,7 +500,7 @@
       <div class="header-center-content">
         <div class="top-action-row">
           <div class="avatar-icon">
-            <i class="fa-solid fa-hand-holding-heart"></i>
+            <img src="{{ asset('assets/img/anees-logo.png') }}" alt="شعار منصة أنيس" class="h-full w-full object-contain">
           </div>
           <a href="{{ route('login') }}" class="back-btn">
             الرجوع لتسجيل الدخول <i class="fa-solid fa-arrow-left"></i>
@@ -509,7 +509,7 @@
 
         <div class="title-block-text">
           <h2>إنشاء حساب مقدم خدمة (متطوع)</h2>
-          <p>انضم إلى منصة إحسان لتقديم الرعاية والعون لكبار السن واحتساب الأجر</p>
+          <p>انضم إلى منصة أنيس لتقديم المساندة لطالبي المساعدة وصنع أثر حقيقي</p>
         </div>
       </div>
     </div>
@@ -707,7 +707,7 @@
 
           <div class="terms-group">
             <input type="checkbox" id="terms" name="terms" required checked>
-            <label for="terms">أتعهد بصحة كافة البيانات والوثائق المرفقة، وأوافق على <a href="#" class="text-[#3b5228] font-bold underline">ميثاق التطوع والشروط والأحكام</a> لمنصة إحسان.</label>
+            <label for="terms">أتعهد بصحة كافة البيانات والوثائق المرفقة، وأوافق على <a href="#" class="text-[#3b5228] font-bold underline">ميثاق التطوع والشروط والأحكام</a> لمنصة أنيس.</label>
           </div>
 
           <div class="btn-container">

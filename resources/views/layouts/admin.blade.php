@@ -9,7 +9,7 @@
     <script>
         (function() {
             try {
-                var s = localStorage.getItem('ihsan_font_scale');
+                var s = localStorage.getItem('anees_font_scale');
                 if (s) { document.documentElement.style.fontSize = s + '%'; }
             } catch (e) {}
         })();
@@ -314,10 +314,9 @@
         <aside class="sidebar" :class="{ 'mobile-open': mobileSidebarOpen }">
             <div class="logo-section">
                 <div class="logo">
-                    <h2>إحسان</h2>
-                    <i class="fa-solid fa-shield-halved"></i>
+                    <img src="{{ asset('assets/img/anees-logo.png') }}" alt="شعار منصة أنيس" style="width:76px;height:58px;object-fit:contain;background:#fffdf9;border-radius:14px;padding:4px 7px">
                 </div>
-                <p class="logo-subtitle">منصة ربط كبار السن بمقدمي الخدمة</p>
+                <p class="logo-subtitle">منصة ربط طالبي المساعدة بمقدمي الخدمة</p>
                 <span class="role-pill {{ $isSuperAdmin ? 'super' : '' }}">
                     <i class="fa-solid {{ $isSuperAdmin ? 'fa-crown' : 'fa-user-shield' }}"></i>
                     {{ $isSuperAdmin ? 'مدير النظام الأعلى' : 'مدير النظام' }}

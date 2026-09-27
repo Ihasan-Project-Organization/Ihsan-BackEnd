@@ -4,7 +4,7 @@
         {{-- رأس الصفحة --}}
         <div>
             <h1 class="text-2xl font-black text-[#31421e] sm:text-3xl">الأداء والتقييم</h1>
-            <p class="mt-1 text-xs text-slate-500 sm:text-sm">مستوى التميز والتقييمات الموثقة من كبار السن وفق نظام المستويات المعتمد.</p>
+            <p class="mt-1 text-xs text-slate-500 sm:text-sm">مستوى التميز والتقييمات الموثقة من المستفيدين وفق نظام المستويات المعتمد.</p>
         </div>
 
         {{-- بطاقة المستوى Tier الرئيسية المعتمدة --}}
@@ -12,7 +12,7 @@
             <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                     <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-bold text-[#dfe6d5] border border-white/15 backdrop-blur-sm">
-                        <span>🏆 نظام المستويات المعتمد (Tier System)</span>
+                        <span><i class="fa-solid fa-trophy" aria-hidden="true"></i> نظام المستويات المعتمد (Tier System)</span>
                     </div>
 
                     <h2 class="mt-3 text-2xl sm:text-3xl font-black text-white">
@@ -22,9 +22,9 @@
                         @if ($tier === 1)
                             المستوى الأساسي المعتمد لمقدمي الخدمة الجدد. يتيح لك تصفح وتلقي كافة طلبات المساعدة المتاحة.
                         @elseif ($tier === 2)
-                            مستوى متقدم يعكس التزامك وجودة خدماتك العالية وخبرتك الموثقة مع كبار السن.
+                            مستوى متقدم يعكس التزامك وجودة خدماتك العالية وخبرتك الموثقة مع المستفيدين.
                         @else
-                            أعلى مستويات التميز والموثوقية في منصة إحسان مع كامل الأولوية والتقدير المؤسسي.
+                            أعلى مستويات التميز والموثوقية في منصة أنيس مع كامل الأولوية والتقدير المؤسسي.
                         @endif
                     </p>
                 </div>
@@ -63,7 +63,7 @@
                             </div>
                             <p class="mt-1 text-amber-200 font-semibold">متبقي {{ $tasksToNextTier }} مهام للترقية إلى Tier 3.</p>
                         @else
-                            <p class="text-emerald-200 font-bold text-xs">✓ وصلت إلى أعلى مستوى تميز معتمد في المنصة.</p>
+                            <p class="text-emerald-200 font-bold text-xs"><i class="fa-solid fa-check" aria-hidden="true"></i> وصلت إلى أعلى مستوى تميز معتمد في المنصة.</p>
                         @endif
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                         <span class="text-4xl sm:text-5xl font-black text-[#31421e]">{{ number_format($avgRating, 1) }}</span>
                         <div>
                             <div class="flex items-center text-amber-400 text-lg">
-                                ★★★★★
+                                <i class="fa-solid fa-star" aria-hidden="true"></i><i class="fa-solid fa-star" aria-hidden="true"></i><i class="fa-solid fa-star" aria-hidden="true"></i><i class="fa-solid fa-star" aria-hidden="true"></i><i class="fa-solid fa-star" aria-hidden="true"></i>
                             </div>
                             <p class="mt-1 text-xs font-bold text-slate-500">
                                 بناءً على {{ $reviews->total() }} تقييماً
@@ -91,7 +91,7 @@
                     </div>
                 </div>
                 <div class="mt-5 rounded-2xl bg-[#f8faf6] p-3 border border-[#dfe6d5] text-[11px] text-slate-600">
-                    ⭐ تقييم إجباري بسيط (1 إلى 5 نجوم) يضعه كبار السن عند تأكيد إتمام الخدمة.
+                    ⭐ تقييم إجباري بسيط (1 إلى 5 نجوم) يضعه المستفيدون عند تأكيد إتمام الخدمة.
                 </div>
             </div>
 
@@ -102,15 +102,15 @@
                     <div class="mt-4 flex items-center gap-4">
                         <span class="text-4xl sm:text-5xl font-black text-emerald-800">{{ $totalServices }}</span>
                         <div>
-                            <span class="text-xs font-bold text-emerald-600">✓ خدمة منجزة</span>
+                            <span class="text-xs font-bold text-emerald-600"><i class="fa-solid fa-check" aria-hidden="true"></i> خدمة منجزة</span>
                             <p class="mt-1 text-xs font-bold text-slate-500">
-                                تسليم مؤكد مع كبار السن
+                                تسليم مؤكد مع المستفيدين
                             </p>
                         </div>
                     </div>
                 </div>
                 <div class="mt-5 rounded-2xl bg-[#f8faf6] p-3 border border-[#dfe6d5] text-[11px] text-slate-600">
-                    📜 مؤهلة لطلب شهادات تطوع رقمية موثقة من المنصة.
+                    <i class="fa-solid fa-certificate" aria-hidden="true"></i> مؤهلة لطلب شهادات تطوع رقمية موثقة من المنصة.
                 </div>
             </div>
 
@@ -121,7 +121,7 @@
                     <div class="mt-4 flex items-center gap-4">
                         <span class="text-4xl sm:text-5xl font-black text-amber-500">{{ $fiveStarsCount }}</span>
                         <div>
-                            <span class="text-xs font-bold text-amber-600">★★★★★</span>
+                            <span class="text-xs font-bold text-amber-600"><i class="fa-solid fa-star" aria-hidden="true"></i><i class="fa-solid fa-star" aria-hidden="true"></i><i class="fa-solid fa-star" aria-hidden="true"></i><i class="fa-solid fa-star" aria-hidden="true"></i><i class="fa-solid fa-star" aria-hidden="true"></i></span>
                             <p class="mt-1 text-xs font-bold text-slate-500">
                                 تقييمات بدرجة 5 من 5
                             </p>
@@ -129,7 +129,7 @@
                     </div>
                 </div>
                 <div class="mt-5 rounded-2xl bg-[#f8faf6] p-3 border border-[#dfe6d5] text-[11px] text-slate-600">
-                    🌟 ثناء وتقدير مباشر من المستفيدين يعزز ترقية مستواك.
+                    <i class="fa-solid fa-award" aria-hidden="true"></i> ثناء وتقدير مباشر من المستفيدين يعزز ترقية مستواك.
                 </div>
             </div>
         </div>
@@ -138,7 +138,7 @@
         <div class="space-y-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <h2 class="text-xl font-black text-[#31421e]">آراء كبار السن</h2>
+                    <h2 class="text-xl font-black text-[#31421e]">آراء المستفيدين</h2>
                     <p class="text-xs text-slate-500">سجل الانطباعات والتعليقات المكتوبة بعد إتمام المساعدات</p>
                 </div>
             </div>
@@ -149,7 +149,7 @@
                         <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                             <div>
                                 <div class="flex items-center gap-2">
-                                    <h3 class="text-sm font-black text-slate-800">{{ $rev->elderly?->name ?? 'كبير السن' }}</h3>
+                                    <h3 class="text-sm font-black text-slate-800">{{ $rev->elderly?->name ?? 'طالب المساعدة' }}</h3>
                                     <span class="text-xs text-slate-400">• {{ $rev->created_at->translatedFormat('d F Y') }}</span>
                                     @if ($rev->serviceRequest)
                                         <span class="text-xs text-slate-400 font-mono">({{ $rev->serviceRequest->public_id }})</span>
@@ -160,7 +160,7 @@
                                 </p>
                             </div>
                             <div class="flex items-center gap-1 text-amber-400 font-black text-sm shrink-0 bg-amber-50 px-3 py-1.5 rounded-2xl border border-amber-200">
-                                @for ($i = 0; $i < $rev->stars; $i++) ★ @endfor
+                                @for ($i = 0; $i < $rev->stars; $i++) <i class="fa-solid fa-star" aria-hidden="true"></i> @endfor
                                 <span class="text-xs font-bold text-slate-700 mr-1">({{ $rev->stars }}/5)</span>
                             </div>
                         </div>
@@ -174,7 +174,7 @@
                 <div class="rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm space-y-2">
                     <span class="text-4xl">⭐</span>
                     <h3 class="text-sm font-bold text-slate-700">لا توجد تقييمات مكتوبة حتى الآن</h3>
-                    <p class="text-xs text-slate-400 max-w-sm mx-auto">ستظهر هنا التقييمات والرسائل فور تأكيد كبار السن للمهام المنفذة.</p>
+                    <p class="text-xs text-slate-400 max-w-sm mx-auto">ستظهر هنا التقييمات والرسائل فور تأكيد المستفيدين للمهام المنفذة.</p>
                 </div>
             @endif
         </div>

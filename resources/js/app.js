@@ -7,6 +7,8 @@ import './elderly-assistant';
  */
 window.IhsanVoice = (() => {
     let activeAudio = null;
+    let activePlayback = null;
+    let playbackGeneration = 0;
     const fixedClips = {
         welcome: '/audio/elderly-assistant/welcome-anis.mp3',
         service: '/audio/elderly-assistant/service-question.mp3',
@@ -72,13 +74,32 @@ window.IhsanVoice = (() => {
     }
     for (let index = 1; index < 60; index++) fixedClips['appointment_minute_' + index] = appointmentBase + '/minute-' + index + '.mp3';
 
-    const stop = () => {
+    const stopCurrentPlayback = () => {
         if (activeAudio) {
+            activeAudio.onended = null;
+            activeAudio.onerror = null;
             activeAudio.pause();
             activeAudio.currentTime = 0;
             activeAudio = null;
         }
         if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+        if (activePlayback) {
+            const { resolve } = activePlayback;
+            activePlayback = null;
+            resolve(false);
+        }
+    };
+
+    const beginPlayback = () => {
+        stopCurrentPlayback();
+        playbackGeneration += 1;
+        return playbackGeneration;
+    };
+
+    const stop = () => {
+        playbackGeneration += 1;
+        stopCurrentPlayback();
     };
 
     let cachedArabicVoice = null;
@@ -153,11 +174,12 @@ window.IhsanVoice = (() => {
         window.speechSynthesis.addEventListener('voiceschanged', chooseArabicVoice);
     }
 
-    const speak = async (text) => {
-        stop();
-        if (!text || !('speechSynthesis' in window)) return;
+    const speakForGeneration = async (text, generation) => {
+        if (!text || !('speechSynthesis' in window) || generation !== playbackGeneration) return false;
 
         const arabicVoice = cachedArabicVoice || await waitForArabicVoice();
+        if (generation !== playbackGeneration) return false;
+
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = arabicVoice?.lang || 'ar-SA';
         if (arabicVoice) {
@@ -167,38 +189,97 @@ window.IhsanVoice = (() => {
         utterance.pitch = 1;
         utterance.volume = 1;
 
-        await new Promise((resolve) => {
-            utterance.onend = resolve;
-            utterance.onerror = resolve;
+        return new Promise((resolve) => {
+            const finish = (completed) => {
+                if (activePlayback?.generation === generation) activePlayback = null;
+                resolve(completed);
+            };
+
+            activePlayback = { generation, resolve: () => finish(false) };
+            utterance.onend = () => finish(true);
+            utterance.onerror = () => finish(false);
             window.speechSynthesis.speak(utterance);
         });
     };
 
-    const playFixed = (key, fallbackText) => new Promise((resolve) => {
-        stop();
+    const speak = (text) => speakForGeneration(text, beginPlayback());
+
+    const playFixed = (key, fallbackText) => {
+        const generation = beginPlayback();
         const source = fixedClips[key];
-        if (!source) return speak(fallbackText).then(resolve);
-        const audio = new Audio(source);
-        activeAudio = audio;
-        audio.onended = () => { activeAudio = null; resolve(); };
-        audio.onerror = () => { activeAudio = null; speak(fallbackText).then(resolve); };
-        audio.play().catch(() => { activeAudio = null; speak(fallbackText).then(resolve); });
-    });
+        if (!source) return speakForGeneration(fallbackText, generation);
+
+        return new Promise((resolve) => {
+            const audio = new Audio(source);
+            let settled = false;
+
+            const finish = (completed) => {
+                if (settled) return;
+                settled = true;
+                if (activeAudio === audio) activeAudio = null;
+                if (activePlayback?.generation === generation) activePlayback = null;
+                resolve(completed);
+            };
+
+            const useFallback = async () => {
+                if (settled || generation !== playbackGeneration) return finish(false);
+                if (activeAudio === audio) activeAudio = null;
+                if (activePlayback?.generation === generation) activePlayback = null;
+                finish(await speakForGeneration(fallbackText, generation));
+            };
+
+            activeAudio = audio;
+            activePlayback = { generation, resolve: () => finish(false) };
+            audio.onended = () => finish(true);
+            audio.onerror = useFallback;
+            audio.play().catch(useFallback);
+        });
+    };
 
     return { playFixed, speakDynamic: speak, stop };
 })();
 
 // زر عام لقراءة البيانات المتغيرة القادمة من النظام.
-document.addEventListener('click', (event) => {
+document.addEventListener('click', async (event) => {
     const button = event.target.closest('[data-tts-text]');
     if (!button) return;
     event.preventDefault();
-    const voiceKey = button.dataset.voiceKey;
-    if (voiceKey) {
-        window.IhsanVoice.playFixed(voiceKey, button.dataset.ttsText || '');
+
+    if (button.dataset.ttsActive === 'true') {
+        window.IhsanVoice.stop();
         return;
     }
-    window.IhsanVoice.speakDynamic(button.dataset.ttsText || '');
+
+    const label = button.querySelector('[data-tts-label]');
+    const icon = button.querySelector('i');
+    const idleText = label?.textContent || '';
+
+    button.dataset.ttsActive = 'true';
+    button.setAttribute('aria-busy', 'true');
+    button.classList.add('is-playing');
+    if (label) label.textContent = 'إيقاف القراءة';
+    if (icon) {
+        icon.classList.remove('fa-volume-high');
+        icon.classList.add('fa-stop');
+    }
+
+    const voiceKey = button.dataset.voiceKey;
+    try {
+        if (voiceKey) {
+            await window.IhsanVoice.playFixed(voiceKey, button.dataset.ttsText || '');
+        } else {
+            await window.IhsanVoice.speakDynamic(button.dataset.ttsText || '');
+        }
+    } finally {
+        button.dataset.ttsActive = 'false';
+        button.setAttribute('aria-busy', 'false');
+        button.classList.remove('is-playing');
+        if (label) label.textContent = idleText;
+        if (icon) {
+            icon.classList.remove('fa-stop');
+            icon.classList.add('fa-volume-high');
+        }
+    }
 });
 
 /**
@@ -208,6 +289,7 @@ document.addEventListener('click', (event) => {
 (() => {
     let lastElement = null;
     let lastSpokenAt = 0;
+    let pendingAnnouncement = null;
 
     const buttonClipByLabel = new Map([
         ['محادثة جديدة', 'button_new_chat'],
@@ -255,16 +337,35 @@ document.addEventListener('click', (event) => {
         }
     };
 
+    const cancelPendingAnnouncement = () => {
+        if (!pendingAnnouncement) return;
+        window.clearTimeout(pendingAnnouncement);
+        pendingAnnouncement = null;
+    };
+
     document.addEventListener('pointerover', (event) => {
         const element = event.target.closest('#elderly-assistant button, #elderly-assistant a');
         if (!element || (event.relatedTarget && element.contains(event.relatedTarget))) return;
-        announceButton(element);
+        cancelPendingAnnouncement();
+        pendingAnnouncement = window.setTimeout(() => {
+            pendingAnnouncement = null;
+            announceButton(element);
+        }, 450);
+    });
+
+    document.addEventListener('pointerout', (event) => {
+        const element = event.target.closest('#elderly-assistant button, #elderly-assistant a');
+        if (!element || (event.relatedTarget && element.contains(event.relatedTarget))) return;
+        cancelPendingAnnouncement();
     });
 
     document.addEventListener('focusin', (event) => {
         const element = event.target.closest('#elderly-assistant button, #elderly-assistant a');
+        cancelPendingAnnouncement();
         announceButton(element);
     });
+
+    document.addEventListener('click', cancelPendingAnnouncement, true);
 })();
 
 // تطبيق مقياس الخط المحفوظ مسبقاً عبر المنصة

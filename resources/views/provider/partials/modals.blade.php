@@ -4,13 +4,13 @@
         <div class="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:p-8 animate-fadeIn">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div class="flex items-center gap-3">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800 text-lg font-black">✓</div>
+                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800 text-lg font-black"><i class="fa-solid fa-check" aria-hidden="true"></i></div>
                     <div>
                         <h3 class="text-lg font-black text-[#31421e]">إكمال وإنهاء الخدمة</h3>
-                        <p class="text-xs text-slate-500">إشعار كبير السن باكتمال الخدمة وبانتظار تأكيده</p>
+                        <p class="text-xs text-slate-500">إشعار طالب المساعدة باكتمال الخدمة وبانتظار تأكيده</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeFinishServiceModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer">✕</button>
+                <button type="button" onclick="closeFinishServiceModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </div>
 
             <form id="finishServiceForm" method="POST" action="" class="mt-5 space-y-4">
@@ -22,7 +22,7 @@
                         <span>ملاحظة تشغيلية</span>
                     </div>
                     <p class="mt-1 text-xs leading-5 text-slate-600">
-                        إنهاء الخدمة سينقل الطلب إلى حالة "بانتظار التأكيد"، ويتم إغلاق الطلب رسمياً واحتسابه في سجلك فور تأكيد كبير السن.
+                        إنهاء الخدمة سينقل الطلب إلى حالة "بانتظار التأكيد"، ويتم إغلاق الطلب رسمياً واحتسابه في سجلك فور تأكيد طالب المساعدة.
                     </p>
                 </div>
 
@@ -48,10 +48,10 @@
                     <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-800 text-lg">⏳</div>
                     <div>
                         <h3 class="text-lg font-black text-slate-800">الإبلاغ عن تأخير متوقع</h3>
-                        <p class="text-xs text-slate-500">إشعار كبير السن بالموعد الجديد المتوقع للوصول</p>
+                        <p class="text-xs text-slate-500">إشعار طالب المساعدة بالموعد الجديد المتوقع للوصول</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeReportDelayModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer">✕</button>
+                <button type="button" onclick="closeReportDelayModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </div>
 
             <form id="reportDelayForm" method="POST" action="" class="mt-5 space-y-4">
@@ -73,9 +73,9 @@
                 </div>
 
                 <div class="rounded-2xl bg-amber-50 p-3.5 border border-amber-200 text-xs text-amber-900 leading-5">
-                    <p class="font-bold mb-1">📌 الضوابط التشغيلية للتأخير:</p>
+                    <p class="font-bold mb-1"><i class="fa-solid fa-thumbtack" aria-hidden="true"></i> الضوابط التشغيلية للتأخير:</p>
                     <ul class="list-disc list-inside text-[11px] text-amber-800 space-y-0.5">
-                        <li>يتم إشعار كبير السن فوراً بالموعد الجديد لانتظارك.</li>
+                        <li>يتم إشعار طالب المساعدة فوراً بالموعد الجديد لانتظارك.</li>
                         <li>يُتاح للمستفيد حرية الانتظار أو طلب البحث عن متطوع بديل.</li>
                     </ul>
                 </div>
@@ -99,13 +99,13 @@
         <div class="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:p-8 animate-fadeIn">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div class="flex items-center gap-3">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-100 text-rose-800 text-lg">⚠️</div>
+                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-100 text-rose-800 text-lg"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></div>
                     <div>
                         <h3 class="text-lg font-black text-slate-800">الاعتذار عن المهمة</h3>
-                        <p class="text-xs text-slate-500">سيُعاد نشر الطلب فوراً للبحث عن متطوع بديل لكبير السن</p>
+                        <p class="text-xs text-slate-500">سيُعاد نشر الطلب فوراً للبحث عن متطوع بديل لطالب المساعدة</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeApologizeModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer">✕</button>
+                <button type="button" onclick="closeApologizeModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </div>
 
             <form id="apologizeForm" method="POST" action="" class="mt-5 space-y-4">
@@ -117,7 +117,7 @@
                 </div>
 
                 <div class="rounded-2xl bg-rose-50 p-3.5 border border-rose-200 text-xs text-rose-900 leading-5">
-                    <p class="font-bold mb-1">⚠️ ضوابط الاعتذار المعتمدة:</p>
+                    <p class="font-bold mb-1"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> ضوابط الاعتذار المعتمدة:</p>
                     <ul class="list-disc list-inside text-[11px] text-rose-800 space-y-0.5">
                         <li>يؤدي الاعتذار إلى فصل إسنادك عن الطلب فوراً وإشعار المستفيد لإعادة الجدولة.</li>
                         <li>يُسجل الاعتذار كحادثة عدم موثوقية في سجل الحساب لدى الإدارة.</li>
@@ -144,13 +144,13 @@
         <div class="relative w-full max-w-2xl rounded-3xl bg-white p-6 shadow-2xl sm:p-8 animate-fadeIn">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div class="flex items-center gap-3">
-                    <div id="detailIcon" class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef2e8] text-2xl shadow-sm">🤝</div>
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef2e8] text-lg text-[#52643a] shadow-sm"><i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i></div>
                     <div>
                         <span id="detailId" class="text-xs font-mono font-bold text-slate-400">#REQ-1000</span>
                         <h3 id="detailTitle" class="text-lg font-black text-[#31421e]">تفاصيل الطلب</h3>
                     </div>
                 </div>
-                <button type="button" onclick="closeDetailsModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer">✕</button>
+                <button type="button" onclick="closeDetailsModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </div>
 
             <div class="mt-5 space-y-4">
@@ -171,7 +171,7 @@
                 </div>
 
                 <div id="detailPrivacyNotice" class="rounded-2xl bg-amber-50 p-3.5 border border-amber-200 flex items-center gap-2 text-xs text-amber-800">
-                    <span class="text-base">🔒</span>
+                    <span class="text-base"><i class="fa-solid fa-lock" aria-hidden="true"></i></span>
                     <span>يظهر العنوان الدقيق ورقم هاتف المستفيد في قائمة "طلباتي" فور قبول الطلب وتوكيله.</span>
                 </div>
             </div>
@@ -191,13 +191,13 @@
         <div class="relative w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl sm:p-8 animate-fadeIn">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                 <div class="flex items-center gap-3">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-100 text-rose-700 text-lg">⚑</div>
+                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-100 text-rose-700 text-lg"><i class="fa-solid fa-flag" aria-hidden="true"></i></div>
                     <div>
                         <h3 class="text-lg font-black text-slate-800">إبلاغ عن مشكلة للإدارة</h3>
                         <p class="text-xs text-slate-500">هذا بلاغ سري للمراجعة، وليس تقييماً للمستفيد.</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeReportIssueModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer">✕</button>
+                <button type="button" onclick="closeReportIssueModal()" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 transition cursor-pointer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </div>
 
             <form id="reportIssueForm" method="POST" action="" class="mt-5 space-y-4">
@@ -221,7 +221,7 @@
                 </div>
 
                 <div class="rounded-2xl bg-slate-50 p-3 text-[11px] text-slate-500 leading-5 border border-slate-200">
-                    🔒 البلاغ يصل للإدارة فقط، ولا يُنقص نقاط المستفيد ولا يظهر في ملفه أو أمام مقدم خدمة آخر.
+                    <i class="fa-solid fa-lock" aria-hidden="true"></i> البلاغ يصل للإدارة فقط، ولا يُنقص نقاط المستفيد ولا يظهر في ملفه أو أمام مقدم خدمة آخر.
                 </div>
 
                 <div class="flex items-center gap-3 pt-2">
@@ -276,13 +276,12 @@
         document.getElementById('reportIssueModal').classList.add('hidden');
     }
 
-    function openDetailsModal(id, title, desc, loc, sched, icon) {
+    function openDetailsModal(id, title, desc, loc, sched) {
         document.getElementById('detailId').innerText = id;
         document.getElementById('detailTitle').innerText = title;
         document.getElementById('detailDescription').innerText = desc;
         document.getElementById('detailLocation').innerText = loc;
         document.getElementById('detailSchedule').innerText = sched;
-        if(icon) document.getElementById('detailIcon').innerText = icon;
         document.getElementById('requestDetailsModal').classList.remove('hidden');
     }
     function closeDetailsModal() {

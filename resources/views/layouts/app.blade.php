@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>أنيس - بوابة كبير السن</title>
+    <title>أنيس - بوابة طالب المساعدة</title>
 
     {{-- الخطوط والأيقونات --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +16,7 @@
     <script>
         (function() {
             try {
-                var s = localStorage.getItem('ihsan_font_scale');
+                var s = localStorage.getItem('anees_font_scale');
                 if (s) {
                     document.documentElement.style.fontSize = s + '%';
                 }
@@ -94,19 +94,23 @@
         }
 
         .logo {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 9px;
-            font-size: 24px;
-            font-weight: 900;
-            color: var(--sidebar-text);
-            margin-bottom: 4px;
+            width: 104px;
+            height: 76px;
+            margin-bottom: 7px;
+            padding: 4px 8px;
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 18px;
+            background: #fffdf9;
+            box-shadow: 0 8px 22px rgba(16,35,11,.18);
         }
 
-        .logo i {
-            font-size: 25px;
-            color: #a8c488;
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .logo-subtitle {
@@ -438,10 +442,10 @@
         .content-body::-webkit-scrollbar-track,.content-body ::-webkit-scrollbar-track{background:transparent}
 
         /* ══════════════ Animations ══════════════ */
-        @keyframes ihsan-fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes ihsan-pulse-soft{0%,100%{opacity:1}50%{opacity:.7}}
+        @keyframes anees-fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes anees-pulse-soft{0%,100%{opacity:1}50%{opacity:.7}}
 
-        .content-body > *{animation:ihsan-fadeIn .35s ease both}
+        .content-body > *{animation:anees-fadeIn .35s ease both}
         .content-body > :nth-child(2){animation-delay:.05s}
         .content-body > :nth-child(3){animation-delay:.1s}
         .content-body > :nth-child(4){animation-delay:.15s}
@@ -454,6 +458,7 @@
 <body x-data="{ mobileSidebarOpen: false }">
     @php
         $user = Auth::user();
+        $displayUserName = trim(preg_replace('/\s*\((?:كبير السن|كبير سن|مستفيد)\)\s*/u', ' ', $user?->name ?? ''));
         $elderProfile = $user?->elderProfile;
         $activeCount = $user ? $user->serviceRequests()->active()->count() : 0;
         $needsActionCount = $user ? $user->serviceRequests()->needsAction()->count() : 0;
@@ -467,12 +472,11 @@
         {{-- الشريط الجانبي (Sidebar) مطابق لتصميم oldman_home المعتمد --}}
         <aside class="sidebar" :class="{ 'mobile-open': mobileSidebarOpen }">
             <div class="logo-section">
-                <div class="logo">
-                    <h2>أنيس</h2>
-                    <i class="fa-solid fa-hand-holding-heart"></i>
-                </div>
-                <p class="logo-subtitle">منصة رعاية ومساندة كبار السن</p>
-                <span class="role-pill">كبير السن / مستفيد</span>
+                <a href="{{ route('dashboard') }}" class="logo" aria-label="أنيس — الصفحة الرئيسية">
+                    <img src="{{ asset('assets/img/anees-logo.png') }}" alt="شعار منصة أنيس">
+                </a>
+                <p class="logo-subtitle">خدمات ومساندة لكل من يحتاجها</p>
+                <span class="role-pill">طالب مساعدة</span>
             </div>
 
             <nav class="sidebar-menu">
@@ -532,7 +536,7 @@
             {{-- كرت الدعم الفني المباشر لكبير السن --}}
             <div class="support-card">
                 <p>نحن هنا لمساعدتك<br>فريق الدعم متاح دائماً</p>
-                <a href="mailto:support@ihsan.app" class="contact-btn">تواصل معنا</a>
+                <a href="mailto:support@anees.app" class="contact-btn">تواصل معنا</a>
             </div>
 
             {{-- تسجيل الخروج الآمن --}}
@@ -554,7 +558,7 @@
                         <i class="fa-solid fa-bars"></i>
                     </button>
                     <div>
-                        <span class="text-xs font-bold text-slate-400">بوابة كبير السن والمستفيد</span>
+                        <span class="text-xs font-bold text-slate-400">بوابة طالب المساعدة</span>
                         <h2 class="text-sm font-black text-[#354e20]">
                             {{ match(true) {
                                 request()->routeIs('dashboard') && request()->boolean('assistant') => 'المساعد الذكي',
@@ -597,7 +601,7 @@
                         <div class="w-8 h-8 rounded-full bg-[#354e20] text-white flex items-center justify-center font-bold text-xs">
                             {{ mb_substr($user?->name ?? 'إ', 0, 1) }}
                         </div>
-                        <span class="text-xs font-bold text-slate-800">{{ $user?->name }}</span>
+                        <span class="text-xs font-bold text-slate-800">{{ $displayUserName }}</span>
                     </a>
                 </div>
             </header>

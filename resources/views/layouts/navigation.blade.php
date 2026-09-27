@@ -4,7 +4,9 @@
 
     <div class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div class="flex items-center gap-6 lg:gap-8">
-            <a href="{{ $isVolunteer ? route('provider.dashboard') : route('dashboard') }}" class="text-2xl font-black text-[#31421e]">إحسان</a>
+            <a href="{{ $isVolunteer ? route('provider.dashboard') : route('dashboard') }}" class="flex items-center gap-2 text-2xl font-black text-[#31421e]">
+                <img src="{{ asset('assets/img/anees-logo.png') }}" alt="شعار منصة أنيس" class="h-12 w-16 object-contain">
+            </a>
             
             <div class="hidden items-center gap-1.5 sm:flex">
                 @if ($isVolunteer)
@@ -112,7 +114,7 @@
 
             <div class="text-left">
                 <p class="text-xs font-bold text-slate-800">{{ $user->name }}</p>
-                <p class="text-[10px] text-slate-400">{{ $user->isProvider() ? 'مقدم خدمة متطوع' : ($user->isAdmin() ? 'مدير النظام' : 'كبير السن / مستفيد') }}</p>
+                <p class="text-[10px] text-slate-400">{{ $user->isProvider() ? 'مقدم خدمة متطوع' : ($user->isAdmin() ? 'مدير النظام' : 'طالب مساعدة') }}</p>
             </div>
 
             <form method="POST" action="{{ route('logout') }}">
@@ -154,7 +156,7 @@
                 <p class="text-xs text-slate-500 truncate">{{ $user->email }}</p>
             </div>
             <span class="rounded-full bg-[#eef2e8] px-2.5 py-1 text-[11px] font-bold text-[#31421e]">
-                {{ $user->isProvider() ? 'مقدم خدمة متطوع' : ($user->isAdmin() ? 'مدير النظام' : 'كبير السن / مستفيد') }}
+                {{ $user->isProvider() ? 'مقدم خدمة متطوع' : ($user->isAdmin() ? 'مدير النظام' : 'طالب مساعدة') }}
             </span>
         </div>
 

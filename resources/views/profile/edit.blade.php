@@ -256,7 +256,7 @@
                         <span class="profile-role">
                             @if ($user->isAdmin()) مدير النظام
                             @elseif ($user->isProvider()) مقدم خدمة (Tier {{ $user->serviceProviderProfile?->tier ?? 1 }})
-                            @else كبير السن / مستفيد
+                            @else طالب مساعدة
                             @endif
                         </span>
                     </h2>
@@ -407,12 +407,12 @@
                     {{-- Font Size --}}
                     <div class="font-size-panel" x-data="{
                         scale: (function() {
-                            try { return parseInt(localStorage.getItem('ihsan_font_scale')) || 100; } catch (e) { return 100; }
+                            try { return parseInt(localStorage.getItem('anees_font_scale')) || 100; } catch (e) { return 100; }
                         })(),
                         apply(val) {
                             this.scale = parseInt(val);
                             document.documentElement.style.fontSize = this.scale + '%';
-                            try { localStorage.setItem('ihsan_font_scale', this.scale); } catch (e) {}
+                            try { localStorage.setItem('anees_font_scale', this.scale); } catch (e) {}
                         }
                     }">
                         <div class="font-size-row">

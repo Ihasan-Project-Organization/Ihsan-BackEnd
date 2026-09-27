@@ -1,18 +1,35 @@
 <x-provider-layout>
+    <style>
+        .provider-dashboard-hero{position:relative;overflow:hidden;border:1px solid #dce5d3;border-radius:1.75rem;background:linear-gradient(135deg,#fff 0%,#f7faf4 68%,#eef4e8 100%);padding:1.75rem;box-shadow:0 14px 36px rgba(42,63,26,.09);color:#25351a}
+        .provider-dashboard-hero:before{content:'';position:absolute;inset-block:0;right:0;width:.45rem;background:linear-gradient(180deg,#31421e,#7c995f)}
+        .provider-dashboard-hero .provider-hero-copy{max-width:42rem;padding-inline-start:.5rem}
+        .provider-dashboard-hero .provider-hero-copy>div:first-child>span{border-color:#d7e1cd!important;background:#f1f5ed!important;color:#42552f!important;box-shadow:none!important}
+        .provider-dashboard-hero .provider-hero-copy>div:first-child form button{border-color:#cbd8bf!important;background:#fff!important;color:#365321!important}
+        .provider-dashboard-hero .provider-hero-title{max-width:38rem;color:#203014;font-size:clamp(1.7rem,3vw,2.5rem);line-height:1.3;letter-spacing:-.035em}
+        .provider-dashboard-hero .provider-hero-description{max-width:41rem;color:#66735c!important;font-size:.82rem;line-height:1.9}
+        .provider-dashboard-hero .provider-hero-copy .mt-6 a:first-child{background:#31421e!important;color:#fff!important;box-shadow:0 8px 20px rgba(49,66,30,.2)}
+        .provider-dashboard-hero .provider-hero-copy .mt-6 a:last-child{border-color:#ccd8c1!important;background:#fff!important;color:#31421e!important}
+        .provider-dashboard-hero .provider-hero-side{border:1px solid rgba(255,255,255,.12)!important;background:linear-gradient(145deg,#2b411b,#3f5c28)!important;box-shadow:0 12px 28px rgba(42,63,26,.18)!important;color:#fff}
+        .provider-dashboard-hero .provider-hero-side .text-white{color:#fff!important}
+        .provider-dashboard-hero .provider-hero-side .text-slate-200{color:#e5eadf!important}
+        .provider-dashboard-hero .provider-hero-side .text-\[\#dfe6d5\]{color:#dfe6d5!important}
+        .provider-dashboard-hero>div.absolute{display:none!important}
+        @media(max-width:640px){.provider-dashboard-hero{padding:1.25rem;border-radius:1.35rem}.provider-dashboard-hero .provider-hero-title{font-size:1.65rem}.provider-dashboard-hero .provider-hero-side{border-radius:1.15rem!important}}
+    </style>
     <div class="space-y-8">
 
         {{-- تنبيهات النظام --}}
         @if (session('status'))
             <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-800 shadow-sm flex items-center justify-between animate-fadeIn">
                 <div class="flex items-center gap-3">
-                    <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 text-lg">✓</span>
+                    <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 text-lg"><i class="fa-solid fa-check" aria-hidden="true"></i></span>
                     <p class="text-xs sm:text-sm font-bold">
                         {{ match(session('status')) {
                             'task-accepted' => 'تم قبول الطلب بنجاح ونقله إلى قائمة طلباتك.',
                             'task-dismissed' => 'تم تجاوز الطلب وإخفاؤه من القائمة دون التأثير على تقييمك.',
                             'service-started' => 'تم تسجيل بدء تقديم الخدمة بنجاح.',
-                            'service-finished' => 'تم إرسال ملخص التنفيذ إلى كبير السن وبانتظار تأكيده.',
-                            'delay-reported' => 'تم إرسال إشعار التأخير إلى كبير السن وتحديث الموعد المتوقع.',
+                            'service-finished' => 'تم إرسال ملخص التنفيذ إلى طالب المساعدة وبانتظار تأكيده.',
+                            'delay-reported' => 'تم إرسال إشعار التأخير إلى طالب المساعدة وتحديث الموعد المتوقع.',
                             'apology-completed' => 'تم تسجيل اعتذارك وفصل الإسناد وإعادة نشر الطلب بنجاح.',
                             'settings-updated' => 'تم حفظ حالة التوفر وإعدادات الخدمة بنجاح.',
                             'certificate-issued' => 'تهانينا! تم إصدار شهادة التطوع الرقمية بنجاح.',
@@ -20,33 +37,34 @@
                         } }}
                     </p>
                 </div>
-                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer">✕</button>
+                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </div>
         @endif
 
         @if (session('error'))
             <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-800 shadow-sm flex items-center justify-between animate-fadeIn">
                 <div class="flex items-center gap-3">
-                    <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-rose-100 text-rose-800 text-lg">⚠️</span>
+                    <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-rose-100 text-rose-800 text-lg"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></span>
                     <p class="text-xs sm:text-sm font-bold">{{ session('error') }}</p>
                 </div>
-                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-rose-600 hover:text-rose-900 cursor-pointer">✕</button>
+                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-rose-600 hover:text-rose-900 cursor-pointer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </div>
         @endif
 
         {{-- 1. بطاقة الترحيب والداشبورد الرئيسية الفاخرة --}}
-        <section class="relative overflow-hidden rounded-3xl bg-gradient-to-l from-[#243516] via-[#31421e] to-[#455a2c] p-6 text-white shadow-xl sm:p-8 lg:p-10">
+        @php($displayProviderName = trim(preg_replace('/\s*\((?:مقدم خدمة|متطوع)\)\s*/u', '', $provider->name)))
+        <section class="provider-dashboard-hero">
             <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-                <div class="max-w-xl">
+                <div class="provider-hero-copy">
                     <div class="flex flex-wrap items-center gap-2">
                         <span class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-[#dfe6d5] backdrop-blur-sm border border-white/10">
-                            <span>✨</span>
+                            <span><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></span>
                             <span>مقدم خدمة معتمد</span>
                         </span>
 
                         {{-- شارة المستوى Tier --}}
                         <span class="inline-flex items-center gap-1.5 rounded-full {{ $tier === 3 ? 'bg-amber-400/20 text-amber-300 border-amber-300/30' : ($tier === 2 ? 'bg-emerald-400/20 text-emerald-300 border-emerald-300/30' : 'bg-white/10 text-white border-white/20') }} px-3 py-1 text-xs font-black border backdrop-blur-sm">
-                            <span>🏆</span>
+                            <span><i class="fa-solid fa-trophy" aria-hidden="true"></i></span>
                             <span>المستوى {{ $tier }} (Tier {{ $tier }})</span>
                         </span>
 
@@ -63,26 +81,26 @@
                         </form>
                     </div>
 
-                    <h1 class="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl leading-tight">مرحبًا، {{ $provider->name }} 👋</h1>
-                    <p class="mt-2 text-xs sm:text-sm text-[#dfe6d5] leading-relaxed">
-                        أهلاً بك في منصة إحسان. مساهماتك التطوعية تصنع فارقاً حقيقياً في حياة كبار السن وتعزز قيم التكافل والمروءة.
+                    <h1 class="provider-hero-title mt-4 font-black">مرحبًا، {{ $displayProviderName }}</h1>
+                    <p class="provider-hero-description mt-2">
+                        أهلًا بك في منصة أنيس. مساهمتك تصنع فرقًا حقيقيًا في حياة طالبي المساعدة من مبتوري الأطراف وذوي الإعاقة وكبار السن، وتعزز قيم التكافل والمروءة.
                     </p>
 
                     <div class="mt-6 flex flex-wrap items-center gap-3">
                         <a href="{{ route('provider.available') }}"
                             class="inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-3 text-xs sm:text-sm font-bold text-[#31421e] shadow-lg hover:bg-[#eef2e8] transition hover:-translate-y-0.5">
-                            <span>🔍 تصفح الطلبات المتاحة ({{ $availableCount }})</span>
+                            <span><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> تصفح الطلبات المتاحة ({{ $availableCount }})</span>
                         </a>
                         <a href="{{ route('provider.tasks') }}"
                             class="inline-flex items-center gap-2 rounded-2xl border border-white/25 bg-white/10 px-4 py-3 text-xs sm:text-sm font-bold text-white hover:bg-white/20 transition">
-                            <span>📋 متابعة طلباتي</span>
+                            <span><i class="fa-solid fa-clipboard-list" aria-hidden="true"></i> متابعة طلباتي</span>
                         </a>
                     </div>
                 </div>
 
                 {{-- بطاقة المهمة القادمة أو التقدم في المستوى --}}
                 @if ($nextTask)
-                    <div class="rounded-3xl bg-white/10 p-5 sm:p-6 backdrop-blur-md border border-white/15 max-w-md w-full shadow-2xl">
+                    <div class="provider-hero-side rounded-3xl p-5 sm:p-6 max-w-md w-full">
                         <div class="flex items-center justify-between gap-4">
                             <span class="rounded-xl bg-amber-400/20 px-3 py-1 text-xs font-black text-amber-300 border border-amber-300/20">
                                 ⏳ الموعد {{ $nextTask->scheduled_at->diffForHumans() }}
@@ -102,7 +120,7 @@
                         </div>
                     </div>
                 @else
-                    <div class="rounded-3xl bg-white/10 p-5 sm:p-6 backdrop-blur-md border border-white/15 max-w-md w-full shadow-2xl">
+                    <div class="provider-hero-side rounded-3xl p-5 sm:p-6 max-w-md w-full">
                         <div class="flex items-center justify-between">
                             <span class="rounded-xl bg-emerald-400/20 px-3 py-1 text-xs font-bold text-emerald-200 border border-emerald-400/20">
                                 مستوى التميز {{ $tier }}
@@ -110,7 +128,7 @@
                             <span class="text-xs text-white/80 font-bold">{{ $tierProgress }}%</span>
                         </div>
                         <h2 class="mt-3 text-base font-black text-white">
-                            {{ $tier === 3 ? 'أعلى مستوى ثقة (Tier 3) 🌟' : 'خطوتك نحو المستوى التالي' }}
+                            {{ $tier === 3 ? 'أعلى مستوى ثقة (Tier 3)' : 'خطوتك نحو المستوى التالي' }}
                         </h2>
                         <div class="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/20">
                             <div class="h-full bg-amber-400 transition-all duration-500 rounded-full" style="width: {{ $tierProgress }}%"></div>
@@ -119,7 +137,7 @@
                             @if ($tier < 3)
                                 أنجزت <strong class="text-white">{{ $completedCount }}</strong> مهمة، يتبقى <strong class="text-amber-300">{{ $tasksToNextTier }}</strong> مهمة للترقية لـ Tier {{ $tier + 1 }}.
                             @else
-                                أحسنت! أنت في أعلى مستوى معتمد لدى منصة إحسان مع كامل الصلاحيات والأولوية.
+                                أحسنت! أنت في أعلى مستوى معتمد لدى منصة أنيس مع كامل الصلاحيات والأولوية.
                             @endif
                         </p>
                     </div>
@@ -137,7 +155,7 @@
             <a href="{{ route('provider.available') }}" class="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm hover:border-[#718256] hover:shadow-md transition block">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-slate-400">فرص متاحة الآن</span>
-                    <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 text-lg group-hover:scale-110 transition">👁️</span>
+                    <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 text-lg group-hover:scale-110 transition"><i class="fa-regular fa-eye" aria-hidden="true"></i></span>
                 </div>
                 <p class="mt-3 text-3xl font-black text-[#31421e]">{{ $availableCount }}</p>
                 <span class="mt-1 block text-[11px] font-semibold text-[#718256]">طلبات تنتظر متطوعين</span>
@@ -147,7 +165,7 @@
             <a href="{{ route('provider.tasks', ['tab' => 'all']) }}" class="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm hover:border-blue-400 hover:shadow-md transition block">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-slate-400">مهام هذا الأسبوع</span>
-                    <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-700 text-lg group-hover:scale-110 transition">📅</span>
+                    <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-700 text-lg group-hover:scale-110 transition"><i class="fa-regular fa-calendar" aria-hidden="true"></i></span>
                 </div>
                 <p class="mt-3 text-3xl font-black text-blue-900">{{ $thisWeekCount }}</p>
                 <span class="mt-1 block text-[11px] font-semibold text-blue-600">نشاطك الأسبوعي المجدول</span>
@@ -157,7 +175,7 @@
             <a href="{{ route('provider.tasks', ['tab' => 'completed']) }}" class="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm hover:border-emerald-400 hover:shadow-md transition block">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-slate-400">إجمالي الخدمات المكتملة</span>
-                    <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 text-lg group-hover:scale-110 transition">✓</span>
+                    <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 text-lg group-hover:scale-110 transition"><i class="fa-solid fa-check" aria-hidden="true"></i></span>
                 </div>
                 <p class="mt-3 text-3xl font-black text-emerald-800">{{ $completedCount }}</p>
                 <span class="mt-1 block text-[11px] font-semibold text-emerald-600">خدمات تم تنفيذها بنجاح</span>
@@ -197,7 +215,7 @@
                         <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-100 pb-5">
                             <div class="flex items-center gap-3">
                                 <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef2e8] text-2xl shadow-sm">
-                                    {{ $nextTask->service_type_icon }}
+                                    <x-service-icon :type="$nextTask->service_type" />
                                 </span>
                                 <div>
                                     <div class="flex items-center gap-2">
@@ -205,7 +223,7 @@
                                         <span class="text-xs font-mono font-bold text-slate-400">{{ $nextTask->public_id }}</span>
                                     </div>
                                     <p class="text-xs text-slate-500 mt-0.5">
-                                        🕒 {{ $nextTask->scheduled_at->translatedFormat('l، d F Y - h:i A') }}
+                                        <i class="fa-regular fa-clock" aria-hidden="true"></i> {{ $nextTask->scheduled_at->translatedFormat('l، d F Y - h:i A') }}
                                     </p>
                                 </div>
                             </div>
@@ -223,9 +241,9 @@
                         {{-- بيانات التواصل والموقع الدقيق بحسب صلاحيات الخصوصية --}}
                         <div class="grid gap-3 sm:grid-cols-2">
                             <div class="rounded-2xl bg-[#f8faf6] p-3.5 border border-[#dfe6d5]">
-                                <span class="text-[11px] font-bold text-slate-400">كبير السن المستفيد</span>
+                                <span class="text-[11px] font-bold text-slate-400">المستفيد</span>
                                 <p class="text-sm font-black text-[#31421e] mt-0.5">
-                                    {{ $nextTask->elderProfile?->full_name ?? $nextTask->user?->name ?? 'كبير السن' }}
+                                    {{ $nextTask->elderProfile?->full_name ?? $nextTask->user?->name ?? 'طالب المساعدة' }}
                                 </p>
                             </div>
                             <div class="rounded-2xl bg-[#f8faf6] p-3.5 border border-[#dfe6d5]">
@@ -241,7 +259,7 @@
                                         {{ $nextTask->elderProfile?->phone_number ?? 'غير متوفر' }}
                                     @else
                                         <span class="text-xs text-amber-800 font-semibold" dir="rtl">
-                                            🔒 يظهر رقم الهاتف بعد قبول وتوكيل الطلب رسمياً
+                                            <i class="fa-solid fa-lock" aria-hidden="true"></i> يظهر رقم الهاتف بعد قبول وتوكيل الطلب رسمياً
                                         </span>
                                     @endif
                                 </p>
@@ -254,7 +272,7 @@
                                 <form method="POST" action="{{ route('provider.tasks.start-service', $nextTask) }}">
                                     @csrf
                                     <button type="submit" class="rounded-2xl bg-[#31421e] px-6 py-2.5 text-xs font-bold text-white shadow-md hover:bg-[#52643a] transition cursor-pointer">
-                                        ⚡ بدء تقديم الخدمة
+                                        <i class="fa-solid fa-bolt" aria-hidden="true"></i> بدء تقديم الخدمة
                                     </button>
                                 </form>
 
@@ -265,14 +283,14 @@
                             @elseif ($nextTask->status === \App\Models\ServiceRequest::STATUS_IN_PROGRESS)
                                 <button type="button" onclick="openFinishServiceModal('{{ route('provider.tasks.finish-service', $nextTask) }}')"
                                     class="rounded-2xl bg-emerald-700 px-6 py-2.5 text-xs font-bold text-white shadow-md hover:bg-emerald-800 transition cursor-pointer">
-                                    ✓ إنهاء الخدمة وإرسال التأكيد
+                                    <i class="fa-solid fa-check" aria-hidden="true"></i> إنهاء الخدمة وإرسال التأكيد
                                 </button>
                             @endif
 
                             @if ($nextTask->canRevealContactPhone() && $nextTask->elderProfile?->phone_number)
                                 <a href="tel:{{ $nextTask->elderProfile->phone_number }}"
                                     class="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition">
-                                    📞 اتصال بالمستفيد
+                                    <i class="fa-solid fa-phone" aria-hidden="true"></i> اتصال بالمستفيد
                                 </a>
                             @endif
 
@@ -286,7 +304,7 @@
                     </div>
                 @else
                     <div class="rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm">
-                        <span class="text-4xl">☕</span>
+                        <span class="text-4xl"><i class="fa-solid fa-mug-hot" aria-hidden="true"></i></span>
                         <h3 class="mt-3 text-base font-black text-slate-800">لا توجد مهام مجدولة قادمة</h3>
                         <p class="mt-1 text-xs text-slate-500">يمكنك استعراض الفرص التطوعية المتاحة الآن وقبول ما يناسب وقتك وقدراتك.</p>
                         <a href="{{ route('provider.available') }}"
@@ -309,7 +327,7 @@
                     @forelse ($recentTasks as $task)
                         <div class="flex items-center gap-3 border-b border-slate-100 pb-3 last:border-none last:pb-0">
                             <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#f8faf6] text-base border border-[#dfe6d5]">
-                                {{ $task->service_type_icon }}
+                                <x-service-icon :type="$task->service_type" />
                             </span>
                             <div class="min-w-0 flex-1">
                                 <p class="text-xs font-bold text-slate-800 truncate">{{ $task->service_type_label }}</p>
@@ -324,7 +342,7 @@
                         <a href="{{ route('provider.certificates') }}"
                             class="flex items-center justify-between rounded-2xl bg-[#f8faf6] p-3 text-xs font-bold text-[#31421e] hover:bg-[#eef2e8] transition border border-[#dfe6d5]">
                             <span class="flex items-center gap-2">
-                                <span>📜</span>
+                                <span><i class="fa-solid fa-certificate" aria-hidden="true"></i></span>
                                 <span>شهادات التطوع المعتمدة</span>
                             </span>
                             <span>←</span>
@@ -333,7 +351,7 @@
                         <a href="{{ route('provider.availability') }}"
                             class="flex items-center justify-between rounded-2xl bg-[#f8faf6] p-3 text-xs font-bold text-[#31421e] hover:bg-[#eef2e8] transition border border-[#dfe6d5]">
                             <span class="flex items-center gap-2">
-                                <span>⚙️</span>
+                                <span><i class="fa-solid fa-gears" aria-hidden="true"></i></span>
                                 <span>إعدادات التوفر والتشغيل</span>
                             </span>
                             <span>←</span>

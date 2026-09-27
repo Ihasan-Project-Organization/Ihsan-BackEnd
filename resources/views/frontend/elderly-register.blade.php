@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إحسان - إنشاء حساب كبير سن</title>
+  <meta name="description" content="إنشاء حساب طالب مساعدة في منصة أنيس لكبار السن وذوي الإعاقة ومبتوري الأطراف.">
+  <title>أنيس - إنشاء حساب طالب مساعدة</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,15 +95,15 @@
     }
 
     .avatar-icon {
-      width: 44px;
-      height: 44px;
-      background-color: #d6ded0;
-      border-radius: 50%;
+      width: 76px;
+      height: 56px;
+      background-color: #fffdf9;
+      border-radius: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      color: #3b5228;
+      padding: 3px 7px;
+      box-shadow: 0 6px 18px rgba(49,66,30,.10);
       flex-shrink: 0;
     }
 
@@ -481,13 +482,13 @@
       <img src="{{ asset('assets/img/header.jpeg') }}" alt="Header Background" class="header-bg">
       
       <div class="oldage-card-wrapper">
-        <img src="{{ asset('assets/img/oldage.jpeg') }}" alt="كبير سن" class="oldage-img">
+        <img src="{{ asset('assets/img/assistance-seeker-register.jpg') }}" alt="كبار السن وذوو الإعاقة ومبتورو الأطراف" class="oldage-img">
       </div>
 
       <div class="header-center-content">
         <div class="top-action-row">
           <div class="avatar-icon">
-            <i class="fa-solid fa-user"></i>
+            <img src="{{ asset('assets/img/anees-logo.png') }}" alt="شعار منصة أنيس" class="h-full w-full object-contain">
           </div>
           <a href="{{ route('login') }}" class="back-btn">
             الرجوع لتسجيل الدخول <i class="fa-solid fa-arrow-left"></i>
@@ -495,8 +496,8 @@
         </div>
 
         <div class="title-block-text">
-          <h2>إنشاء حساب كبير سن</h2>
-          <p>أنشئ حسابك الآن لتتمكن من طلب المساعدة والخدمات بسهولة</p>
+          <h2>إنشاء حساب طالب مساعدة</h2>
+          <p>لكبار السن وذوي الإعاقة ومبتوري الأطراف وكل من يحتاج إلى المساندة</p>
         </div>
       </div>
     </div>
@@ -748,7 +749,7 @@
 
           <div class="terms-group">
             <input type="checkbox" id="terms" name="terms" required checked>
-            <label for="terms">أوافق على <a href="#" class="text-[#3b5228] font-bold underline">الشروط والأحكام</a> وسياسة الخصوصية لمنصة إحسان</label>
+            <label for="terms">أوافق على <a href="#" class="text-[#3b5228] font-bold underline">الشروط والأحكام</a> وسياسة الخصوصية لمنصة أنيس</label>
           </div>
 
           <div class="btn-container">

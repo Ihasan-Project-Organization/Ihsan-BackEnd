@@ -1,6 +1,7 @@
 <x-app-layout>
     @php($user = auth()->user())
     @php($elderProfile = $user->elderProfile)
+    @php($displayUserName = trim(preg_replace('/\s*\((?:كبير السن|كبير سن|مستفيد)\)\s*/u', ' ', $user->name)))
 
     @if (request()->boolean('assistant'))
         <div class="mx-auto max-w-6xl">
@@ -138,7 +139,7 @@
             <section class="elder-welcome">
                 <div class="elder-welcome-copy">
                     <span class="elder-status"><i class="fa-solid fa-circle-check"></i> حساب معتمد</span>
-                    <h1>أهلًا، {{ $user->name }}</h1>
+                    <h1>أهلًا، {{ $displayUserName }}</h1>
                     <p>كل ما تحتاجه لإدارة طلباتك موجود هنا بشكل بسيط وواضح.</p>
                     <div class="elder-meta">
                         <span><i class="fa-solid fa-location-dot"></i> {{ $elderProfile?->city ?? 'المدينة غير محددة' }}</span>

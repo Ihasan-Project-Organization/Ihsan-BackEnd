@@ -5,13 +5,13 @@
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h1 class="text-2xl font-black text-[#31421e] sm:text-3xl">شهادات التطوع الرقمية</h1>
-                <p class="mt-1 text-xs text-slate-500 sm:text-sm">توثيق رسمي ومعتمد لساعاتك وجهودك التطوعية في رعاية ومساندة كبار السن.</p>
+                <p class="mt-1 text-xs text-slate-500 sm:text-sm">توثيق رسمي ومعتمد لساعاتك وجهودك في تقديم خدمات المساعدة المجتمعية للمستفيدين.</p>
             </div>
 
             <div class="flex items-center gap-2">
                 <a href="{{ route('provider.tasks', ['tab' => 'completed']) }}"
                     class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition">
-                    <span>✓ سجل الخدمات المكتملة</span>
+                    <span><i class="fa-solid fa-check" aria-hidden="true"></i> سجل الخدمات المكتملة</span>
                 </a>
             </div>
         </div>
@@ -20,17 +20,17 @@
         @if (session('status') === 'certificate-issued')
             <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-800 text-xs font-bold flex items-center justify-between animate-fadeIn">
                 <span class="flex items-center gap-2">
-                    <span class="text-base">🎉</span>
+                    <span class="text-base"><i class="fa-solid fa-star" aria-hidden="true"></i></span>
                     <span>تهانينا! تم إصدار وتوثيق شهادة التطوع الرقمية بنجاح. يمكنك معاينتها أو طباعتها أدناه.</span>
                 </span>
-                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer">✕</button>
+                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </div>
         @endif
 
         @if (session('error'))
             <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-800 text-xs font-bold flex items-center justify-between animate-fadeIn">
-                <span>⚠️ {{ session('error') }}</span>
-                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-rose-600 hover:text-rose-900 cursor-pointer">✕</button>
+                <span><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> {{ session('error') }}</span>
+                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-rose-600 hover:text-rose-900 cursor-pointer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </div>
         @endif
 
@@ -39,14 +39,14 @@
             <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                     <span class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-[#dfe6d5] border border-white/10">
-                        <span>📜</span>
+                        <span><i class="fa-solid fa-certificate" aria-hidden="true"></i></span>
                         <span>اعتماد رسمي وموثق</span>
                     </span>
                     <h2 class="mt-3 text-2xl sm:text-3xl font-black text-white">
                         سجل عطائك يستحق التوثيق
                     </h2>
                     <p class="mt-2 text-xs sm:text-sm text-[#dfe6d5] max-w-xl leading-relaxed">
-                        تُصدر منصة إحسان شهادات تطوع رقمية معتمدة برقم تسلسلي فريد يمكن التحقق منه، بناءً على المهام المنجزة الموثقة مع كبار السن.
+                        تُصدر منصة أنيس شهادات تطوع رقمية معتمدة برقم تسلسلي فريد يمكن التحقق منه، بناءً على المهام المنجزة الموثقة مع المستفيدين.
                     </p>
 
                     {{-- أرقام سريعة --}}
@@ -70,7 +70,7 @@
 
                 {{-- زر الإجراء --}}
                 <div class="rounded-2xl bg-white/10 p-5 backdrop-blur-md border border-white/15 max-w-sm w-full text-center">
-                    <span class="text-3xl">🏅</span>
+                    <span class="text-3xl"><i class="fa-solid fa-medal" aria-hidden="true"></i></span>
                     <h3 class="mt-2 text-sm font-black text-white">إصدار شهادة تطوع جديدة</h3>
                     <p class="mt-1 text-[11px] text-[#dfe6d5]">
                         @if ($completedCount > 0)
@@ -97,7 +97,7 @@
         <div class="space-y-6">
             <div>
                 <h2 class="text-xl font-black text-[#31421e]">الشهادات المصدرة</h2>
-                <p class="text-xs text-slate-500">سجل شهادات التطوع الرسمية الممنوحة لك من منصة إحسان</p>
+                <p class="text-xs text-slate-500">سجل شهادات التطوع الرسمية الممنوحة لك من منصة أنيس</p>
             </div>
 
             @if ($certificates->count() > 0)
@@ -112,7 +112,7 @@
                                     <div class="flex items-center gap-2">
                                         <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#31421e] text-white font-black text-lg">إ</span>
                                         <div>
-                                            <h4 class="text-xs font-black text-[#31421e]">منصة إحسان لرعاية كبار السن</h4>
+                                            <h4 class="text-xs font-black text-[#31421e]">منصة أنيس لخدمات المساعدة المجتمعية</h4>
                                             <p class="text-[10px] text-slate-400">وثيقة تطوعية رقمية معتمدة</p>
                                         </div>
                                     </div>
@@ -124,13 +124,13 @@
                                 <div class="mt-6 text-center space-y-2">
                                     <span class="text-xs font-bold text-amber-700">شهادة شكر وتقدير</span>
                                     <h3 class="text-xl font-black text-slate-900">
-                                        تُشهد منصة إحسان بأن المتطوع/ـة:
+                                        تُشهد منصة أنيس بأن المتطوع/ـة:
                                     </h3>
                                     <p class="text-2xl font-black text-[#31421e] py-1">
                                         {{ $provider->name }}
                                     </p>
                                     <p class="text-xs leading-6 text-slate-600 max-w-md mx-auto">
-                                        قد ساهم/ـت بفاعلية وإخلاص في تقديم خدمات الرعاية والمساندة لكبار السن بإجمالي <strong class="text-[#31421e]">{{ $completedCount }} مهمة تطوعية</strong>، تقديراً لجهوده الطيبة ومسؤوليته الإنسانية النبيلة.
+                                        قد ساهم/ـت بفاعلية وإخلاص في تقديم خدمات المساعدة والمساندة للمستفيدين بإجمالي <strong class="text-[#31421e]">{{ $completedCount }} مهمة تطوعية</strong>، تقديراً لجهوده الطيبة ومسؤوليته الإنسانية النبيلة.
                                     </p>
                                 </div>
                             </div>
@@ -144,7 +144,7 @@
                                 <div class="flex items-center gap-2">
                                     <button type="button" onclick="window.print()"
                                         class="rounded-xl bg-[#31421e] px-4 py-2 text-xs font-bold text-white hover:bg-[#52643a] transition cursor-pointer shadow-sm">
-                                        🖨️ طباعة / حفظ PDF
+                                        <i class="fa-solid fa-print" aria-hidden="true"></i> طباعة / حفظ PDF
                                     </button>
                                 </div>
                             </div>
@@ -153,7 +153,7 @@
                 </div>
             @else
                 <div class="rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm space-y-3">
-                    <span class="text-4xl">📜</span>
+                    <span class="text-4xl"><i class="fa-solid fa-certificate" aria-hidden="true"></i></span>
                     <h3 class="text-base font-black text-slate-800">لا توجد شهادات مصدرة بعد</h3>
                     <p class="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
                         عند إنجازك للمهام التطوعية، يمكنك في أي وقت طلب إصدار شهادة تطوع رقمية موثقة من هذا القسم.

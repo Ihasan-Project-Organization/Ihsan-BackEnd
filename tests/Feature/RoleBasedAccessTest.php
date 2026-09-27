@@ -122,7 +122,7 @@ test('navigation bar renders role-specific links and badges', function () {
     $elder = makeApprovedElder();
     $elderResponse = $this->actingAs($elder)->get(route('dashboard'));
     $elderResponse->assertOk()
-        ->assertSee('كبير السن / مستفيد')
+        ->assertSee('طالب مساعدة')
         ->assertSee(route('service-requests.index'))
         ->assertSee('طلب مساعدة');
 });
@@ -230,4 +230,3 @@ test('login screen displays quick-fill testing buttons when show_test_buttons co
     $loginPage->assertSee('suspended@ihsan.com');
     $loginPage->assertSee('دخول ⚡');
 });
-
