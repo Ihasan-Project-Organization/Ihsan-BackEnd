@@ -7,7 +7,9 @@ mkdir -p /var/www/html/storage/framework/{cache,sessions,views} /var/www/html/st
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 echo "Preparing Laravel..."
-php artisan optimize:clear
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
 php artisan storage:link || true
 
 echo "Applying database migrations..."
