@@ -77,13 +77,13 @@
         </div>
 
         <button type="submit" style="background:#354e20; color:#fff; border:none; border-radius:10px; padding:10px 22px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:6px;">
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <x-app-icon name="magnifying-glass" class="w-4 h-4 text-white" />
             <span>تصفية</span>
         </button>
 
         @if (request()->anyFilled(['search', 'action', 'admin_id', 'date_from', 'date_to']))
             <a href="{{ route('admin.audit-log.index') }}" style="background:#f3f4f6; color:#374151; border-radius:10px; padding:10px 18px; font-size:13px; font-weight:700; text-decoration:none; display:flex; align-items:center; gap:6px;">
-                <i class="fa-solid fa-xmark"></i>
+                <x-app-icon name="x-mark" class="w-4 h-4 text-slate-600" />
                 <span>إلغاء التصفية</span>
             </a>
         @endif
@@ -125,7 +125,7 @@
                             @if ($log->admin)
                                 <div style="display:flex; align-items:center; gap:8px;">
                                     <div style="width:32px; height:32px; border-radius:8px; background:#e6edd9; color:#354e20; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px;">
-                                        <i class="fa-solid {{ $log->admin->admin?->admin_level === 'super_admin' ? 'fa-crown' : 'fa-user-shield' }}"></i>
+                                        <x-app-icon :name="$log->admin->admin?->admin_level === 'super_admin' ? 'crown' : 'shield-check'" class="w-4 h-4 text-[#354e20]" />
                                     </div>
                                     <div>
                                         <div style="font-weight:800; color:#1a1f36; font-size:12px;">{{ $log->admin->name }}</div>
@@ -140,7 +140,7 @@
                         {{-- نوع الإجراء --}}
                         <td style="padding:14px 18px; vertical-align:top;">
                             <span style="background:{{ $badge['bg'] }}; color:{{ $badge['color'] }}; border:1px solid {{ $badge['border'] }}; border-radius:20px; padding:4px 12px; font-size:11px; font-weight:800; display:inline-flex; align-items:center; gap:5px; white-space:nowrap;">
-                                <i class="fa-solid {{ $badge['icon'] }}"></i>
+                                <x-app-icon :name="$badge['icon']" class="w-3.5 h-3.5" />
                                 {{ $log->action_label }}
                             </span>
                         </td>
@@ -171,8 +171,10 @@
                             @if (!empty($log->metadata) && is_array($log->metadata))
                                 <div style="margin-top:6px; display:flex; flex-wrap:wrap; gap:6px;">
                                     @if(isset($log->metadata['old_status']) && isset($log->metadata['new_status']))
-                                        <span style="font-size:10px; background:#eff6ff; color:#1e40af; border-radius:6px; padding:2px 8px; font-weight:700;">
-                                            {{ $log->metadata['old_status'] }} ➔ {{ $log->metadata['new_status'] }}
+                                        <span style="font-size:10px; background:#eff6ff; color:#1e40af; border-radius:6px; padding:2px 8px; font-weight:700; display:inline-flex; align-items:center; gap:4px;">
+                                            <span>{{ $log->metadata['old_status'] }}</span>
+                                            <x-app-icon name="arrow-left" class="w-3 h-3 text-blue-600" />
+                                            <span>{{ $log->metadata['new_status'] }}</span>
                                         </span>
                                     @endif
                                     @if(isset($log->metadata['admin_level']))
@@ -181,13 +183,15 @@
                                         </span>
                                     @endif
                                     @if(isset($log->metadata['tier_2_tasks_threshold']))
-                                        <span style="font-size:10px; background:#f0fdfa; color:#115e59; border-radius:6px; padding:2px 8px; font-weight:700;">
-                                            T2: {{ $log->metadata['tier_2_tasks_threshold'] }}م / {{ $log->metadata['tier_2_rating_threshold'] }}★
+                                        <span style="font-size:10px; background:#f0fdfa; color:#115e59; border-radius:6px; padding:2px 8px; font-weight:700; display:inline-flex; align-items:center; gap:3px;">
+                                            <span>T2: {{ $log->metadata['tier_2_tasks_threshold'] }}م / {{ $log->metadata['tier_2_rating_threshold'] }}</span>
+                                            <x-app-icon name="star" type="solid" class="w-3 h-3 text-amber-500" />
                                         </span>
                                     @endif
                                     @if(isset($log->metadata['tier_3_tasks_threshold']))
-                                        <span style="font-size:10px; background:#fdf2f8; color:#9d174d; border-radius:6px; padding:2px 8px; font-weight:700;">
-                                            T3: {{ $log->metadata['tier_3_tasks_threshold'] }}م / {{ $log->metadata['tier_3_rating_threshold'] }}★
+                                        <span style="font-size:10px; background:#fdf2f8; color:#9d174d; border-radius:6px; padding:2px 8px; font-weight:700; display:inline-flex; align-items:center; gap:3px;">
+                                            <span>T3: {{ $log->metadata['tier_3_tasks_threshold'] }}م / {{ $log->metadata['tier_3_rating_threshold'] }}</span>
+                                            <x-app-icon name="star" type="solid" class="w-3 h-3 text-amber-500" />
                                         </span>
                                     @endif
                                 </div>
@@ -197,7 +201,7 @@
                 @empty
                     <tr>
                         <td colspan="5" style="text-align:center; padding:54px 20px; color:#9ca3af;">
-                            <i class="fa-solid fa-clock-rotate-left" style="font-size:38px; margin-bottom:12px; display:block; color:#cbd5e1;"></i>
+                            <x-app-icon name="clock" class="w-10 h-10 text-slate-300 mx-auto mb-3" />
                             <div style="font-weight:700; font-size:14px; color:#6b7280;">لا توجد أي سجلات تدقيق مطابقة للبحث.</div>
                             @if(request()->anyFilled(['search', 'action', 'admin_id', 'date_from', 'date_to']))
                                 <a href="{{ route('admin.audit-log.index') }}" style="display:inline-block; margin-top:10px; color:#354e20; font-weight:700; text-decoration:none; font-size:12px;">

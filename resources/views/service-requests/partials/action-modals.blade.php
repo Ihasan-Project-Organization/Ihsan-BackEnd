@@ -191,9 +191,9 @@ class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y
             @csrf
             <div class="flex justify-center gap-2 mb-3">
                 <template x-for="star in [1, 2, 3, 4, 5]" :key="star">
-                    <button type="button" @click="rating = star" class="text-2xl transition hover:scale-125 focus:outline-none"
+                    <button type="button" @click="rating = star" class="p-1 transition hover:scale-125 focus:outline-none"
                         :class="star <= rating ? 'text-amber-400' : 'text-slate-200'">
-                        ★
+                        <x-app-icon name="star" type="solid" class="w-6 h-6" />
                     </button>
                 </template>
                 <input type="hidden" name="rating" :value="rating">
@@ -307,13 +307,15 @@ class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y
         <div class="mt-5 space-y-2.5">
             <a :href="'tel:' + phone"
                 class="flex items-center justify-center gap-2 w-full rounded-xl bg-[#31421e] py-2.5 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-[#52643a] transition">
-                <span>📞 اتصال هاتفي مباشر</span>
+                <x-app-icon name="phone" class="w-4 h-4" />
+                <span>اتصال هاتفي مباشر</span>
                 <span dir="ltr" class="font-mono text-xs text-[#dfe6d5]" x-text="phone"></span>
             </a>
 
             <a :href="'https://wa.me/' + phone.replace(/[^0-9]/g, '')" target="_blank"
                 class="flex items-center justify-center gap-2 w-full rounded-xl bg-emerald-600 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-emerald-700 transition">
-                <span>💬 محادثة واتساب</span>
+                <x-app-icon name="chat-bubble-left-right" class="w-4 h-4" />
+                <span>محادثة واتساب</span>
             </a>
         </div>
 
@@ -354,7 +356,7 @@ style="font-family: 'Alexandria', sans-serif;">
 
     <div class="relative z-10 w-full max-w-md overflow-hidden rounded-3xl bg-[#fbf9f5] border border-[#e2dcd0] p-5 sm:p-7 shadow-2xl text-center my-auto">
         <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f2ede4] text-[#3b5228] shadow-sm">
-            <i class="fa-solid fa-medal text-2xl"></i>
+            <x-app-icon name="trophy" class="w-7 h-7 text-[#3b5228]" />
         </div>
 
         <h3 class="mt-3.5 text-xl font-black text-[#3b5228]">تأكيد اكتمال الخدمة والتقييم</h3>
@@ -376,18 +378,18 @@ style="font-family: 'Alexandria', sans-serif;">
                         <button type="button" 
                             @click="stars = s"
                             @mouseenter="hoverStars = s"
-                            class="text-3xl transition-transform hover:scale-125 focus:outline-none cursor-pointer"
+                            class="p-1 transition-transform hover:scale-125 focus:outline-none cursor-pointer"
                             :class="(hoverStars > 0 ? (s <= hoverStars) : (s <= stars)) ? 'text-amber-400' : 'text-slate-200'">
-                            ★
+                            <x-app-icon name="star" type="solid" class="w-8 h-8" />
                         </button>
                     </template>
                 </div>
                 <div class="mt-1 text-xs font-bold text-slate-500">
-                    <span x-show="(hoverStars || stars) === 5">ممتاز جداً - بارك الله في جهوده 🌟</span>
-                    <span x-show="(hoverStars || stars) === 4">جيد جداً - خدمة متميزة 👍</span>
-                    <span x-show="(hoverStars || stars) === 3">جيد - أدى المطلوب 🤝</span>
-                    <span x-show="(hoverStars || stars) === 2">مقبول - يحتاج لتحسين ⚠️</span>
-                    <span x-show="(hoverStars || stars) === 1">ضعيف - لم تكن التجربة مناسبة ❌</span>
+                    <span x-show="(hoverStars || stars) === 5" class="inline-flex items-center gap-1.5"><x-app-icon name="star" type="solid" class="w-4 h-4 text-amber-400" /> ممتاز جداً - بارك الله في جهوده</span>
+                    <span x-show="(hoverStars || stars) === 4" class="inline-flex items-center gap-1.5"><x-app-icon name="check-circle" class="w-4 h-4 text-emerald-500" /> جيد جداً - خدمة متميزة</span>
+                    <span x-show="(hoverStars || stars) === 3" class="inline-flex items-center gap-1.5"><x-app-icon name="handshake" class="w-4 h-4 text-blue-500" /> جيد - أدى المطلوب</span>
+                    <span x-show="(hoverStars || stars) === 2" class="inline-flex items-center gap-1.5"><x-app-icon name="alert-triangle" class="w-4 h-4 text-amber-500" /> مقبول - يحتاج لتحسين</span>
+                    <span x-show="(hoverStars || stars) === 1" class="inline-flex items-center gap-1.5"><x-app-icon name="x-circle" class="w-4 h-4 text-rose-500" /> ضعيف - لم تكن التجربة مناسبة</span>
                 </div>
                 <input type="hidden" name="stars" :value="stars">
             </div>
@@ -402,7 +404,7 @@ style="font-family: 'Alexandria', sans-serif;">
             <div class="mt-5 flex gap-2.5">
                 <button type="submit"
                     class="flex-1 rounded-xl bg-[#3b5228] py-2.5 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-[#4e6b35] transition cursor-pointer flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-check-double text-xs"></i>
+                    <x-app-icon name="check" class="w-4 h-4" />
                     <span>تأكيد الإكمال والتقييم</span>
                 </button>
                 <button type="button" @click="open = false"
@@ -440,7 +442,7 @@ style="font-family: 'Alexandria', sans-serif;">
 
     <div class="relative z-10 w-full max-w-md overflow-hidden rounded-3xl bg-[#fbf9f5] border border-rose-200 p-5 sm:p-7 shadow-2xl text-center my-auto">
         <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-50 text-rose-600 shadow-sm">
-            <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+            <x-app-icon name="alert-triangle" class="w-7 h-7 text-rose-600" />
         </div>
 
         <h3 class="mt-3.5 text-xl font-black text-rose-800">الإبلاغ عن مشكلة في الخدمة</h3>
@@ -460,14 +462,14 @@ style="font-family: 'Alexandria', sans-serif;">
             </div>
 
             <div class="mt-3 rounded-xl bg-amber-50 border border-amber-200 p-2.5 text-[11px] text-amber-800 flex items-center gap-2 text-right">
-                <i class="fa-solid fa-circle-info text-amber-600 shrink-0"></i>
+                <x-app-icon name="information-circle" class="w-4 h-4 text-amber-600 shrink-0" />
                 <span>فريق الدعم سيراجع البلاغ ويتواصل معك أو مع مقدم الخدمة لمعالجة الأمر.</span>
             </div>
 
             <div class="mt-5 flex gap-2.5">
                 <button type="submit"
                     class="flex-1 rounded-xl bg-rose-600 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-rose-700 transition cursor-pointer flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                    <x-app-icon name="paper-airplane" class="w-4 h-4" />
                     <span>إرسال البلاغ للإدارة</span>
                 </button>
                 <button type="button" @click="open = false"

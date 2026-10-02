@@ -25,7 +25,7 @@
 
     <a href="{{ route('admin.admins.create') }}"
         style="background:linear-gradient(135deg, #354e20, #4e6b35); color:#fff; text-decoration:none; border-radius:12px; padding:11px 22px; font-size:13px; font-weight:700; display:inline-flex; align-items:center; gap:8px; box-shadow:0 2px 8px rgba(53,78,32,0.25);">
-        <i class="fa-solid fa-user-plus"></i>
+        <x-app-icon name="user-plus" class="w-4 h-4" />
         <span>إضافة مدير جديد</span>
     </a>
 </div>
@@ -49,7 +49,7 @@
                         <td style="padding:14px 20px;">
                             <div style="display:flex; align-items:center; gap:12px;">
                                 <div style="width:38px; height:38px; border-radius:10px; background:{{ $admin->admin_level === 'super_admin' ? '#fef3c7' : '#e6edd9' }}; color:{{ $admin->admin_level === 'super_admin' ? '#d97706' : '#354e20' }}; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px;">
-                                    <i class="fa-solid {{ $admin->admin_level === 'super_admin' ? 'fa-crown' : 'fa-user-shield' }}"></i>
+                                    <x-app-icon :name="$admin->admin_level === 'super_admin' ? 'sparkles' : 'shield-check'" class="w-5 h-5" />
                                 </div>
                                 <div>
                                     <div style="font-weight:800; color:#1a1f36; font-size:13px;">{{ $admin->user?->name ?? 'مستخدم محذوف' }}</div>
@@ -67,12 +67,12 @@
                         <td style="padding:14px 20px;">
                             @if ($admin->admin_level === 'super_admin')
                                 <span style="background:#fef3c7; color:#92400e; border:1px solid #fde68a; border-radius:20px; padding:4px 12px; font-size:11px; font-weight:800; display:inline-flex; align-items:center; gap:5px;">
-                                    <i class="fa-solid fa-crown" style="font-size:10px; color:#d97706;"></i>
+                                    <x-app-icon name="sparkles" class="w-3.5 h-3.5 text-amber-600" />
                                     مدير أعلى (Super Admin)
                                 </span>
                             @else
                                 <span style="background:#e6edd9; color:#354e20; border:1px solid #b8cfa0; border-radius:20px; padding:4px 12px; font-size:11px; font-weight:800; display:inline-flex; align-items:center; gap:5px;">
-                                    <i class="fa-solid fa-shield-halved" style="font-size:10px; color:#354e20;"></i>
+                                    <x-app-icon name="shield-check" class="w-3.5 h-3.5 text-[#354e20]" />
                                     مدير نظام (Admin)
                                 </span>
                             @endif
@@ -84,9 +84,9 @@
 
                         <td style="padding:14px 20px; text-align:center;">
                             @if ($admin->user_id === $currentAdminUserId)
-                                <span style="background:#f3f4f6; color:#9ca3af; border-radius:8px; padding:6px 14px; font-size:11px; font-weight:700; display:inline-block;">
-                                    <i class="fa-solid fa-lock" style="margin-left:4px;"></i>
-                                    حسابك الحالي
+                                <span style="background:#f3f4f6; color:#9ca3af; border-radius:8px; padding:6px 14px; font-size:11px; font-weight:700; display:inline-flex; align-items:center; gap:4px;">
+                                    <x-app-icon name="lock-closed" class="w-3.5 h-3.5" />
+                                    <span>حسابك الحالي</span>
                                 </span>
                             @else
                                 <form method="POST" action="{{ route('admin.admins.destroy', $admin) }}" style="display:inline-block;"
@@ -97,7 +97,7 @@
                                         style="background:#fef2f2; color:#ef4444; border:1px solid #fecaca; border-radius:8px; padding:6px 14px; font-size:11px; font-weight:800; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:5px; transition:0.15s;"
                                         onmouseover="this.style.background='#ef4444'; this.style.color='#fff';"
                                         onmouseout="this.style.background='#fef2f2'; this.style.color='#ef4444';">
-                                        <i class="fa-solid fa-trash-can"></i>
+                                        <x-app-icon name="trash" class="w-3.5 h-3.5" />
                                         <span>حذف</span>
                                     </button>
                                 </form>
@@ -107,7 +107,7 @@
                 @empty
                     <tr>
                         <td colspan="5" style="text-align:center; padding:48px 20px; color:#9ca3af;">
-                            <i class="fa-solid fa-users-slash" style="font-size:36px; margin-bottom:12px; display:block; color:#cbd5e1;"></i>
+                            <x-app-icon name="users" class="w-10 h-10 mx-auto mb-3 text-slate-300" />
                             <div style="font-weight:700; font-size:14px;">لا يوجد أي مدراء مسجلين حالياً.</div>
                         </td>
                     </tr>

@@ -51,13 +51,13 @@
         </div>
 
         <button type="submit" style="background:#354e20; color:#fff; border:none; border-radius:10px; padding:10px 22px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:6px;">
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <x-app-icon name="magnifying-glass" class="w-4 h-4 text-white" />
             <span>تصفية</span>
         </button>
 
         @if (request()->anyFilled(['search', 'role', 'status']))
         <a href="{{ route('admin.users.index') }}" style="background:#f3f4f6; color:#374151; border-radius:10px; padding:10px 18px; font-size:13px; font-weight:700; text-decoration:none; display:flex; align-items:center; gap:6px;">
-            <i class="fa-solid fa-xmark"></i>
+            <x-app-icon name="x-mark" class="w-4 h-4 text-slate-600" />
             <span>إعادة ضبط</span>
         </a>
         @endif
@@ -99,7 +99,7 @@
 
                     $statusConfig = [
                         'approved'  => ['bg'=>'#d1fae5','color'=>'#065f46','label'=>'نشط (معتمد)'],
-                        'suspended' => ['bg'=>'#fee2e2','color'=>'#991b1b','label'=>'موقوف ✗'],
+                        'suspended' => ['bg'=>'#fee2e2','color'=>'#991b1b','label'=>'موقوف'],
                         'pending'   => ['bg'=>'#fef3c7','color'=>'#92400e','label'=>'بانتظار الاعتماد'],
                         'rejected'  => ['bg'=>'#f3f4f6','color'=>'#4b5563','label'=>'مرفوض'],
                     ];
@@ -137,7 +137,7 @@
                     <td style="padding:14px 20px; white-space:nowrap;">
                         <a href="{{ route('admin.users.show', $u) }}"
                             style="background:#e6edd9; color:#354e20; padding:6px 14px; border-radius:10px; font-size:11.5px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
-                            <i class="fa-solid fa-id-badge"></i>
+                            <x-app-icon name="identification" class="w-4 h-4 text-[#354e20]" />
                             <span>عرض الملف</span>
                         </a>
                     </td>
@@ -145,8 +145,8 @@
                 @empty
                 <tr>
                     <td colspan="6" style="padding:48px 20px; text-align:center; color:#9ca3af;">
-                        <i class="fa-regular fa-user" style="font-size:36px; margin-bottom:8px; display:block;"></i>
-                        لا يوجد مستخدمون يطابقون خيارات البحث
+                        <x-app-icon name="user" class="w-10 h-10 text-slate-300 mx-auto mb-2" />
+                        <div>لا يوجد مستخدمون يطابقون خيارات البحث</div>
                     </td>
                 </tr>
                 @endforelse

@@ -202,14 +202,14 @@
         <div class="notif-hero">
             <div class="notif-hero-text">
                 <span class="notif-hero-label">لوحة التحكم</span>
-                <h1><i class="fa-regular fa-bell"></i> الإشعارات</h1>
+                <h1><x-app-icon name="bell" class="w-5 h-5 inline text-[#c8ddb0]" /> الإشعارات</h1>
                 <p>تابع تنبيهات ومستجدات طلباتك وحسابك أولاً بأول</p>
             </div>
             @if (($counts['unread'] ?? 0) > 0)
                 <form method="POST" action="{{ route('notifications.mark-all-read') }}">
                     @csrf
                     <button type="submit" class="notif-mark-all">
-                        <i class="fa-solid fa-check-double"></i>
+                        <x-app-icon name="check" class="w-4 h-4 inline" />
                         <span>تحديد الكل كمقروء</span>
                     </button>
                 </form>
@@ -238,12 +238,12 @@
         {{-- ═══════ Status Alerts ═══════ --}}
         @if (session('status') === 'notification-read')
             <div class="notif-status-alert">
-                <i class="fa-solid fa-circle-check"></i>
+                <x-app-icon name="check-circle" class="w-4 h-4 text-emerald-600 inline" />
                 <span>تم تعليم الإشعار كمقروء بنجاح.</span>
             </div>
         @elseif (session('status') === 'all-notifications-read')
             <div class="notif-status-alert">
-                <i class="fa-solid fa-circle-check"></i>
+                <x-app-icon name="check-circle" class="w-4 h-4 text-emerald-600 inline" />
                 <span>تم تعليم جميع الإشعارات كمقروءة بنجاح.</span>
             </div>
         @endif
@@ -271,11 +271,11 @@
                         default => 'إشعار من النظام',
                     };
 
-                    $iconFA = match(true) {
-                        $isRed => 'fa-solid fa-circle-exclamation',
-                        $isOrange => 'fa-solid fa-clock-rotate-left',
-                        $isGreen => 'fa-solid fa-circle-check',
-                        default => 'fa-solid fa-bell',
+                    $iconName = match(true) {
+                        $isRed => 'alert-triangle',
+                        $isOrange => 'clock',
+                        $isGreen => 'check-circle',
+                        default => 'bell',
                     };
                 @endphp
 
@@ -283,7 +283,7 @@
                     <div class="notif-card-top">
                         <div class="notif-card-body">
                             <div class="notif-icon {{ $iconClass }}">
-                                <i class="{{ $iconFA }}"></i>
+                                <x-app-icon :name="$iconName" class="w-5 h-5" />
                             </div>
                             <div style="flex:1;min-width:0">
                                 <div class="notif-title-row">
@@ -300,7 +300,7 @@
                                     data-tts-text="{{ $spokenNotif }}"
                                     class="notif-listen-btn"
                                     aria-label="قراءة الإشعار بصوت مرتفع">
-                                    <i class="fa-solid fa-volume-high"></i>
+                                    <x-app-icon name="volume" class="w-3.5 h-3.5 inline" />
                                     <span>استمع للإشعار</span>
                                 </button>
                             </div>
@@ -317,13 +317,13 @@
                                     @csrf
                                     @method('patch')
                                     <button type="submit" class="notif-read-btn">
-                                        <i class="fa-solid fa-check"></i>
+                                        <x-app-icon name="check" class="w-3.5 h-3.5 inline" />
                                         <span>تحديد كمقروء</span>
                                     </button>
                                 </form>
                             @else
                                 <span class="notif-read-done">
-                                    <i class="fa-solid fa-check-double"></i>
+                                    <x-app-icon name="check" class="w-3 h-3 inline" />
                                     <span>مقروء</span>
                                 </span>
                             @endif
@@ -335,12 +335,12 @@
                                 @if (Auth::user()->isProvider())
                                     <a href="{{ route('provider.tasks') }}" class="notif-goto-link">
                                         <span>الانتقال لطلباتي</span>
-                                        <i class="fa-solid fa-arrow-left"></i>
+                                        <x-app-icon name="arrow-left" class="w-3 h-3 inline" />
                                     </a>
                                 @else
                                     <a href="{{ route('service-requests.index') }}" class="notif-goto-link">
                                         <span>الانتقال لطلباتي</span>
-                                        <i class="fa-solid fa-arrow-left"></i>
+                                        <x-app-icon name="arrow-left" class="w-3 h-3 inline" />
                                     </a>
                                 @endif
                             </div>
@@ -349,8 +349,8 @@
                 </article>
             @empty
                 <div class="notif-empty">
-                    <div class="notif-empty-icon">
-                        <i class="fa-regular fa-bell-slash"></i>
+                    <div class="notif-empty-icon flex justify-center items-center">
+                        <x-app-icon name="bell" class="w-7 h-7 text-slate-400" />
                     </div>
                     <h3>لا توجد إشعارات في هذا التبويب</h3>
                     <p>ستظهر هنا كافة التنبيهات المرتبطة بنشاطك على المنصة فور حدوثها.</p>

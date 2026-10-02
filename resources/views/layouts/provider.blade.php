@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -88,7 +88,9 @@
             margin-bottom: 4px;
         }
 
-        .logo i {
+        .logo i, .logo svg {
+            width: 28px;
+            height: 28px;
             font-size: 28px;
             color: #b8cfa0;
         }
@@ -129,12 +131,14 @@
             transition: all 0.2s ease;
         }
 
-        .menu-item i {
-            width: 24px;
+        .menu-item i, .menu-item svg {
+            width: 20px;
+            height: 20px;
             font-size: 16px;
             margin-left: 10px;
             text-align: center;
             color: #b8cfa0;
+            flex-shrink: 0;
         }
 
         .menu-item:hover {
@@ -149,7 +153,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
 
-        .menu-item.active i {
+        .menu-item.active i, .menu-item.active svg {
             color: #ffffff;
         }
 
@@ -397,7 +401,7 @@
             <div class="logo-section">
                 <div class="logo">
                     <h2>أنيس</h2>
-                    <i class="fa-solid fa-hand-holding-heart"></i>
+                    <x-app-icon name="hand-heart" class="w-7 h-7 text-[#b8cfa0]" />
                 </div>
                 <p class="logo-subtitle">منصة ربط كبار السن بمقدمي الخدمة</p>
                 <span class="role-pill">مقدم خدمة متطوع</span>
@@ -406,13 +410,13 @@
             <nav class="sidebar-menu">
                 <a href="{{ route('provider.dashboard') }}" 
                     class="menu-item {{ request()->routeIs('provider.dashboard') ? 'active' : '' }}">
-                    <i class="fa-solid fa-house"></i>
+                    <x-app-icon name="home" class="w-5 h-5 ml-2.5" />
                     <span>الرئيسية</span>
                 </a>
 
                 <a href="{{ route('provider.available') }}" 
                     class="menu-item {{ request()->routeIs('provider.available') ? 'active' : '' }}">
-                    <i class="fa-solid fa-hand-holding-hand"></i>
+                    <x-app-icon name="handshake" class="w-5 h-5 ml-2.5" />
                     <span>الطلبات المتاحة</span>
                     @if ($availableCount > 0)
                         <span class="sidebar-badge">{{ $availableCount }}</span>
@@ -421,7 +425,7 @@
 
                 <a href="{{ route('provider.tasks') }}" 
                     class="menu-item {{ request()->routeIs('provider.tasks*') ? 'active' : '' }}">
-                    <i class="fa-solid fa-clipboard-list"></i>
+                    <x-app-icon name="clipboard-list" class="w-5 h-5 ml-2.5" />
                     <span>مهامي</span>
                     @if ($activeTasksCount > 0)
                         <span class="sidebar-badge">{{ $activeTasksCount }}</span>
@@ -430,25 +434,25 @@
 
                 <a href="{{ route('provider.performance') }}" 
                     class="menu-item {{ request()->routeIs('provider.performance') ? 'active' : '' }}">
-                    <i class="fa-solid fa-chart-line"></i>
+                    <x-app-icon name="chart-pie" class="w-5 h-5 ml-2.5" />
                     <span>الأداء والتقييم</span>
                 </a>
 
                 <a href="{{ route('provider.certificates') }}" 
                     class="menu-item {{ request()->routeIs('provider.certificates*') ? 'active' : '' }}">
-                    <i class="fa-solid fa-award"></i>
+                    <x-app-icon name="trophy" class="w-5 h-5 ml-2.5" />
                     <span>شهادات التطوع</span>
                 </a>
 
                 <a href="{{ route('provider.availability') }}" 
                     class="menu-item {{ request()->routeIs('provider.availability') ? 'active' : '' }}">
-                    <i class="fa-solid fa-clock"></i>
+                    <x-app-icon name="clock" class="w-5 h-5 ml-2.5" />
                     <span>التوفر والإعدادات</span>
                 </a>
 
                 <a href="{{ route('notifications.index') }}" 
                     class="menu-item {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
-                    <i class="fa-regular fa-bell"></i>
+                    <x-app-icon name="bell" class="w-5 h-5 ml-2.5" />
                     <span>الإشعارات</span>
                     @if ($unreadNotificationsCount > 0)
                         <span class="sidebar-badge">{{ $unreadNotificationsCount }}</span>
@@ -457,7 +461,7 @@
 
                 <a href="{{ route('profile.edit') }}" 
                     class="menu-item {{ request()->routeIs('profile.*') ? 'active' : '' }}">
-                    <i class="fa-regular fa-user"></i>
+                    <x-app-icon name="user" class="w-5 h-5 ml-2.5" />
                     <span>الملف الشخصي</span>
                 </a>
             </nav>
@@ -470,7 +474,7 @@
             <form method="POST" action="{{ route('logout') }}" class="logout-form">
                 @csrf
                 <button type="submit" class="logout-btn">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <x-app-icon name="logout" class="w-4 h-4 ml-2" />
                     <span>تسجيل خروج</span>
                 </button>
             </form>
@@ -482,7 +486,7 @@
             <header class="top-header">
                 <div class="flex items-center gap-3">
                     <button type="button" class="mobile-menu-btn" @click="mobileSidebarOpen = !mobileSidebarOpen">
-                        <i class="fa-solid fa-bars"></i>
+                        <x-app-icon name="bars" class="w-6 h-6 text-[#354e20]" />
                     </button>
                     <div>
                         <span class="text-xs font-bold text-slate-400">بوابة مقدم الخدمة</span>
@@ -505,7 +509,7 @@
                 <div class="header-actions">
                     {{-- شارة المستوى Tier --}}
                     <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black border {{ $tier === 3 ? 'bg-amber-100 text-amber-900 border-amber-300' : ($tier === 2 ? 'bg-emerald-100 text-emerald-900 border-emerald-300' : 'bg-slate-100 text-slate-800 border-slate-300') }}">
-                        <span>🏆</span>
+                        <x-app-icon name="trophy" class="w-3.5 h-3.5 text-amber-600" />
                         <span>المستوى {{ $tier }}</span>
                     </span>
 
@@ -521,7 +525,7 @@
 
                     {{-- جرس الإشعارات --}}
                     <a href="{{ route('notifications.index') }}" class="notification-icon-btn" title="الإشعارات">
-                        <i class="fa-regular fa-bell"></i>
+                        <x-app-icon name="bell" class="w-5 h-5 text-slate-600" />
                         @if ($unreadNotificationsCount > 0)
                             <span class="notification-badge-dot">{{ $unreadNotificationsCount }}</span>
                         @endif

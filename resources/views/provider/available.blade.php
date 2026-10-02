@@ -11,7 +11,8 @@
             <div class="flex items-center gap-2">
                 <a href="{{ route('provider.tasks') }}"
                     class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition">
-                    <span>📋 طلباتي المسندة</span>
+                    <x-app-icon name="clipboard-list" class="w-4 h-4 inline" />
+                    <span>طلباتي المسندة</span>
                 </a>
             </div>
         </div>
@@ -19,19 +20,29 @@
         {{-- تنبيهات --}}
         @if (session('status'))
             <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-800 text-xs font-bold flex items-center justify-between animate-fadeIn">
-                <span>✓ {{ match(session('status')) {
-                    'task-dismissed' => 'تم تجاوز الطلب وإخفاؤه من قائمتك دون أي تأثير على تقييمك أو حسابك.',
-                    'task-accepted' => 'تم قبول الطلب بنجاح ونقله إلى قائمة طلباتي.',
-                    default => 'تم تنفيذ الإجراء بنجاح.'
-                } }}</span>
-                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer">✕</button>
+                <span class="inline-flex items-center gap-1.5">
+                    <x-app-icon name="check" class="w-4 h-4 text-emerald-800" />
+                    <span>{{ match(session('status')) {
+                        'task-dismissed' => 'تم تجاوز الطلب وإخفاؤه من قائمتك دون أي تأثير على تقييمك أو حسابك.',
+                        'task-accepted' => 'تم قبول الطلب بنجاح ونقله إلى قائمة طلباتي.',
+                        default => 'تم تنفيذ الإجراء بنجاح.'
+                    } }}</span>
+                </span>
+                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer">
+                    <x-app-icon name="x-mark" class="w-4 h-4" />
+                </button>
             </div>
         @endif
 
         @if (session('error'))
             <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-800 text-xs font-bold flex items-center justify-between animate-fadeIn">
-                <span>⚠️ {{ session('error') }}</span>
-                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-rose-600 hover:text-rose-900 cursor-pointer">✕</button>
+                <span class="inline-flex items-center gap-1.5">
+                    <x-app-icon name="alert-triangle" class="w-4 h-4 text-rose-800" />
+                    <span>{{ session('error') }}</span>
+                </span>
+                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-rose-600 hover:text-rose-900 cursor-pointer">
+                    <x-app-icon name="x-mark" class="w-4 h-4" />
+                </button>
             </div>
         @endif
 
@@ -48,20 +59,20 @@
                 <div>
                     <select name="service_type" onchange="this.form.submit()" class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-700 focus:border-[#52643a] focus:bg-white focus:ring-2 focus:ring-[#52643a]/20">
                         <option value="all" {{ $serviceType === 'all' || !$serviceType ? 'selected' : '' }}>جميع الخدمات ({{ $categoryCounts['all'] ?? $counts['all'] ?? 0 }})</option>
-                        <option value="grocery" {{ $serviceType === 'grocery' ? 'selected' : '' }}>🛒 شراء أغراض منزلية ({{ $categoryCounts['grocery'] ?? $counts['grocery'] ?? 0 }})</option>
-                        <option value="medical_escort" {{ $serviceType === 'medical_escort' ? 'selected' : '' }}>🚶‍♂️ مرافقة إلى موعد طبي ({{ $categoryCounts['medical_escort'] ?? $counts['medical_escort'] ?? 0 }})</option>
-                        <option value="medicine" {{ $serviceType === 'medicine' ? 'selected' : '' }}>💊 إحضار دواء ({{ $categoryCounts['medicine'] ?? $counts['medicine'] ?? 0 }})</option>
-                        <option value="home_help" {{ $serviceType === 'home_help' ? 'selected' : '' }}>🧹 مساعدة منزلية خفيفة ({{ $categoryCounts['home_help'] ?? $counts['home_help'] ?? 0 }})</option>
-                        <option value="social_visit" {{ $serviceType === 'social_visit' ? 'selected' : '' }}>👥 زيارة اجتماعية ومؤانسة ({{ $categoryCounts['social_visit'] ?? 0 }})</option>
-                        <option value="support_request" {{ $serviceType === 'support_request' ? 'selected' : '' }}>🤝 طلب دعم ومساندة ({{ $categoryCounts['support_request'] ?? 0 }})</option>
+                        <option value="grocery" {{ $serviceType === 'grocery' ? 'selected' : '' }}>شراء أغراض منزلية ({{ $categoryCounts['grocery'] ?? $counts['grocery'] ?? 0 }})</option>
+                        <option value="medical_escort" {{ $serviceType === 'medical_escort' ? 'selected' : '' }}>مرافقة إلى موعد طبي ({{ $categoryCounts['medical_escort'] ?? $counts['medical_escort'] ?? 0 }})</option>
+                        <option value="medicine" {{ $serviceType === 'medicine' ? 'selected' : '' }}>إحضار دواء ({{ $categoryCounts['medicine'] ?? $counts['medicine'] ?? 0 }})</option>
+                        <option value="home_help" {{ $serviceType === 'home_help' ? 'selected' : '' }}>مساعدة منزلية خفيفة ({{ $categoryCounts['home_help'] ?? $counts['home_help'] ?? 0 }})</option>
+                        <option value="social_visit" {{ $serviceType === 'social_visit' ? 'selected' : '' }}>زيارة اجتماعية ومؤانسة ({{ $categoryCounts['social_visit'] ?? 0 }})</option>
+                        <option value="support_request" {{ $serviceType === 'support_request' ? 'selected' : '' }}>طلب دعم ومساندة ({{ $categoryCounts['support_request'] ?? 0 }})</option>
                     </select>
                 </div>
 
                 {{-- الترتيب --}}
                 <div>
                     <select name="sort" onchange="this.form.submit()" class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-700 focus:border-[#52643a] focus:bg-white focus:ring-2 focus:ring-[#52643a]/20">
-                        <option value="soonest" {{ $sort === 'soonest' ? 'selected' : '' }}>🕒 الأقرب موعداً أولاً</option>
-                        <option value="latest" {{ $sort === 'latest' ? 'selected' : '' }}>⚡ الأحدث نشراً</option>
+                        <option value="soonest" {{ $sort === 'soonest' ? 'selected' : '' }}>الأقرب موعداً أولاً</option>
+                        <option value="latest" {{ $sort === 'latest' ? 'selected' : '' }}>الأحدث نشراً</option>
                     </select>
                 </div>
 
@@ -88,11 +99,14 @@
                             <div class="flex items-start justify-between gap-3 border-b border-slate-100 pb-4">
                                 <div class="flex items-center gap-3">
                                     <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef2e8] text-2xl shadow-sm">
-                                        {{ $req->service_type_icon }}
+                                        <x-app-icon :name="$req->service_type_icon_name" class="w-6 h-6 text-[#31421e]" />
                                     </span>
                                     <div>
                                         <h3 class="text-base font-black text-slate-900">{{ $req->service_type_label }}</h3>
-                                        <p class="text-xs font-bold text-[#52643a] mt-0.5">📍 {{ $req->location }} (الموقع التقريبي)</p>
+                                        <p class="text-xs font-bold text-[#52643a] mt-0.5 inline-flex items-center gap-1">
+                                            <x-app-icon name="map-pin" class="w-3.5 h-3.5" />
+                                            <span>{{ $req->location }} (الموقع التقريبي)</span>
+                                        </p>
                                     </div>
                                 </div>
                                 <span class="text-xs font-mono font-bold text-slate-400">{{ $req->public_id }}</span>
@@ -106,7 +120,7 @@
                             {{-- الموعد والمدة المتوقعة --}}
                             <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-500">
                                 <span class="flex items-center gap-1.5 font-bold text-slate-700 bg-slate-50 px-2.5 py-1 rounded-xl border border-slate-100">
-                                    <span>🕒</span>
+                                    <x-app-icon name="clock" class="w-3.5 h-3.5 text-slate-500" />
                                     <span>{{ $req->scheduled_at->translatedFormat('l، d F Y - h:i A') }}</span>
                                 </span>
                                 <span class="text-slate-300">•</span>
@@ -115,7 +129,7 @@
 
                             {{-- تنبيه الخصوصية المعتمد --}}
                             <div class="mt-4 rounded-2xl bg-amber-50/80 p-3 border border-amber-200/60 flex items-center gap-2 text-[11px] text-amber-800">
-                                <span class="text-sm">🔒</span>
+                                <x-app-icon name="lock-closed" class="w-3.5 h-3.5 text-amber-800" />
                                 <span>يظهر العنوان الدقيق وبيانات التواصل المباشر بعد قبول الطلب.</span>
                             </div>
                         </div>
@@ -130,7 +144,7 @@
                             </form>
 
                             <button type="button"
-                                onclick="openDetailsModal('{{ $req->public_id }}', '{{ $req->service_type_label }}', '{{ addslashes($req->description) }}', '{{ $req->location }} (الموقع التقريبي)', '{{ $req->scheduled_at->translatedFormat('l، d F Y - h:i A') }}', '{{ $req->service_type_icon }}')"
+                                onclick="openDetailsModal('{{ $req->public_id }}', '{{ $req->service_type_label }}', '{{ addslashes($req->description) }}', '{{ $req->location }} (الموقع التقريبي)', '{{ $req->scheduled_at->translatedFormat('l، d F Y - h:i A') }}', '{{ $req->service_type_icon_name }}')"
                                 class="rounded-2xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition cursor-pointer">
                                 التفاصيل
                             </button>
@@ -151,7 +165,9 @@
             </div>
         @else
             <div class="rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm space-y-3">
-                <span class="text-4xl">🔍</span>
+                <div class="flex justify-center mb-2">
+                    <x-app-icon name="search" class="w-12 h-12 text-slate-300" />
+                </div>
                 <h3 class="text-base font-black text-slate-800">لا توجد طلبات متاحة مطابقة حالياً</h3>
                 <p class="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
                     يتم بث طلبات كبار السن فور نشرها لمقدمي الخدمة المؤهلين. يمكنك العودة لاحقاً أو إعادة تعيين الفلاتر.

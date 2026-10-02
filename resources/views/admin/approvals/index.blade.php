@@ -17,12 +17,12 @@
             </select>
         </div>
         <button type="submit" style="background:#354e20; color:#fff; border:none; border-radius:10px; padding:10px 22px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:6px;">
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <x-app-icon name="magnifying-glass" class="w-4 h-4 text-white" />
             <span>تصفية</span>
         </button>
         @if (request()->anyFilled(['search', 'role']))
         <a href="{{ route('admin.approvals.index') }}" style="background:#f3f4f6; color:#374151; border-radius:10px; padding:10px 18px; font-size:13px; font-weight:700; text-decoration:none; display:flex; align-items:center; gap:6px;">
-            <i class="fa-solid fa-xmark"></i>
+            <x-app-icon name="x-mark" class="w-4 h-4 text-slate-600" />
             <span>إلغاء الفلتر</span>
         </a>
         @endif
@@ -72,12 +72,14 @@
                     </td>
                     <td style="padding:14px 20px;">
                         @if ($isProv)
-                            <span style="background:#e6edd9; color:#354e20; padding:3px 10px; border-radius:8px; font-size:11px; font-weight:700;">
-                                <i class="fa-solid fa-hand-holding-heart" style="margin-left:4px;"></i> متطوع (مقدم خدمة)
+                            <span style="background:#e6edd9; color:#354e20; padding:3px 10px; border-radius:8px; font-size:11px; font-weight:700; display:inline-flex; align-items:center; gap:4px;">
+                                <x-app-icon name="heart" class="w-3.5 h-3.5 text-[#354e20]" />
+                                <span>متطوع (مقدم خدمة)</span>
                             </span>
                         @else
-                            <span style="background:#eff6ff; color:#1e40af; padding:3px 10px; border-radius:8px; font-size:11px; font-weight:700;">
-                                <i class="fa-solid fa-person-cane" style="margin-left:4px;"></i> كبير سن (مستفيد)
+                            <span style="background:#eff6ff; color:#1e40af; padding:3px 10px; border-radius:8px; font-size:11px; font-weight:700; display:inline-flex; align-items:center; gap:4px;">
+                                <x-app-icon name="user" class="w-3.5 h-3.5 text-blue-700" />
+                                <span>كبير سن (مستفيد)</span>
                             </span>
                         @endif
                     </td>
@@ -90,8 +92,9 @@
                         <span style="display:block; font-size:10px; color:#9ca3af;">{{ $u->created_at->diffForHumans() }}</span>
                     </td>
                     <td style="padding:14px 20px;">
-                        <span style="background:#fef3c7; color:#92400e; padding:4px 10px; border-radius:8px; font-size:11px; font-weight:700;">
-                            <i class="fa-solid fa-hourglass-half" style="margin-left:3px;"></i> بانتظار الاعتماد
+                        <span style="background:#fef3c7; color:#92400e; padding:4px 10px; border-radius:8px; font-size:11px; font-weight:700; display:inline-flex; align-items:center; gap:4px;">
+                            <x-app-icon name="clock" class="w-3.5 h-3.5 text-amber-700" />
+                            <span>بانتظار الاعتماد</span>
                         </span>
                     </td>
                     <td style="padding:14px 20px;">
@@ -99,7 +102,7 @@
                             style="background:#354e20; color:#fff; padding:7px 16px; border-radius:10px; font-size:11.5px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:opacity 0.2s;"
                             onmouseover="this.style.opacity='0.9';"
                             onmouseout="this.style.opacity='1';">
-                            <i class="fa-solid fa-eye"></i>
+                            <x-app-icon name="eye" class="w-4 h-4 text-white" />
                             <span>معاينة المستندات والبت</span>
                         </a>
                     </td>
@@ -107,7 +110,7 @@
                 @empty
                 <tr>
                     <td colspan="6" style="padding:48px 20px; text-align:center; color:#9ca3af;">
-                        <i class="fa-solid fa-clipboard-check" style="font-size:36px; color:#10b981; margin-bottom:12px; display:block;"></i>
+                        <x-app-icon name="clipboard-document-check" class="w-10 h-10 text-emerald-500 mx-auto mb-3" />
                         <span style="font-size:14px; font-weight:700; color:#374151;">رائع! لا توجد حسابات معلقة بانتظار الاعتماد.</span>
                     </td>
                 </tr>

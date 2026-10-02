@@ -5,12 +5,12 @@ import { parseAppointmentWithAI } from './appointment-ai';
 import { assistantReplies } from './assistant-replies';
 
 const services = [
-    { id: 'grocery', title: 'شراء أغراض', icon: '🛒', keywords: ['اغراض', 'أغراض', 'تسوق', 'شراء', 'سوبرماركت'] },
-    { id: 'medicine', title: 'شراء دواء', icon: '💊', keywords: ['دواء', 'ادوية', 'أدوية', 'صيدلية', 'علاج'] },
-    { id: 'medical_escort', title: 'مرافقة طبية', icon: '🏥', keywords: ['مستشفى', 'طبيب', 'دكتور', 'عيادة', 'مرافقة'] },
-    { id: 'social_visit', title: 'زيارة اجتماعية', icon: '👥', keywords: ['زيارة', 'مؤانسة', 'اجتماعية', 'صحبة'] },
-    { id: 'home_help', title: 'مساعدة منزلية', icon: '🏠', keywords: ['منزل', 'بيت', 'تنظيف', 'ترتيب'] },
-    { id: 'support_request', title: 'خدمة أخرى', icon: '🤲', keywords: ['اخرى', 'أخرى', 'غير ذلك', 'دعم'] },
+    { id: 'grocery', title: 'شراء أغراض', iconName: 'shopping-cart', keywords: ['اغراض', 'أغراض', 'تسوق', 'شراء', 'سوبرماركت'] },
+    { id: 'medicine', title: 'شراء دواء', iconName: 'pill', keywords: ['دواء', 'ادوية', 'أدوية', 'صيدلية', 'علاج'] },
+    { id: 'medical_escort', title: 'مرافقة طبية', iconName: 'walking', keywords: ['مستشفى', 'طبيب', 'دكتور', 'عيادة', 'مرافقة'] },
+    { id: 'social_visit', title: 'زيارة اجتماعية', iconName: 'users', keywords: ['زيارة', 'مؤانسة', 'اجتماعية', 'صحبة'] },
+    { id: 'home_help', title: 'مساعدة منزلية', iconName: 'broom', keywords: ['منزل', 'بيت', 'تنظيف', 'ترتيب'] },
+    { id: 'support_request', title: 'خدمة أخرى', iconName: 'handshake', keywords: ['اخرى', 'أخرى', 'غير ذلك', 'دعم'] },
 ];
 
 const normalizeMessage = RunnableLambda.from((input) => ({

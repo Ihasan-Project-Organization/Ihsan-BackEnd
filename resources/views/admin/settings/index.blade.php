@@ -12,7 +12,7 @@
 
     @if (session('success'))
         <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:12px; padding:14px 18px; margin-bottom:20px; display:flex; align-items:center; gap:10px; color:#065f46; font-size:13px; font-weight:700;">
-            <i class="fa-solid fa-circle-check" style="font-size:16px;"></i>
+            <x-app-icon name="check-circle" class="w-5 h-5 text-emerald-600 shrink-0" />
             <span>{{ session('success') }}</span>
         </div>
     @endif
@@ -20,7 +20,7 @@
     @if ($errors->any())
         <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:12px; padding:14px 18px; margin-bottom:20px;">
             <div style="font-weight:800; color:#991b1b; font-size:13px; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-                <i class="fa-solid fa-circle-exclamation"></i>
+                <x-app-icon name="exclamation-circle" class="w-4 h-4 text-red-700 shrink-0" />
                 <span>يرجى تصحيح أخطاء الإدخال التالية:</span>
             </div>
             <ul style="margin:0; padding-right:20px; color:#b91c1c; font-size:12px;">
@@ -34,7 +34,7 @@
     {{-- بطاقة توضيحية لآلية المستويات --}}
     <div style="background:linear-gradient(135deg, #354e20, #253915); border-radius:16px; padding:22px 24px; color:#fff; margin-bottom:24px; box-shadow:0 4px 14px rgba(53,78,32,0.2);">
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
-            <i class="fa-solid fa-circle-info" style="color:#f4a400; font-size:18px;"></i>
+            <x-app-icon name="information-circle" class="w-5 h-5 text-amber-400 shrink-0" />
             <h3 style="margin:0; font-size:15px; font-weight:800; color:#fff;">كيف يعمل نظام المستويات (Tier System) في المنصة؟</h3>
         </div>
         <p style="margin:0 0 14px; font-size:12px; color:#dfe6d5; line-height:1.6;">
@@ -148,7 +148,7 @@
                 style="background:#354e20; color:#fff; border:none; border-radius:12px; padding:12px 32px; font-size:14px; font-weight:800; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 12px rgba(53,78,32,0.25); transition:0.2s;"
                 onmouseover="this.style.transform='translateY(-1px)';"
                 onmouseout="this.style.transform='translateY(0)';">
-                <i class="fa-solid fa-floppy-disk"></i>
+                <x-app-icon name="check" class="w-4 h-4 text-white" />
                 <span>حفظ التعديلات في النظام</span>
             </button>
         </div>

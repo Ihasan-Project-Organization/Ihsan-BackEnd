@@ -9,25 +9,25 @@
     </a>
     <a href="{{ route('admin.requests.index', ['status' => 'active']) }}"
         style="text-decoration:none; padding:8px 16px; border-radius:12px; font-size:12px; font-weight:700; white-space:nowrap; display:flex; align-items:center; gap:6px; {{ request('status') === 'active' ? 'background:#354e20;color:#fff;' : 'background:#fff;color:#4b5563;border:1px solid #e5e7eb;' }}">
-        <i class="fa-solid fa-spinner" style="font-size:11px;"></i>
+        <x-app-icon name="arrow-path" class="w-3.5 h-3.5" />
         <span>النشطة الآن</span>
         <span style="background:{{ request('status') === 'active' ? 'rgba(255,255,255,0.25)' : '#f3f4f6' }}; padding:2px 7px; border-radius:8px; font-size:11px;">{{ $counts['active'] }}</span>
     </a>
     <a href="{{ route('admin.requests.index', ['status' => 'needs_action']) }}"
         style="text-decoration:none; padding:8px 16px; border-radius:12px; font-size:12px; font-weight:700; white-space:nowrap; display:flex; align-items:center; gap:6px; {{ request('status') === 'needs_action' ? 'background:#ea580c;color:#fff;' : 'background:#fff;color:#4b5563;border:1px solid #e5e7eb;' }}">
-        <i class="fa-solid fa-triangle-exclamation" style="font-size:11px;"></i>
+        <x-app-icon name="exclamation-triangle" class="w-3.5 h-3.5" />
         <span>بحاجة لإجراء</span>
         <span style="background:{{ request('status') === 'needs_action' ? 'rgba(255,255,255,0.25)' : '#fee2e2;color:#991b1b;' }}; padding:2px 7px; border-radius:8px; font-size:11px;">{{ $counts['needs_action'] }}</span>
     </a>
     <a href="{{ route('admin.requests.index', ['status' => 'under_review']) }}"
         style="text-decoration:none; padding:8px 16px; border-radius:12px; font-size:12px; font-weight:700; white-space:nowrap; display:flex; align-items:center; gap:6px; {{ request('status') === 'under_review' ? 'background:#ef4444;color:#fff;' : 'background:#fff;color:#4b5563;border:1px solid #e5e7eb;' }}">
-        <i class="fa-solid fa-flag" style="font-size:11px;"></i>
+        <x-app-icon name="flag" class="w-3.5 h-3.5" />
         <span>تحت المراجعة (اعتراض)</span>
         <span style="background:{{ request('status') === 'under_review' ? 'rgba(255,255,255,0.25)' : '#f3f4f6' }}; padding:2px 7px; border-radius:8px; font-size:11px;">{{ $counts['under_review'] }}</span>
     </a>
     <a href="{{ route('admin.requests.index', ['status' => 'completed']) }}"
         style="text-decoration:none; padding:8px 16px; border-radius:12px; font-size:12px; font-weight:700; white-space:nowrap; display:flex; align-items:center; gap:6px; {{ request('status') === 'completed' ? 'background:#10b981;color:#fff;' : 'background:#fff;color:#4b5563;border:1px solid #e5e7eb;' }}">
-        <i class="fa-solid fa-check" style="font-size:11px;"></i>
+        <x-app-icon name="check" class="w-3.5 h-3.5" />
         <span>المكتملة</span>
         <span style="background:{{ request('status') === 'completed' ? 'rgba(255,255,255,0.25)' : '#f3f4f6' }}; padding:2px 7px; border-radius:8px; font-size:11px;">{{ $counts['completed'] }}</span>
     </a>
@@ -70,13 +70,13 @@
         </div>
 
         <button type="submit" style="background:#354e20; color:#fff; border:none; border-radius:10px; padding:10px 22px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:6px;">
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <x-app-icon name="magnifying-glass" class="w-4 h-4 text-white" />
             <span>تصفية</span>
         </button>
 
         @if (request()->anyFilled(['search', 'status']))
         <a href="{{ route('admin.requests.index') }}" style="background:#f3f4f6; color:#374151; border-radius:10px; padding:10px 18px; font-size:13px; font-weight:700; text-decoration:none; display:flex; align-items:center; gap:6px;">
-            <i class="fa-solid fa-xmark"></i>
+            <x-app-icon name="x-mark" class="w-4 h-4 text-slate-600" />
             <span>إعادة ضبط</span>
         </a>
         @endif
@@ -138,7 +138,10 @@
                     <td style="padding:14px 20px;">
                         @if ($req->serviceProviderProfile?->user)
                             <div style="font-weight:700; color:#374151;">{{ $req->serviceProviderProfile->user->name }}</div>
-                            <div style="font-size:11px; color:#f59e0b;">⭐ {{ number_format($req->serviceProviderProfile->average_rating ?? 0, 1) }}</div>
+                            <div style="font-size:11px; color:#f59e0b; display:inline-flex; align-items:center; gap:3px;">
+                                <x-app-icon name="star" type="solid" class="w-3.5 h-3.5 text-amber-500" />
+                                <span>{{ number_format($req->serviceProviderProfile->average_rating ?? 0, 1) }}</span>
+                            </div>
                         @else
                             <span style="color:#9ca3af; font-size:11px;">لم يُسند بعد</span>
                         @endif
@@ -154,7 +157,7 @@
                     <td style="padding:14px 20px; white-space:nowrap;">
                         <a href="{{ route('admin.requests.show', $req) }}"
                             style="background:#e6edd9; color:#354e20; padding:6px 14px; border-radius:10px; font-size:11.5px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
-                            <i class="fa-solid fa-timeline"></i>
+                            <x-app-icon name="clock" class="w-4 h-4 text-[#354e20]" />
                             <span>التفاصيل والخط الزمني</span>
                         </a>
                     </td>
@@ -162,8 +165,8 @@
                 @empty
                 <tr>
                     <td colspan="7" style="padding:48px 20px; text-align:center; color:#9ca3af;">
-                        <i class="fa-regular fa-folder-open" style="font-size:36px; margin-bottom:8px; display:block;"></i>
-                        لا توجد طلبات تطابق معايير البحث
+                        <x-app-icon name="folder-open" class="w-10 h-10 text-slate-300 mx-auto mb-2" />
+                        <div>لا توجد طلبات تطابق معايير البحث</div>
                     </td>
                 </tr>
                 @endforelse

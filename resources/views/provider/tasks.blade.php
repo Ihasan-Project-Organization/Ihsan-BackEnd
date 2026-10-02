@@ -11,7 +11,8 @@
             <div class="flex items-center gap-2">
                 <a href="{{ route('provider.available') }}"
                     class="inline-flex items-center gap-2 rounded-2xl bg-[#31421e] px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#52643a] transition">
-                    <span>+ تصفح الطلبات المتاحة</span>
+                    <x-app-icon name="plus" class="w-4 h-4 inline" />
+                    <span>تصفح الطلبات المتاحة</span>
                 </a>
             </div>
         </div>
@@ -19,24 +20,34 @@
         {{-- تنبيهات --}}
         @if (session('status'))
             <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-800 text-xs font-bold flex items-center justify-between animate-fadeIn">
-                <span>✓ {{ match(session('status')) {
-                    'task-accepted' => 'تم قبول الطلب بنجاح وإسناده لك.',
-                    'service-started' => 'تم بدء تقديم الخدمة بنجاح.',
-                    'service-finished' => 'تم إرسال ملخص التنفيذ إلى كبير السن وبانتظار تأكيده.',
-                    'delay-reported' => 'تم تسجيل إشعار التأخير بنجاح.',
-                    'apology-completed' => 'تم تسجيل اعتذارك وفصل الإسناد بنجاح.',
-                    'provider-issue-reported' => 'تم إرسال البلاغ للإدارة للمراجعة. لا يؤثر البلاغ على تقييم أو حساب المستفيد.',
-                    'provider-issue-already-reported' => 'تم إرسال بلاغ سابق للإدارة بشأن هذا الطلب.',
-                    default => 'تم تنفيذ الإجراء بنجاح.'
-                } }}</span>
-                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer">✕</button>
+                <span class="inline-flex items-center gap-1.5">
+                    <x-app-icon name="check" class="w-4 h-4 text-emerald-800" />
+                    <span>{{ match(session('status')) {
+                        'task-accepted' => 'تم قبول الطلب بنجاح وإسناده لك.',
+                        'service-started' => 'تم بدء تقديم الخدمة بنجاح.',
+                        'service-finished' => 'تم إرسال ملخص التنفيذ إلى كبير السن وبانتظار تأكيده.',
+                        'delay-reported' => 'تم تسجيل إشعار التأخير بنجاح.',
+                        'apology-completed' => 'تم تسجيل اعتذارك وفصل الإسناد بنجاح.',
+                        'provider-issue-reported' => 'تم إرسال البلاغ للإدارة للمراجعة. لا يؤثر البلاغ على تقييم أو حساب المستفيد.',
+                        'provider-issue-already-reported' => 'تم إرسال بلاغ سابق للإدارة بشأن هذا الطلب.',
+                        default => 'تم تنفيذ الإجراء بنجاح.'
+                    } }}</span>
+                </span>
+                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer">
+                    <x-app-icon name="x-mark" class="w-4 h-4" />
+                </button>
             </div>
         @endif
 
         @if (session('error'))
             <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-800 text-xs font-bold flex items-center justify-between animate-fadeIn">
-                <span>⚠️ {{ session('error') }}</span>
-                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-rose-600 hover:text-rose-900 cursor-pointer">✕</button>
+                <span class="inline-flex items-center gap-1.5">
+                    <x-app-icon name="alert-triangle" class="w-4 h-4 text-rose-800" />
+                    <span>{{ session('error') }}</span>
+                </span>
+                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-rose-600 hover:text-rose-900 cursor-pointer">
+                    <x-app-icon name="x-mark" class="w-4 h-4" />
+                </button>
             </div>
         @endif
 
@@ -74,15 +85,23 @@
                         <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-100 pb-5">
                             <div class="flex items-center gap-3">
                                 <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef2e8] text-2xl shadow-sm">
-                                    {{ $req->service_type_icon }}
+                                    <x-app-icon :name="$req->service_type_icon_name" class="w-6 h-6 text-[#31421e]" />
                                 </span>
                                 <div>
                                     <div class="flex items-center gap-2">
                                         <h3 class="text-base font-black text-slate-900">{{ $req->service_type_label }}</h3>
                                         <span class="text-xs font-mono font-bold text-slate-400">{{ $req->public_id }}</span>
                                     </div>
-                                    <p class="text-xs text-slate-500 mt-0.5">
-                                        📍 <span class="font-bold text-slate-700">{{ $req->location }}</span> • 🕒 {{ $req->scheduled_at->translatedFormat('l، d F Y - h:i A') }}
+                                    <p class="text-xs text-slate-500 mt-0.5 inline-flex items-center gap-1.5 flex-wrap">
+                                        <span class="inline-flex items-center gap-1">
+                                            <x-app-icon name="map-pin" class="w-3.5 h-3.5" />
+                                            <span class="font-bold text-slate-700">{{ $req->location }}</span>
+                                        </span>
+                                        <span>•</span>
+                                        <span class="inline-flex items-center gap-1">
+                                            <x-app-icon name="clock" class="w-3.5 h-3.5" />
+                                            <span>{{ $req->scheduled_at->translatedFormat('l، d F Y - h:i A') }}</span>
+                                        </span>
                                     </p>
                                 </div>
                             </div>
@@ -114,7 +133,7 @@
                                     <div class="relative z-10 flex flex-col items-center">
                                         <div class="flex h-8 w-8 items-center justify-center rounded-full text-xs font-black transition {{ $step > $idx ? 'bg-[#31421e] text-white shadow-sm' : ($step === $idx ? 'bg-[#718256] text-white ring-4 ring-[#eef2e8]' : 'bg-slate-100 text-slate-400') }}">
                                             @if ($step > $idx)
-                                                ✓
+                                                <x-app-icon name="check" class="w-4 h-4 text-white" />
                                             @else
                                                 {{ $idx }}
                                             @endif
@@ -160,7 +179,7 @@
                         @if ($req->status === \App\Models\ServiceRequest::STATUS_PROVIDER_DELAYED)
                             <div class="rounded-2xl bg-amber-50 p-4 border border-amber-200 flex items-center justify-between">
                                 <div class="flex items-center gap-2 text-xs text-amber-900">
-                                    <span class="text-base">⏳</span>
+                                    <x-app-icon name="clock" class="w-4 h-4 text-amber-800 shrink-0" />
                                     <div>
                                         <span class="font-bold">تم إشعار كبير السن بالتأخير.</span>
                                         <p class="text-[11px] text-amber-700 mt-0.5">يرجى المبادرة ببدء تقديم الخدمة فور وصولك.</p>
@@ -178,7 +197,7 @@
                                 </div>
                                 <div class="flex items-center gap-1 text-amber-500 font-bold text-sm shrink-0">
                                     <span>{{ $req->review->stars }}</span>
-                                    <span>★</span>
+                                    <x-app-icon name="star" type="solid" class="w-4 h-4 text-amber-400" />
                                 </div>
                             </div>
                         @endif
@@ -190,22 +209,25 @@
                                 @if (in_array($req->status, [\App\Models\ServiceRequest::STATUS_ACCEPTED, \App\Models\ServiceRequest::STATUS_ASSIGNED, \App\Models\ServiceRequest::STATUS_PROVIDER_DELAYED]))
                                     <form method="POST" action="{{ route('provider.tasks.start-service', $req) }}">
                                         @csrf
-                                        <button type="submit" class="rounded-2xl bg-[#31421e] px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#52643a] transition cursor-pointer">
-                                            ⚡ بدء تقديم الخدمة
+                                        <button type="submit" class="rounded-2xl bg-[#31421e] px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#52643a] transition cursor-pointer inline-flex items-center gap-1.5">
+                                            <x-app-icon name="bolt" class="w-3.5 h-3.5" />
+                                            <span>بدء تقديم الخدمة</span>
                                         </button>
                                     </form>
 
                                     <button type="button" onclick="openReportDelayModal('{{ route('provider.tasks.report-delay', $req) }}')"
-                                        class="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-xs font-bold text-amber-800 hover:bg-amber-100 transition cursor-pointer">
-                                        ⏳ توقع تأخير
+                                        class="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-xs font-bold text-amber-800 hover:bg-amber-100 transition cursor-pointer inline-flex items-center gap-1.5">
+                                        <x-app-icon name="clock" class="w-3.5 h-3.5" />
+                                        <span>توقع تأخير</span>
                                     </button>
                                 @endif
 
                                 {{-- 2. حالة قيد التنفيذ: زر إنهاء الخدمة --}}
                                 @if ($req->status === \App\Models\ServiceRequest::STATUS_IN_PROGRESS)
                                     <button type="button" onclick="openFinishServiceModal('{{ route('provider.tasks.finish-service', $req) }}')"
-                                        class="rounded-2xl bg-emerald-700 px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-emerald-800 transition cursor-pointer">
-                                        ✓ إنهاء الخدمة وإرسال التأكيد
+                                        class="rounded-2xl bg-emerald-700 px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-emerald-800 transition cursor-pointer inline-flex items-center gap-1.5">
+                                        <x-app-icon name="check" class="w-3.5 h-3.5" />
+                                        <span>إنهاء الخدمة وإرسال التأكيد</span>
                                     </button>
                                 @endif
 
@@ -213,21 +235,24 @@
                                 @php($elderPhone = $req->elderProfile?->phone_number)
                                 @if ($req->canRevealContactPhone() && $elderPhone)
                                     <a href="tel:{{ $elderPhone }}"
-                                        class="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition">
-                                        📞 تواصل مع المستفيد (<span dir="ltr">{{ $elderPhone }}</span>)
+                                        class="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition inline-flex items-center gap-1.5">
+                                        <x-app-icon name="phone" class="w-3.5 h-3.5" />
+                                        <span>تواصل مع المستفيد (<span dir="ltr">{{ $elderPhone }}</span>)</span>
                                     </a>
                                 @endif
 
                                 {{-- بلاغ للإدارة فقط؛ لا يمكن لمقدم الخدمة تقييم المستفيد. --}}
                                 @if (in_array($req->status, [\App\Models\ServiceRequest::STATUS_ACCEPTED, \App\Models\ServiceRequest::STATUS_ASSIGNED, \App\Models\ServiceRequest::STATUS_IN_PROGRESS, \App\Models\ServiceRequest::STATUS_PROVIDER_DELAYED, \App\Models\ServiceRequest::STATUS_PENDING_CONFIRMATION, \App\Models\ServiceRequest::STATUS_COMPLETED], true))
                                     @if ($req->complaints->isNotEmpty())
-                                        <span class="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-600">
-                                            ✓ تم إرسال بلاغ للإدارة
+                                        <span class="inline-flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-600">
+                                            <x-app-icon name="check" class="w-3.5 h-3.5 text-slate-600" />
+                                            <span>تم إرسال بلاغ للإدارة</span>
                                         </span>
                                     @else
                                         <button type="button" onclick="openReportIssueModal('{{ route('provider.tasks.report-issue', $req) }}')"
-                                            class="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-xs font-bold text-rose-700 hover:bg-rose-100 transition cursor-pointer">
-                                            ⚑ إبلاغ عن مشكلة للإدارة
+                                            class="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-xs font-bold text-rose-700 hover:bg-rose-100 transition cursor-pointer inline-flex items-center gap-1.5">
+                                            <x-app-icon name="flag" class="w-3.5 h-3.5" />
+                                            <span>إبلاغ عن مشكلة للإدارة</span>
                                         </button>
                                     @endif
                                 @endif
@@ -251,7 +276,9 @@
             </div>
         @else
             <div class="rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm space-y-3">
-                <span class="text-4xl">📋</span>
+                <div class="flex justify-center mb-2">
+                    <x-app-icon name="clipboard-list" class="w-12 h-12 text-slate-300" />
+                </div>
                 <h3 class="text-base font-black text-slate-800">لا توجد طلبات في هذا التبويب</h3>
                 <p class="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
                     يمكنك تصفح الفرص المتاحة وقبول طلبات جديدة لتقديم العون لكبار السن.
@@ -259,7 +286,7 @@
                 <div class="pt-2">
                     <a href="{{ route('provider.available') }}" class="inline-flex items-center gap-2 rounded-2xl bg-[#31421e] px-6 py-3 text-xs font-bold text-white shadow-sm hover:bg-[#52643a] transition">
                         <span>استعراض الطلبات المتاحة</span>
-                        <span>←</span>
+                        <x-app-icon name="arrow-left" class="w-4 h-4 inline" />
                     </a>
                 </div>
             </div>

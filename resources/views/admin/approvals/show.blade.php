@@ -2,18 +2,19 @@
 
 <div style="margin-bottom:20px; display:flex; align-items:center; justify-content:space-between;">
     <a href="{{ route('admin.approvals.index') }}" style="font-size:13px; color:#354e20; text-decoration:none; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
-        <i class="fa-solid fa-arrow-right"></i>
+        <x-app-icon name="arrow-right" class="w-4 h-4" />
         <span>العودة لقائمة طلبات الاعتماد</span>
     </a>
 
-    <span style="background:#fef3c7; color:#92400e; padding:4px 14px; border-radius:20px; font-size:12px; font-weight:800;">
-        <i class="fa-solid fa-clock" style="margin-left:4px;"></i> بانتظار قرار الإدارة
+    <span style="background:#fef3c7; color:#92400e; padding:4px 14px; border-radius:20px; font-size:12px; font-weight:800; display:inline-flex; align-items:center; gap:4px;">
+        <x-app-icon name="clock" class="w-3.5 h-3.5" />
+        <span>بانتظار قرار الإدارة</span>
     </span>
 </div>
 
 @if ($errors->any())
 <div style="background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; border-radius:12px; padding:14px 18px; margin-bottom:20px; font-size:13px;">
-    <div style="font-weight:800; margin-bottom:6px;"><i class="fa-solid fa-triangle-exclamation" style="margin-left:6px;"></i> يرجى تصحيح الأخطاء التالية:</div>
+    <div style="font-weight:800; margin-bottom:6px; display:flex; align-items:center; gap:6px;"><x-app-icon name="triangle-exclamation" class="w-4 h-4" /> يرجى تصحيح الأخطاء التالية:</div>
     <ul style="margin:0; padding-right:20px;">
         @foreach ($errors->all() as $error)
             <li>{{ $error }}</li>
@@ -25,7 +26,7 @@
 @if ($user->resubmission_note)
 <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:14px; padding:16px 20px; margin-bottom:24px;">
     <div style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:800; color:#92400e; margin-bottom:6px;">
-        <i class="fa-solid fa-comment-dots"></i>
+        <x-app-icon name="chat-bubble-bottom-center-text" class="w-4 h-4 text-amber-700" />
         <span>آخر طلب استكمال مستندات تم إرساله للمستخدم:</span>
     </div>
     <div style="font-size:13px; color:#78350f; line-height:1.6; background:rgba(255,255,255,0.6); padding:10px 14px; border-radius:8px;">
@@ -50,12 +51,14 @@
 
                 <div style="margin-top:12px;">
                     @if ($user->isProvider())
-                        <span style="background:rgba(255, 255, 255, 0.2); color:#ffffff; border:1px solid rgba(255, 255, 255, 0.3); padding:4px 14px; border-radius:20px; font-size:11px; font-weight:800;">
-                            <i class="fa-solid fa-hand-holding-heart" style="margin-left:4px;"></i> متطوع (مقدم خدمة)
+                        <span style="background:rgba(255, 255, 255, 0.2); color:#ffffff; border:1px solid rgba(255, 255, 255, 0.3); padding:4px 14px; border-radius:20px; font-size:11px; font-weight:800; display:inline-flex; align-items:center; gap:4px;">
+                            <x-app-icon name="heart" class="w-3.5 h-3.5" />
+                            <span>متطوع (مقدم خدمة)</span>
                         </span>
                     @else
-                        <span style="background:rgba(255, 255, 255, 0.2); color:#ffffff; border:1px solid rgba(255, 255, 255, 0.3); padding:4px 14px; border-radius:20px; font-size:11px; font-weight:800;">
-                            <i class="fa-solid fa-person-cane" style="margin-left:4px;"></i> كبير سن (مستفيد)
+                        <span style="background:rgba(255, 255, 255, 0.2); color:#ffffff; border:1px solid rgba(255, 255, 255, 0.3); padding:4px 14px; border-radius:20px; font-size:11px; font-weight:800; display:inline-flex; align-items:center; gap:4px;">
+                            <x-app-icon name="user" class="w-3.5 h-3.5" />
+                            <span>كبير سن (مستفيد)</span>
                         </span>
                     @endif
                 </div>
@@ -120,8 +123,18 @@
 
                     <div style="display:flex; justify-content:space-between; border-bottom:1px solid #f3f4f6; padding-bottom:8px;">
                         <span style="color:#6b7280;">توثيق البريد</span>
-                        <span style="font-weight:700; color:{{ $user->hasVerifiedEmail() ? '#10b981' : '#f59e0b' }};">
-                            {{ $user->hasVerifiedEmail() ? 'موثّق ✓' : 'غير موثّق ⚠' }}
+                        <span style="font-weight:700;">
+                            @if ($user->hasVerifiedEmail())
+                                <span style="color:#10b981; display:inline-flex; align-items:center; gap:4px;">
+                                    <x-app-icon name="check" class="w-3.5 h-3.5" />
+                                    <span>موثّق</span>
+                                </span>
+                            @else
+                                <span style="color:#f59e0b; display:inline-flex; align-items:center; gap:4px;">
+                                    <x-app-icon name="triangle-exclamation" class="w-3.5 h-3.5" />
+                                    <span>غير موثّق</span>
+                                </span>
+                            @endif
                         </span>
                     </div>
 
@@ -136,7 +149,7 @@
         {{-- إجراء سريع 1: اعتماد الحساب --}}
         <div style="background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); padding:20px; border:1px solid #e2dcd0; border-top:4px solid #10b981;">
             <div style="font-size:14px; font-weight:900; color:#065f46; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-                <i class="fa-solid fa-circle-check"></i>
+                <x-app-icon name="check-circle" class="w-4 h-4 text-emerald-700" />
                 <span>الموافقة والاعتماد</span>
             </div>
             <p style="font-size:11.5px; color:#6b7280; margin:0 0 14px; line-height:1.5;">
@@ -149,7 +162,7 @@
                     onmouseover="this.style.background='#059669';"
                     onmouseout="this.style.background='#10b981';"
                     onclick="return confirm('هل أنت متأكد من اعتماد حساب {{ $user->name }}؟')">
-                    <i class="fa-solid fa-check"></i>
+                    <x-app-icon name="check" class="w-4 h-4" />
                     <span>اعتماد وتفعيل الحساب</span>
                 </button>
             </form>
@@ -163,7 +176,7 @@
         {{-- قسم المستندات المرفوعة لمعاينتها --}}
         <div style="background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); overflow:hidden; border:1px solid #e2dcd0;">
             <div style="padding:18px 24px; border-bottom:1px solid #f3f4f6; display:flex; align-items:center; gap:8px;">
-                <i class="fa-solid fa-file-shield" style="color:#354e20; font-size:16px;"></i>
+                <x-app-icon name="shield-check" class="w-5 h-5 text-[#354e20]" />
                 <h3 style="margin:0; font-size:15px; font-weight:900; color:#1a1f36;">المستندات المرفوعة للمعاينة والتدقيق</h3>
             </div>
 
@@ -182,15 +195,15 @@
                     {{-- 1. صورة الهوية الوطنية --}}
                     <div style="border:1px solid #e5e7eb; border-radius:14px; padding:16px; background:#f9fafb;">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                            <span style="font-weight:800; font-size:13px; color:#1a1f36;">
-                                <i class="fa-solid fa-id-card" style="margin-left:6px; color:#354e20;"></i>
-                                صورة الهوية الشخصية
+                            <span style="font-weight:800; font-size:13px; color:#1a1f36; display:inline-flex; align-items:center; gap:6px;">
+                                <x-app-icon name="identification" class="w-4 h-4 text-[#354e20]" />
+                                <span>صورة الهوية الشخصية</span>
                             </span>
                             @if ($idDocPath)
                                 <a href="{{ route('admin.documents.view', ['path' => $idDocPath]) }}" target="_blank"
                                     style="font-size:11px; color:#354e20; text-decoration:none; font-weight:700; display:inline-flex; align-items:center; gap:4px;">
                                     <span>فتح كامل</span>
-                                    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:9px;"></i>
+                                    <x-app-icon name="arrow-top-right-on-square" class="w-3 h-3" />
                                 </a>
                             @endif
                         </div>
@@ -199,7 +212,7 @@
                             @php $isPdf = str_ends_with(strtolower($idDocPath), '.pdf'); @endphp
                             @if ($isPdf)
                                 <div style="height:220px; background:#fff; border:1px dashed #cbd5e1; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">
-                                    <i class="fa-solid fa-file-pdf" style="font-size:48px; color:#ef4444;"></i>
+                                    <x-app-icon name="document-text" class="w-12 h-12 text-rose-500" />
                                     <span style="font-size:12px; color:#64748b; font-weight:700;">مستند بصيغة PDF</span>
                                     <a href="{{ route('admin.documents.view', ['path' => $idDocPath]) }}" target="_blank"
                                         style="background:#354e20; color:#fff; padding:6px 16px; border-radius:8px; font-size:11.5px; font-weight:700; text-decoration:none;">
@@ -215,7 +228,7 @@
                             @endif
                         @else
                             <div style="height:220px; background:#fff; border:1px dashed #cbd5e1; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#9ca3af; font-size:12px;">
-                                <i class="fa-regular fa-image" style="font-size:36px; margin-bottom:8px;"></i>
+                                <x-app-icon name="photo" class="w-9 h-9 mb-2 text-stone-400" />
                                 لم يتم رفع صورة هوية
                             </div>
                         @endif
@@ -225,15 +238,15 @@
                     @if ($user->isProvider())
                     <div style="border:1px solid #e5e7eb; border-radius:14px; padding:16px; background:#f9fafb;">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                            <span style="font-weight:800; font-size:13px; color:#1a1f36;">
-                                <i class="fa-solid fa-certificate" style="margin-left:6px; color:#10b981;"></i>
-                                شهادة حسن السيرة والسلوك
+                            <span style="font-weight:800; font-size:13px; color:#1a1f36; display:inline-flex; align-items:center; gap:6px;">
+                                <x-app-icon name="check-badge" class="w-4 h-4 text-emerald-600" />
+                                <span>شهادة حسن السيرة والسلوك</span>
                             </span>
                             @if ($conductDocPath)
                                 <a href="{{ route('admin.documents.view', ['path' => $conductDocPath]) }}" target="_blank"
                                     style="font-size:11px; color:#354e20; text-decoration:none; font-weight:700; display:inline-flex; align-items:center; gap:4px;">
                                     <span>فتح كامل</span>
-                                    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:9px;"></i>
+                                    <x-app-icon name="arrow-top-right-on-square" class="w-3 h-3" />
                                 </a>
                             @endif
                         </div>
@@ -242,7 +255,7 @@
                             @php $isPdfConduct = str_ends_with(strtolower($conductDocPath), '.pdf'); @endphp
                             @if ($isPdfConduct)
                                 <div style="height:220px; background:#fff; border:1px dashed #cbd5e1; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">
-                                    <i class="fa-solid fa-file-pdf" style="font-size:48px; color:#ef4444;"></i>
+                                    <x-app-icon name="document-text" class="w-12 h-12 text-rose-500" />
                                     <span style="font-size:12px; color:#64748b; font-weight:700;">شهادة بصيغة PDF</span>
                                     <a href="{{ route('admin.documents.view', ['path' => $conductDocPath]) }}" target="_blank"
                                         style="background:#10b981; color:#fff; padding:6px 16px; border-radius:8px; font-size:11.5px; font-weight:700; text-decoration:none;">
@@ -258,7 +271,7 @@
                             @endif
                         @else
                             <div style="height:220px; background:#fff; border:1px dashed #cbd5e1; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#9ca3af; font-size:12px;">
-                                <i class="fa-regular fa-file-lines" style="font-size:36px; margin-bottom:8px;"></i>
+                                <x-app-icon name="document" class="w-9 h-9 mb-2 text-stone-400" />
                                 لم يتم رفع شهادة حسن السيرة
                             </div>
                         @endif
@@ -269,10 +282,11 @@
             </div>
         </div>
 
+
         {{-- قرار الرفض مع سبب إلزامي (تمت إزالة استكمال المستندات لحصر الإجراء في الاعتماد أو الرفض) --}}
         <div style="background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); padding:20px; border:1px solid #e2dcd0; border-top:4px solid #ef4444;">
             <div style="font-size:14px; font-weight:900; color:#991b1b; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-                <i class="fa-solid fa-ban"></i>
+                <x-app-icon name="no-symbol" class="w-4 h-4 text-rose-700" />
                 <span>رفض طلب الاعتماد</span>
             </div>
             <p style="font-size:11.5px; color:#6b7280; margin:0 0 12px; line-height:1.5;">
@@ -288,7 +302,7 @@
                 <button type="submit"
                     style="width:100%; background:#ef4444; color:#fff; border:none; border-radius:10px; padding:11px; font-size:12.5px; font-weight:800; cursor:pointer; font-family:inherit; display:flex; align-items:center; justify-content:center; gap:6px;"
                     onclick="return confirm('تأكيد رفض طلب اعتماد {{ $user->name }}؟')">
-                    <i class="fa-solid fa-xmark"></i>
+                    <x-app-icon name="x-mark" class="w-4 h-4" />
                     <span>رفض الحساب نهائياً</span>
                 </button>
             </form>

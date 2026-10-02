@@ -193,7 +193,7 @@
                     <p class="text-sm font-semibold text-[#b87536]">ثلاث خطوات فقط</p>
                     <h2 class="mt-3 text-3xl font-extrabold leading-[1.8] text-[#1d3826] sm:text-4xl sm:leading-[1.75]">طريقك إلى المساعدة أبسط مما تتخيّل</h2>
                     <p class="mt-5 text-sm font-light leading-8 text-[#6f7b73] sm:text-base">أنشئ حسابك، أخبرنا بما تحتاج، ودع أنيس يقرّب لك الشخص المناسب.</p>
-                    <a href="{{ route('register.choose') }}" class="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#24472f] transition hover:text-[#b87536]">إنشاء حساب الآن <span aria-hidden="true">←</span></a>
+                    <a href="{{ route('register.choose') }}" class="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#24472f] transition hover:text-[#b87536]"><span>إنشاء حساب الآن</span> <x-app-icon name="arrow-left" class="w-4 h-4" /></a>
                 </div>
                 <ol class="grid gap-4" data-reveal="left">
                     @foreach ([['01', 'اختر نوع حسابك', 'سجّل بصفتك كبير سن يحتاج إلى المساندة، أو متطوعًا يرغب في تقديمها.', '#24472f'], ['02', 'أكمل بياناتك بسهولة', 'نموذج واضح ومقسّم إلى مراحل قصيرة يساعدك على إتمام التسجيل براحة.', '#b87536'], ['03', 'ابدأ تجربتك مع أنيس', 'تابع ملفك وطلباتك وخدماتك من مكان واحد وبواجهة سهلة الاستخدام.', '#789066']] as $step)

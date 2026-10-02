@@ -93,7 +93,7 @@ class AdminRequestsController extends Controller
                 'description' => 'تم إنشاء ونشر الطلب بواسطة كبير السن (' . ($serviceRequest->elderProfile?->user?->name ?? 'المستفيد') . ')',
                 'time'        => $serviceRequest->created_at,
                 'status'      => 'completed',
-                'icon'        => 'fa-solid fa-file-circle-plus',
+                'icon'        => 'document-plus',
                 'color'       => '#3b82f6',
             ];
         }
@@ -105,7 +105,7 @@ class AdminRequestsController extends Controller
                 'description' => 'تم قبول الطلب من قبل مقدم الخدمة (' . ($serviceRequest->serviceProviderProfile?->user?->name ?? 'المتطوع') . ')',
                 'time'        => $serviceRequest->accepted_at,
                 'status'      => 'completed',
-                'icon'        => 'fa-solid fa-user-check',
+                'icon'        => 'check-circle',
                 'color'       => '#8b5cf6',
             ];
         }
@@ -117,7 +117,7 @@ class AdminRequestsController extends Controller
                 'description' => 'تم تأكيد التوكيل وانتقال الطلب لمرحلة الاستعداد للتنفيذ',
                 'time'        => $serviceRequest->assigned_at,
                 'status'      => 'completed',
-                'icon'        => 'fa-solid fa-handshake',
+                'icon'        => 'handshake',
                 'color'       => '#0ea5e9',
             ];
         }
@@ -129,7 +129,7 @@ class AdminRequestsController extends Controller
                 'description' => 'باشر المتطوع تقديم الخدمة في الموقع المحدد',
                 'time'        => $serviceRequest->started_at,
                 'status'      => 'completed',
-                'icon'        => 'fa-solid fa-person-running',
+                'icon'        => 'walking',
                 'color'       => '#f59e0b',
             ];
         }
@@ -141,7 +141,7 @@ class AdminRequestsController extends Controller
                 'description' => 'تم إنجاز المهمة وتأكيد الانتهاء وتقييم الخدمة',
                 'time'        => $serviceRequest->completed_at,
                 'status'      => 'completed',
-                'icon'        => 'fa-solid fa-circle-check',
+                'icon'        => 'check',
                 'color'       => '#10b981',
             ];
         }
@@ -154,7 +154,7 @@ class AdminRequestsController extends Controller
                 'description' => 'تم تسجيل إلغاء الطلب' . $reason,
                 'time'        => $serviceRequest->cancelled_at,
                 'status'      => 'cancelled',
-                'icon'        => 'fa-solid fa-circle-xmark',
+                'icon'        => 'x-circle',
                 'color'       => '#ef4444',
             ];
         }

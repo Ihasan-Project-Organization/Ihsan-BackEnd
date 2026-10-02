@@ -1,7 +1,7 @@
 <section>
     <header class="flex items-center gap-3">
         <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e6edd9] text-lg text-[#354e20]">
-            👤
+            <x-app-icon name="user" class="w-5 h-5 text-[#354e20]" />
         </div>
         <div>
             <h2 class="text-xl font-black text-[#31421e]">الملف الشخصي</h2>
@@ -78,8 +78,9 @@
             </button>
             @if (session('status') === 'profile-updated')
                 <span x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
-                    class="text-xs font-bold text-emerald-700 flex items-center gap-1">
-                    <span>✓ تم حفظ التغييرات بنجاح</span>
+                    class="text-xs font-bold text-emerald-700 flex items-center gap-1.5">
+                    <x-app-icon name="check-circle" class="w-4 h-4 text-emerald-600" />
+                    <span>تم حفظ التغييرات بنجاح</span>
                 </span>
             @endif
         </div>

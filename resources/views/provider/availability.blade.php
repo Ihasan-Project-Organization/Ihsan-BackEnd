@@ -10,8 +10,13 @@
         {{-- تنبيه نجاح الحفظ --}}
         @if (session('status') === 'settings-updated')
             <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-800 text-xs font-bold flex items-center justify-between animate-fadeIn">
-                <span>✓ تم حفظ وتحديث حالة التوفر بنجاح.</span>
-                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer">✕</button>
+                <span class="flex items-center gap-2">
+                    <x-app-icon name="check-circle" class="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>تم حفظ وتحديث حالة التوفر بنجاح.</span>
+                </span>
+                <button type="button" onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+                    <x-app-icon name="x-mark" class="w-4 h-4" />
+                </button>
             </div>
         @endif
 
@@ -35,7 +40,7 @@
                             <div>
                                 <span class="text-sm font-black text-slate-900 flex items-center gap-2">
                                     <span class="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                    <span>🟢 متاح لاستقبال الطلبات</span>
+                                    <span>متاح لاستقبال الطلبات</span>
                                 </span>
                                 <p class="text-xs text-slate-500 mt-1 leading-5">
                                     حسابك نشط وجاهز. ستتمكن من تصفح وقبول كافة طلبات المساعدة المتوافقة مع مستواك.
@@ -48,7 +53,7 @@
                             <div>
                                 <span class="text-sm font-black text-slate-900 flex items-center gap-2">
                                     <span class="h-2.5 w-2.5 rounded-full bg-rose-500"></span>
-                                    <span>🔴 غير متاح مؤقتًا (إجازة / توقف)</span>
+                                    <span>غير متاح مؤقتًا (إجازة / توقف)</span>
                                 </span>
                                 <p class="text-xs text-slate-500 mt-1 leading-5">
                                     يمكنك إيقاف الاستقبال مؤقتاً عند انشغالك أو سفرك دون أي تأثير على تقييمك أو مستواك.
@@ -75,7 +80,7 @@
 
                 <div class="space-y-3.5 text-xs">
                     <div class="rounded-2xl bg-[#f8faf6] p-4 border border-[#dfe6d5] flex items-start gap-3">
-                        <span class="text-lg">📢</span>
+                        <x-app-icon name="megaphone" class="w-5 h-5 text-[#52643a] shrink-0 mt-0.5" />
                         <div>
                             <h4 class="font-black text-[#31421e]">البث المباشر (Broadcast):</h4>
                             <p class="text-slate-600 mt-0.5 leading-5">يتم عرض الطلبات المنشورة لجميع مقدمي الخدمة المؤهلين بحسب المستوى (Tier) وتفضيل الجنس.</p>
@@ -83,7 +88,7 @@
                     </div>
 
                     <div class="rounded-2xl bg-[#f8faf6] p-4 border border-[#dfe6d5] flex items-start gap-3">
-                        <span class="text-lg">⚡</span>
+                        <x-app-icon name="bolt" class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
                         <div>
                             <h4 class="font-black text-[#31421e]">أسبقية القبول:</h4>
                             <p class="text-slate-600 mt-0.5 leading-5">أول مقدم خدمة يضغط "قبول الطلب" يفوز به، ويُقفل الطلب فوراً أمام البقية لمنع أي تضارب.</p>
@@ -91,7 +96,7 @@
                     </div>
 
                     <div class="rounded-2xl bg-[#f8faf6] p-4 border border-[#dfe6d5] flex items-start gap-3">
-                        <span class="text-lg">📍</span>
+                        <x-app-icon name="map-pin" class="w-5 h-5 text-[#52643a] shrink-0 mt-0.5" />
                         <div>
                             <h4 class="font-black text-[#31421e]">المرونة المكانية:</h4>
                             <p class="text-slate-600 mt-0.5 leading-5">يعرض كل طلب عنواناً نصياً واضحاً، ومقدم الخدمة يحدد بنفسه ملاءمة الموقع لوقته وقدرته.</p>

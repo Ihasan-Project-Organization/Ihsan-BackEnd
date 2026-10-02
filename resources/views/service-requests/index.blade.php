@@ -1,5 +1,4 @@
 <x-app-layout>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
@@ -743,42 +742,42 @@
         {{-- تنبيهات العمليات والرسائل السريعة --}}
         @if (session('status') === 'request-created')
             <div class="mb-5 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-bold text-emerald-800 shadow-sm">
-                <i class="fa-solid fa-circle-check text-base"></i>
+                <x-app-icon name="check-circle" class="w-5 h-5 text-emerald-600 shrink-0" />
                 <span>تم إنشاء ونشر طلب المساعدة بنجاح! سيتم إشعارك فور قبول أحد مقدمي الخدمة.</span>
             </div>
         @elseif (session('status') === 'request-rescheduled')
             <div class="mb-5 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-bold text-emerald-800 shadow-sm">
-                <i class="fa-solid fa-arrows-rotate text-base"></i>
+                <x-app-icon name="arrow-path" class="w-5 h-5 text-emerald-600 shrink-0" />
                 <span>تم تحديد موعد جديد وإعادة نشر الطلب بنجاح بنفس الرقم وتاريخ المحاولات.</span>
             </div>
         @elseif (session('status') === 'request-updated')
             <div class="mb-5 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-bold text-emerald-800 shadow-sm">
-                <i class="fa-solid fa-pen-to-square text-base"></i>
+                <x-app-icon name="pencil-square" class="w-5 h-5 text-emerald-600 shrink-0" />
                 <span>تم تعديل بيانات الطلب وإعادة نشره لمقدمي الخدمة.</span>
             </div>
         @elseif (session('status') === 'request-completed')
             <div class="mb-5 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-bold text-emerald-800 shadow-sm">
-                <i class="fa-solid fa-star text-base text-amber-500"></i>
+                <x-app-icon name="star" type="solid" class="w-5 h-5 text-amber-500 shrink-0" />
                 <span>تم تأكيد اكتمال الخدمة بنجاح! شكرًا لك، يمكنك الآن تقييم مقدم الخدمة.</span>
             </div>
         @elseif (session('status') === 'request-cancelled')
             <div class="mb-5 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-100 p-4 text-sm font-bold text-slate-700 shadow-sm">
-                <i class="fa-regular fa-circle-xmark text-base"></i>
+                <x-app-icon name="x-circle" class="w-5 h-5 text-slate-500 shrink-0" />
                 <span>تم إلغاء الطلب ونقله إلى قسم الطلبات الملغاة.</span>
             </div>
         @elseif (session('status') === 'request-reassigned')
             <div class="mb-5 flex items-center gap-3 rounded-2xl border border-blue-200 bg-blue-50 p-4 text-sm font-bold text-blue-800 shadow-sm">
-                <i class="fa-solid fa-magnifying-glass text-base"></i>
+                <x-app-icon name="search" class="w-5 h-5 text-blue-600 shrink-0" />
                 <span>تم فك الإسناد وإعادة نشر الطلب للبحث عن مقدم خدمة بديل.</span>
             </div>
         @elseif (session('status') === 'review-submitted')
             <div class="mb-5 flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-bold text-amber-800 shadow-sm">
-                <i class="fa-solid fa-award text-base text-amber-500"></i>
+                <x-app-icon name="trophy" class="w-5 h-5 text-amber-500 shrink-0" />
                 <span>شكرًا لك! تم إرسال تقييمك لمقدم الخدمة بنجاح.</span>
             </div>
         @elseif (session('status') === 'problem-reported')
             <div class="mb-5 flex items-center gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm font-bold text-rose-800 shadow-sm">
-                <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                <x-app-icon name="alert-triangle" class="w-5 h-5 text-rose-600 shrink-0" />
                 <span>تم استلام بلاغ المشكلة بنجاح وإحالة الطلب إلى التدقيق الإداري.</span>
             </div>
         @endif
@@ -798,12 +797,12 @@
                         placeholder="ابحث برقم الطلب أو العنوان..."
                         class="rounded-xl border border-slate-200 bg-[#f8fafc] py-2 px-4 pr-9 text-xs focus:border-[#718256] focus:bg-white focus:ring-1 focus:ring-[#718256] w-full sm:w-60">
                     <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
-                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                        <x-app-icon name="search" class="w-3.5 h-3.5" />
                     </span>
                 </form>
 
                 <button type="button" onclick="openCreateRequestModal()" class="new-request-btn">
-                    <i class="fa-solid fa-plus"></i>
+                    <x-app-icon name="plus" class="w-4 h-4" />
                     <span>طلب جديد</span>
                 </button>
             </div>
@@ -883,12 +882,12 @@
                             data-voice-key="status_{{ $item->status }}"
                             class="float-left mb-3 inline-flex min-h-11 items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 text-sm font-black text-blue-800"
                             aria-label="قراءة حالة الطلب بصوت مرتفع">
-                            <span aria-hidden="true">🔊</span>
+                            <x-app-icon name="volume" class="w-4 h-4 shrink-0" />
                             <span>استمع للحالة</span>
                         </button>
                         <div class="action-card-accent"></div>
                         <div class="action-card-heading">
-                            <span class="request-lock" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                            <span class="request-lock" aria-hidden="true"><x-app-icon name="alert-triangle" class="w-4 h-4" /></span>
                             <div class="action-request-info">
                                 <span class="text-xs font-mono font-bold text-slate-400">{{ $item->public_id }}</span>
                                 <h2>{{ $item->title }}</h2>
@@ -897,17 +896,17 @@
                         </div>
 
                         <div class="request-meta" style="margin-top: 10px;">
-                            <span><i class="fa-regular fa-calendar"></i> {{ $item->scheduled_at->translatedFormat('l d F Y - h:i A') }}</span>
-                            <span><i class="fa-solid fa-location-dot"></i> {{ $item->location }}</span>
+                            <span><x-app-icon name="calendar" class="w-3.5 h-3.5 text-[#83a55b] shrink-0" /> {{ $item->scheduled_at->translatedFormat('l d F Y - h:i A') }}</span>
+                            <span><x-app-icon name="map-pin" class="w-3.5 h-3.5 text-[#83a55b] shrink-0" /> {{ $item->location }}</span>
                             @if ($item->serviceProviderProfile)
-                                <span><i class="fa-solid fa-user"></i> المتطوع: {{ $provName }}</span>
+                                <span><x-app-icon name="user" class="w-3.5 h-3.5 text-[#83a55b] shrink-0" /> المتطوع: {{ $provName }}</span>
                             @endif
                         </div>
 
                         {{-- صندوق التنبيه التفصيلي حسب الحالة --}}
                         @if ($item->status === \App\Models\ServiceRequest::STATUS_PROVIDER_APOLOGIZED)
                             <div class="action-alert">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                <x-app-icon name="alert-triangle" class="w-5 h-5 text-rose-600 shrink-0" />
                                 <div>
                                     <strong>اعتذر مقدم الخدمة عن تنفيذ الطلب</strong>
                                     <p>تم فك إسناد الطلب وإعادته للبحث، يمكنك تحديد موعد جديد أو إلغاء الطلب.</p>
@@ -915,7 +914,7 @@
                             </div>
                         @elseif ($item->status === \App\Models\ServiceRequest::STATUS_PROVIDER_DELAYED)
                             <div class="action-alert" style="background:#fffbeb;border-color:#fef3c7;color:#b45309;">
-                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                <x-app-icon name="clock" class="w-5 h-5 text-amber-600 shrink-0" />
                                 <div>
                                     <strong>تأخر مقدم الخدمة عن الموعد المحدد</strong>
                                     <p>يمكنك البحث عن بديل فوراً أو التواصل معه للاستفسار أو إلغاء الطلب.</p>
@@ -923,7 +922,7 @@
                             </div>
                         @elseif ($item->status === \App\Models\ServiceRequest::STATUS_NO_PROVIDER_FOUND)
                             <div class="action-alert" style="background:#fffbeb;border-color:#fef3c7;color:#b45309;">
-                                <i class="fa-solid fa-calendar-xmark"></i>
+                                <x-app-icon name="calendar" class="w-5 h-5 text-amber-600 shrink-0" />
                                 <div>
                                     <strong>لم يتوفر متطوع قبل حلول الموعد المحدد</strong>
                                     <p>يرجى اختيار موعد جديد مناسب لإعادة نشر الطلب لمقدمي الخدمة أو إلغائه.</p>
@@ -931,7 +930,7 @@
                             </div>
                         @elseif ($item->status === \App\Models\ServiceRequest::STATUS_UNDER_REVIEW)
                             <div class="action-alert" style="background:#eff6ff;border-color:#dbeafe;color:#1d4ed8;">
-                                <i class="fa-solid fa-shield-halved"></i>
+                                <x-app-icon name="shield-check" class="w-5 h-5 text-blue-600 shrink-0" />
                                 <div>
                                     <strong>الطلب قيد المراجعة الإدارية</strong>
                                     <p>تم استلام بلاغك بنجاح ويتولى فريق الدعم والإشراف مراجعة التفاصيل ومتابعتها.</p>
@@ -947,7 +946,7 @@
                                     <button type="button"
                                         onclick="openRescheduleModal({{ $item->id }}, '{{ $item->public_id }}', '{{ route('service-requests.reschedule', $item) }}')"
                                         class="action-button schedule-and-repost">
-                                        <i class="fa-solid fa-calendar-plus"></i>
+                                        <x-app-icon name="calendar" class="w-4 h-4" />
                                         <span>موعد جديد وإعادة النشر</span>
                                     </button>
                                 @endif
@@ -958,7 +957,7 @@
                                         @csrf
                                         @method('patch')
                                         <button type="submit" class="action-button" style="background:#3b5228;color:#fff;">
-                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                            <x-app-icon name="search" class="w-4 h-4" />
                                             <span>البحث عن بديل فوراً</span>
                                         </button>
                                     </form>
@@ -969,12 +968,12 @@
                                     <button type="button"
                                         onclick="openContactModal('{{ addslashes($provName) }}', '{{ $provPhone }}')"
                                         class="action-button">
-                                        <i class="fa-solid fa-phone"></i>
+                                        <x-app-icon name="phone" class="w-4 h-4" />
                                         <span>تواصل مع المتطوع</span>
                                     </button>
                                 @elseif ($item->status === \App\Models\ServiceRequest::STATUS_PROVIDER_DELAYED && !$item->canRevealContactPhone())
                                     <span class="phone-masked-notice">
-                                        <i class="fa-solid fa-lock"></i>
+                                        <x-app-icon name="lock-closed" class="w-3.5 h-3.5" />
                                         <span>سيظهر رقم التواصل بعد تأكيد الإسناد</span>
                                     </span>
                                 @endif
@@ -985,7 +984,7 @@
                                 <button type="button"
                                     onclick="openCancelModal({{ $item->id }}, '{{ $item->public_id }}', '{{ route('service-requests.cancel', $item) }}')"
                                     class="action-button cancel-request">
-                                    <i class="fa-regular fa-circle-xmark"></i>
+                                    <x-app-icon name="x-circle" class="w-4 h-4" />
                                     <span>إلغاء الطلب</span>
                                 </button>
                             @endif
@@ -1003,24 +1002,24 @@
                             data-voice-key="status_{{ $item->status }}"
                             class="float-left mb-3 inline-flex min-h-11 items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 text-sm font-black text-blue-800"
                             aria-label="قراءة حالة الطلب بصوت مرتفع">
-                            <span aria-hidden="true">🔊</span>
+                            <x-app-icon name="volume" class="w-4 h-4 shrink-0" />
                             <span>استمع للحالة</span>
                         </button>
                         <div class="completed-card-top">
                             <div class="completed-title">
-                                <span class="completed-icon green"><i class="fa-solid fa-circle-check"></i></span>
+                                <span class="completed-icon green"><x-app-icon name="check-circle" class="w-5 h-5 text-emerald-600" /></span>
                                 <div>
                                     <h2>{{ $item->title }}</h2>
                                     <p>{{ $item->description }}</p>
                                 </div>
                             </div>
-                            <span class="completed-badge"><i class="fa-solid fa-check"></i> مكتمل</span>
+                            <span class="completed-badge"><x-app-icon name="check" class="w-3.5 h-3.5 inline ml-1" /> مكتمل</span>
                         </div>
 
                         <div class="completed-meta">
-                            <span><i class="fa-regular fa-calendar"></i> <b>تاريخ الإنجاز:</b> {{ $item->completed_at?->translatedFormat('d F Y - h:i A') ?? $item->updated_at->translatedFormat('d F Y') }}</span>
+                            <span><x-app-icon name="calendar" class="w-3.5 h-3.5 inline ml-1 text-slate-400" /> <b>تاريخ الإنجاز:</b> {{ $item->completed_at?->translatedFormat('d F Y - h:i A') ?? $item->updated_at->translatedFormat('d F Y') }}</span>
                             @if ($item->serviceProviderProfile)
-                                <span><i class="fa-solid fa-user"></i> <b>المتطوع:</b> {{ $provName }}</span>
+                                <span><x-app-icon name="user" class="w-3.5 h-3.5 inline ml-1 text-slate-400" /> <b>المتطوع:</b> {{ $provName }}</span>
                             @endif
                             <span class="font-mono text-slate-400 mr-auto">{{ $item->public_id }}</span>
                         </div>
@@ -1029,7 +1028,11 @@
                         <div class="mt-4">
                             @if ($item->review)
                                 <div class="rated-row">
-                                    <span class="stars">{{ str_repeat('★', $item->review->stars) }}</span>
+                                    <span class="inline-flex items-center gap-0.5 text-amber-400">
+                                        @for ($s = 0; $s < $item->review->stars; $s++)
+                                            <x-app-icon name="star" type="solid" class="w-4 h-4" />
+                                        @endfor
+                                    </span>
                                     <span>لقد قمت بتقييم هذه الخدمة ({{ $item->review->stars }}/5)</span>
                                 </div>
                             @endif
@@ -1047,18 +1050,18 @@
                             data-voice-key="status_{{ $item->status }}"
                             class="float-left mb-3 inline-flex min-h-11 items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 text-sm font-black text-blue-800"
                             aria-label="قراءة حالة الطلب بصوت مرتفع">
-                            <span aria-hidden="true">🔊</span>
+                            <x-app-icon name="volume" class="w-4 h-4 shrink-0" />
                             <span>استمع للحالة</span>
                         </button>
                         <header class="cancelled-card-header">
                             <div class="cancelled-request-info">
-                                <span class="cancelled-icon" aria-hidden="true"><i class="fa-regular fa-circle-xmark"></i></span>
+                                <span class="cancelled-icon" aria-hidden="true"><x-app-icon name="x-circle" class="w-5 h-5 text-slate-500" /></span>
                                 <div>
                                     <h2>{{ $item->title }}</h2>
                                     <span class="text-xs text-slate-400 font-mono">{{ $item->public_id }}</span>
                                 </div>
                             </div>
-                            <span class="cancelled-status"><i class="fa-solid fa-xmark"></i> ملغاة</span>
+                            <span class="cancelled-status"><x-app-icon name="x-mark" class="w-3.5 h-3.5 inline ml-1" /> ملغاة</span>
                         </header>
 
                         <div class="mt-3 flex flex-wrap items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100">
@@ -1078,17 +1081,7 @@
                         <div class="request-card-header">
                             <div class="request-card-top">
                             <span class="request-icon">
-                                @if (str_contains($item->title, 'دواء') || str_contains($item->description, 'دواء') || $item->service_type === 'medical')
-                                    <i class="fa-solid fa-kit-medical"></i>
-                                @elseif (str_contains($item->title, 'أغراض') || str_contains($item->title, 'شراء') || $item->service_type === 'grocery')
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                @elseif (str_contains($item->title, 'مرافقة') || $item->service_type === 'companion')
-                                    <i class="fa-solid fa-person-walking"></i>
-                                @elseif (str_contains($item->title, 'زيارة') || $item->service_type === 'social')
-                                    <i class="fa-solid fa-users"></i>
-                                @else
-                                    <i class="fa-solid fa-handshake-angle"></i>
-                                @endif
+                                <x-app-icon :name="$item->service_type_icon_name" class="w-5 h-5 text-[#354e20]" />
                             </span>
                             <div>
                                 <h3>{{ $item->title }}</h3>
@@ -1104,27 +1097,27 @@
                             </span>
                         @elseif ($item->status === \App\Models\ServiceRequest::STATUS_ACCEPTED || $item->status === \App\Models\ServiceRequest::STATUS_ASSIGNED)
                             <span class="request-state confirmed">
-                                <i class="fa-solid fa-user-check"></i>
+                                <x-app-icon name="user-check" class="w-3.5 h-3.5 inline ml-1" />
                                 <span>تم توكيل مقدم الخدمة</span>
                             </span>
                         @elseif ($item->status === \App\Models\ServiceRequest::STATUS_IN_PROGRESS)
                             <span class="request-state progress">
-                                <i class="fa-solid fa-person-walking"></i>
+                                <x-app-icon name="walking" class="w-3.5 h-3.5 inline ml-1" />
                                 <span>قيد التنفيذ الآن</span>
                             </span>
                         @elseif ($item->status === \App\Models\ServiceRequest::STATUS_PENDING_CONFIRMATION)
                             <span class="request-state pending-confirm">
-                                <i class="fa-solid fa-clock"></i>
+                                <x-app-icon name="clock" class="w-3.5 h-3.5 inline ml-1" />
                                 <span>أنهيت المهمة — بانتظار تأكيدك</span>
                             </span>
                         @endif
                         </div>
 
                         <div class="request-meta">
-                            <span><i class="fa-regular fa-calendar"></i> {{ $item->scheduled_at->translatedFormat('l d F - h:i A') }}</span>
-                            <span><i class="fa-solid fa-location-dot"></i> {{ $item->location }}</span>
+                            <span><x-app-icon name="calendar" class="w-3.5 h-3.5 inline ml-1 text-[#83a55b]" /> {{ $item->scheduled_at->translatedFormat('l d F - h:i A') }}</span>
+                            <span><x-app-icon name="map-pin" class="w-3.5 h-3.5 inline ml-1 text-[#83a55b]" /> {{ $item->location }}</span>
                             @if ($item->serviceProviderProfile)
-                                <span><i class="fa-solid fa-user"></i> المتطوع: {{ $provName }}</span>
+                                <span><x-app-icon name="user" class="w-3.5 h-3.5 inline ml-1 text-[#83a55b]" /> المتطوع: {{ $provName }}</span>
                             @endif
                         </div>
 
@@ -1149,7 +1142,7 @@
 
                         <div class="service-stepper-wrapper">
                             <div class="stepper-header-title">
-                                <i class="fa-solid fa-route text-emerald-700"></i>
+                                <x-app-icon name="arrow-path" class="w-4 h-4 text-emerald-700 inline" />
                                 <span>مسار الخدمة الحالي (مرحلة {{ $currentStep }} من 4):</span>
                             </div>
                             <div class="service-stepper">
@@ -1161,7 +1154,7 @@
                                 <div class="stepper-step {{ $currentStep > 1 ? 'completed' : ($currentStep === 1 ? 'active' : 'upcoming') }}">
                                     <div class="stepper-icon-node">
                                         @if ($currentStep > 1)
-                                            <i class="fa-solid fa-check"></i>
+                                            <x-app-icon name="check" class="w-4 h-4" />
                                         @else
                                             1
                                         @endif
@@ -1173,7 +1166,7 @@
                                 <div class="stepper-step {{ $currentStep > 2 ? 'completed' : ($currentStep === 2 ? 'active' : 'upcoming') }}">
                                     <div class="stepper-icon-node">
                                         @if ($currentStep > 2)
-                                            <i class="fa-solid fa-check"></i>
+                                            <x-app-icon name="check" class="w-4 h-4" />
                                         @else
                                             2
                                         @endif
@@ -1185,7 +1178,7 @@
                                 <div class="stepper-step {{ $currentStep > 3 ? 'completed' : ($currentStep === 3 ? 'active' : 'upcoming') }}">
                                     <div class="stepper-icon-node">
                                         @if ($currentStep > 3)
-                                            <i class="fa-solid fa-check"></i>
+                                            <x-app-icon name="check" class="w-4 h-4" />
                                         @else
                                             3
                                         @endif
@@ -1197,7 +1190,7 @@
                                 <div class="stepper-step {{ $currentStep === 4 ? 'active' : ($currentStep > 4 ? 'completed' : 'upcoming') }}">
                                     <div class="stepper-icon-node">
                                         @if ($currentStep >= 4 && $item->status === \App\Models\ServiceRequest::STATUS_COMPLETED)
-                                            <i class="fa-solid fa-check"></i>
+                                            <x-app-icon name="check" class="w-4 h-4" />
                                         @else
                                             4
                                         @endif
@@ -1215,7 +1208,7 @@
                             data-voice-key="status_{{ $item->status }}"
                                     class="action-button listen-status"
                                     aria-label="قراءة حالة الطلب بصوت مرتفع">
-                                    <i class="fa-solid fa-volume-high"></i>
+                                    <x-app-icon name="volume" class="w-4 h-4" />
                                     <span>استمع للحالة</span>
                                 </button>
 
@@ -1224,13 +1217,13 @@
                                     <button type="button"
                                         onclick="openConfirmModal({{ $item->id }}, '{{ addslashes($provName) }}', '{{ route('service-requests.confirm', $item) }}')"
                                         class="action-button schedule-and-repost">
-                                        <i class="fa-solid fa-check-double"></i>
+                                        <x-app-icon name="check" class="w-4 h-4" />
                                         <span>تأكيد اكتمال الخدمة والتقييم</span>
                                     </button>
                                     <button type="button"
                                         onclick="openReportProblemModal({{ $item->id }}, '{{ $item->public_id }}', '{{ route('service-requests.report-problem', $item) }}')"
                                         class="action-button" style="border-color:#fca5a5;color:#dc2626;background:#fef2f2;">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        <x-app-icon name="alert-triangle" class="w-4 h-4" />
                                         <span>هناك مشكلة</span>
                                     </button>
                                 @endif
@@ -1240,12 +1233,12 @@
                                     <button type="button"
                                         onclick="openContactModal('{{ addslashes($provName) }}', '{{ $provPhone }}')"
                                         class="action-button">
-                                        <i class="fa-solid fa-phone"></i>
+                                        <x-app-icon name="phone" class="w-4 h-4" />
                                         <span>تواصل مع المتطوع</span>
                                     </button>
                                 @else
                                     <span class="phone-masked-notice">
-                                        <i class="fa-solid fa-lock"></i>
+                                        <x-app-icon name="lock-closed" class="w-3.5 h-3.5" />
                                         <span>سيظهر رقم التواصل بعد تأكيد الإسناد</span>
                                     </span>
                                 @endif
@@ -1256,7 +1249,7 @@
                                 <button type="button"
                                     onclick="openCancelModal({{ $item->id }}, '{{ $item->public_id }}', '{{ route('service-requests.cancel', $item) }}')"
                                     class="action-button cancel-request">
-                                    <i class="fa-regular fa-circle-xmark"></i>
+                                    <x-app-icon name="x-circle" class="w-4 h-4" />
                                     <span>إلغاء الطلب</span>
                                 </button>
                             @endif
@@ -1267,11 +1260,11 @@
 
             @empty
                 <div class="requests-empty-state">
-                    <div class="empty-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+                    <div class="empty-icon flex justify-center"><x-app-icon name="clipboard-list" class="w-12 h-12 text-slate-300" /></div>
                     <h3>لا توجد طلبات في هذا القسم حالياً</h3>
                     <p>يمكنك إنشاء طلب مساعدة جديد في أي وقت وسيتولى المتطوعون والجمعيات تقديم العون.</p>
                     <button type="button" onclick="openCreateRequestModal()" class="action-button schedule-and-repost" style="padding: 10px 24px; font-size: 13px; margin-top: 15px;">
-                        <i class="fa-solid fa-plus"></i> <span>إنشاء طلب مساعدة جديد</span>
+                        <x-app-icon name="plus" class="w-4 h-4" /> <span>إنشاء طلب مساعدة جديد</span>
                     </button>
                 </div>
             @endforelse

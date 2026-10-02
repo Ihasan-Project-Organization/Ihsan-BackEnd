@@ -222,6 +222,6 @@ test('login screen displays quick-fill testing buttons when show_test_buttons co
     $loginPage->assertOk();
     $loginPage->assertSee('نظام الأزرار للاختبار والدخول السريع');
     $loginPage->assertSee('superadmin@anees.com');
-    $loginPage->assertSee('دخول فوري ⚡');
+    $loginPage->assertSee('دخول فوري');
 });
 

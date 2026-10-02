@@ -5,6 +5,20 @@ use App\Models\ElderProfile;
 use App\Models\ServiceProviderProfile;
 use App\Models\User;
 
+test('heroicons render valid svgs', function () {
+    $rendered = \Illuminate\Support\Facades\Blade::render('<x-heroicon-o-home class="w-5 h-5" />');
+    expect($rendered)->toContain('<svg');
+
+    $xIconHero = \Illuminate\Support\Facades\Blade::render('<x-app-icon name="chart-pie" class="w-5 h-5" />');
+    expect($xIconHero)->toContain('<svg');
+
+    $xIconLucide = \Illuminate\Support\Facades\Blade::render('<x-app-icon name="crown" class="w-5 h-5" />');
+    expect($xIconLucide)->toContain('<svg');
+
+    $xIconTabler = \Illuminate\Support\Facades\Blade::render('<x-app-icon name="broom" class="w-5 h-5" />');
+    expect($xIconTabler)->toContain('<svg');
+});
+
 test('all 25 screens render without HTTP 500 errors', function () {
     // 1. شاشات عامة
     $this->get(route('login'))->assertOk(); // شاشة 1

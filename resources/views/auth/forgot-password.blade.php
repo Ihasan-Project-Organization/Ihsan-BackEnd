@@ -1,6 +1,8 @@
 <x-guest-layout>
     <div class="text-center">
-        <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#eef2e8] text-2xl">✉</span>
+        <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#eef2e8] text-[#31421e]">
+            <x-app-icon name="envelope" class="w-7 h-7" />
+        </span>
         <h1 class="mt-5 text-2xl font-black text-[#31421e]">استعادة كلمة المرور</h1>
         <p class="mt-3 text-sm leading-7 text-slate-500">أدخل بريدك الإلكتروني وسنرسل إليك رابطًا آمنًا لإنشاء كلمة مرور
             جديدة.</p>

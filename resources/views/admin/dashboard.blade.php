@@ -10,14 +10,14 @@
         onmouseout="this.style.transform='none';this.style.boxShadow='0 1px 6px rgba(0,0,0,0.05)';">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
             <span style="font-size:11.5px; font-weight:700; color:#6b7280;">كبار السن (المستفيدون)</span>
-            <div style="width:36px;height:36px;border-radius:10px;background:#eff6ff;display:flex;align-items:center;justify-content:center;color:#3b82f6;font-size:15px;">
-                <i class="fa-solid fa-person-cane"></i>
+            <div style="width:36px;height:36px;border-radius:10px;background:#eff6ff;display:flex;align-items:center;justify-content:center;">
+                <x-app-icon name="user" class="w-5 h-5 text-blue-600" />
             </div>
         </div>
         <div style="font-size:28px; font-weight:900; color:#1a1f36;">{{ number_format($eldersCount) }}</div>
         <div style="margin-top:6px; font-size:11px; color:#3b82f6; font-weight:700; display:flex; align-items:center; gap:4px;">
             <span>عرض المستفيدين</span>
-            <i class="fa-solid fa-arrow-left" style="font-size:9px;"></i>
+            <x-app-icon name="arrow-left" class="w-3 h-3 text-blue-600" />
         </div>
     </a>
 
@@ -28,14 +28,14 @@
         onmouseout="this.style.transform='none';this.style.boxShadow='0 1px 6px rgba(0,0,0,0.05)';">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
             <span style="font-size:11.5px; font-weight:700; color:#6b7280;">مقدمو الخدمة (المتطوعون)</span>
-            <div style="width:36px;height:36px;border-radius:10px;background:#ecfdf5;display:flex;align-items:center;justify-content:center;color:#10b981;font-size:15px;">
-                <i class="fa-solid fa-hand-holding-heart"></i>
+            <div style="width:36px;height:36px;border-radius:10px;background:#ecfdf5;display:flex;align-items:center;justify-content:center;">
+                <x-app-icon name="heart" class="w-5 h-5 text-emerald-600" />
             </div>
         </div>
         <div style="font-size:28px; font-weight:900; color:#1a1f36;">{{ number_format($providersCount) }}</div>
         <div style="margin-top:6px; font-size:11px; color:#10b981; font-weight:700; display:flex; align-items:center; gap:4px;">
             <span>عرض المتطوعين</span>
-            <i class="fa-solid fa-arrow-left" style="font-size:9px;"></i>
+            <x-app-icon name="arrow-left" class="w-3 h-3 text-emerald-600" />
         </div>
     </a>
 
@@ -46,14 +46,14 @@
         onmouseout="this.style.transform='none';this.style.boxShadow='0 1px 6px rgba(0,0,0,0.05)';">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
             <span style="font-size:11.5px; font-weight:700; color:#6b7280;">بانتظار الاعتماد</span>
-            <div style="width:36px;height:36px;border-radius:10px;background:#fef3c7;display:flex;align-items:center;justify-content:center;color:#f59e0b;font-size:15px;">
-                <i class="fa-solid fa-user-clock"></i>
+            <div style="width:36px;height:36px;border-radius:10px;background:#fef3c7;display:flex;align-items:center;justify-content:center;">
+                <x-app-icon name="clock" class="w-5 h-5 text-amber-600" />
             </div>
         </div>
         <div style="font-size:28px; font-weight:900; color:#1a1f36;">{{ number_format($pendingAccountsCount) }}</div>
         <div style="margin-top:6px; font-size:11px; color:#d97706; font-weight:700; display:flex; align-items:center; gap:4px;">
             <span>مراجعة الطلبات</span>
-            <i class="fa-solid fa-arrow-left" style="font-size:9px;"></i>
+            <x-app-icon name="arrow-left" class="w-3 h-3 text-amber-600" />
         </div>
     </a>
 
@@ -64,14 +64,14 @@
         onmouseout="this.style.transform='none';this.style.boxShadow='0 1px 6px rgba(0,0,0,0.05)';">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
             <span style="font-size:11.5px; font-weight:700; color:#6b7280;">الطلبات النشطة</span>
-            <div style="width:36px;height:36px;border-radius:10px;background:#e6edd9;display:flex;align-items:center;justify-content:center;color:#354e20;font-size:15px;">
-                <i class="fa-solid fa-spinner"></i>
+            <div style="width:36px;height:36px;border-radius:10px;background:#e6edd9;display:flex;align-items:center;justify-content:center;">
+                <x-app-icon name="arrow-path" class="w-5 h-5 text-[#354e20]" />
             </div>
         </div>
         <div style="font-size:28px; font-weight:900; color:#1a1f36;">{{ number_format($activeRequestsCount) }}</div>
         <div style="margin-top:6px; font-size:11px; color:#354e20; font-weight:700; display:flex; align-items:center; gap:4px;">
             <span>مقبولة ومسندة وجارية</span>
-            <i class="fa-solid fa-arrow-left" style="font-size:9px;"></i>
+            <x-app-icon name="arrow-left" class="w-3 h-3 text-[#354e20]" />
         </div>
     </a>
 
@@ -82,8 +82,8 @@
         onmouseout="this.style.transform='none';this.style.boxShadow='0 1px 6px rgba(0,0,0,0.05)';">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
             <span style="font-size:11.5px; font-weight:700; color:#6b7280;">بحاجة لإجراء عاجل</span>
-            <div style="width:36px;height:36px;border-radius:10px;background:#ffedd5;display:flex;align-items:center;justify-content:center;color:#ea580c;font-size:15px;">
-                <i class="fa-solid fa-bell-exclamation"></i>
+            <div style="width:36px;height:36px;border-radius:10px;background:#ffedd5;display:flex;align-items:center;justify-content:center;">
+                <x-app-icon name="bell-alert" class="w-5 h-5 text-orange-600" />
             </div>
         </div>
         <div style="font-size:28px; font-weight:900; color:{{ $needsActionRequestsCount > 0 ? '#ea580c' : '#1a1f36' }};">
@@ -91,7 +91,7 @@
         </div>
         <div style="margin-top:6px; font-size:11px; color:#ea580c; font-weight:700; display:flex; align-items:center; gap:4px;">
             <span>اعتذار / تأخير / لا يوجد مقدم</span>
-            <i class="fa-solid fa-arrow-left" style="font-size:9px;"></i>
+            <x-app-icon name="arrow-left" class="w-3 h-3 text-orange-600" />
         </div>
     </a>
 
@@ -102,8 +102,8 @@
         onmouseout="this.style.transform='none';this.style.boxShadow='0 1px 6px rgba(0,0,0,0.05)';">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
             <span style="font-size:11.5px; font-weight:700; color:#6b7280;">البلاغات والشكاوى المفتوحة</span>
-            <div style="width:36px;height:36px;border-radius:10px;background:#fee2e2;display:flex;align-items:center;justify-content:center;color:#ef4444;font-size:15px;">
-                <i class="fa-solid fa-triangle-exclamation"></i>
+            <div style="width:36px;height:36px;border-radius:10px;background:#fee2e2;display:flex;align-items:center;justify-content:center;">
+                <x-app-icon name="exclamation-triangle" class="w-5 h-5 text-red-600" />
             </div>
         </div>
         <div style="font-size:28px; font-weight:900; color:{{ $openComplaintsCount > 0 ? '#ef4444' : '#1a1f36' }};">
@@ -111,7 +111,7 @@
         </div>
         <div style="margin-top:6px; font-size:11px; color:#ef4444; font-weight:700; display:flex; align-items:center; gap:4px;">
             <span>متابعة الشكاوى</span>
-            <i class="fa-solid fa-arrow-left" style="font-size:9px;"></i>
+            <x-app-icon name="arrow-left" class="w-3 h-3 text-red-600" />
         </div>
     </a>
 
@@ -122,8 +122,8 @@
         onmouseout="this.style.transform='none';this.style.boxShadow='0 1px 6px rgba(0,0,0,0.05)';">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
             <span style="font-size:11.5px; font-weight:700; color:#6b7280;">تنبيهات الموثوقية (30 يوماً)</span>
-            <div style="width:36px;height:36px;border-radius:10px;background:#f5f3ff;display:flex;align-items:center;justify-content:center;color:#8b5cf6;font-size:15px;">
-                <i class="fa-solid fa-shield-virus"></i>
+            <div style="width:36px;height:36px;border-radius:10px;background:#f5f3ff;display:flex;align-items:center;justify-content:center;">
+                <x-app-icon name="shield-exclamation" class="w-5 h-5 text-purple-600" />
             </div>
         </div>
         <div style="font-size:28px; font-weight:900; color:{{ $reliabilityAlertsCount > 0 ? '#8b5cf6' : '#1a1f36' }};">
@@ -131,7 +131,7 @@
         </div>
         <div style="margin-top:6px; font-size:11px; color:#8b5cf6; font-weight:700; display:flex; align-items:center; gap:4px;">
             <span>3+ حوادث عدم موثوقية</span>
-            <i class="fa-solid fa-arrow-left" style="font-size:9px;"></i>
+            <x-app-icon name="arrow-left" class="w-3 h-3 text-purple-600" />
         </div>
     </a>
 
@@ -144,7 +144,7 @@
     <div style="background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="padding:16px 20px; border-bottom:1px solid #f3f4f6; display:flex; align-items:center; justify-content:space-between;">
             <div style="display:flex; align-items:center; gap:8px;">
-                <i class="fa-solid fa-user-clock" style="color:#f59e0b;"></i>
+                <x-app-icon name="clock" class="w-4 h-4 text-amber-500" />
                 <h3 style="font-size:13px; font-weight:800; color:#1a1f36; margin:0;">طلبات تسجيل بانتظار الاعتماد</h3>
             </div>
             <a href="{{ route('admin.approvals.index') }}" style="font-size:11px; color:#354e20; font-weight:700; text-decoration:none;">عرض الكل ({{ $pendingAccountsCount }})</a>
@@ -165,14 +165,15 @@
                     </div>
                 </div>
                 <a href="{{ route('admin.approvals.show', $pUser) }}"
-                    style="background:#e6edd9;color:#354e20;padding:6px 14px;border-radius:10px;font-size:11px;font-weight:700;text-decoration:none;">
-                    معاينة واعتماد ←
+                    style="background:#e6edd9;color:#354e20;padding:6px 14px;border-radius:10px;font-size:11px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+                    <span>معاينة واعتماد</span>
+                    <x-app-icon name="arrow-left" class="w-3 h-3 text-[#354e20]" />
                 </a>
             </div>
             @empty
             <div style="padding:32px 20px; text-align:center; color:#9ca3af; font-size:12px;">
-                <i class="fa-regular fa-circle-check" style="font-size:24px; color:#83a55b; margin-bottom:6px; display:block;"></i>
-                لا توجد طلبات تسجيل معلقة حالياً
+                <x-app-icon name="check-circle" class="w-7 h-7 text-[#83a55b] mx-auto mb-1.5" />
+                <div>لا توجد طلبات تسجيل معلقة حالياً</div>
             </div>
             @endforelse
         </div>
@@ -182,7 +183,7 @@
     <div style="background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); overflow:hidden;">
         <div style="padding:16px 20px; border-bottom:1px solid #f3f4f6; display:flex; align-items:center; justify-content:space-between;">
             <div style="display:flex; align-items:center; gap:8px;">
-                <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i>
+                <x-app-icon name="exclamation-triangle" class="w-4 h-4 text-red-500" />
                 <h3 style="font-size:13px; font-weight:800; color:#1a1f36; margin:0;">آخر الشكاوى والبلاغات</h3>
             </div>
             <a href="{{ Route::has('admin.complaints.index') ? route('admin.complaints.index') : (Route::has('admin.reports.index') ? route('admin.reports.index') : '#') }}"
@@ -201,8 +202,8 @@
             </div>
             @empty
             <div style="padding:32px 20px; text-align:center; color:#9ca3af; font-size:12px;">
-                <i class="fa-solid fa-shield-halved" style="font-size:24px; color:#83a55b; margin-bottom:6px; display:block;"></i>
-                لا توجد شكاوى مسجلة
+                <x-app-icon name="shield-check" class="w-7 h-7 text-[#83a55b] mx-auto mb-1.5" />
+                <div>لا توجد شكاوى مسجلة</div>
             </div>
             @endforelse
         </div>

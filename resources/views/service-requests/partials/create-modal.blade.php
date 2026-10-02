@@ -17,12 +17,12 @@ window.openCreateRequestModal = function () {
         description: '',
         errorMessage: '',
         services: [
-            { id: 'grocery', title: 'شراء أغراض', description: 'احتياجات المنزل اليومية', icon: 'fa-cart-shopping' },
-            { id: 'medicine', title: 'شراء دواء', description: 'إحضار الدواء من الصيدلية', icon: 'fa-kit-medical' },
-            { id: 'medical_escort', title: 'مرافقة طبية', description: 'مرافقة إلى طبيب أو مستشفى', icon: 'fa-person-walking' },
-            { id: 'social_visit', title: 'زيارة اجتماعية', description: 'زيارة ودية ومؤانسة', icon: 'fa-users' },
-            { id: 'home_help', title: 'مساعدة منزلية', description: 'مساعدة خفيفة داخل المنزل', icon: 'fa-broom' },
-            { id: 'support_request', title: 'خدمة أخرى', description: 'احتياج آخر غير موجود بالقائمة', icon: 'fa-hand-holding-heart' }
+            { id: 'grocery', title: 'شراء أغراض', description: 'احتياجات المنزل اليومية', icon: 'shopping-cart' },
+            { id: 'medicine', title: 'شراء دواء', description: 'إحضار الدواء من الصيدلية', icon: 'pill' },
+            { id: 'medical_escort', title: 'مرافقة طبية', description: 'مرافقة إلى طبيب أو مستشفى', icon: 'walking' },
+            { id: 'social_visit', title: 'زيارة اجتماعية', description: 'زيارة ودية ومؤانسة', icon: 'users' },
+            { id: 'home_help', title: 'مساعدة منزلية', description: 'مساعدة خفيفة داخل المنزل', icon: 'broom' },
+            { id: 'support_request', title: 'خدمة أخرى', description: 'احتياج آخر غير موجود بالقائمة', icon: 'handshake' }
         ],
         stepLabels: ['الخدمة', 'المكان', 'الموعد', 'التفاصيل', 'التأكيد'],
         stepTitles: [
@@ -119,14 +119,14 @@ window.openCreateRequestModal = function () {
                 <h2 id="request-wizard-title" x-text="currentTitle()"></h2>
             </div>
             <button type="button" @click="resetForm()" class="request-wizard-close" aria-label="إغلاق">
-                <i class="fa-solid fa-xmark"></i>
+                <x-app-icon name="x-mark" class="w-5 h-5" />
             </button>
 
             <div class="request-progress" aria-label="مراحل إنشاء الطلب">
                 <div class="request-progress-line"><span :style="`width: ${((step - 1) / 4) * 100}%`"></span></div>
                 <template x-for="(label, index) in stepLabels" :key="label">
                     <div class="request-progress-step" :class="{ active: step === index + 1, done: step > index + 1 }">
-                        <span><i x-show="step > index + 1" class="fa-solid fa-check"></i><b x-show="step <= index + 1" x-text="index + 1"></b></span>
+                        <span><span x-show="step > index + 1"><x-app-icon name="check" class="w-3.5 h-3.5 inline-block" /></span><b x-show="step <= index + 1" x-text="index + 1"></b></span>
                         <small x-text="label"></small>
                     </div>
                 </template>
@@ -143,7 +143,7 @@ window.openCreateRequestModal = function () {
 
             <div class="request-wizard-body">
                 <div x-show="errorMessage" x-cloak class="request-wizard-error" role="alert">
-                    <i class="fa-solid fa-circle-exclamation"></i><span x-text="errorMessage"></span>
+                    <x-app-icon name="warning" class="w-4 h-4 text-rose-600 inline-block ml-1" /><span x-text="errorMessage"></span>
                 </div>
 
                 <section x-show="step === 1" class="wizard-step-panel">
@@ -152,9 +152,16 @@ window.openCreateRequestModal = function () {
                         <template x-for="service in services" :key="service.id">
                             <button type="button" @click="selectService(service)" class="service-choice"
                                 :class="{ selected: service_type === service.id }">
-                                <span class="service-choice-icon"><i class="fa-solid" :class="service.icon"></i></span>
+                                <span class="service-choice-icon">
+                                    <template x-if="service.id === 'grocery'"><x-app-icon name="shopping-cart" class="w-6 h-6" /></template>
+                                    <template x-if="service.id === 'medicine'"><x-app-icon name="pill" class="w-6 h-6" /></template>
+                                    <template x-if="service.id === 'medical_escort'"><x-app-icon name="walking" class="w-6 h-6" /></template>
+                                    <template x-if="service.id === 'social_visit'"><x-app-icon name="users" class="w-6 h-6" /></template>
+                                    <template x-if="service.id === 'home_help'"><x-app-icon name="broom" class="w-6 h-6" /></template>
+                                    <template x-if="service.id === 'support_request'"><x-app-icon name="handshake" class="w-6 h-6" /></template>
+                                </span>
                                 <span class="service-choice-copy"><strong x-text="service.title"></strong><small x-text="service.description"></small></span>
-                                <span class="service-choice-check"><i class="fa-solid fa-check"></i></span>
+                                <span class="service-choice-check"><x-app-icon name="check" class="w-3.5 h-3.5" /></span>
                             </button>
                         </template>
                     </div>
@@ -162,22 +169,22 @@ window.openCreateRequestModal = function () {
 
                 <section x-show="step === 2" x-cloak class="wizard-step-panel compact-panel">
                     <div class="wizard-field-card">
-                        <span class="wizard-field-icon"><i class="fa-solid fa-location-dot"></i></span>
+                        <span class="wizard-field-icon"><x-app-icon name="map-pin" class="w-5 h-5" /></span>
                         <div class="wizard-field-content">
                             <label for="wizard-location">المنطقة أو العنوان</label>
                             <input id="wizard-location" type="text" name="location" x-model="location"
                                 placeholder="مثال: رام الله، حي المصايف" autocomplete="street-address">
                             <button x-show="profileCity" type="button" @click="useProfileCity()" class="profile-city-button">
-                                <i class="fa-solid fa-house"></i> استخدام مدينتي: <span x-text="profileCity"></span>
+                                <x-app-icon name="home" class="w-4 h-4 inline-block ml-1" /> استخدام مدينتي: <span x-text="profileCity"></span>
                             </button>
                         </div>
                     </div>
-                    <p class="privacy-note"><i class="fa-solid fa-shield-heart"></i> لن يظهر عنوانك إلا لمقدم الخدمة الذي يتولى الطلب.</p>
+                    <p class="privacy-note"><x-app-icon name="shield-check" class="w-4 h-4 inline-block ml-1 text-slate-500" /> لن يظهر عنوانك إلا لمقدم الخدمة الذي يتولى الطلب.</p>
                 </section>
 
                 <section x-show="step === 3" x-cloak class="wizard-step-panel compact-panel">
                     <div class="schedule-field schedule-field-required">
-                        <span class="schedule-icon"><i class="fa-regular fa-calendar-check"></i></span>
+                        <span class="schedule-icon"><x-app-icon name="calendar" class="w-5 h-5 text-white" /></span>
                         <div class="schedule-copy">
                             <strong>حدد موعد الخدمة</strong>
                             <small>اختر اليوم والساعة المناسبة لك</small>
@@ -202,19 +209,19 @@ window.openCreateRequestModal = function () {
 
                 <section x-show="step === 5" x-cloak class="wizard-step-panel compact-panel">
                     <div class="request-review">
-                        <div class="review-row main"><span class="review-icon"><i class="fa-solid fa-hand-holding-heart"></i></span><div><small>الخدمة</small><strong x-text="title"></strong></div><button type="button" @click="step = 1">تعديل</button></div>
-                        <div class="review-row"><span class="review-icon"><i class="fa-solid fa-location-dot"></i></span><div><small>المكان</small><strong x-text="location"></strong></div><button type="button" @click="step = 2">تعديل</button></div>
-                        <div class="review-row"><span class="review-icon"><i class="fa-regular fa-clock"></i></span><div><small>الموعد</small><strong x-text="formatDate(scheduled_at)"></strong></div><button type="button" @click="step = 3">تعديل</button></div>
-                        <div class="review-row"><span class="review-icon"><i class="fa-regular fa-note-sticky"></i></span><div><small>التفاصيل</small><strong x-text="description"></strong></div><button type="button" @click="step = 4">تعديل</button></div>
+                        <div class="review-row main"><span class="review-icon"><x-app-icon name="hand-heart" class="w-5 h-5 text-[#3b5228]" /></span><div><small>الخدمة</small><strong x-text="title"></strong></div><button type="button" @click="step = 1">تعديل</button></div>
+                        <div class="review-row"><span class="review-icon"><x-app-icon name="map-pin" class="w-5 h-5 text-[#3b5228]" /></span><div><small>المكان</small><strong x-text="location"></strong></div><button type="button" @click="step = 2">تعديل</button></div>
+                        <div class="review-row"><span class="review-icon"><x-app-icon name="clock" class="w-5 h-5 text-[#3b5228]" /></span><div><small>الموعد</small><strong x-text="formatDate(scheduled_at)"></strong></div><button type="button" @click="step = 3">تعديل</button></div>
+                        <div class="review-row"><span class="review-icon"><x-app-icon name="document-text" class="w-5 h-5 text-[#3b5228]" /></span><div><small>التفاصيل</small><strong x-text="description"></strong></div><button type="button" @click="step = 4">تعديل</button></div>
                     </div>
-                    <p class="submit-note"><i class="fa-solid fa-circle-info"></i> لن يُرسل الطلب إلا بعد ضغط «تأكيد وإرسال».</p>
+                    <p class="submit-note"><x-app-icon name="info" class="w-4 h-4 inline-block ml-1 text-slate-500" /> لن يُرسل الطلب إلا بعد ضغط «تأكيد وإرسال».</p>
                 </section>
             </div>
 
             <footer class="request-wizard-footer">
-                <button x-show="step > 1" type="button" @click="prevStep()" class="wizard-back"><i class="fa-solid fa-arrow-right"></i> السابق</button>
-                <button x-show="step < 5" type="button" @click="nextStep()" class="wizard-next">متابعة <i class="fa-solid fa-arrow-left"></i></button>
-                <button x-show="step === 5" x-cloak type="submit" class="wizard-submit"><i class="fa-solid fa-paper-plane"></i> تأكيد وإرسال</button>
+                <button x-show="step > 1" type="button" @click="prevStep()" class="wizard-back"><x-app-icon name="arrow-right" class="w-4 h-4 inline-block ml-1" /> السابق</button>
+                <button x-show="step < 5" type="button" @click="nextStep()" class="wizard-next">متابعة <x-app-icon name="arrow-left" class="w-4 h-4 inline-block mr-1" /></button>
+                <button x-show="step === 5" x-cloak type="submit" class="wizard-submit"><x-app-icon name="paper-plane" class="w-4 h-4 inline-block ml-1" /> تأكيد وإرسال</button>
                 <button x-show="step === 1" type="button" @click="resetForm()" class="wizard-cancel">إلغاء</button>
             </footer>
         </form>

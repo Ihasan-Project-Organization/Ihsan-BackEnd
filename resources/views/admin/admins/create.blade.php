@@ -5,7 +5,7 @@
     <div style="margin-bottom:20px;">
         <a href="{{ route('admin.admins.index') }}"
             style="color:#6b7280; font-size:12px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
-            <i class="fa-solid fa-arrow-right"></i>
+            <x-app-icon name="arrow-right" class="w-4 h-4" />
             <span>العودة إلى قائمة المديرين</span>
         </a>
     </div>
@@ -14,7 +14,7 @@
     <div style="background:#fff; border-radius:18px; box-shadow:0 2px 10px rgba(0,0,0,0.06); padding:28px 32px; border:1px solid #e2dcd0;">
         <div style="display:flex; align-items:center; gap:14px; margin-bottom:24px; padding-bottom:18px; border-bottom:1px solid #f3f4f6;">
             <div style="width:48px; height:48px; border-radius:12px; background:linear-gradient(135deg, #354e20, #4e6b35); color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px; box-shadow:0 4px 10px rgba(53,78,32,0.25);">
-                <i class="fa-solid fa-user-plus"></i>
+                <x-app-icon name="user-plus" class="w-5 h-5" />
             </div>
             <div>
                 <h2 style="margin:0; font-size:18px; font-weight:900; color:#1a1f36;">إضافة مدير نظام جديد</h2>
@@ -25,7 +25,7 @@
         @if ($errors->any())
             <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:12px; padding:14px 16px; margin-bottom:20px;">
                 <div style="font-weight:800; color:#991b1b; font-size:13px; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <x-app-icon name="exclamation-circle" class="w-4 h-4" />
                     <span>يرجى تصحيح الأخطاء التالية:</span>
                 </div>
                 <ul style="margin:0; padding-right:20px; color:#b91c1c; font-size:12px;">
@@ -129,7 +129,7 @@
             <div style="display:flex; justify-content:flex-start; gap:12px; padding-top:16px; border-top:1px solid #f3f4f6;">
                 <button type="submit"
                     style="background:#354e20; color:#fff; border:none; border-radius:10px; padding:11px 28px; font-size:13px; font-weight:800; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:8px; box-shadow:0 2px 8px rgba(53,78,32,0.25);">
-                    <i class="fa-solid fa-check"></i>
+                    <x-app-icon name="check" class="w-4 h-4" />
                     <span>حفظ وإضافة المدير</span>
                 </button>
 

@@ -4,7 +4,7 @@
     <header class="assistant-topbar">
         <div class="flex min-w-0 items-center gap-3">
             <span class="assistant-avatar" aria-hidden="true">
-                <i class="fa-solid fa-robot"></i>
+                <x-app-icon name="sparkles" class="w-6 h-6 text-white" />
                 <span class="assistant-avatar-pulse"></span>
             </span>
             <div class="min-w-0">
@@ -19,14 +19,14 @@
         <div class="flex items-center gap-2">
             <button type="button" @click="fixedVoice('welcome', 'أهلًا فيك! أنا مساعد أنيس الذكي. احكيلي شو بتحتاج، أو اختار واحد من الاقتراحات تحت.')"
                 class="assistant-header-button" data-voice-key="welcome" aria-label="سماع الترحيب">
-                <i class="fa-solid fa-volume-high"></i><span class="hidden sm:inline">سماع الترحيب</span>
+                <x-app-icon name="volume" class="w-4 h-4" /><span class="hidden sm:inline">سماع الترحيب</span>
             </button>
             <button x-show="step > 0" x-cloak type="button" @click="cancelDraft()"
                 class="assistant-header-button cancel" aria-label="إلغاء الطلب الحالي">
-                <i class="fa-solid fa-xmark"></i><span class="hidden sm:inline">إلغاء الطلب</span>
+                <x-app-icon name="x-mark" class="w-4 h-4" /><span class="hidden sm:inline">إلغاء الطلب</span>
             </button>
             <button type="button" @click="resetChat()" class="assistant-header-button" aria-label="ابدأ محادثة جديدة">
-                <i class="fa-solid fa-rotate-right"></i><span class="hidden sm:inline">محادثة جديدة</span>
+                <x-app-icon name="refresh" class="w-4 h-4" /><span class="hidden sm:inline">محادثة جديدة</span>
             </button>
         </div>
     </header>
@@ -53,18 +53,18 @@
         <div x-ref="messages" class="assistant-messages" role="log" aria-live="polite" aria-label="محادثة المساعد">
             <template x-for="message in messages" :key="message.id">
                 <div class="assistant-message-row" :class="message.role">
-                    <span x-show="message.role === 'assistant'" class="assistant-mini-avatar" aria-hidden="true"><i class="fa-solid fa-robot"></i></span>
+                    <span x-show="message.role === 'assistant'" class="assistant-mini-avatar" aria-hidden="true"><x-app-icon name="sparkles" class="w-4 h-4" /></span>
                     <div class="assistant-bubble" :class="{ 'summary': message.kind === 'summary' }">
                         <p x-text="message.text"></p>
                         <button x-show="message.role === 'assistant'" type="button" @click="speakMessage(message.text, message.voiceKey)"
                             class="assistant-read-message" aria-label="اقرأ هذه الرسالة">
-                            <i class="fa-solid fa-volume-high"></i>
+                            <x-app-icon name="volume" class="w-3.5 h-3.5" />
                         </button>
                     </div>
                 </div>
             </template>
             <div x-show="submitting" class="assistant-message-row assistant">
-                <span class="assistant-mini-avatar"><i class="fa-solid fa-robot"></i></span>
+                <span class="assistant-mini-avatar"><x-app-icon name="sparkles" class="w-4 h-4" /></span>
                 <div class="assistant-bubble assistant-typing"><span></span><span></span><span></span></div>
             </div>
         </div>
@@ -73,19 +73,19 @@
             <div x-show="step === 0" class="grid gap-3 sm:grid-cols-3">
                 <button type="button" @click="startRequestWithVoice()" class="assistant-reply-card service"
                     data-voice-key="button_request" data-voice-text="طلب خدمة">
-                    <span class="icon"><i class="fa-solid fa-hand-holding-heart"></i></span>
+                    <span class="icon"><x-app-icon name="hand-heart" class="w-6 h-6 text-[#48612f]" /></span>
                     <span><strong>طلب خدمة</strong><small>خلينا نعمل الطلب سوا</small></span>
                 </button>
                 <a href="{{ route('service-requests.index') }}"
                     @click.prevent="navigateWithVoice('button_tracking', 'متابعة طلباتي', $el.href)"
                     class="assistant-reply-card tracking" data-voice-key="button_tracking" data-voice-text="متابعة طلباتي">
-                    <span class="icon"><i class="fa-solid fa-list-check"></i></span>
+                    <span class="icon"><x-app-icon name="clipboard-list" class="w-6 h-6 text-[#3b6d9c]" /></span>
                     <span><strong>متابعة طلباتي</strong><small>شوف حالة طلباتك</small></span>
                 </a>
                 <a href="{{ route('notifications.index') }}"
                     @click.prevent="navigateWithVoice('button_notifications', 'الإشعارات', $el.href)"
                     class="assistant-reply-card notifications" data-voice-key="button_notifications" data-voice-text="الإشعارات">
-                    <span class="icon"><i class="fa-solid fa-bell"></i></span>
+                    <span class="icon"><x-app-icon name="bell" class="w-6 h-6 text-[#a66c12]" /></span>
                     <span><strong>الإشعارات</strong><small>اقرأ آخر التنبيهات</small></span>
                 </a>
             </div>
@@ -94,12 +94,17 @@
                 <template x-for="service in services" :key="service.id">
                     <div class="assistant-service-option" :class="{ selected: draft.service_type === service.id }">
                         <button type="button" @click="chooseService(service)" class="assistant-service-chip">
-                            <span x-text="service.icon" aria-hidden="true"></span>
+                            <template x-if="service.id === 'grocery'"><x-app-icon name="shopping-cart" class="w-5 h-5 text-[#31421e]" /></template>
+                            <template x-if="service.id === 'medicine'"><x-app-icon name="pill" class="w-5 h-5 text-[#31421e]" /></template>
+                            <template x-if="service.id === 'medical_escort'"><x-app-icon name="walking" class="w-5 h-5 text-[#31421e]" /></template>
+                            <template x-if="service.id === 'social_visit'"><x-app-icon name="users" class="w-5 h-5 text-[#31421e]" /></template>
+                            <template x-if="service.id === 'home_help'"><x-app-icon name="broom" class="w-5 h-5 text-[#31421e]" /></template>
+                            <template x-if="service.id === 'support_request'"><x-app-icon name="handshake" class="w-5 h-5 text-[#31421e]" /></template>
                             <strong x-text="service.title"></strong>
                         </button>
                         <button type="button" @click.stop="speakService(service)" class="assistant-service-sound"
                             :aria-label="`استمع إلى اسم خدمة ${service.title}`" title="استمع للخدمة">
-                            <i class="fa-solid fa-volume-high"></i>
+                            <x-app-icon name="volume" class="w-4 h-4" />
                         </button>
                     </div>
                 </template>
@@ -107,7 +112,7 @@
 
             <div x-show="step === 2 && profileCity" x-cloak>
                 <button type="button" @click="useProfileCity()" class="assistant-suggestion">
-                    <i class="fa-solid fa-location-dot"></i>
+                    <x-app-icon name="map-pin" class="w-4 h-4" />
                     استخدام مدينتي: <span x-text="profileCity"></span>
                 </button>
             </div>
@@ -115,21 +120,21 @@
             <div x-show="step === 3" x-cloak class="space-y-3">
                 <div class="assistant-date-box required-date">
                     <div class="assistant-date-heading">
-                        <span><i class="fa-regular fa-calendar-check"></i></span>
+                        <span><x-app-icon name="calendar" class="w-5 h-5 text-white" /></span>
                         <div><strong>حدد موعد الخدمة</strong><small>اختيار اليوم والساعة مطلوب لإكمال الطلب</small></div>
                     </div>
                     <div class="assistant-appointment-voice">
                         <button type="button" @click="startAppointmentListening()" :disabled="listening || understandingAppointment"
                             class="assistant-appointment-mic" :class="{ active: listening }"
                             :aria-label="listening ? 'جاري الاستماع للموعد' : 'احكي موعد الخدمة'">
-                            <span><i class="fa-solid" :class="listening ? 'fa-wave-square' : 'fa-microphone'"></i></span>
+                            <span><x-app-icon name="microphone" class="w-5 h-5 text-white" /></span>
                             <span><strong x-text="listening ? 'أنا سامعك... احكي الآن' : 'احكي الموعد بصوتك'"></strong><small>مثال: بكرا الساعة ثلاثة العصر</small></span>
                         </button>
                         <button x-show="draft.scheduled_at" x-cloak type="button" @click="playAppointmentDate()" class="assistant-replay-date">
-                            <i class="fa-solid fa-volume-high"></i> اسمع الموعد
+                            <x-app-icon name="volume" class="w-4 h-4" /> اسمع الموعد
                         </button>
-                        <p x-show="appointmentTranscript" x-cloak><i class="fa-solid fa-check"></i> سمعت: <b x-text="appointmentTranscript"></b></p>
-                        <p x-show="understandingAppointment" x-cloak class="assistant-ai-thinking"><i class="fa-solid fa-wand-magic-sparkles"></i> جاري فهم اليوم والساعة...</p>
+                        <p x-show="appointmentTranscript" x-cloak class="flex items-center gap-1.5"><x-app-icon name="check" class="w-3.5 h-3.5 text-emerald-600" /> سمعت: <b x-text="appointmentTranscript"></b></p>
+                        <p x-show="understandingAppointment" x-cloak class="assistant-ai-thinking flex items-center gap-1.5"><x-app-icon name="sparkles" class="w-3.5 h-3.5 text-amber-500" /> جاري فهم اليوم والساعة...</p>
                     </div>
                     <div class="assistant-date-divider"><span>أو اختار من التقويم</span></div>
                     <label for="assistant-time">اليوم والساعة <b>مطلوب</b></label>
@@ -146,10 +151,10 @@
             </div>
 
             <div x-show="step === 5" x-cloak class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                <button type="button" @click="readSummary()" class="assistant-action listen"><i class="fa-solid fa-volume-high"></i> قراءة الملخص</button>
-                <button type="button" @click="openEditMenu()" class="assistant-action edit"><i class="fa-solid fa-pen"></i> تعديل</button>
-                <button type="button" @click="cancelDraft()" class="assistant-action cancel"><i class="fa-solid fa-xmark"></i> إلغاء الطلب</button>
-                <button type="submit" :disabled="submitting" class="assistant-action confirm"><i class="fa-solid fa-paper-plane"></i> تأكيد وإرسال</button>
+                <button type="button" @click="readSummary()" class="assistant-action listen"><x-app-icon name="volume" class="w-4 h-4" /> قراءة الملخص</button>
+                <button type="button" @click="openEditMenu()" class="assistant-action edit"><x-app-icon name="edit" class="w-4 h-4" /> تعديل</button>
+                <button type="button" @click="cancelDraft()" class="assistant-action cancel"><x-app-icon name="x-mark" class="w-4 h-4" /> إلغاء الطلب</button>
+                <button type="submit" :disabled="submitting" class="assistant-action confirm"><x-app-icon name="paper-plane" class="w-4 h-4" /> تأكيد وإرسال</button>
             </div>
 
             <div x-show="step === 6" x-cloak class="grid grid-cols-2 gap-3">
@@ -166,20 +171,20 @@
             <button type="button" @click="startListening()" class="assistant-mic" :class="{ active: listening }"
                 :disabled="listening" :title="listening ? 'جاري الاستماع... احكي الآن' : 'استخدم الميكروفون'"
                 :aria-label="listening ? 'جاري الاستماع، احكي الآن' : 'استخدم الميكروفون'">
-                <i class="fa-solid" :class="listening ? 'fa-wave-square' : 'fa-microphone'"></i>
+                <x-app-icon name="microphone" class="w-5 h-5" />
             </button>
             <textarea x-model="chatInput" @keydown.enter.prevent="sendText()" rows="1"
                 :placeholder="listening ? 'جاري الاستماع... احكي الآن' : (step === 0 ? 'اكتب مثلاً: بدي حدا يجيبلي دواء...' : (step === 2 ? 'اكتب عنوانك هنا...' : 'اكتب التفاصيل، أو اضغط تخطي...'))"
                 aria-label="اكتب رسالتك"></textarea>
             <button type="button" @click="sendText()" :disabled="!chatInput.trim()" class="assistant-send" aria-label="إرسال الرسالة">
-                <i class="fa-solid fa-paper-plane"></i><span class="hidden sm:inline">إرسال</span>
+                <x-app-icon name="paper-plane" class="w-4 h-4" /><span class="hidden sm:inline">إرسال</span>
             </button>
         </div>
 
         <footer class="assistant-footer">
-            <span><i class="fa-solid fa-volume-high"></i> جميع الأزرار ناطقة: مرّر عليها لسماع وظيفتها</span>
+            <span><x-app-icon name="volume" class="w-4 h-4" /> جميع الأزرار ناطقة: مرّر عليها لسماع وظيفتها</span>
             <span class="assistant-footer-divider"></span>
-            <span><i class="fa-solid fa-shield-heart"></i> لن يُرسل أي طلب قبل ضغط «تأكيد وإرسال»</span>
+            <span><x-app-icon name="shield-check" class="w-4 h-4" /> لن يُرسل أي طلب قبل ضغط «تأكيد وإرسال»</span>
         </footer>
     </form>
 </section>

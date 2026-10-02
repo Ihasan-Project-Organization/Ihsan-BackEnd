@@ -2,7 +2,7 @@
 
 <div style="margin-bottom:16px; display:flex; align-items:center; justify-content:space-between;">
     <a href="{{ route('admin.requests.index') }}" style="font-size:13px; color:#354e20; text-decoration:none; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
-        <i class="fa-solid fa-arrow-right"></i>
+        <x-app-icon name="arrow-right" class="w-4 h-4 text-[#354e20]" />
         <span>العودة لقائمة الطلبات</span>
     </a>
 </div>
@@ -78,7 +78,7 @@
         {{-- الخط الزمني لتغيرات حالة الطلب (Timeline) --}}
         <div style="background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); overflow:hidden; border:1px solid #e2dcd0;">
             <div style="padding:18px 24px; border-bottom:1px solid #f3f4f6; display:flex; align-items:center; gap:8px;">
-                <i class="fa-solid fa-timeline" style="color:#354e20; font-size:16px;"></i>
+                <x-app-icon name="clock" class="w-5 h-5 text-[#354e20]" />
                 <h3 style="margin:0; font-size:15px; font-weight:900; color:#1a1f36;">الخط الزمني لمراحل وحالة الطلب</h3>
             </div>
 
@@ -91,8 +91,8 @@
                     @foreach ($timeline as $step)
                     <div style="position:relative; margin-bottom:24px; display:flex; gap:16px; align-items:flex-start;">
                         {{-- أيقونة النقطة على الخط --}}
-                        <div style="width:24px; height:24px; border-radius:50%; background:{{ $step['color'] }}; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; z-index:1; flex-shrink:0; margin-top:2px; box-shadow:0 0 0 4px #fff;">
-                            <i class="{{ $step['icon'] }}"></i>
+                        <div style="width:24px; height:24px; border-radius:50%; background:{{ $step['color'] }}; color:#fff; display:flex; align-items:center; justify-content:center; z-index:1; flex-shrink:0; margin-top:2px; box-shadow:0 0 0 4px #fff;">
+                            <x-app-icon :name="$step['icon']" class="w-3.5 h-3.5 text-white" />
                         </div>
 
                         {{-- محتوى النقطة الزمنية --}}
@@ -123,7 +123,7 @@
         @if ($serviceRequest->complaints->isNotEmpty())
         <div style="background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); overflow:hidden; border:1px solid #e2dcd0;">
             <div style="padding:16px 20px; border-bottom:1px solid #f3f4f6; display:flex; align-items:center; gap:8px;">
-                <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i>
+                <x-app-icon name="exclamation-triangle" class="w-4 h-4 text-red-500" />
                 <h3 style="margin:0; font-size:13px; font-weight:800; color:#1a1f36;">الشكاوى المسجلة على هذا الطلب ({{ $serviceRequest->complaints->count() }})</h3>
             </div>
             <div style="padding:8px 0;">
@@ -134,8 +134,9 @@
                         <div style="font-size:12px; color:#6b7280; margin-top:2px;">{{ $c->description }}</div>
                     </div>
                     <a href="{{ route('admin.complaints.show', $c) }}"
-                        style="background:#e6edd9; color:#354e20; padding:6px 14px; border-radius:8px; font-size:11px; font-weight:700; text-decoration:none;">
-                        معاينة الشكوى ←
+                        style="background:#e6edd9; color:#354e20; padding:6px 14px; border-radius:8px; font-size:11px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                        <span>معاينة الشكوى</span>
+                        <x-app-icon name="arrow-left" class="w-3 h-3 text-[#354e20]" />
                     </a>
                 </div>
                 @endforeach
@@ -182,9 +183,10 @@
                 </div>
                 <div>
                     <div style="font-weight:800; font-size:14px; color:#1a1f36;">{{ $serviceRequest->serviceProviderProfile->user->name }}</div>
-                    <div style="font-size:11px; color:#f59e0b; font-weight:700;">
-                        ⭐ {{ number_format($serviceRequest->serviceProviderProfile->average_rating ?? 0, 1) }}
-                        · المستوى {{ $serviceRequest->serviceProviderProfile->tier }}
+                    <div style="font-size:11px; color:#f59e0b; font-weight:700; display:inline-flex; align-items:center; gap:3px;">
+                        <x-app-icon name="star" type="solid" class="w-3.5 h-3.5 text-amber-500" />
+                        <span>{{ number_format($serviceRequest->serviceProviderProfile->average_rating ?? 0, 1) }}</span>
+                        <span>· المستوى {{ $serviceRequest->serviceProviderProfile->tier }}</span>
                     </div>
                 </div>
             </div>
@@ -203,9 +205,9 @@
 
         {{-- تدخل إداري --}}
         <div style="background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); padding:20px; border:1px solid #e2dcd0; border-top:4px solid #354e20;">
-            <div style="font-size:13px; font-weight:800; color:#1a1f36; margin-bottom:10px;">
-                <i class="fa-solid fa-pen-to-square" style="color:#354e20; margin-left:6px;"></i>
-                تدخل إداري لتعديل الحالة
+            <div style="font-size:13px; font-weight:800; color:#1a1f36; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+                <x-app-icon name="pencil-square" class="w-4 h-4 text-[#354e20]" />
+                <span>تدخل إداري لتعديل الحالة</span>
             </div>
             <form method="POST" action="{{ route('admin.requests.force-status', $serviceRequest) }}">
                 @csrf

@@ -10,7 +10,9 @@
     <!-- رأس الصفحة البسيط -->
     <header class="w-full bg-white/80 backdrop-blur-md border-b border-slate-200/80 py-4 px-6 sm:px-12 flex items-center justify-between">
         <div class="flex items-center gap-3">
-            <span class="text-2xl">🌱</span>
+            <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#31421e]/10 text-[#31421e]">
+                <x-app-icon name="sparkles" class="w-5 h-5 text-[#31421e]" />
+            </span>
             <span class="text-lg font-black text-[#31421e]">منصة أنيس</span>
         </div>
         <div>
@@ -71,7 +73,7 @@
             @endauth
 
             <div class="rounded-2xl bg-[#eef2e8] p-4 text-xs leading-6 text-[#31421e] text-right mb-6">
-                <p class="font-bold mb-1">📌 ماذا يحدث الآن؟</p>
+                <p class="font-bold mb-1 flex items-center gap-1.5"><x-app-icon name="information-circle" class="w-4 h-4 text-[#31421e]" /><span>ماذا يحدث الآن؟</span></p>
                 <ul class="list-disc list-inside space-y-0.5 text-slate-700 text-[11px]">
                     <li>يقوم فريق المراجعة بمطابقة الهوية والوثائق المدخلة.</li>
                     <li>عند الانتهاء من التدقيق، سيتم اعتماد الحساب وفتح كافة خصائص المنصة تلقائياً.</li>

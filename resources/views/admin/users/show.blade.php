@@ -2,17 +2,19 @@
 
 <div style="margin-bottom:16px; display:flex; align-items:center; justify-content:space-between;">
     <a href="{{ route('admin.users.index') }}" style="font-size:13px; color:#354e20; text-decoration:none; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
-        <i class="fa-solid fa-arrow-right"></i>
+        <x-app-icon name="arrow-right" class="w-4 h-4 text-[#354e20]" />
         <span>العودة لقائمة المستخدمين</span>
     </a>
 
     @if ($user->status === 'suspended')
-        <span style="background:#fee2e2; color:#991b1b; padding:4px 14px; border-radius:20px; font-size:12px; font-weight:800;">
-            <i class="fa-solid fa-ban" style="margin-left:4px;"></i> الحساب موقوف عن الاستخدام
+        <span style="background:#fee2e2; color:#991b1b; padding:4px 14px; border-radius:20px; font-size:12px; font-weight:800; display:inline-flex; align-items:center; gap:4px;">
+            <x-app-icon name="no-symbol" class="w-3.5 h-3.5 text-red-700" />
+            <span>الحساب موقوف عن الاستخدام</span>
         </span>
     @elseif ($user->status === 'approved')
-        <span style="background:#d1fae5; color:#065f46; padding:4px 14px; border-radius:20px; font-size:12px; font-weight:800;">
-            <i class="fa-solid fa-check" style="margin-left:4px;"></i> الحساب نشط ومعتمد
+        <span style="background:#d1fae5; color:#065f46; padding:4px 14px; border-radius:20px; font-size:12px; font-weight:800; display:inline-flex; align-items:center; gap:4px;">
+            <x-app-icon name="check" class="w-3.5 h-3.5 text-emerald-700" />
+            <span>الحساب نشط ومعتمد</span>
         </span>
     @else
         <span style="background:#fef3c7; color:#92400e; padding:4px 14px; border-radius:20px; font-size:12px; font-weight:800;">
@@ -34,8 +36,8 @@
 {{-- تنبيه خاص إذا كان الحساب موقوفاً يوضح سبب الإيقاف --}}
 @if ($user->status === 'suspended')
 <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:16px; padding:18px 22px; margin-bottom:24px; display:flex; align-items:flex-start; gap:14px;">
-    <div style="width:42px; height:42px; border-radius:10px; background:#fee2e2; color:#dc2626; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">
-        <i class="fa-solid fa-ban"></i>
+    <div style="width:42px; height:42px; border-radius:10px; background:#fee2e2; color:#dc2626; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+        <x-app-icon name="no-symbol" class="w-5 h-5 text-red-600" />
     </div>
     <div style="flex:1;">
         <h4 style="margin:0 0 4px; font-size:14px; font-weight:900; color:#991b1b;">تم إيقاف هذا الحساب ومُنِع المستخدم من الدخول</h4>
@@ -85,7 +87,7 @@
                     <div style="display:flex; justify-content:space-between; border-bottom:1px solid #f3f4f6; padding-bottom:8px;">
                         <span style="color:#6b7280;">الحالة الحالية</span>
                         <span style="font-weight:800; color:{{ $user->status === 'approved' ? '#10b981' : ($user->status === 'suspended' ? '#ef4444' : '#f59e0b') }};">
-                            {{ $user->status === 'approved' ? 'نشط ومعتمد ✓' : ($user->status === 'suspended' ? 'موقوف ✗' : $user->status) }}
+                            {{ $user->status === 'approved' ? 'نشط ومعتمد' : ($user->status === 'suspended' ? 'موقوف' : $user->status) }}
                         </span>
                     </div>
 
@@ -104,7 +106,10 @@
                     @if ($user->serviceProviderProfile)
                     <div style="display:flex; justify-content:space-between; border-bottom:1px solid #f3f4f6; padding-bottom:8px;">
                         <span style="color:#6b7280;">متوسط التقييم</span>
-                        <span style="font-weight:800; color:#f59e0b;">⭐ {{ number_format($user->serviceProviderProfile->average_rating ?? 0, 1) }}</span>
+                        <span style="font-weight:800; color:#f59e0b; display:inline-flex; align-items:center; gap:4px;">
+                            <x-app-icon name="star" type="solid" class="w-4 h-4 text-amber-500" />
+                            <span>{{ number_format($user->serviceProviderProfile->average_rating ?? 0, 1) }}</span>
+                        </span>
                     </div>
                     <div style="display:flex; justify-content:space-between; border-bottom:1px solid #f3f4f6; padding-bottom:8px;">
                         <span style="color:#6b7280;">المستوى التطوعي</span>
@@ -133,7 +138,7 @@
         @if (!$user->admin)
         <div style="background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); padding:20px; border:1px solid #e2dcd0;">
             <div style="font-size:13px; font-weight:900; color:#1a1f36; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
-                <i class="fa-solid fa-user-shield" style="color:#354e20;"></i>
+                <x-app-icon name="shield-check" class="w-4 h-4 text-[#354e20]" />
                 <span>التحكم الإداري بالحساب</span>
             </div>
 
@@ -147,7 +152,7 @@
                     <button type="submit"
                         style="width:100%; background:#10b981; color:#fff; border:none; border-radius:10px; padding:12px; font-size:13px; font-weight:800; cursor:pointer; font-family:inherit; display:flex; align-items:center; justify-content:center; gap:6px;"
                         onclick="return confirm('هل أنت متأكد من إعادة تفعيل حساب {{ $user->name }}؟')">
-                        <i class="fa-solid fa-rotate-left"></i>
+                        <x-app-icon name="arrow-path" class="w-4 h-4 text-white" />
                         <span>إعادة تفعيل الحساب الآن</span>
                     </button>
                 </form>
@@ -167,7 +172,7 @@
                     <button type="submit"
                         style="width:100%; background:#ef4444; color:#fff; border:none; border-radius:10px; padding:11px; font-size:12.5px; font-weight:800; cursor:pointer; font-family:inherit; display:flex; align-items:center; justify-content:center; gap:6px;"
                         onclick="return confirm('تحذير: سيتم إيقاف حساب {{ $user->name }} ومنعه فوراً من الدخول. تأكيد؟')">
-                        <i class="fa-solid fa-ban"></i>
+                        <x-app-icon name="no-symbol" class="w-4 h-4 text-white" />
                         <span>إيقاف الحساب ومنع الدخول</span>
                     </button>
                 </form>
@@ -184,7 +189,7 @@
         <div style="background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); overflow:hidden; border:1px solid #e2dcd0;">
             <div style="padding:16px 20px; border-bottom:1px solid #f3f4f6; display:flex; justify-content:space-between; align-items:center;">
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i>
+                    <x-app-icon name="exclamation-triangle" class="w-4 h-4 text-red-500" />
                     <h3 style="margin:0; font-size:14px; font-weight:900; color:#1a1f36;">البلاغات المرتبطة بطلبات المستخدم ({{ $complaintsAgainst->count() }})</h3>
                 </div>
             </div>
@@ -205,8 +210,8 @@
                 </div>
                 @empty
                 <div style="padding:28px 20px; text-align:center; color:#9ca3af; font-size:12px;">
-                    <i class="fa-solid fa-circle-check" style="font-size:24px; color:#10b981; margin-bottom:6px; display:block;"></i>
-                    لا توجد أي شكاوى مسجلة ضد هذا المستخدم
+                    <x-app-icon name="check-circle" class="w-7 h-7 text-emerald-500 mx-auto mb-1.5" />
+                    <div>لا توجد أي شكاوى مسجلة ضد هذا المستخدم</div>
                 </div>
                 @endforelse
             </div>
@@ -216,7 +221,7 @@
         @if ($user->serviceProviderProfile)
         <div style="background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); overflow:hidden; border:1px solid #e2dcd0;">
             <div style="padding:16px 20px; border-bottom:1px solid #f3f4f6; display:flex; align-items:center; gap:8px;">
-                <i class="fa-solid fa-clock-rotate-left" style="color:#f59e0b;"></i>
+                <x-app-icon name="clock" class="w-4 h-4 text-amber-500" />
                 <h3 style="margin:0; font-size:14px; font-weight:900; color:#1a1f36;">سجل حوادث عدم الموثوقية للمتطوع ({{ $reliabilityIncidents->count() }})</h3>
             </div>
             <div style="padding:8px 0;">
@@ -230,15 +235,16 @@
                     </div>
                     @if ($inc->request)
                     <a href="{{ route('admin.requests.show', $inc->request) }}"
-                        style="color:#354e20; font-size:11.5px; font-weight:700; text-decoration:none;">
-                        {{ $inc->request->public_id ?? '#'.$inc->request->id }} ←
+                        style="color:#354e20; font-size:11.5px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                        <span>{{ $inc->request->public_id ?? '#'.$inc->request->id }}</span>
+                        <x-app-icon name="arrow-left" class="w-3 h-3 text-[#354e20]" />
                     </a>
                     @endif
                 </div>
                 @empty
                 <div style="padding:28px 20px; text-align:center; color:#9ca3af; font-size:12px;">
-                    <i class="fa-solid fa-shield-check" style="font-size:24px; color:#10b981; margin-bottom:6px; display:block;"></i>
-                    سجل الموثوقية نظيف ولا توجد حوادث مسجلة
+                    <x-app-icon name="shield-check" class="w-7 h-7 text-emerald-500 mx-auto mb-1.5" />
+                    <div>سجل الموثوقية نظيف ولا توجد حوادث مسجلة</div>
                 </div>
                 @endforelse
             </div>
@@ -249,7 +255,7 @@
         @if ($complaintsSubmitted->isNotEmpty())
         <div style="background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); overflow:hidden; border:1px solid #e2dcd0;">
             <div style="padding:16px 20px; border-bottom:1px solid #f3f4f6; display:flex; align-items:center; gap:8px;">
-                <i class="fa-solid fa-flag" style="color:#354e20;"></i>
+                <x-app-icon name="flag" class="w-4 h-4 text-[#354e20]" />
                 <h3 style="margin:0; font-size:14px; font-weight:900; color:#1a1f36;">بلاغات قدمها المستخدم ({{ $complaintsSubmitted->count() }})</h3>
             </div>
             <div style="padding:8px 0;">
@@ -260,8 +266,9 @@
                         <div style="font-size:10.5px; color:#9ca3af;">{{ $cs->created_at->format('Y/m/d') }}</div>
                     </div>
                     <a href="{{ route('admin.complaints.show', $cs) }}"
-                        style="color:#354e20; font-size:11px; font-weight:700; text-decoration:none;">
-                        عرض الشكوى ←
+                        style="color:#354e20; font-size:11px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                        <span>عرض الشكوى</span>
+                        <x-app-icon name="arrow-left" class="w-3 h-3 text-[#354e20]" />
                     </a>
                 </div>
                 @endforeach
@@ -272,7 +279,7 @@
         {{-- 4. آخر الإشعارات المرسلة للحساب --}}
         <div style="background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); overflow:hidden; border:1px solid #e2dcd0;">
             <div style="padding:16px 20px; border-bottom:1px solid #f3f4f6; display:flex; align-items:center; gap:8px;">
-                <i class="fa-regular fa-bell" style="color:#6b7280;"></i>
+                <x-app-icon name="bell" class="w-4 h-4 text-slate-500" />
                 <h3 style="margin:0; font-size:14px; font-weight:900; color:#1a1f36;">آخر الإشعارات المرسلة للمستخدم</h3>
             </div>
             <div style="padding:8px 0;">

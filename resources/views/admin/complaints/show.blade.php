@@ -2,7 +2,7 @@
 
 <div style="margin-bottom:16px; display:flex; align-items:center; justify-content:space-between;">
     <a href="{{ route('admin.complaints.index') }}" style="font-size:13px; color:#354e20; text-decoration:none; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
-        <i class="fa-solid fa-arrow-right"></i>
+        <x-app-icon name="arrow-right" class="w-4 h-4 text-[#354e20]" />
         <span>العودة لقائمة الشكاوى</span>
     </a>
 
@@ -13,7 +13,7 @@
             </span>
         @elseif ($complaint->status === 'closed')
             <span style="background:#d1fae5; color:#065f46; padding:5px 14px; border-radius:10px; font-size:12px; font-weight:800;">
-                شكوى مغلقة ومحسومة ✓
+                شكوى مغلقة ومحسومة
             </span>
         @else
             <span style="background:#fef3c7; color:#92400e; padding:5px 14px; border-radius:10px; font-size:12px; font-weight:800;">
@@ -77,7 +77,7 @@
                         <a href="{{ route('admin.requests.show', $complaint->serviceRequest) }}"
                             style="background:#354e20; color:#fff; padding:8px 18px; border-radius:10px; font-size:12px; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
                             <span>معاينة الطلب بالكامل</span>
-                            <i class="fa-solid fa-arrow-left"></i>
+                            <x-app-icon name="arrow-left" class="w-3 h-3 text-white" />
                         </a>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
 
         <div style="background:#fff; border-radius:16px; box-shadow:0 1px 6px rgba(0,0,0,0.06); padding:24px; border:1px solid #e2dcd0; border-top:4px solid #354e20;">
             <div style="font-size:14px; font-weight:900; color:#1a1f36; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
-                <i class="fa-solid fa-gavel" style="color:#354e20;"></i>
+                <x-app-icon name="shield-check" class="w-4 h-4 text-[#354e20]" />
                 <span>القرار الإداري والحل</span>
             </div>
 
@@ -118,7 +118,7 @@
 
                 <button type="submit"
                     style="width:100%; background:#354e20; color:#fff; border:none; border-radius:10px; padding:12px; font-size:13px; font-weight:800; cursor:pointer; font-family:inherit; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:10px;">
-                    <i class="fa-solid fa-save"></i>
+                    <x-app-icon name="check" class="w-4 h-4 text-white" />
                     <span>حفظ القرار الإداري</span>
                 </button>
             </form>
@@ -132,7 +132,7 @@
                 <button type="submit"
                     style="width:100%; background:#ecfdf5; color:#065f46; border:1px solid #6ee7b7; border-radius:10px; padding:10px; font-size:12px; font-weight:800; cursor:pointer; font-family:inherit; display:flex; align-items:center; justify-content:center; gap:6px;"
                     onclick="return confirm('تأكيد إغلاق هذه الشكوى نهائياً؟')">
-                    <i class="fa-solid fa-circle-check"></i>
+                    <x-app-icon name="check-circle" class="w-4 h-4 text-emerald-600" />
                     <span>تغيير الحالة إلى "مغلقة" مباشرة</span>
                 </button>
             </form>

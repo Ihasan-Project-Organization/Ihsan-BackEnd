@@ -18,7 +18,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -87,7 +87,7 @@
             margin-bottom: 4px;
         }
 
-        .logo i { font-size: 24px; color: #b8cfa0; }
+        .logo i, .logo svg { width: 24px; height: 24px; font-size: 24px; color: #b8cfa0; }
 
         .logo-subtitle { font-size: 11px; color: #dfe6d5; margin-bottom: 10px; }
 
@@ -139,8 +139,9 @@
             gap: 10px;
         }
 
-        .menu-item i {
-            width: 22px;
+        .menu-item i, .menu-item svg {
+            width: 20px;
+            height: 20px;
             font-size: 15px;
             text-align: center;
             color: #b8cfa0;
@@ -159,7 +160,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
 
-        .menu-item.active i { color: #ffffff; }
+        .menu-item.active i, .menu-item.active svg { color: #ffffff; }
 
         .sidebar-badge {
             margin-right: auto;
@@ -334,11 +335,11 @@
             <div class="logo-section">
                 <div class="logo">
                     <h2>أنيس</h2>
-                    <i class="fa-solid fa-shield-halved"></i>
+                    <x-app-icon name="shield-check" class="w-6 h-6 text-[#b8cfa0]" />
                 </div>
                 <p class="logo-subtitle">منصة ربط كبار السن بمقدمي الخدمة</p>
                 <span class="role-pill {{ $isSuperAdmin ? 'super' : '' }}">
-                    <i class="fa-solid {{ $isSuperAdmin ? 'fa-crown' : 'fa-user-shield' }}"></i>
+                    <x-app-icon :name="$isSuperAdmin ? 'crown' : 'shield-check'" class="w-3.5 h-3.5" />
                     {{ $isSuperAdmin ? 'مدير النظام الأعلى' : 'مدير النظام' }}
                 </span>
             </div>
@@ -349,14 +350,14 @@
                 {{-- 1. لوحة التحكم --}}
                 <a href="{{ route('admin.dashboard') }}"
                     class="menu-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                    <i class="fa-solid fa-chart-pie"></i>
+                    <x-app-icon name="chart-pie" class="w-5 h-5" />
                     <span>لوحة التحكم</span>
                 </a>
 
                 {{-- 2. مراجعة الاعتمادات --}}
                 <a href="{{ route('admin.approvals.index') }}"
                     class="menu-item {{ request()->routeIs('admin.approvals*') ? 'active' : '' }}">
-                    <i class="fa-solid fa-user-check"></i>
+                    <x-app-icon name="user-check" class="w-5 h-5" />
                     <span>مراجعة الاعتمادات</span>
                     @if ($pendingUsersCount > 0)
                         <span class="sidebar-badge">{{ $pendingUsersCount }}</span>
@@ -366,21 +367,21 @@
                 {{-- 3. إدارة الطلبات --}}
                 <a href="{{ Route::has('admin.requests.index') ? route('admin.requests.index') : '#' }}"
                     class="menu-item {{ request()->routeIs('admin.requests*') ? 'active' : '' }}">
-                    <i class="fa-solid fa-clipboard-list"></i>
+                    <x-app-icon name="clipboard-list" class="w-5 h-5" />
                     <span>إدارة الطلبات</span>
                 </a>
 
                 {{-- 4. الشكاوى وتنبيهات الموثوقية --}}
                 <a href="{{ Route::has('admin.complaints.index') ? route('admin.complaints.index') : (Route::has('admin.reports.index') ? route('admin.reports.index') : '#') }}"
                     class="menu-item {{ (request()->routeIs('admin.complaints*') || request()->routeIs('admin.reports*')) ? 'active' : '' }}">
-                    <i class="fa-solid fa-shield-halved"></i>
+                    <x-app-icon name="shield-exclamation" class="w-5 h-5" />
                     <span>الشكاوى والموثوقية</span>
                 </a>
 
                 {{-- 5. إدارة المستخدمين --}}
                 <a href="{{ Route::has('admin.users.index') ? route('admin.users.index') : '#' }}"
                     class="menu-item {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
-                    <i class="fa-solid fa-users"></i>
+                    <x-app-icon name="users" class="w-5 h-5" />
                     <span>إدارة المستخدمين</span>
                 </a>
 
@@ -390,14 +391,14 @@
                     {{-- 6. إدارة المديرين --}}
                     <a href="{{ Route::has('admin.admins.index') ? route('admin.admins.index') : '#' }}"
                         class="menu-item {{ request()->routeIs('admin.admins*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-crown"></i>
+                        <x-app-icon name="crown" class="w-5 h-5" />
                         <span>إدارة المديرين</span>
                     </a>
 
                     {{-- 7. إعدادات النظام --}}
                     <a href="{{ Route::has('admin.settings.index') ? route('admin.settings.index') : '#' }}"
                         class="menu-item {{ request()->routeIs('admin.settings*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-sliders"></i>
+                        <x-app-icon name="sliders" class="w-5 h-5" />
                         <span>إعدادات النظام</span>
                     </a>
                 @endif
@@ -406,7 +407,7 @@
                 <span class="menu-section-label">السجلات والتدقيق</span>
                 <a href="{{ Route::has('admin.audit-log.index') ? route('admin.audit-log.index') : '#' }}"
                     class="menu-item {{ request()->routeIs('admin.audit-log*') ? 'active' : '' }}">
-                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <x-app-icon name="history" class="w-5 h-5" />
                     <span>سجل النظام (Audit Log)</span>
                 </a>
             </nav>
@@ -419,7 +420,7 @@
             <form method="POST" action="{{ route('logout') }}" class="logout-form">
                 @csrf
                 <button type="submit" class="logout-btn">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <x-app-icon name="logout" class="w-4 h-4" />
                     <span>تسجيل خروج</span>
                 </button>
             </form>
@@ -429,7 +430,7 @@
             <header class="top-header">
                 <div class="flex items-center gap-3">
                     <button type="button" class="mobile-menu-btn" @click="mobileSidebarOpen = !mobileSidebarOpen">
-                        <i class="fa-solid fa-bars"></i>
+                        <x-app-icon name="bars" class="w-6 h-6 text-[#354e20]" />
                     </button>
                     <div class="header-breadcrumb">
                         <span class="label">لوحة الإدارة — أنيس</span>
@@ -466,14 +467,14 @@
             <div class="content-body">
                 @if (session('success'))
                     <div style="background:#d1fae5; border:1px solid #6ee7b7; color:#065f46; border-radius:12px; padding:12px 18px; margin-bottom:20px; font-size:13px; font-weight:700; display:flex; align-items:center; gap:8px;">
-                        <i class="fa-solid fa-circle-check"></i>
+                        <x-app-icon name="check-circle" class="w-5 h-5 text-emerald-600 shrink-0" />
                         <span>{{ session('success') }}</span>
                     </div>
                 @endif
 
                 @if (session('error'))
                     <div style="background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; border-radius:12px; padding:12px 18px; margin-bottom:20px; font-size:13px; font-weight:700; display:flex; align-items:center; gap:8px;">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <x-app-icon name="warning" class="w-5 h-5 text-rose-600 shrink-0" />
                         <span>{{ session('error') }}</span>
                     </div>
                 @endif

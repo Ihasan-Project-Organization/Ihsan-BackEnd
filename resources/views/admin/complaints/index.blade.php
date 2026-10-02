@@ -4,7 +4,7 @@
 <div style="display:flex; gap:12px; margin-bottom:24px; border-bottom:1px solid #e5e7eb; padding-bottom:12px;">
     <a href="{{ route('admin.complaints.index', ['tab' => 'complaints']) }}"
         style="text-decoration:none; padding:10px 20px; border-radius:12px; font-size:13px; font-weight:800; display:flex; align-items:center; gap:8px; transition:all 0.2s; {{ $tab !== 'reliability' ? 'background:#354e20; color:#fff; box-shadow:0 4px 12px rgba(53,78,32,0.2);' : 'background:#fff; color:#4b5563; border:1px solid #e5e7eb;' }}">
-        <i class="fa-solid fa-flag"></i>
+        <x-app-icon name="flag" class="w-4 h-4" />
         <span>البلاغات والشكاوى</span>
         @if ($openComplaintsCount > 0)
             <span style="background:{{ $tab !== 'reliability' ? 'rgba(255,255,255,0.25)' : '#fee2e2; color:#991b1b;' }}; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:800;">
@@ -15,7 +15,7 @@
 
     <a href="{{ route('admin.complaints.index', ['tab' => 'reliability']) }}"
         style="text-decoration:none; padding:10px 20px; border-radius:12px; font-size:13px; font-weight:800; display:flex; align-items:center; gap:8px; transition:all 0.2s; {{ $tab === 'reliability' ? 'background:#83a55b; color:#fff; box-shadow:0 4px 12px rgba(131,165,91,0.25);' : 'background:#fff; color:#4b5563; border:1px solid #e5e7eb;' }}">
-        <i class="fa-solid fa-shield-virus"></i>
+        <x-app-icon name="shield-exclamation" class="w-4 h-4" />
         <span>تنبيهات الموثوقية (آخر 30 يوماً)</span>
         @if ($reliabilityAlertsCount > 0)
             <span style="background:{{ $tab === 'reliability' ? 'rgba(255,255,255,0.25)' : '#fef3c7; color:#b45309;' }}; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:800;">
@@ -50,13 +50,13 @@
             </div>
 
             <button type="submit" style="background:#354e20; color:#fff; border:none; border-radius:10px; padding:10px 22px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:6px;">
-                <i class="fa-solid fa-magnifying-glass"></i>
+                <x-app-icon name="magnifying-glass" class="w-4 h-4 text-white" />
                 <span>تصفية</span>
             </button>
 
             @if (request()->anyFilled(['search', 'status']))
             <a href="{{ route('admin.complaints.index', ['tab' => 'complaints']) }}" style="background:#f3f4f6; color:#374151; border-radius:10px; padding:10px 18px; font-size:13px; font-weight:700; text-decoration:none; display:flex; align-items:center; gap:6px;">
-                <i class="fa-solid fa-xmark"></i>
+                <x-app-icon name="x-mark" class="w-4 h-4 text-slate-600" />
                 <span>إلغاء الفلتر</span>
             </a>
             @endif
@@ -111,7 +111,7 @@
                             @if ($c->status === 'open')
                                 <span style="background:#fee2e2; color:#991b1b; padding:3px 10px; border-radius:8px; font-size:11px; font-weight:800;">مفتوحة</span>
                             @elseif ($c->status === 'closed')
-                                <span style="background:#d1fae5; color:#065f46; padding:3px 10px; border-radius:8px; font-size:11px; font-weight:800;">مغلقة ✓</span>
+                                <span style="background:#d1fae5; color:#065f46; padding:3px 10px; border-radius:8px; font-size:11px; font-weight:800;">مغلقة</span>
                             @else
                                 <span style="background:#fef3c7; color:#92400e; padding:3px 10px; border-radius:8px; font-size:11px; font-weight:800;">قيد المراجعة</span>
                             @endif
@@ -122,7 +122,7 @@
                         <td style="padding:14px 20px; white-space:nowrap;">
                             <a href="{{ route('admin.complaints.show', $c) }}"
                                 style="background:#e6edd9; color:#354e20; padding:6px 14px; border-radius:10px; font-size:11.5px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
-                                <i class="fa-solid fa-pen-to-square"></i>
+                                <x-app-icon name="pencil-square" class="w-4 h-4 text-[#354e20]" />
                                 <span>معاينة والحل</span>
                             </a>
                         </td>
@@ -130,7 +130,7 @@
                     @empty
                     <tr>
                         <td colspan="7" style="padding:48px 20px; text-align:center; color:#9ca3af;">
-                            <i class="fa-solid fa-shield-halved" style="font-size:36px; color:#10b981; margin-bottom:12px; display:block;"></i>
+                            <x-app-icon name="shield-check" class="w-10 h-10 text-emerald-500 mx-auto mb-3" />
                             <span>لا توجد شكاوى مسجلة تطابق الفلاتر الحالية</span>
                         </td>
                     </tr>
@@ -150,8 +150,8 @@
 @else
 
     <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:16px; padding:18px 22px; margin-bottom:24px; display:flex; align-items:flex-start; gap:14px;">
-        <div style="width:40px; height:40px; border-radius:10px; background:#fef3c7; color:#b45309; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">
-            <i class="fa-solid fa-triangle-exclamation"></i>
+        <div style="width:40px; height:40px; border-radius:10px; background:#fef3c7; color:#b45309; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <x-app-icon name="exclamation-triangle" class="w-5 h-5 text-amber-600" />
         </div>
         <div>
             <h4 style="margin:0 0 4px; font-size:14px; font-weight:900; color:#92400e;">نظام مراقبة جودة وموثوقية المتطوعين</h4>
@@ -187,15 +187,16 @@
                     <div style="display:flex; align-items:center; gap:16px;">
                         <div style="text-align:center; background:#fff; padding:8px 16px; border-radius:10px; border:1px solid #fed7d7;">
                             <div style="font-size:10px; color:#6b7280; font-weight:700;">متوسط التقييم</div>
-                            <div style="font-size:15px; font-weight:900; color:#f59e0b;">
-                                ⭐ {{ number_format($prov->average_rating ?? 0, 1) }}
+                            <div style="font-size:15px; font-weight:900; color:#f59e0b; display:inline-flex; align-items:center; gap:4px;">
+                                <x-app-icon name="star" type="solid" class="w-4 h-4 text-amber-500" />
+                                <span>{{ number_format($prov->average_rating ?? 0, 1) }}</span>
                             </div>
                         </div>
 
                         {{-- رابط لملف المستخدم --}}
                         <a href="{{ Route::has('admin.users.show') ? route('admin.users.show', $prov->user) : '#' }}"
                             style="background:#354e20; color:#fff; padding:9px 18px; border-radius:10px; font-size:12px; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
-                            <i class="fa-solid fa-user-gear"></i>
+                            <x-app-icon name="user" class="w-4 h-4 text-white" />
                             <span>عرض ملف المستخدم واتخاذ قرار</span>
                         </a>
                     </div>
@@ -222,12 +223,14 @@
                                     </td>
                                     <td style="padding:10px 16px;">
                                         @if ($inc->incident_type === 'apology')
-                                            <span style="background:#fce7f3; color:#9d174d; padding:3px 10px; border-radius:6px; font-size:11px; font-weight:700;">
-                                                <i class="fa-solid fa-circle-xmark" style="margin-left:4px;"></i> اعتذار مفاجئ عن المهمة
+                                            <span style="background:#fce7f3; color:#9d174d; padding:3px 10px; border-radius:6px; font-size:11px; font-weight:700; display:inline-flex; align-items:center; gap:4px;">
+                                                <x-app-icon name="x-circle" class="w-3.5 h-3.5 text-pink-700" />
+                                                <span>اعتذار مفاجئ عن المهمة</span>
                                             </span>
                                         @elseif ($inc->incident_type === 'delay')
-                                            <span style="background:#ffedd5; color:#c2410c; padding:3px 10px; border-radius:6px; font-size:11px; font-weight:700;">
-                                                <i class="fa-solid fa-clock-rotate-left" style="margin-left:4px;"></i> تأخر عن الموعد المحدد
+                                            <span style="background:#ffedd5; color:#c2410c; padding:3px 10px; border-radius:6px; font-size:11px; font-weight:700; display:inline-flex; align-items:center; gap:4px;">
+                                                <x-app-icon name="clock" class="w-3.5 h-3.5 text-orange-700" />
+                                                <span>تأخر عن الموعد المحدد</span>
                                             </span>
                                         @else
                                             <span style="background:#f3f4f6; color:#4b5563; padding:3px 10px; border-radius:6px; font-size:11px; font-weight:700;">
@@ -257,7 +260,7 @@
     @else
         <div style="background:#fff; border-radius:16px; padding:60px 20px; text-align:center; box-shadow:0 1px 6px rgba(0,0,0,0.06);">
             <div style="width:60px; height:60px; border-radius:50%; background:#d1fae5; color:#059669; display:flex; align-items:center; justify-content:center; font-size:28px; margin:0 auto 16px;">
-                <i class="fa-solid fa-shield-heart"></i>
+                <x-app-icon name="shield-check" class="w-8 h-8 text-emerald-600" />
             </div>
             <h3 style="margin:0 0 6px; font-size:16px; font-weight:900; color:#1a1f36;">سجل الموثوقية نظيف تماماً!</h3>
             <p style="margin:0; font-size:12.5px; color:#6b7280;">لا يوجد أي مقدم خدمة وصل إلى عتبة الـ 3 حوادث عدم موثوقية خلال آخر 30 يوماً.</p>

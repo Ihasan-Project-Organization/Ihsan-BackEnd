@@ -424,17 +424,26 @@ class ServiceRequest extends Model
     }
 
     /**
-     * أيقونة نوع الخدمة.
+     * اسم أيقونة نوع الخدمة (Heroicons / Lucide / Tabler).
+     */
+    public function getServiceTypeIconNameAttribute(): string
+    {
+        return match ($this->service_type) {
+            'grocery' => 'shopping-cart',
+            'medical_escort' => 'walking',
+            'medicine' => 'pill',
+            'home_help' => 'broom',
+            'social_visit' => 'users',
+            default => 'handshake',
+        };
+    }
+
+    /**
+     * أيقونة نوع الخدمة المعتمدة.
      */
     public function getServiceTypeIconAttribute(): string
     {
-        return match ($this->service_type) {
-            'grocery' => '🛒',
-            'medical_escort' => '🚶‍♂️',
-            'medicine' => '💊',
-            'home_help' => '🧹',
-            default => '🤝',
-        };
+        return $this->service_type_icon_name;
     }
 
     /**

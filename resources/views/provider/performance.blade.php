@@ -12,7 +12,8 @@
             <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                     <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-bold text-[#dfe6d5] border border-white/15 backdrop-blur-sm">
-                        <span>🏆 نظام المستويات المعتمد (Tier System)</span>
+                        <x-app-icon name="trophy" class="w-4 h-4 text-amber-300 inline" />
+                        <span>نظام المستويات المعتمد (Tier System)</span>
                     </div>
 
                     <h2 class="mt-3 text-2xl sm:text-3xl font-black text-white">
@@ -63,7 +64,10 @@
                             </div>
                             <p class="mt-1 text-amber-200 font-semibold">متبقي {{ $tasksToNextTier }} مهام للترقية إلى Tier 3.</p>
                         @else
-                            <p class="text-emerald-200 font-bold text-xs">✓ وصلت إلى أعلى مستوى تميز معتمد في المنصة.</p>
+                            <p class="text-emerald-200 font-bold text-xs inline-flex items-center gap-1.5">
+                                <x-app-icon name="check-circle" class="w-4 h-4 text-emerald-300" />
+                                <span>وصلت إلى أعلى مستوى تميز معتمد في المنصة.</span>
+                            </p>
                         @endif
                     </div>
                 </div>
@@ -81,8 +85,10 @@
                     <div class="mt-4 flex items-center gap-4">
                         <span class="text-4xl sm:text-5xl font-black text-[#31421e]">{{ number_format($avgRating, 1) }}</span>
                         <div>
-                            <div class="flex items-center text-amber-400 text-lg">
-                                ★★★★★
+                            <div class="flex items-center gap-0.5 text-amber-400">
+                                @for($i = 0; $i < 5; $i++)
+                                    <x-app-icon name="star" type="solid" class="w-4 h-4" />
+                                @endfor
                             </div>
                             <p class="mt-1 text-xs font-bold text-slate-500">
                                 بناءً على {{ $reviews->total() }} تقييماً
@@ -90,8 +96,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-5 rounded-2xl bg-[#f8faf6] p-3 border border-[#dfe6d5] text-[11px] text-slate-600">
-                    ⭐ تقييم إجباري بسيط (1 إلى 5 نجوم) يضعه كبار السن عند تأكيد إتمام الخدمة.
+                <div class="mt-5 rounded-2xl bg-[#f8faf6] p-3 border border-[#dfe6d5] text-[11px] text-slate-600 inline-flex items-center gap-1.5">
+                    <x-app-icon name="star" type="solid" class="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                    <span>تقييم إجباري بسيط (1 إلى 5 نجوم) يضعه كبار السن عند تأكيد إتمام الخدمة.</span>
                 </div>
             </div>
 
@@ -102,15 +109,19 @@
                     <div class="mt-4 flex items-center gap-4">
                         <span class="text-4xl sm:text-5xl font-black text-emerald-800">{{ $totalServices }}</span>
                         <div>
-                            <span class="text-xs font-bold text-emerald-600">✓ خدمة منجزة</span>
+                            <span class="text-xs font-bold text-emerald-600 inline-flex items-center gap-1">
+                                <x-app-icon name="check" class="w-3.5 h-3.5" />
+                                <span>خدمة منجزة</span>
+                            </span>
                             <p class="mt-1 text-xs font-bold text-slate-500">
                                 تسليم مؤكد مع كبار السن
                             </p>
                         </div>
                     </div>
                 </div>
-                <div class="mt-5 rounded-2xl bg-[#f8faf6] p-3 border border-[#dfe6d5] text-[11px] text-slate-600">
-                    📜 مؤهلة لطلب شهادات تطوع رقمية موثقة من المنصة.
+                <div class="mt-5 rounded-2xl bg-[#f8faf6] p-3 border border-[#dfe6d5] text-[11px] text-slate-600 inline-flex items-center gap-1.5">
+                    <x-app-icon name="academic-cap" class="w-3.5 h-3.5 text-slate-600 shrink-0" />
+                    <span>مؤهلة لطلب شهادات تطوع رقمية موثقة من المنصة.</span>
                 </div>
             </div>
 
@@ -121,15 +132,20 @@
                     <div class="mt-4 flex items-center gap-4">
                         <span class="text-4xl sm:text-5xl font-black text-amber-500">{{ $fiveStarsCount }}</span>
                         <div>
-                            <span class="text-xs font-bold text-amber-600">★★★★★</span>
+                            <div class="flex items-center gap-0.5 text-amber-500">
+                                @for($i = 0; $i < 5; $i++)
+                                    <x-app-icon name="star" type="solid" class="w-3 h-3" />
+                                @endfor
+                            </div>
                             <p class="mt-1 text-xs font-bold text-slate-500">
                                 تقييمات بدرجة 5 من 5
                             </p>
                         </div>
                     </div>
                 </div>
-                <div class="mt-5 rounded-2xl bg-[#f8faf6] p-3 border border-[#dfe6d5] text-[11px] text-slate-600">
-                    🌟 ثناء وتقدير مباشر من المستفيدين يعزز ترقية مستواك.
+                <div class="mt-5 rounded-2xl bg-[#f8faf6] p-3 border border-[#dfe6d5] text-[11px] text-slate-600 inline-flex items-center gap-1.5">
+                    <x-app-icon name="sparkles" class="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                    <span>ثناء وتقدير مباشر من المستفيدين يعزز ترقية مستواك.</span>
                 </div>
             </div>
         </div>
@@ -159,8 +175,12 @@
                                     "{{ $rev->comment ?? 'خدمة ممتازة، بارك الله فيكم وفي جهودكم الطيبة.' }}"
                                 </p>
                             </div>
-                            <div class="flex items-center gap-1 text-amber-400 font-black text-sm shrink-0 bg-amber-50 px-3 py-1.5 rounded-2xl border border-amber-200">
-                                @for ($i = 0; $i < $rev->stars; $i++) ★ @endfor
+                            <div class="flex items-center gap-1.5 text-amber-400 font-black text-sm shrink-0 bg-amber-50 px-3 py-1.5 rounded-2xl border border-amber-200">
+                                <span class="inline-flex items-center gap-0.5">
+                                    @for ($i = 0; $i < $rev->stars; $i++)
+                                        <x-app-icon name="star" type="solid" class="w-3.5 h-3.5" />
+                                    @endfor
+                                </span>
                                 <span class="text-xs font-bold text-slate-700 mr-1">({{ $rev->stars }}/5)</span>
                             </div>
                         </div>
@@ -172,7 +192,9 @@
                 </div>
             @else
                 <div class="rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm space-y-2">
-                    <span class="text-4xl">⭐</span>
+                    <div class="flex justify-center mb-2">
+                        <x-app-icon name="star" class="w-12 h-12 text-slate-300" />
+                    </div>
                     <h3 class="text-sm font-bold text-slate-700">لا توجد تقييمات مكتوبة حتى الآن</h3>
                     <p class="text-xs text-slate-400 max-w-sm mx-auto">ستظهر هنا التقييمات والرسائل فور تأكيد كبار السن للمهام المنفذة.</p>
                 </div>

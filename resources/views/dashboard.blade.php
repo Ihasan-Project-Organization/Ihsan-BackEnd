@@ -137,17 +137,17 @@
         <main class="elder-dash">
             <section class="elder-welcome">
                 <div class="elder-welcome-copy">
-                    <span class="elder-status"><i class="fa-solid fa-circle-check"></i> حساب معتمد</span>
+                    <span class="elder-status"><x-app-icon name="check-circle" class="w-4 h-4 inline-block ml-1" /> حساب معتمد</span>
                     <h1>أهلًا، {{ $user->name }}</h1>
                     <p>كل ما تحتاجه لإدارة طلباتك موجود هنا بشكل بسيط وواضح.</p>
                     <div class="elder-meta">
-                        <span><i class="fa-solid fa-location-dot"></i> {{ $elderProfile?->city ?? 'المدينة غير محددة' }}</span>
-                        <span><i class="fa-regular fa-calendar"></i> عضو منذ {{ $user->created_at->translatedFormat('M Y') }}</span>
+                        <span><x-app-icon name="map-pin" class="w-4 h-4 inline-block ml-1" /> {{ $elderProfile?->city ?? 'المدينة غير محددة' }}</span>
+                        <span><x-app-icon name="calendar" class="w-4 h-4 inline-block ml-1" /> عضو منذ {{ $user->created_at->translatedFormat('M Y') }}</span>
                     </div>
                 </div>
 
                 <div class="elder-assistant">
-                    <span class="elder-assistant-icon"><i class="fa-solid fa-robot"></i></span>
+                    <span class="elder-assistant-icon flex items-center justify-center"><x-app-icon name="sparkles" class="w-7 h-7 text-[#31421e]" /></span>
                     <div class="elder-assistant-copy">
                         <small>مساعد أنيس الذكي</small>
                         <strong>كيف نقدر نساعدك اليوم؟</strong>
@@ -155,7 +155,7 @@
                     </div>
                     <a href="{{ route('dashboard', ['assistant' => 1]) }}">
                         <span>فتح المساعد</span>
-                        <i class="fa-solid fa-arrow-left"></i>
+                        <x-app-icon name="arrow-left" class="w-4 h-4 inline-block mr-1" />
                     </a>
                 </div>
             </section>
@@ -166,38 +166,38 @@
                         <span>نظرة سريعة</span>
                         <h2 id="summary-title">حالة طلباتك</h2>
                     </div>
-                    <a href="{{ route('service-requests.index') }}">عرض كل الطلبات <i class="fa-solid fa-arrow-left"></i></a>
+                    <a href="{{ route('service-requests.index') }}">عرض كل الطلبات <x-app-icon name="arrow-left" class="w-4 h-4 inline-block mr-1" /></a>
                 </header>
 
                 <div class="elder-summary-grid">
                     <a href="{{ route('service-requests.index', ['tab' => 'active']) }}" class="elder-summary-item">
-                        <span class="elder-summary-icon active-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                        <span class="elder-summary-icon active-icon flex items-center justify-center"><x-app-icon name="history" class="w-5 h-5 text-sky-700" /></span>
                         <span class="elder-summary-content">
                             <small>طلبات نشطة</small>
                             <strong>{{ $activeCount }}</strong>
                             <em>قيد المتابعة</em>
                         </span>
-                        <i class="fa-solid fa-chevron-left elder-summary-arrow"></i>
+                        <x-app-icon name="chevron-left" class="w-4 h-4 elder-summary-arrow" />
                     </a>
 
                     <a href="{{ route('service-requests.index', ['tab' => 'needs_action']) }}" class="elder-summary-item {{ $needsActionCount > 0 ? 'needs-attention' : '' }}">
-                        <span class="elder-summary-icon action-icon"><i class="fa-solid fa-circle-exclamation"></i></span>
+                        <span class="elder-summary-icon action-icon flex items-center justify-center"><x-app-icon name="warning" class="w-5 h-5 text-amber-700" /></span>
                         <span class="elder-summary-content">
                             <small>بحاجة لإجراء</small>
                             <strong>{{ $needsActionCount }}</strong>
                             <em>{{ $needsActionCount > 0 ? 'بانتظار مراجعتك' : 'لا يوجد إجراء مطلوب' }}</em>
                         </span>
-                        <i class="fa-solid fa-chevron-left elder-summary-arrow"></i>
+                        <x-app-icon name="chevron-left" class="w-4 h-4 elder-summary-arrow" />
                     </a>
 
                     <a href="{{ route('service-requests.index', ['tab' => 'completed']) }}" class="elder-summary-item">
-                        <span class="elder-summary-icon done-icon"><i class="fa-solid fa-circle-check"></i></span>
+                        <span class="elder-summary-icon done-icon flex items-center justify-center"><x-app-icon name="check-circle" class="w-5 h-5 text-emerald-700" /></span>
                         <span class="elder-summary-content">
                             <small>طلبات مكتملة</small>
                             <strong>{{ $completedCount }}</strong>
                             <em>تم إنجازها بنجاح</em>
                         </span>
-                        <i class="fa-solid fa-chevron-left elder-summary-arrow"></i>
+                        <x-app-icon name="chevron-left" class="w-4 h-4 elder-summary-arrow" />
                     </a>
                 </div>
             </section>

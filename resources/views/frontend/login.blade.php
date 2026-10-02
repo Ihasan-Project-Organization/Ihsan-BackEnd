@@ -344,46 +344,6 @@
             {{ $errors->first('password') }}
           </div>
         @endif
-
-        @if (config('app.show_test_buttons', env('SHOW_TEST_BUTTONS', app()->environment(['local', 'production']))))
-        <!-- ======================================================== -->
-        <!-- [نظام الأزرار السريعة لحسابات الاختبار والتجربة] -->
-        <!-- ======================================================== -->
-        <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 16px; padding: 14px; margin-bottom: 20px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-            <div style="display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 12px; color: #1e293b;">
-              <span style="font-size: 14px;">⚡</span>
-              <span>نظام الأزرار للاختبار والدخول السريع:</span>
-            </div>
-            <span style="font-size: 10px; background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 10px; font-weight: 700;">نقرة للتعبئة أو دخول فوري</span>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
-            <!-- 1. مدير النظام الأعلى (الحساب التجريبي المعتمد الوحيد) -->
-            <div class="quick-fill-card" onclick="fillCredentials('superadmin@anees.com', 'password', 'مدير النظام الأعلى (Super Admin)', false)"
-              style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; padding: 12px 14px; text-align: right; cursor: pointer; transition: all 0.15s; position: relative;">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-weight: 800; font-size: 13px; color: #92400e; display: flex; align-items: center; gap: 6px;">
-                  <span>👑</span>
-                  <span>مدير النظام الأعلى (Super Admin)</span>
-                </div>
-                <button type="button" onclick="event.stopPropagation(); fillCredentials('superadmin@anees.com', 'password', 'مدير النظام الأعلى (Super Admin)', true)"
-                  title="تسجيل دخول فوري"
-                  style="background: #fef3c7; border: 1px solid #f59e0b; color: #92400e; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; cursor: pointer;">
-                  دخول فوري ⚡
-                </button>
-              </div>
-              <div style="font-size: 11px; color: #b45309; margin-top: 4px; direction: ltr; text-align: right; font-family: monospace;">superadmin@anees.com</div>
-            </div>
-          </div>
-
-          <div id="quickFillNotice" style="display:none; margin-top: 10px; font-size: 11px; font-weight: 700; color: #065f46; text-align: center; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 6px 10px;">
-            ✓ تم تعبئة البيانات بنجاح! يمكنك الآن الضغط على تسجيل الدخول.
-          </div>
-        </div>
-        <!-- ======================================================== -->
-        @endif
-
         <form method="POST" action="{{ route('login') }}" id="loginForm">
           @csrf
 
@@ -437,7 +397,7 @@
 
         if (autoSubmit && form) {
           if (notice) {
-            notice.innerHTML = '⚡ جاري تسجيل الدخول كـ <strong>' + roleName + '</strong>...';
+            notice.innerHTML = 'جاري تسجيل الدخول كـ <strong>' + roleName + '</strong>...';
             notice.style.display = 'block';
             notice.style.background = '#e0f2fe';
             notice.style.borderColor = '#7dd3fc';
@@ -455,7 +415,7 @@
         }, 1500);
 
         if (notice) {
-          notice.innerHTML = '✓ تم تعبئة بيانات: <strong>' + roleName + '</strong>. اضغط الآن على زر "تسجيل الدخول" أو "دخول ⚡".';
+          notice.innerHTML = 'تم تعبئة بيانات: <strong>' + roleName + '</strong>. اضغط الآن على زر "تسجيل الدخول" أو "دخول فوري".';
           notice.style.display = 'block';
           notice.style.background = '#ecfdf5';
           notice.style.borderColor = '#a7f3d0';

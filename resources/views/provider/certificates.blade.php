@@ -11,7 +11,8 @@
             <div class="flex items-center gap-2">
                 <a href="{{ route('provider.tasks', ['tab' => 'completed']) }}"
                     class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition">
-                    <span>✓ سجل الخدمات المكتملة</span>
+                    <x-app-icon name="check" class="w-4 h-4 inline" />
+                    <span>سجل الخدمات المكتملة</span>
                 </a>
             </div>
         </div>
@@ -20,17 +21,24 @@
         @if (session('status') === 'certificate-issued')
             <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-800 text-xs font-bold flex items-center justify-between animate-fadeIn">
                 <span class="flex items-center gap-2">
-                    <span class="text-base">🎉</span>
+                    <x-app-icon name="sparkles" class="w-5 h-5 text-amber-500" />
                     <span>تهانينا! تم إصدار وتوثيق شهادة التطوع الرقمية بنجاح. يمكنك معاينتها أو طباعتها أدناه.</span>
                 </span>
-                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer">✕</button>
+                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer">
+                    <x-app-icon name="x-mark" class="w-4 h-4" />
+                </button>
             </div>
         @endif
 
         @if (session('error'))
             <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-800 text-xs font-bold flex items-center justify-between animate-fadeIn">
-                <span>⚠️ {{ session('error') }}</span>
-                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-rose-600 hover:text-rose-900 cursor-pointer">✕</button>
+                <span class="inline-flex items-center gap-1.5">
+                    <x-app-icon name="alert-triangle" class="w-4 h-4 text-rose-800" />
+                    <span>{{ session('error') }}</span>
+                </span>
+                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-rose-600 hover:text-rose-900 cursor-pointer">
+                    <x-app-icon name="x-mark" class="w-4 h-4" />
+                </button>
             </div>
         @endif
 
@@ -39,7 +47,7 @@
             <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                     <span class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-[#dfe6d5] border border-white/10">
-                        <span>📜</span>
+                        <x-app-icon name="academic-cap" class="w-4 h-4 text-[#dfe6d5]" />
                         <span>اعتماد رسمي وموثق</span>
                     </span>
                     <h2 class="mt-3 text-2xl sm:text-3xl font-black text-white">
@@ -70,7 +78,9 @@
 
                 {{-- زر الإجراء --}}
                 <div class="rounded-2xl bg-white/10 p-5 backdrop-blur-md border border-white/15 max-w-sm w-full text-center">
-                    <span class="text-3xl">🏅</span>
+                    <div class="flex justify-center mb-1">
+                        <x-app-icon name="trophy" class="w-10 h-10 text-amber-300" />
+                    </div>
                     <h3 class="mt-2 text-sm font-black text-white">إصدار شهادة تطوع جديدة</h3>
                     <p class="mt-1 text-[11px] text-[#dfe6d5]">
                         @if ($completedCount > 0)
@@ -143,8 +153,9 @@
 
                                 <div class="flex items-center gap-2">
                                     <button type="button" onclick="window.print()"
-                                        class="rounded-xl bg-[#31421e] px-4 py-2 text-xs font-bold text-white hover:bg-[#52643a] transition cursor-pointer shadow-sm">
-                                        🖨️ طباعة / حفظ PDF
+                                        class="rounded-xl bg-[#31421e] px-4 py-2 text-xs font-bold text-white hover:bg-[#52643a] transition cursor-pointer shadow-sm inline-flex items-center gap-1.5">
+                                        <x-app-icon name="printer" class="w-3.5 h-3.5" />
+                                        <span>طباعة / حفظ PDF</span>
                                     </button>
                                 </div>
                             </div>
@@ -153,7 +164,9 @@
                 </div>
             @else
                 <div class="rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm space-y-3">
-                    <span class="text-4xl">📜</span>
+                    <div class="flex justify-center mb-2">
+                        <x-app-icon name="academic-cap" class="w-12 h-12 text-slate-300" />
+                    </div>
                     <h3 class="text-base font-black text-slate-800">لا توجد شهادات مصدرة بعد</h3>
                     <p class="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
                         عند إنجازك للمهام التطوعية، يمكنك في أي وقت طلب إصدار شهادة تطوع رقمية موثقة من هذا القسم.
@@ -161,7 +174,7 @@
                     <div class="pt-2">
                         <a href="{{ route('provider.available') }}" class="inline-flex items-center gap-2 rounded-2xl bg-[#31421e] px-6 py-3 text-xs font-bold text-white shadow-sm hover:bg-[#52643a] transition">
                             <span>استعراض الفرص التطوعية المتاحة</span>
-                            <span>←</span>
+                            <x-app-icon name="arrow-left" class="w-4 h-4 inline" />
                         </a>
                     </div>
                 </div>
