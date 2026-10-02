@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إحسان - إنشاء حساب كبير سن</title>
-  
+  <title>أنيس - إنشاء حساب كبير سن</title>
+
   <!-- استدعاء خط Alexandria من Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
   <!-- أيقونات FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+
   <style>
     * {
       box-sizing: border-box;
@@ -68,7 +70,7 @@
       background: #ffffff;
       border-radius: 40px 40px 0 0;
       padding: 7px 7px 0 7px;
-      box-shadow: 0 -4px 15px rgba(0,0,0,0.04);
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.04);
       z-index: 5;
     }
 
@@ -147,7 +149,7 @@
       margin-top: -10px;
       position: relative;
       z-index: 10;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
     }
 
     .stepper {
@@ -246,6 +248,7 @@
     .input-wrapper input[type="date"] {
       cursor: pointer;
     }
+
     .input-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
       opacity: 0;
       cursor: pointer;
@@ -321,7 +324,8 @@
       gap: 12px;
     }
 
-    .submit-btn, .prev-btn {
+    .submit-btn,
+    .prev-btn {
       width: 100%;
       padding: 14px;
       background-color: #3b5228;
@@ -387,14 +391,15 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="page-container">
-    
+
     <!-- قسم الهيدر -->
     <div class="hero-header">
       <img src="header.jpeg" alt="Header Background" class="header-bg">
-      
+
       <div class="oldage-card-wrapper">
         <img src="oldage.jpeg" alt="Old Age" class="oldage-img">
       </div>
@@ -436,7 +441,7 @@
       </div>
 
       <form id="registrationForm" onsubmit="handleFormSubmit(event)">
-        
+
         <!-- الخطوة الأولى: المعلومات الشخصية -->
         <div class="form-step-content active" id="step-1">
           <div class="form-grid">
@@ -487,7 +492,8 @@
               <div class="input-wrapper">
                 <i class="fa-solid fa-lock field-icon"></i>
                 <input type="password" id="confirmPassword" placeholder="أعد إدخال كلمة المرور" required>
-                <i class="fa-regular fa-eye toggle-password" onclick="togglePasswordVisibility('confirmPassword', this)"></i>
+                <i class="fa-regular fa-eye toggle-password"
+                  onclick="togglePasswordVisibility('confirmPassword', this)"></i>
               </div>
             </div>
           </div>
@@ -629,4 +635,5 @@
     }
   </script>
 </body>
+
 </html>

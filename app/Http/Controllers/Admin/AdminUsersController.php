@@ -166,7 +166,7 @@ class AdminUsersController extends Controller
         Notification::create([
             'user_id' => $user->id,
             'type'    => 'account_reactivated',
-            'message' => 'تمت إعادة تفعيل حسابك بنجاح من قِبل إدارة منصة إحسان. يمكنك الآن تسجيل الدخول واستخدام كافة الخدمات.',
+            'message' => 'تمت إعادة تفعيل حسابك بنجاح من قِبل إدارة منصة أنيس. يمكنك الآن تسجيل الدخول واستخدام كافة الخدمات.',
         ]);
 
         \App\Models\AdminAuditLog::log(

@@ -1,4 +1,4 @@
-# 📑 التقرير الشامل النهائي لتدقيق منصة إحسان (Codebase Audit Report)
+# 📑 التقرير الشامل النهائي لتدقيق منصة أنيس (Codebase Audit Report)
 
 > **تاريخ الفحص والتدقيق:** 11 سبتمبر 2026  
 > **طبيعة التقرير:** تقرير تدقيق وفحص برمجي وأمني شامل (Audit-Only) وفق معايير المراجعة الصارمة (Senior Staff Engineer Review)، دون إجراء أي تعديل على الكود.  
@@ -236,7 +236,7 @@
     ```php
     // منع المدير الحالي من حذف نفسه
     if ($admin->user_id === Auth::id()) {
-        return back()->with('error', 'لا يمكنك حذف حسابك الخاص كمدير لنظام إحسان.');
+        return back()->with('error', 'لا يمكنك حذف حسابك الخاص كمدير لنظام أنيس.');
     }
     ```
   - وفي [`app/Http/Controllers/Admin/AdminUsersController.php:124-126`](file:///c:/Users/pc/OneDrive/Desktop/BackEnd/Ihsan_Project/app/Http/Controllers/Admin/AdminUsersController.php#L124-L126):

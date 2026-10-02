@@ -66,7 +66,7 @@ class AdminApprovalsController extends Controller
         Notification::create([
             'user_id' => $user->id,
             'type'    => 'account_approved',
-            'message' => 'تم اعتماد حسابك بنجاح من قِبل إدارة منصة إحسان. يمكنك الآن الاستفادة من كافة خدمات المنصة.',
+            'message' => 'تم اعتماد حسابك بنجاح من قِبل إدارة منصة أنيس. يمكنك الآن الاستفادة من كافة خدمات المنصة.',
         ]);
 
         \App\Models\AdminAuditLog::log(

@@ -4,7 +4,7 @@
 
     <div class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div class="flex items-center gap-6 lg:gap-8">
-            <a href="{{ $isVolunteer ? route('provider.dashboard') : route('dashboard') }}" class="text-2xl font-black text-[#31421e]">إحسان</a>
+            <a href="{{ $isVolunteer ? route('provider.dashboard') : route('dashboard') }}" class="text-2xl font-black text-[#31421e]">أنيس</a>
             
             <div class="hidden items-center gap-1.5 sm:flex">
                 @if ($isVolunteer)

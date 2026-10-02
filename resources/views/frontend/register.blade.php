@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="اختر نوع حسابك في منصة إحسان">
-    <title>إنشاء حساب | إحسان</title>
+    <meta name="description" content="اختر نوع حسابك في منصة أنيس">
+    <title>إنشاء حساب | أنيس</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -13,7 +13,7 @@
     <main class="flex min-h-screen w-full items-center justify-center px-3 py-4 sm:px-6 sm:py-8">
         <section class="w-full max-w-5xl overflow-hidden rounded-2xl bg-white shadow-xl sm:rounded-3xl sm:shadow-2xl">
             <header class="bg-[#31421e] px-4 py-7 text-center text-white sm:px-10 sm:py-12">
-                <p class="text-sm font-bold text-[#cdd9bd]">منصة إحسان</p>
+                <p class="text-sm font-bold text-[#cdd9bd]">منصة أنيس</p>
                 <h1 class="mt-2 text-2xl font-extrabold leading-[1.7] sm:text-4xl">إنشاء حساب جديد</h1>
                 <p class="mx-auto mt-3 max-w-xl text-sm leading-7 text-[#e6ecde] sm:text-base">اختر نوع الحساب المناسب
                     لك للانتقال إلى نموذج التسجيل.</p>

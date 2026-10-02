@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إحسان - مراجعة معلوماتك ورفع الوثائق</title>
+  <title>أنيس - مراجعة معلوماتك ورفع الوثائق</title>
   <!-- استيراد خط Alexandria من Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -31,7 +33,7 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
     }
 
-    /* --- الهيدر العلوي وشعار إحسان --- */
+    /* --- الهيدر العلوي وشعار أنيس --- */
     .brand-header {
       text-align: center;
       margin-bottom: 30px;
@@ -153,7 +155,7 @@
       padding: 28px 35px;
       margin-bottom: 25px;
       background-color: #fff;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
     }
 
     .review-card-title {
@@ -231,12 +233,14 @@
       position: absolute;
       top: 14px;
       left: 14px;
-      background-color: #28a745; /* لون أخضر واضح */
+      background-color: #28a745;
+      /* لون أخضر واضح */
       color: #fff;
       border-radius: 50%;
       width: 32px;
       height: 32px;
-      display: none; /* مخفية حتى يتم الرفع */
+      display: none;
+      /* مخفية حتى يتم الرفع */
       align-items: center;
       justify-content: center;
       font-size: 16px;
@@ -320,15 +324,18 @@
       .docs-grid {
         grid-template-columns: 1fr;
       }
+
       .stepper {
         padding: 0 10px;
       }
+
       .form-card {
         padding: 25px 20px;
       }
     }
   </style>
 </head>
+
 <body>
 
   <div class="form-card">
@@ -339,11 +346,11 @@
         <i class="fa-solid fa-hand-holding-heart"></i>
       </div>
       <div class="brand-title">
-        احسان
+        أنيس
       </div>
       <div class="brand-subtitle">منصة ربط كبار السن بمقدمي الخدمة</div>
     </div>
-    
+
     <!-- شريط الخطوات -->
     <div class="stepper">
       <div class="step completed">
@@ -402,7 +409,7 @@
     <div class="review-card">
       <div class="review-card-title">الوثائق المرفوعة</div>
       <div class="docs-grid">
-        
+
         <!-- صندوق رفع الهوية الشخصية -->
         <div class="doc-box" id="box-idDoc">
           <input type="file" id="file-idDoc" accept="image/*,.pdf" onchange="handleFileUpload('idDoc')">
@@ -424,7 +431,7 @@
 
     <!-- ملاحظة الشروط -->
     <div class="terms-banner">
-      بارسال طلبك فانك توافق على الشروط والاحكام وسياسة الخصوصيه الخاصة بمنصة الاحسان
+      بإرسال طلبك فإنك توافق على الشروط والأحكام وسياسة الخصوصية الخاصة بمنصة أنيس
     </div>
 
     <!-- الأزرار -->
@@ -473,7 +480,7 @@
 
       if (fileInput.files && fileInput.files.length > 0) {
         const fileName = fileInput.files[0].name;
-        
+
         // تحديث النص ليعرض اسم الملف المرفوع
         fileNameSpan.innerText = fileName;
         fileNameSpan.style.color = "#28a745";
@@ -501,4 +508,5 @@
   </script>
 
 </body>
+
 </html>

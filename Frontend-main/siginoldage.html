@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إحسان - تفاصيل السكن للمسن</title>
-  
+  <title>أنيس - تفاصيل السكن للمسن</title>
+
   <!-- استدعاء خط Alexandria -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+
   <style>
     * {
       box-sizing: border-box;
@@ -33,10 +35,13 @@
     .form-card {
       background: #ffffff;
       width: 95vw;
-      max-width: 1100px; /* تكبير الحد الأقصى للعرض */
-      min-height: 85vh;  /* زيادة الارتفاع الأدنى */
+      max-width: 1100px;
+      /* تكبير الحد الأقصى للعرض */
+      min-height: 85vh;
+      /* زيادة الارتفاع الأدنى */
       border-radius: 24px;
-      padding: 60px 50px; /* زيادة الهوامش الداخلية */
+      padding: 60px 50px;
+      /* زيادة الهوامش الداخلية */
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
       display: flex;
       flex-direction: column;
@@ -243,10 +248,11 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="form-card">
-    
+
     <!-- شريط الخطوات -->
     <div class="stepper">
       <div class="step">
@@ -303,7 +309,8 @@
       <div class="form-group">
         <label>العنوان التفصيلي</label>
         <div class="input-wrapper">
-          <input type="text" id="addressDetails" placeholder="ادخل العنوان بالتفاصيل (اسم الشارع , رقم المبنى , اقرب معلم ...)" required>
+          <input type="text" id="addressDetails"
+            placeholder="ادخل العنوان بالتفاصيل (اسم الشارع , رقم المبنى , اقرب معلم ...)" required>
           <i class="fa-solid fa-location-dot"></i>
         </div>
       </div>
@@ -312,7 +319,7 @@
       <div class="housing-type-section">
         <div class="section-label">عنوان السكن</div>
         <div class="housing-options">
-          
+
           <label class="housing-card">
             <input type="radio" name="housing_type" value="apartment" checked>
             <i class="fa-solid fa-building"></i>
@@ -350,7 +357,7 @@
         if (savedHousingData.city) document.getElementById("city").value = savedHousingData.city;
         if (savedHousingData.district) document.getElementById("district").value = savedHousingData.district;
         if (savedHousingData.addressDetails) document.getElementById("addressDetails").value = savedHousingData.addressDetails;
-        
+
         if (savedHousingData.housingType) {
           const selectedRadio = document.querySelector(`input[name="housing_type"][value="${savedHousingData.housingType}"]`);
           if (selectedRadio) selectedRadio.checked = true;
@@ -374,4 +381,5 @@
   </script>
 
 </body>
+
 </html>

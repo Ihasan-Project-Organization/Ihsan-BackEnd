@@ -101,7 +101,7 @@ class AdminAdminsController extends Controller
     {
         // منع المدير الحالي من حذف نفسه
         if ($admin->user_id === Auth::id()) {
-            return back()->with('error', 'لا يمكنك حذف حسابك الخاص كمدير لنظام إحسان.');
+            return back()->with('error', 'لا يمكنك حذف حسابك الخاص كمدير لنظام أنيس.');
         }
 
         $adminName = $admin->user?->name ?? 'المدير';

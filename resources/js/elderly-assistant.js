@@ -81,7 +81,7 @@ window.elderlyAssistant = (profileCity = '') => ({
 
     init() {
         try {
-            const saved = JSON.parse(localStorage.getItem('ihsan_elderly_request_draft'));
+            const saved = JSON.parse(localStorage.getItem('anees_elderly_request_draft') || localStorage.getItem('ihsan_elderly_request_draft'));
             if (saved && typeof saved === 'object') this.draft = { ...this.draft, ...saved };
         } catch (_) { }
 
@@ -89,7 +89,7 @@ window.elderlyAssistant = (profileCity = '') => ({
     },
 
     fixedVoice(key, fallbackText = '') {
-        return window.IhsanVoice?.playFixed(key, fallbackText);
+        return (window.AneesVoice || window.IhsanVoice)?.playFixed(key, fallbackText);
     },
 
     addMessage(role, text, kind = 'text', voiceKey = null) {
@@ -102,7 +102,7 @@ window.elderlyAssistant = (profileCity = '') => ({
 
     addBot(text, voiceKey = null) {
         this.addMessage('assistant', text, 'text', voiceKey);
-        if (voiceKey) window.IhsanVoice?.playFixed(voiceKey, text);
+        if (voiceKey) (window.AneesVoice || window.IhsanVoice)?.playFixed(voiceKey, text);
     },
 
     addUser(text) {
@@ -110,11 +110,14 @@ window.elderlyAssistant = (profileCity = '') => ({
     },
 
     saveDraft() {
-        try { localStorage.setItem('ihsan_elderly_request_draft', JSON.stringify(this.draft)); } catch (_) { }
+        try {
+            localStorage.setItem('anees_elderly_request_draft', JSON.stringify(this.draft));
+            localStorage.setItem('ihsan_elderly_request_draft', JSON.stringify(this.draft));
+        } catch (_) { }
     },
 
     resetChat() {
-        window.IhsanVoice?.stop();
+        (window.AneesVoice || window.IhsanVoice)?.stop();
         this.step = 0;
         this.editing = false;
         this.errorMessage = '';
@@ -124,7 +127,10 @@ window.elderlyAssistant = (profileCity = '') => ({
     },
 
     cancelDraft() {
-        try { localStorage.removeItem('ihsan_elderly_request_draft'); } catch (_) { }
+        try {
+            localStorage.removeItem('anees_elderly_request_draft');
+            localStorage.removeItem('ihsan_elderly_request_draft');
+        } catch (_) { }
         this.draft = {
             service_type: '',
             title: '',
@@ -433,9 +439,12 @@ window.elderlyAssistant = (profileCity = '') => ({
                 throw new Error(Array.isArray(firstError) ? firstError[0] : 'تعذر إرسال الطلب. حاول مرة أخرى.');
             }
 
-            try { localStorage.removeItem('ihsan_elderly_request_draft'); } catch (_) { }
+            try {
+                localStorage.removeItem('anees_elderly_request_draft');
+                localStorage.removeItem('ihsan_elderly_request_draft');
+            } catch (_) { }
             this.addBot('تم إرسال طلبك بنجاح. رح أحولك الآن لصفحة المتابعة.');
-            await window.IhsanVoice?.playFixed('success', 'تم إرسال طلبك بنجاح');
+            await (window.AneesVoice || window.IhsanVoice)?.playFixed('success', 'تم إرسال طلبك بنجاح');
             window.location.assign(response.url);
         } catch (error) {
             this.errorMessage = error.message || 'تعذر إرسال الطلب. حاول مرة أخرى.';

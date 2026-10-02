@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الحساب قيد المراجعة | منصة إحسان</title>
+    <title>الحساب قيد المراجعة | منصة أنيس</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-[#f3eee5] text-slate-800 antialiased flex flex-col justify-between">
@@ -11,7 +11,7 @@
     <header class="w-full bg-white/80 backdrop-blur-md border-b border-slate-200/80 py-4 px-6 sm:px-12 flex items-center justify-between">
         <div class="flex items-center gap-3">
             <span class="text-2xl">🌱</span>
-            <span class="text-lg font-black text-[#31421e]">منصة إحسان</span>
+            <span class="text-lg font-black text-[#31421e]">منصة أنيس</span>
         </div>
         <div>
             @auth
@@ -50,7 +50,7 @@
             </h1>
 
             <p class="text-sm leading-relaxed text-slate-600 mb-6">
-                شكراً لانضمامك إلى <strong class="text-[#31421e]">منصة إحسان</strong>. يجري حالياً مراجعة وتدقيق بياناتك ووثائقك من قِبل إدارة المنصة للتحقق والتأكد من مطابقة المعايير المعتمدة لسلامة وأمان كبار السن.
+                شكراً لانضمامك إلى <strong class="text-[#31421e]">منصة أنيس</strong>. يجري حالياً مراجعة وتدقيق بياناتك ووثائقك من قِبل إدارة المنصة للتحقق والتأكد من مطابقة المعايير المعتمدة لسلامة وأمان كبار السن.
             </p>
 
             @auth
@@ -105,7 +105,7 @@
 
     <!-- تذييل الصفحة -->
     <footer class="py-4 text-center text-xs text-slate-500">
-        &copy; {{ date('Y') }} منصة إحسان لرعاية كبار السن. جميع الحقوق محفوظة.
+        &copy; {{ date('Y') }} منصة أنيس لرعاية كبار السن. جميع الحقوق محفوظة.
     </footer>
 </body>
 </html>

@@ -36,7 +36,7 @@ window.openCreateRequestModal = function () {
             this.service_type = service.id;
             this.title = service.title;
             this.errorMessage = '';
-            window.IhsanVoice?.playFixed('service_' + service.id, service.title);
+            (window.AneesVoice || window.IhsanVoice)?.playFixed('service_' + service.id, service.title);
         },
 
         useProfileCity() {
@@ -89,7 +89,7 @@ window.openCreateRequestModal = function () {
             return date.toISOString().slice(0, 16);
         },
         resetForm() {
-            window.IhsanVoice?.stop();
+            (window.AneesVoice || window.IhsanVoice)?.stop();
             this.open = false;
             this.step = 1;
             this.service_type = '';

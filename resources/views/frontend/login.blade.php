@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="منصة إحسان لخدمة كبار السن وربطهم بالمتطوعين">
-  <title>تسجيل الدخول | إحسان</title>
+  <meta name="description" content="منصة أنيس لخدمة كبار السن وربطهم بالمتطوعين">
+  <title>تسجيل الدخول | أنيس</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
   <style>
     body {
@@ -305,17 +305,17 @@
 
   <div class="main-container">
     <!-- النصف الأيمن: الصورة -->
-    <div class="image-section" role="img" aria-label="منصة إحسان">
+    <div class="image-section" role="img" aria-label="منصة أنيس">
       <div class="image-overlay-text">
         <h2>معًا لرعاية كبار السن</h2>
-        <p>نصل كبار السن بالمتطوعين الموثوقين والجمعيات الخيرية لتقديم الدعم والمرافقة وقضاء الحوائج بكل محبة وإحسان.</p>
+        <p>نصل كبار السن بالمتطوعين الموثوقين والجمعيات الخيرية لتقديم الدعم والمرافقة وقضاء الحوائج بكل محبة وأنيس.</p>
       </div>
     </div>
 
     <!-- النصف الأيسر: النموذج -->
     <div class="form-section">
       <div class="form-content">
-        <h1>مرحبا بكم في <span class="brand-name">إحسان</span></h1>
+        <h1>مرحبا بكم في <span class="brand-name">أنيس</span></h1>
 
         {{-- تنبيهات الحالة مثل تأكيد البريد أو إعادة تعيين كلمة المرور --}}
         @if (session('status'))

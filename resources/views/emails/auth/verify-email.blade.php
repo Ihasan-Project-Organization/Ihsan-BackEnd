@@ -4,7 +4,7 @@
 <head>
     <meta charset=UTF-8>
     <meta name=viewport content=width=device-width,initial-scale=1.0>
-    <title>تأكيد البريد الإلكتروني | إحسان</title>
+    <title>تأكيد البريد الإلكتروني | أنيس</title>
 </head>
 
 <body style=margin:0;background:#f3eee5;font-family:Tahoma,Arial,sans-serif;color:#334155>
@@ -15,7 +15,7 @@
                     style=max-width:600px;background:#ffffff;border-radius:20px;overflow:hidden;border:1px solid #dfe6d5>
                     <tr>
                         <td style=background:#31421e;padding:30px;text-align:center;color:#ffffff>
-                            <div style=font-size:30px;font-weight:800>إحسان</div>
+                            <div style=font-size:30px;font-weight:800>أنيس</div>
                             <div style=margin-top:8px;color:#cdd9bd;font-size:14px>العطاء أقرب، والرعاية أسهل.</div>
                         </td>
                     </tr>
@@ -24,7 +24,7 @@
                             <h1 style="margin:0;color:#31421e;font-size:24px">تأكيد البريد الإلكتروني</h1>
                             <p style="margin:20px 0 0;line-height:1.9">مرحبًا {{ $user->name }}،</p>
                             <p style="margin:10px 0 0;line-height:1.9;color:#64748b">
-                                شكرًا لانضمامك إلى منصة إحسان. يرجى الضغط على الزر أدناه لتأكيد بريدك الإلكتروني وتفعيل حسابك والبدء في استخدام كافة مميزات المنصة.
+                                شكرًا لانضمامك إلى منصة أنيس. يرجى الضغط على الزر أدناه لتأكيد بريدك الإلكتروني وتفعيل حسابك والبدء في استخدام كافة مميزات المنصة.
                             </p>
                             <div style="text-align:center;margin:30px 0">
                                 <a href="{{ $verificationUrl }}"
@@ -33,14 +33,14 @@
                                 </a>
                             </div>
                             <p style="margin:0;line-height:1.9;color:#64748b;font-size:14px">
-                                إذا لم تقم بإنشاء حساب في منصة إحسان، فلا داعي لاتخاذ أي إجراء آخر.
+                                إذا لم تقم بإنشاء حساب في منصة أنيس، فلا داعي لاتخاذ أي إجراء آخر.
                             </p>
-                            <p style="margin:24px 0 0;color:#31421e;font-weight:700">فريق إحسان</p>
+                            <p style="margin:24px 0 0;color:#31421e;font-weight:700">فريق أنيس</p>
                         </td>
                     </tr>
                     <tr>
                         <td style=background:#eef2e8;padding:18px 30px;text-align:center;color:#718256;font-size:12px>
-                            هذه رسالة آلية من منصة إحسان، يرجى عدم الرد عليها.
+                            هذه رسالة آلية من منصة أنيس، يرجى عدم الرد عليها.
                         </td>
                     </tr>
                 </table>

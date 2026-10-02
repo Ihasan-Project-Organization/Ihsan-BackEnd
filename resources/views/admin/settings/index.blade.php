@@ -6,7 +6,7 @@
     <div style="margin-bottom:24px;">
         <h2 style="margin:0; font-size:20px; font-weight:900; color:#1a1f36;">إعدادات النظام العامة وعتبات الترقية (Tiers)</h2>
         <p style="margin:4px 0 0; font-size:12px; color:#6b7280;">
-            ضبط المعايير الرقمية لترقية وتخفيض مستويات مقدمي الخدمة (Tier System) في منصة إحسان.
+            ضبط المعايير الرقمية لترقية وتخفيض مستويات مقدمي الخدمة (Tier System) في منصة أنيس.
         </p>
     </div>
 

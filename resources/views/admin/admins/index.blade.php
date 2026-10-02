@@ -20,7 +20,7 @@
 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
     <div>
         <h2 style="margin:0; font-size:20px; font-weight:900; color:#1a1f36;">إدارة مسؤولي النظام (Admins)</h2>
-        <p style="margin:4px 0 0; font-size:12px; color:#6b7280;">استعراض وإدارة حسابات مدراء منصة إحسان ومنح الصلاحيات الإدارية.</p>
+        <p style="margin:4px 0 0; font-size:12px; color:#6b7280;">استعراض وإدارة حسابات مدراء منصة أنيس ومنح الصلاحيات الإدارية.</p>
     </div>
 
     <a href="{{ route('admin.admins.create') }}"

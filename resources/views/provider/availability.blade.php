@@ -70,7 +70,7 @@
                 <div>
                     <span class="text-xs font-bold text-slate-400">نظام المنصة</span>
                     <h2 class="text-lg font-black text-[#31421e] mt-1">قواعد استقبال وتوزيع الطلبات</h2>
-                    <p class="text-xs text-slate-500 mt-1">الضوابط والسياسات المعتمدة لإسناد وتنسيق المهام في منصة إحسان.</p>
+                    <p class="text-xs text-slate-500 mt-1">الضوابط والسياسات المعتمدة لإسناد وتنسيق المهام في منصة أنيس.</p>
                 </div>
 
                 <div class="space-y-3.5 text-xs">
@@ -106,7 +106,7 @@
         <div class="space-y-4">
             <div>
                 <h2 class="text-xl font-black text-[#31421e]">قاموس الحالات التشغيلية المعتمد</h2>
-                <p class="text-xs text-slate-500">المرجع الحصري المعتمد لجميع حالات الطلبات في منصة إحسان ومعانيها الميدانية.</p>
+                <p class="text-xs text-slate-500">المرجع الحصري المعتمد لجميع حالات الطلبات في منصة أنيس ومعانيها الميدانية.</p>
             </div>
 
             @php($officialStatuses = [

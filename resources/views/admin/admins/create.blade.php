@@ -18,7 +18,7 @@
             </div>
             <div>
                 <h2 style="margin:0; font-size:18px; font-weight:900; color:#1a1f36;">إضافة مدير نظام جديد</h2>
-                <p style="margin:4px 0 0; font-size:12px; color:#6b7280;">قم بتعبئة بيانات المدير وتحديد الصلاحيات الممنوحة له في منصة إحسان.</p>
+                <p style="margin:4px 0 0; font-size:12px; color:#6b7280;">قم بتعبئة بيانات المدير وتحديد الصلاحيات الممنوحة له في منصة أنيس.</p>
             </div>
         </div>
 
@@ -57,7 +57,7 @@
                         البريد الإلكتروني <span style="color:#ef4444;">*</span>
                     </label>
                     <input type="email" name="email" value="{{ old('email') }}" required
-                        placeholder="admin@ehsan.sa"
+                        placeholder="admin@anees.sa"
                         style="width:100%; border:1px solid #d1d5db; border-radius:10px; padding:11px 14px; font-size:13px; font-family:inherit; box-sizing:border-box; outline:none; transition:border-color 0.2s;"
                         onfocus="this.style.borderColor='#83a55b';" onblur="this.style.borderColor='#d1d5db';">
                 </div>

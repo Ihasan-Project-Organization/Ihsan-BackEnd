@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إحسان - الوثائق المطلوبة</title>
+  <title>أنيس - الوثائق المطلوبة</title>
   <!-- استيراد خط Alexandria من Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -146,7 +148,7 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
     }
 
     .card-right-side {
@@ -304,27 +306,30 @@
         align-items: flex-start;
         gap: 20px;
       }
+
       .card-left-side {
         width: 100%;
         align-items: flex-start;
       }
+
       .stepper-container {
         padding: 0 10px;
       }
     }
   </style>
 </head>
+
 <body>
 
   <div class="page-container">
-    
+
     <!-- الهيدر والشعار (الشعار فوق الكلام) -->
     <div class="top-header">
       <div class="logo-graphic">
         <i class="fa-solid fa-hand-holding-heart"></i>
       </div>
       <div class="logo-text-group">
-        <h1 class="logo-main-text">احسان</h1>
+        <h1 class="logo-main-text">أنيس</h1>
         <span class="logo-subtext">منصة ربط كبار السن بمقدمي الخدمة</span>
       </div>
     </div>
@@ -358,7 +363,7 @@
 
     <!-- نموذج الوثائق -->
     <form id="documentsForm" onsubmit="handleSubmit(event)">
-      
+
       <!-- بطاقة صورة الهوية الشخصية -->
       <div class="upload-card">
         <div class="card-right-side">
@@ -375,7 +380,8 @@
             <i class="fa-solid fa-arrow-up-from-bracket"></i> رفع صورة
           </button>
           <span class="file-hint" id="idCardHint">JPG,PNG- الحد الاقصى</span>
-          <input type="file" id="idCardInput" accept="image/png, image/jpeg" onchange="updateFileName(this, 'idCardHint')">
+          <input type="file" id="idCardInput" accept="image/png, image/jpeg"
+            onchange="updateFileName(this, 'idCardHint')">
         </div>
       </div>
 
@@ -395,7 +401,8 @@
             <i class="fa-solid fa-arrow-up-from-bracket"></i> رفع صورة
           </button>
           <span class="file-hint" id="conductHint">JPG,PNG- الحد الاقصى</span>
-          <input type="file" id="conductInput" accept="image/png, image/jpeg" onchange="updateFileName(this, 'conductHint')">
+          <input type="file" id="conductInput" accept="image/png, image/jpeg"
+            onchange="updateFileName(this, 'conductHint')">
         </div>
       </div>
 
@@ -439,4 +446,5 @@
     }
   </script>
 </body>
+
 </html>

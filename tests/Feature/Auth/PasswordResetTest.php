@@ -63,6 +63,6 @@ test('password reset email uses Ehsan branding', function () {
     $user = User::factory()->create();
     $message = (new EhsanResetPasswordNotification('test-token'))->toMail($user);
 
-    expect($message->subject)->toBe('استعادة كلمة المرور | إحسان')
+    expect($message->subject)->toBe('استعادة كلمة المرور | أنيس')
         ->and($message->view)->toBe('emails.auth.reset-password');
 });

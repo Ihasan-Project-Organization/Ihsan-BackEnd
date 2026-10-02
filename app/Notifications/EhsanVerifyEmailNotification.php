@@ -12,7 +12,7 @@ class EhsanVerifyEmailNotification extends VerifyEmail
         $verificationUrl = $this->verificationUrl($notifiable);
 
         return (new MailMessage)
-            ->subject('تأكيد وتوثيق البريد الإلكتروني | إحسان')
+            ->subject('تأكيد وتوثيق البريد الإلكتروني | أنيس')
             ->view('emails.auth.verify-email', [
                 'verificationUrl' => $verificationUrl,
                 'user' => $notifiable,

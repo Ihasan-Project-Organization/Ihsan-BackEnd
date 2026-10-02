@@ -65,7 +65,7 @@
 
                     <h1 class="mt-4 text-2xl font-black sm:text-3xl lg:text-4xl leading-tight">مرحبًا، {{ $provider->name }} 👋</h1>
                     <p class="mt-2 text-xs sm:text-sm text-[#dfe6d5] leading-relaxed">
-                        أهلاً بك في منصة إحسان. مساهماتك التطوعية تصنع فارقاً حقيقياً في حياة كبار السن وتعزز قيم التكافل والمروءة.
+                        أهلاً بك في منصة أنيس. مساهماتك التطوعية تصنع فارقاً حقيقياً في حياة كبار السن وتعزز قيم التكافل والمروءة.
                     </p>
 
                     <div class="mt-6 flex flex-wrap items-center gap-3">
@@ -119,7 +119,7 @@
                             @if ($tier < 3)
                                 أنجزت <strong class="text-white">{{ $completedCount }}</strong> مهمة، يتبقى <strong class="text-amber-300">{{ $tasksToNextTier }}</strong> مهمة للترقية لـ Tier {{ $tier + 1 }}.
                             @else
-                                أحسنت! أنت في أعلى مستوى معتمد لدى منصة إحسان مع كامل الصلاحيات والأولوية.
+                                أحسنت! أنت في أعلى مستوى معتمد لدى منصة أنيس مع كامل الصلاحيات والأولوية.
                             @endif
                         </p>
                     </div>

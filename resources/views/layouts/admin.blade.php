@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'إحسان') }} - لوحة الإدارة</title>
+    <title>{{ config('app.name', 'أنيس') }} - لوحة الإدارة</title>
 
     <script>
         (function() {
             try {
-                var s = localStorage.getItem('ihsan_font_scale');
+                var s = localStorage.getItem('anees_font_scale') || localStorage.getItem('ihsan_font_scale');
                 if (s) { document.documentElement.style.fontSize = s + '%'; }
             } catch (e) {}
         })();
@@ -333,7 +333,7 @@
         <aside class="sidebar" :class="{ 'mobile-open': mobileSidebarOpen }">
             <div class="logo-section">
                 <div class="logo">
-                    <h2>إحسان</h2>
+                    <h2>أنيس</h2>
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <p class="logo-subtitle">منصة ربط كبار السن بمقدمي الخدمة</p>
@@ -432,7 +432,7 @@
                         <i class="fa-solid fa-bars"></i>
                     </button>
                     <div class="header-breadcrumb">
-                        <span class="label">لوحة الإدارة — إحسان</span>
+                        <span class="label">لوحة الإدارة — أنيس</span>
                         <h2 class="title">
                             {{ match(true) {
                                 request()->routeIs('admin.dashboard')       => 'نظرة عامة على المنصة',

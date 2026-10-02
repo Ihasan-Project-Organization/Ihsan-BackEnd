@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إحسان - إنشاء حساب مقدم خدمة</title>
+  <title>أنيس - إنشاء حساب مقدم خدمة</title>
   <!-- استيراد خط Alexandria من Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -62,7 +64,7 @@
       background: #ffffff;
       border-radius: 45px 45px 0 0;
       padding: 9px 9px 0 9px;
-      box-shadow: 0 -4px 15px rgba(0,0,0,0.04);
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.04);
       z-index: 5;
     }
 
@@ -136,7 +138,7 @@
       margin-top: -12px;
       position: relative;
       z-index: 10;
-      box-shadow: 0 12px 35px rgba(0,0,0,0.05);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.05);
     }
 
     .form-grid {
@@ -270,13 +272,14 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="page-container">
-    
+
     <div class="hero-header">
       <img src="header.jpeg" alt="Header Background" class="header-bg">
-      
+
       <div class="volunteer-card-wrapper">
         <img src="vol.jpeg" alt="Volunteer" class="volunteer-img">
       </div>
@@ -299,7 +302,7 @@
     </div>
 
     <div class="form-card">
-      
+
       <form id="registrationForm" onsubmit="handleNextStep(event)">
         <div class="form-grid">
           <div class="input-group">
@@ -375,7 +378,7 @@
     function togglePasswordVisibility() {
       const passwordField = document.getElementById('passwordField');
       const toggleIcon = document.getElementById('togglePassword');
-      
+
       if (passwordField.type === 'password') {
         passwordField.type = 'text';
         toggleIcon.classList.remove('fa-eye');
@@ -393,4 +396,5 @@
     }
   </script>
 </body>
+
 </html>

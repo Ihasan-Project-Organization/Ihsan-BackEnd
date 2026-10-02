@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إحسان - إنشاء حساب مقدم خدمة (متطوع)</title>
+  <title>أنيس - إنشاء حساب مقدم خدمة (متطوع)</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -509,7 +509,7 @@
 
         <div class="title-block-text">
           <h2>إنشاء حساب مقدم خدمة (متطوع)</h2>
-          <p>انضم إلى منصة إحسان لتقديم الرعاية والعون لكبار السن واحتساب الأجر</p>
+          <p>انضم إلى منصة أنيس لتقديم الرعاية والعون لكبار السن واحتساب الأجر</p>
         </div>
       </div>
     </div>
@@ -707,7 +707,7 @@
 
           <div class="terms-group">
             <input type="checkbox" id="terms" name="terms" required checked>
-            <label for="terms">أتعهد بصحة كافة البيانات والوثائق المرفقة، وأوافق على <a href="#" class="text-[#3b5228] font-bold underline">ميثاق التطوع والشروط والأحكام</a> لمنصة إحسان.</label>
+            <label for="terms">أتعهد بصحة كافة البيانات والوثائق المرفقة، وأوافق على <a href="#" class="text-[#3b5228] font-bold underline">ميثاق التطوع والشروط والأحكام</a> لمنصة أنيس.</label>
           </div>
 
           <div class="btn-container">

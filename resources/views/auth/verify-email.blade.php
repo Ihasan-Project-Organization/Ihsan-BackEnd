@@ -5,10 +5,10 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
         </div>
-        <p class="text-xs font-bold text-[#718256]">منصة إحسان</p>
+        <p class="text-xs font-bold text-[#718256]">منصة أنيس</p>
         <h1 class="mt-1 text-2xl font-extrabold text-[#31421e]">توثيق البريد الإلكتروني</h1>
         <p class="mt-3 text-sm leading-7 text-slate-600">
-            شكرًا لتسجيلك في منصة إحسان! قبل البدء، يرجى تفعيل حسابك من خلال الضغط على الرابط الذي تم إرساله إلى بريدك الإلكتروني.
+            شكرًا لتسجيلك في منصة أنيس! قبل البدء، يرجى تفعيل حسابك من خلال الضغط على الرابط الذي تم إرساله إلى بريدك الإلكتروني.
         </p>
     </div>
 

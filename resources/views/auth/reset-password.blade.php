@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="text-center">
         <h1 class="text-2xl font-black text-[#31421e]">إنشاء كلمة مرور جديدة</h1>
-        <p class="mt-3 text-sm leading-7 text-slate-500">اختر كلمة مرور قوية لحماية حسابك في إحسان.</p>
+        <p class="mt-3 text-sm leading-7 text-slate-500">اختر كلمة مرور قوية لحماية حسابك في أنيس.</p>
     </div>
     <form method="POST" action="{{ route('password.store') }}" class="mt-7 space-y-5">@csrf
         <input type="hidden" name="token" value="{{ $request->route('token') }}">

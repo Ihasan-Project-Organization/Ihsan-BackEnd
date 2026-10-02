@@ -10,7 +10,7 @@ class EhsanResetPasswordNotification extends ResetPassword
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('استعادة كلمة المرور | إحسان')
+            ->subject('استعادة كلمة المرور | أنيس')
             ->view('emails.auth.reset-password', [
                 'resetUrl' => $this->resetUrl($notifiable),
                 'user' => $notifiable,

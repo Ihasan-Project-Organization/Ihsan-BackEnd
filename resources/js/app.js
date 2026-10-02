@@ -5,7 +5,7 @@ import './elderly-assistant';
  * طبقة الصوت المشتركة في واجهة كبير السن.
  * التسجيلات الثابتة تعمل أولاً، ونطق المتصفح بديل عند غياب ملف MP3.
  */
-window.IhsanVoice = (() => {
+window.AneesVoice = window.IhsanVoice = (() => {
     let activeAudio = null;
     const fixedClips = {
         welcome: '/audio/elderly-assistant/welcome-anis.mp3',
@@ -195,10 +195,10 @@ document.addEventListener('click', (event) => {
     event.preventDefault();
     const voiceKey = button.dataset.voiceKey;
     if (voiceKey) {
-        window.IhsanVoice.playFixed(voiceKey, button.dataset.ttsText || '');
+        (window.AneesVoice || window.IhsanVoice).playFixed(voiceKey, button.dataset.ttsText || '');
         return;
     }
-    window.IhsanVoice.speakDynamic(button.dataset.ttsText || '');
+    (window.AneesVoice || window.IhsanVoice).speakDynamic(button.dataset.ttsText || '');
 });
 
 /**
@@ -249,9 +249,9 @@ document.addEventListener('click', (event) => {
         const normalizedLabel = label.replace(/[🔊🎤➤✏️❌✅]/gu, '').trim();
         const clipKey = element.dataset.voiceKey || buttonClipByLabel.get(normalizedLabel);
         if (clipKey) {
-            window.IhsanVoice?.playFixed(clipKey, normalizedLabel);
+            (window.AneesVoice || window.IhsanVoice)?.playFixed(clipKey, normalizedLabel);
         } else {
-            window.IhsanVoice?.speakDynamic(normalizedLabel);
+            (window.AneesVoice || window.IhsanVoice)?.speakDynamic(normalizedLabel);
         }
     };
 

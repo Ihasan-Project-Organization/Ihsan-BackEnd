@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إحسان - إنشاء حساب كبير سن</title>
+  <title>أنيس - إنشاء حساب كبير سن</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -748,7 +748,7 @@
 
           <div class="terms-group">
             <input type="checkbox" id="terms" name="terms" required checked>
-            <label for="terms">أوافق على <a href="#" class="text-[#3b5228] font-bold underline">الشروط والأحكام</a> وسياسة الخصوصية لمنصة إحسان</label>
+            <label for="terms">أوافق على <a href="#" class="text-[#3b5228] font-bold underline">الشروط والأحكام</a> وسياسة الخصوصية لمنصة أنيس</label>
           </div>
 
           <div class="btn-container">

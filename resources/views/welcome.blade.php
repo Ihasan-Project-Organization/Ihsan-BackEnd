@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="إحسان منصة تربط كبار السن بمتطوعين موثوقين لتقديم المساندة والرعاية اليومية.">
+    <meta name="description" content="أنيس منصة تربط كبار السن بمتطوعين موثوقين لتقديم المساندة والرعاية اليومية.">
     <meta name="theme-color" content="#24472f">
-    <title>إحسان | العطاء أقرب</title>
+    <title>أنيس | العطاء أقرب</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         [data-reveal].reveal-ready {
@@ -56,11 +56,11 @@
     <header class="relative z-50 border-b border-[#24472f]/10 bg-[#fbfaf6]/95 backdrop-blur-xl">
         <nav class="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10" aria-label="التنقل الرئيسي">
             <a href="{{ url('/') }}" class="flex items-center gap-3" aria-label="العودة إلى الرئيسية">
-                <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#24472f] text-xl font-extrabold text-white shadow-[0_8px_24px_rgba(36,71,47,0.2)]">إ</span>
-                <span class="hidden text-2xl font-extrabold tracking-tight text-[#24472f] sm:inline">إحسان</span>
+                <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#24472f] text-xl font-extrabold text-white shadow-[0_8px_24px_rgba(36,71,47,0.2)]">أ</span>
+                <span class="hidden text-2xl font-extrabold tracking-tight text-[#24472f] sm:inline">أنيس</span>
             </a>
             <div class="hidden items-center gap-8 text-sm font-medium text-[#506057] md:flex">
-                <a href="#about" class="transition hover:text-[#24472f]">عن إحسان</a>
+                <a href="#about" class="transition hover:text-[#24472f]">عن أنيس</a>
                 <a href="#services" class="transition hover:text-[#24472f]">خدماتنا</a>
                 <a href="#how" class="transition hover:text-[#24472f]">كيف نعمل؟</a>
             </div>
@@ -131,7 +131,7 @@
                                 <p class="mt-1 text-lg font-semibold">كرامة، اهتمام، ورفقة تصنع فرقًا.</p>
                             </div>
                         </div>
-                        <div class="floating-card absolute -bottom-5 -right-3 flex items-center gap-3 rounded-2xl border border-white/80 bg-white/95 p-3.5 pl-5 shadow-[0_14px_35px_rgba(36,71,47,0.16)] backdrop-blur sm:-right-8">
+                        <div class="floating-card absolute -top-1 -right-3 flex items-center gap-3 rounded-2xl border border-white/80 bg-white/95 p-3.5 pl-5 shadow-[0_14px_35px_rgba(36,71,47,0.16)] backdrop-blur sm:-right-8">
                             <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-[#edf3e9] text-[#315f40]">
                                 <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z" stroke-linecap="round" stroke-linejoin="round" /></svg>
                             </span>
@@ -156,7 +156,7 @@
         <section id="services" class="py-20 sm:py-28">
             <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
                 <div class="mx-auto max-w-2xl text-center" data-reveal>
-                    <p class="text-sm font-semibold text-[#b87536]">لماذا إحسان؟</p>
+                    <p class="text-sm font-semibold text-[#b87536]">لماذا أنيس؟</p>
                     <h2 class="mt-3 text-3xl font-extrabold leading-[1.75] text-[#1d3826] sm:text-4xl sm:leading-[1.7]">رعاية إنسانية مصممة حول احتياجك</h2>
                     <p class="mt-5 text-sm font-light leading-7 text-[#6f7b73] sm:text-base">نجمع التقنية والبُعد الإنساني لنمنح كبار السن وعائلاتهم تجربة أكثر راحة واطمئنانًا.</p>
                 </div>
@@ -192,11 +192,11 @@
                 <div data-reveal>
                     <p class="text-sm font-semibold text-[#b87536]">ثلاث خطوات فقط</p>
                     <h2 class="mt-3 text-3xl font-extrabold leading-[1.8] text-[#1d3826] sm:text-4xl sm:leading-[1.75]">طريقك إلى المساعدة أبسط مما تتخيّل</h2>
-                    <p class="mt-5 text-sm font-light leading-8 text-[#6f7b73] sm:text-base">أنشئ حسابك، أخبرنا بما تحتاج، ودع إحسان يقرّب لك الشخص المناسب.</p>
+                    <p class="mt-5 text-sm font-light leading-8 text-[#6f7b73] sm:text-base">أنشئ حسابك، أخبرنا بما تحتاج، ودع أنيس يقرّب لك الشخص المناسب.</p>
                     <a href="{{ route('register.choose') }}" class="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#24472f] transition hover:text-[#b87536]">إنشاء حساب الآن <span aria-hidden="true">←</span></a>
                 </div>
                 <ol class="grid gap-4" data-reveal="left">
-                    @foreach ([['01', 'اختر نوع حسابك', 'سجّل بصفتك كبير سن يحتاج إلى المساندة، أو متطوعًا يرغب في تقديمها.', '#24472f'], ['02', 'أكمل بياناتك بسهولة', 'نموذج واضح ومقسّم إلى مراحل قصيرة يساعدك على إتمام التسجيل براحة.', '#b87536'], ['03', 'ابدأ تجربتك مع إحسان', 'تابع ملفك وطلباتك وخدماتك من مكان واحد وبواجهة سهلة الاستخدام.', '#789066']] as $step)
+                    @foreach ([['01', 'اختر نوع حسابك', 'سجّل بصفتك كبير سن يحتاج إلى المساندة، أو متطوعًا يرغب في تقديمها.', '#24472f'], ['02', 'أكمل بياناتك بسهولة', 'نموذج واضح ومقسّم إلى مراحل قصيرة يساعدك على إتمام التسجيل براحة.', '#b87536'], ['03', 'ابدأ تجربتك مع أنيس', 'تابع ملفك وطلباتك وخدماتك من مكان واحد وبواجهة سهلة الاستخدام.', '#789066']] as $step)
                         <li class="flex gap-5 rounded-3xl border border-[#24472f]/10 bg-white p-5 shadow-sm sm:p-6">
                             <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-sm font-bold text-white" style="background-color: {{ $step[3] }}">{{ $step[0] }}</span>
                             <div><h3 class="font-bold text-[#24472f]">{{ $step[1] }}</h3><p class="mt-2 text-sm font-light leading-6 text-[#718078]">{{ $step[2] }}</p></div>
@@ -214,7 +214,7 @@
                     <div class="relative mx-auto max-w-2xl">
                         <p class="text-sm font-medium text-[#e8c698]">ابدأ اليوم</p>
                         <h2 class="mt-3 text-3xl font-extrabold leading-[1.8] sm:text-4xl sm:leading-[1.75]">خطوة صغيرة منك، أثر كبير في حياة إنسان</h2>
-                        <p class="mx-auto mt-5 max-w-xl text-sm font-light leading-7 text-white/70 sm:text-base">انضم إلى مجتمع إحسان، وكن جزءًا من تجربة رعاية أكثر قربًا وإنسانية.</p>
+                        <p class="mx-auto mt-5 max-w-xl text-sm font-light leading-7 text-white/70 sm:text-base">انضم إلى مجتمع أنيس، وكن جزءًا من تجربة رعاية أكثر قربًا وإنسانية.</p>
                         <a href="{{ route('register.choose') }}" class="mt-8 inline-flex items-center justify-center rounded-2xl bg-white px-8 py-4 text-sm font-bold text-[#24472f] transition hover:-translate-y-1 hover:bg-[#f4eadb]">إنشاء حساب جديد</a>
                     </div>
                 </div>
@@ -224,8 +224,8 @@
 
     <footer class="border-t border-[#24472f]/10 bg-white">
         <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 px-5 py-8 text-center sm:flex-row sm:px-8 sm:text-right lg:px-10">
-            <a href="{{ url('/') }}" class="flex items-center gap-2.5"><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#24472f] font-extrabold text-white">إ</span><span class="text-xl font-extrabold text-[#24472f]">إحسان</span></a>
-            <p class="text-xs font-light text-[#7a857e]">© {{ date('Y') }} منصة إحسان. جميع الحقوق محفوظة.</p>
+            <a href="{{ url('/') }}" class="flex items-center gap-2.5"><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#24472f] font-extrabold text-white">أ</span><span class="text-xl font-extrabold text-[#24472f]">أنيس</span></a>
+            <p class="text-xs font-light text-[#7a857e]">© {{ date('Y') }} منصة أنيس. جميع الحقوق محفوظة.</p>
             <div class="flex items-center gap-5 text-xs font-medium text-[#647168]"><a href="#about" class="transition hover:text-[#24472f]">عن المنصة</a><a href="#services" class="transition hover:text-[#24472f]">الخدمات</a></div>
         </div>
     </footer>

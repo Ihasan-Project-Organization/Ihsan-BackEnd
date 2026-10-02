@@ -46,7 +46,7 @@
                         سجل عطائك يستحق التوثيق
                     </h2>
                     <p class="mt-2 text-xs sm:text-sm text-[#dfe6d5] max-w-xl leading-relaxed">
-                        تُصدر منصة إحسان شهادات تطوع رقمية معتمدة برقم تسلسلي فريد يمكن التحقق منه، بناءً على المهام المنجزة الموثقة مع كبار السن.
+                        تُصدر منصة أنيس شهادات تطوع رقمية معتمدة برقم تسلسلي فريد يمكن التحقق منه، بناءً على المهام المنجزة الموثقة مع كبار السن.
                     </p>
 
                     {{-- أرقام سريعة --}}
@@ -97,7 +97,7 @@
         <div class="space-y-6">
             <div>
                 <h2 class="text-xl font-black text-[#31421e]">الشهادات المصدرة</h2>
-                <p class="text-xs text-slate-500">سجل شهادات التطوع الرسمية الممنوحة لك من منصة إحسان</p>
+                <p class="text-xs text-slate-500">سجل شهادات التطوع الرسمية الممنوحة لك من منصة أنيس</p>
             </div>
 
             @if ($certificates->count() > 0)
@@ -110,9 +110,9 @@
                             <div>
                                 <div class="flex items-center justify-between border-b border-[#dfe6d5] pb-4">
                                     <div class="flex items-center gap-2">
-                                        <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#31421e] text-white font-black text-lg">إ</span>
+                                        <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#31421e] text-white font-black text-lg">أ</span>
                                         <div>
-                                            <h4 class="text-xs font-black text-[#31421e]">منصة إحسان لرعاية كبار السن</h4>
+                                            <h4 class="text-xs font-black text-[#31421e]">منصة أنيس لرعاية كبار السن</h4>
                                             <p class="text-[10px] text-slate-400">وثيقة تطوعية رقمية معتمدة</p>
                                         </div>
                                     </div>
@@ -124,7 +124,7 @@
                                 <div class="mt-6 text-center space-y-2">
                                     <span class="text-xs font-bold text-amber-700">شهادة شكر وتقدير</span>
                                     <h3 class="text-xl font-black text-slate-900">
-                                        تُشهد منصة إحسان بأن المتطوع/ـة:
+                                        تُشهد منصة أنيس بأن المتطوع/ـة:
                                     </h3>
                                     <p class="text-2xl font-black text-[#31421e] py-1">
                                         {{ $provider->name }}
