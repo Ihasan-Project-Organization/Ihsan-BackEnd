@@ -189,16 +189,35 @@ window.AneesVoice = window.IhsanVoice = (() => {
 })();
 
 // زر عام لقراءة البيانات المتغيرة القادمة من النظام.
-document.addEventListener('click', (event) => {
+document.addEventListener('click', async (event) => {
     const button = event.target.closest('[data-tts-text]');
     if (!button) return;
     event.preventDefault();
-    const voiceKey = button.dataset.voiceKey;
-    if (voiceKey) {
-        (window.AneesVoice || window.IhsanVoice).playFixed(voiceKey, button.dataset.ttsText || '');
+
+    const voice = window.AneesVoice || window.IhsanVoice;
+    if (button.dataset.ttsActive === 'true') {
+        voice.stop();
         return;
     }
-    (window.AneesVoice || window.IhsanVoice).speakDynamic(button.dataset.ttsText || '');
+
+    const label = button.querySelector('[data-tts-label]');
+    const idleText = label?.textContent || '';
+    button.dataset.ttsActive = 'true';
+    button.setAttribute('aria-busy', 'true');
+    button.classList.add('is-playing');
+    const voiceKey = button.dataset.voiceKey;
+    try {
+        if (voiceKey) {
+            await voice.playFixed(voiceKey, button.dataset.ttsText || '');
+        } else {
+            await voice.speakDynamic(button.dataset.ttsText || '');
+        }
+    } finally {
+        button.dataset.ttsActive = 'false';
+        button.setAttribute('aria-busy', 'false');
+        button.classList.remove('is-playing');
+        if (label) label.textContent = idleText;
+    }
 });
 
 /**
@@ -208,6 +227,7 @@ document.addEventListener('click', (event) => {
 (() => {
     let lastElement = null;
     let lastSpokenAt = 0;
+    let pendingAnnouncement = null;
 
     const buttonClipByLabel = new Map([
         ['محادثة جديدة', 'button_new_chat'],
@@ -255,16 +275,35 @@ document.addEventListener('click', (event) => {
         }
     };
 
+    const cancelPendingAnnouncement = () => {
+        if (!pendingAnnouncement) return;
+        window.clearTimeout(pendingAnnouncement);
+        pendingAnnouncement = null;
+    };
+
     document.addEventListener('pointerover', (event) => {
         const element = event.target.closest('#elderly-assistant button, #elderly-assistant a');
         if (!element || (event.relatedTarget && element.contains(event.relatedTarget))) return;
-        announceButton(element);
+        cancelPendingAnnouncement();
+        pendingAnnouncement = window.setTimeout(() => {
+            pendingAnnouncement = null;
+            announceButton(element);
+        }, 450);
+    });
+
+    document.addEventListener('pointerout', (event) => {
+        const element = event.target.closest('#elderly-assistant button, #elderly-assistant a');
+        if (!element || (event.relatedTarget && element.contains(event.relatedTarget))) return;
+        cancelPendingAnnouncement();
     });
 
     document.addEventListener('focusin', (event) => {
         const element = event.target.closest('#elderly-assistant button, #elderly-assistant a');
+        cancelPendingAnnouncement();
         announceButton(element);
     });
+
+    document.addEventListener('click', cancelPendingAnnouncement, true);
 })();
 
 // تطبيق مقياس الخط المحفوظ مسبقاً عبر المنصة

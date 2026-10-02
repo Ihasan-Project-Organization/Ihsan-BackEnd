@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -94,15 +94,15 @@
     }
 
     .avatar-icon {
-      width: 44px;
-      height: 44px;
-      background-color: #d6ded0;
-      border-radius: 50%;
+      width: 76px;
+      height: 56px;
+      background-color: #fffdf9;
+      border-radius: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      color: #3b5228;
+      padding: 3px 7px;
+      box-shadow: 0 6px 18px rgba(49,66,30,.10);
       flex-shrink: 0;
     }
 
@@ -181,11 +181,6 @@
       background: #fff;
       color: #777;
       transition: all 0.3s ease;
-    }
-
-    .step-icon svg {
-      width: 22px;
-      height: 22px;
     }
 
     .step.active .step-icon {
@@ -276,8 +271,6 @@
       position: absolute;
       right: 14px;
       color: #3b5228;
-      width: 18px;
-      height: 18px;
       font-size: 15px;
       pointer-events: none;
     }
@@ -286,26 +279,12 @@
       position: absolute;
       left: 14px;
       color: #777;
-      width: 20px;
-      height: 20px;
+      font-size: 15px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: none;
-      border: none;
-      padding: 0;
       transition: color 0.2s;
     }
 
     .input-wrapper .toggle-password:hover {
-      color: #3b5228;
-    }
-
-    .upload-icon svg {
-      width: 36px;
-      height: 36px;
-      margin: 0 auto 8px;
       color: #3b5228;
     }
 
@@ -521,17 +500,16 @@
       <div class="header-center-content">
         <div class="top-action-row">
           <div class="avatar-icon">
-            <x-app-icon name="hand-heart" class="w-6 h-6 text-[#3b5228]" />
+            <img src="{{ asset('assets/img/anees-logo.png') }}" alt="شعار منصة أنيس" class="h-full w-full object-contain">
           </div>
           <a href="{{ route('login') }}" class="back-btn">
-            <span>الرجوع لتسجيل الدخول</span>
-            <x-app-icon name="arrow-left" class="w-4 h-4" />
+            الرجوع لتسجيل الدخول <i class="fa-solid fa-arrow-left"></i>
           </a>
         </div>
 
         <div class="title-block-text">
           <h2>إنشاء حساب مقدم خدمة (متطوع)</h2>
-          <p>انضم إلى منصة أنيس لتقديم الرعاية والعون لكبار السن واحتساب الأجر</p>
+          <p>انضم إلى منصة أنيس لتقديم المساندة لطالبي المساعدة وصنع أثر حقيقي</p>
         </div>
       </div>
     </div>
@@ -542,17 +520,17 @@
       <!-- شريط الخطوات المعتمد -->
       <div class="stepper">
         <div class="step active" id="step-indicator-1" onclick="goToStep(1)">
-          <div class="step-icon"><x-app-icon name="user" class="w-5 h-5" /></div>
+          <div class="step-icon"><i class="fa-solid fa-user"></i></div>
           <span>البيانات الشخصية</span>
         </div>
         <div class="step-line" id="line-1"></div>
         <div class="step" id="step-indicator-2" onclick="goToStep(2)">
-          <div class="step-icon"><x-app-icon name="shield-check" class="w-5 h-5" /></div>
+          <div class="step-icon"><i class="fa-solid fa-file-shield"></i></div>
           <span>الوثائق الرسمية</span>
         </div>
         <div class="step-line" id="line-2"></div>
         <div class="step" id="step-indicator-3" onclick="goToStep(3)">
-          <div class="step-icon"><x-app-icon name="clipboard-list" class="w-5 h-5" /></div>
+          <div class="step-icon"><i class="fa-solid fa-clipboard-check"></i></div>
           <span>المراجعة والتأكيد</span>
         </div>
       </div>
@@ -580,7 +558,7 @@
             <div class="input-group">
               <label for="name">الاسم بالكامل <span class="text-red-500">*</span></label>
               <div class="input-wrapper">
-                <x-app-icon name="user" class="field-icon" />
+                <i class="fa-regular fa-user field-icon"></i>
                 <input type="text" id="name" name="name" value="{{ old('name') }}" placeholder="ادخل اسمك الرباعي" required autofocus>
               </div>
             </div>
@@ -588,7 +566,7 @@
             <div class="input-group">
               <label for="id_number">رقم الهوية الوطنية / الإقامة <span class="text-red-500">*</span></label>
               <div class="input-wrapper">
-                <x-app-icon name="id-card" class="field-icon" />
+                <i class="fa-regular fa-id-card field-icon"></i>
                 <input type="text" id="id_number" name="id_number" value="{{ old('id_number') }}" placeholder="أدخل رقم الهوية" required>
               </div>
             </div>
@@ -596,7 +574,7 @@
             <div class="input-group">
               <label for="dob">تاريخ الميلاد (شرط 18 سنة فأكثر) <span class="text-red-500">*</span></label>
               <div class="input-wrapper">
-                <x-app-icon name="calendar" class="field-icon" />
+                <i class="fa-regular fa-calendar field-icon"></i>
                 <input type="date" id="dob" name="dob" value="{{ old('dob') }}" max="{{ now()->subYears(18)->format('Y-m-d') }}" required>
               </div>
               <span class="text-xs text-slate-500">يجب ألا يقل عمر المتطوع عن 18 عامًا كاملة.</span>
@@ -605,7 +583,7 @@
             <div class="input-group">
               <label for="phone_number">رقم الجوال <span class="text-red-500">*</span></label>
               <div class="input-wrapper">
-                <x-app-icon name="phone" class="field-icon" />
+                <i class="fa-solid fa-phone field-icon"></i>
                 <input type="tel" id="phone_number" name="phone_number" value="{{ old('phone_number') ?? old('phone') }}" placeholder="059XXXXXXX" required>
                 <input type="hidden" id="phone" name="phone" value="{{ old('phone_number') ?? old('phone') }}">
               </div>
@@ -614,7 +592,7 @@
             <div class="input-group">
               <label for="email">البريد الإلكتروني <span class="text-red-500">*</span></label>
               <div class="input-wrapper">
-                <x-app-icon name="envelope" class="field-icon" />
+                <i class="fa-regular fa-envelope field-icon"></i>
                 <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="example@email.com" required autocomplete="username">
               </div>
             </div>
@@ -622,24 +600,18 @@
             <div class="input-group">
               <label for="password">كلمة المرور <span class="text-red-500">*</span></label>
               <div class="input-wrapper">
-                <x-app-icon name="lock" class="field-icon" />
+                <i class="fa-solid fa-lock field-icon"></i>
                 <input type="password" id="password" name="password" placeholder="٨ خانات على الأقل" minlength="8" required autocomplete="new-password">
-                <button type="button" class="toggle-password" onclick="togglePassword('password', this)" tabindex="-1">
-                  <x-app-icon name="eye" class="w-5 h-5 eye-icon" />
-                  <x-app-icon name="eye-slash" class="w-5 h-5 eye-slash-icon hidden" />
-                </button>
+                <i class="fa-regular fa-eye toggle-password" onclick="togglePassword('password', this)"></i>
               </div>
             </div>
 
             <div class="input-group md:col-span-2">
               <label for="password_confirmation">تأكيد كلمة المرور <span class="text-red-500">*</span></label>
               <div class="input-wrapper">
-                <x-app-icon name="lock" class="field-icon" />
+                <i class="fa-solid fa-lock field-icon"></i>
                 <input type="password" id="password_confirmation" name="password_confirmation" placeholder="أعد إدخال كلمة المرور" minlength="8" required autocomplete="new-password">
-                <button type="button" class="toggle-password" onclick="togglePassword('password_confirmation', this)" tabindex="-1">
-                  <x-app-icon name="eye" class="w-5 h-5 eye-icon" />
-                  <x-app-icon name="eye-slash" class="w-5 h-5 eye-slash-icon hidden" />
-                </button>
+                <i class="fa-regular fa-eye toggle-password" onclick="togglePassword('password_confirmation', this)"></i>
               </div>
             </div>
           </div>
@@ -647,7 +619,7 @@
           <div class="btn-container">
             <button type="button" class="next-btn" onclick="nextStep(1)">
               <span>التالي: رفع الوثائق الرسمية</span>
-              <x-app-icon name="arrow-left" class="w-4 h-4" />
+              <i class="fa-solid fa-arrow-left"></i>
             </button>
           </div>
         </div>
@@ -660,7 +632,7 @@
             <div class="input-group">
               <label for="id_document">صورة الهوية الوطنية الشخصية <span class="text-red-500">*</span></label>
               <label for="id_document" class="upload-box block">
-                <div class="upload-icon"><x-app-icon name="id-card" class="w-9 h-9" /></div>
+                <div class="upload-icon"><i class="fa-solid fa-id-card"></i></div>
                 <strong class="text-sm block text-slate-700">اضغط لرفع صورة الهوية</strong>
                 <span class="text-xs text-slate-500 block mt-1">الملفات المدعومة: JPG, PNG, PDF (حد أقصى 5MB)</span>
                 <input type="file" id="id_document" name="id_document" accept=".png,.jpg,.jpeg,.pdf" required class="hidden" onchange="updateFileName(this, 'id-file-name')">
@@ -672,7 +644,7 @@
             <div class="input-group">
               <label for="conduct_document">شهادة حسن السيرة والسلوك (عدم محكومية) <span class="text-red-500">*</span></label>
               <label for="conduct_document" class="upload-box block">
-                <div class="upload-icon"><x-app-icon name="shield-check" class="w-9 h-9" /></div>
+                <div class="upload-icon"><i class="fa-solid fa-file-shield"></i></div>
                 <strong class="text-sm block text-slate-700">اضغط لرفع شهادة حسن السيرة</strong>
                 <span class="text-xs text-slate-500 block mt-1">الملفات المدعومة: JPG, PNG, PDF (حد أقصى 5MB)</span>
                 <input type="file" id="conduct_document" name="conduct_document" accept=".png,.jpg,.jpeg,.pdf" required class="hidden" onchange="updateFileName(this, 'conduct-file-name')">
@@ -682,19 +654,19 @@
 
           </div>
 
-          <div class="bg-[#f4f6f0] p-4 rounded-xl border border-[#d6ded0] text-xs text-[#3b5228] mb-4 flex items-center gap-2">
-            <x-app-icon name="info" class="w-4 h-4 shrink-0 text-[#3b5228]" />
-            <span>تخضع كافة الوثائق للتدقيق والمصادقة الأمنية والإدارية قبل تفعيل الحساب لضمان أمان وموثوقية خدمات كبار السن.</span>
+          <div class="bg-[#f4f6f0] p-4 rounded-xl border border-[#d6ded0] text-xs text-[#3b5228] mb-4">
+            <i class="fa-solid fa-circle-info ml-1"></i>
+            تخضع كافة الوثائق للتدقيق والمصادقة الأمنية والإدارية قبل تفعيل الحساب لضمان أمان وموثوقية خدمات كبار السن.
           </div>
 
           <div class="btn-container">
             <button type="button" class="prev-btn" onclick="prevStep(2)">
-              <x-app-icon name="arrow-right" class="w-4 h-4" />
+              <i class="fa-solid fa-arrow-right"></i>
               <span>السابق</span>
             </button>
             <button type="button" class="next-btn" onclick="nextStep(2)">
               <span>التالي: المراجعة والتأكيد</span>
-              <x-app-icon name="arrow-left" class="w-4 h-4" />
+              <i class="fa-solid fa-arrow-left"></i>
             </button>
           </div>
         </div>
@@ -704,7 +676,7 @@
           
           <!-- ملخص المعلومات المدخلة والوثائق -->
           <div class="info-summary-card">
-            <h4 class="flex items-center gap-1.5"><x-app-icon name="check-circle" class="w-5 h-5 text-[#3b5228]" /> مراجعة نهائية لبيانات التسجيل:</h4>
+            <h4><i class="fa-solid fa-circle-check ml-1 text-[#3b5228]"></i> مراجعة نهائية لبيانات التسجيل:</h4>
             <div class="summary-grid">
               <div class="summary-item">
                 <span class="label">الاسم بالكامل:</span>
@@ -740,11 +712,11 @@
 
           <div class="btn-container">
             <button type="button" class="prev-btn" onclick="prevStep(3)">
-              <x-app-icon name="arrow-right" class="w-4 h-4" />
+              <i class="fa-solid fa-arrow-right"></i>
               <span>السابق</span>
             </button>
             <button type="submit" class="submit-btn" id="submitVolunteerFormBtn">
-              <x-app-icon name="paper-plane" class="w-4 h-4" />
+              <i class="fa-solid fa-paper-plane"></i>
               <span>إرسال طلب الانضمام</span>
             </button>
           </div>
@@ -773,7 +745,7 @@
     function updateFileName(input, targetId) {
       const target = document.getElementById(targetId);
       if (input.files && input.files.length > 0) {
-        target.textContent = input.files[0].name;
+        target.textContent = '✓ ' + input.files[0].name;
         target.style.color = '#3b5228';
       } else {
         target.textContent = 'لم يتم اختيار ملف بعد';
@@ -894,19 +866,17 @@
       showStep(step);
     }
 
-    function togglePassword(inputId, btn) {
+    function togglePassword(inputId, icon) {
       const input = document.getElementById(inputId);
       if (!input) return;
-      const eye = btn.querySelector('.eye-icon');
-      const eyeSlash = btn.querySelector('.eye-slash-icon');
       if (input.type === 'password') {
         input.type = 'text';
-        if (eye) eye.classList.add('hidden');
-        if (eyeSlash) eyeSlash.classList.remove('hidden');
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
       } else {
         input.type = 'password';
-        if (eye) eye.classList.remove('hidden');
-        if (eyeSlash) eyeSlash.classList.add('hidden');
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
       }
     }
 

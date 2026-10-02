@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>أنيس - بوابة كبير السن</title>
+    <title>أنيس - بوابة طالب المساعدة</title>
 
     {{-- الخطوط والأيقونات --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     {{-- استرجاع وتطبيق مقياس الخط المفضل فورياً --}}
     <script>
         (function() {
             try {
-                var s = localStorage.getItem('anees_font_scale') || localStorage.getItem('ihsan_font_scale');
+                var s = localStorage.getItem('anees_font_scale');
                 if (s) {
                     document.documentElement.style.fontSize = s + '%';
                 }
@@ -94,21 +94,23 @@
         }
 
         .logo {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 9px;
-            font-size: 24px;
-            font-weight: 900;
-            color: var(--sidebar-text);
-            margin-bottom: 4px;
+            width: 104px;
+            height: 76px;
+            margin-bottom: 7px;
+            padding: 4px 8px;
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 18px;
+            background: #fffdf9;
+            box-shadow: 0 8px 22px rgba(16,35,11,.18);
         }
 
-        .logo i, .logo svg {
-            width: 25px;
-            height: 25px;
-            font-size: 25px;
-            color: #a8c488;
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .logo-subtitle {
@@ -150,22 +152,20 @@
             position: relative;
         }
 
-        .menu-item i, .menu-item svg {
-            width: 20px;
-            height: 20px;
+        .menu-item i {
+            width: 22px;
             font-size: 14px;
             margin-left: 9px;
             text-align: center;
             color: rgba(168,196,136,.75);
             transition: color .2s;
-            flex-shrink: 0;
         }
 
         .menu-item:hover {
             background-color: rgba(255, 255, 255, 0.09);
             color: #ffffff;
         }
-        .menu-item:hover i, .menu-item:hover svg { color: rgba(168,196,136,1); }
+        .menu-item:hover i { color: rgba(168,196,136,1); }
 
         .menu-item.active {
             background: linear-gradient(135deg, var(--primary-color) 0%, #6e8e44 100%);
@@ -174,7 +174,7 @@
             box-shadow: 0 3px 12px rgba(122,157,80,.3);
         }
 
-        .menu-item.active i, .menu-item.active svg {
+        .menu-item.active i {
             color: #ffffff;
         }
 
@@ -442,10 +442,10 @@
         .content-body::-webkit-scrollbar-track,.content-body ::-webkit-scrollbar-track{background:transparent}
 
         /* ══════════════ Animations ══════════════ */
-        @keyframes ihsan-fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes ihsan-pulse-soft{0%,100%{opacity:1}50%{opacity:.7}}
+        @keyframes anees-fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes anees-pulse-soft{0%,100%{opacity:1}50%{opacity:.7}}
 
-        .content-body > *{animation:ihsan-fadeIn .35s ease both}
+        .content-body > *{animation:anees-fadeIn .35s ease both}
         .content-body > :nth-child(2){animation-delay:.05s}
         .content-body > :nth-child(3){animation-delay:.1s}
         .content-body > :nth-child(4){animation-delay:.15s}
@@ -458,6 +458,7 @@
 <body x-data="{ mobileSidebarOpen: false }">
     @php
         $user = Auth::user();
+        $displayUserName = trim(preg_replace('/\s*\((?:كبير السن|كبير سن|مستفيد)\)\s*/u', ' ', $user?->name ?? ''));
         $elderProfile = $user?->elderProfile;
         $activeCount = $user ? $user->serviceRequests()->active()->count() : 0;
         $needsActionCount = $user ? $user->serviceRequests()->needsAction()->count() : 0;
@@ -471,26 +472,25 @@
         {{-- الشريط الجانبي (Sidebar) مطابق لتصميم oldman_home المعتمد --}}
         <aside class="sidebar" :class="{ 'mobile-open': mobileSidebarOpen }">
             <div class="logo-section">
-                <div class="logo">
-                    <h2>أنيس</h2>
-                    <x-app-icon name="hand-heart" class="w-6 h-6 text-[#a8c488]" />
-                </div>
-                <p class="logo-subtitle">منصة رعاية ومساندة كبار السن</p>
-                <span class="role-pill">كبير السن / مستفيد</span>
+                <a href="{{ route('dashboard') }}" class="logo" aria-label="أنيس — الصفحة الرئيسية">
+                    <img src="{{ asset('assets/img/anees-logo.png') }}" alt="شعار منصة أنيس">
+                </a>
+                <p class="logo-subtitle">خدمات ومساندة لكل من يحتاجها</p>
+                <span class="role-pill">طالب مساعدة</span>
             </div>
 
             <nav class="sidebar-menu">
                 {{-- 1. الرئيسية --}}
                 <a href="{{ route('dashboard') }}" 
                     class="menu-item {{ request()->routeIs('dashboard') && !request()->boolean('assistant') ? 'active' : '' }}">
-                    <x-app-icon name="home" class="w-5 h-5 ml-2.5" />
+                    <i class="fa-solid fa-house"></i>
                     <span>الرئيسية</span>
                 </a>
 
                 {{-- صفحة المساعد الذكي المستقلة --}}
                 <a href="{{ route('dashboard', ['assistant' => 1]) }}"
                     class="menu-item {{ request()->routeIs('dashboard') && request()->boolean('assistant') ? 'active' : '' }}">
-                    <x-app-icon name="sparkles" class="w-5 h-5 ml-2.5" />
+                    <i class="fa-solid fa-robot"></i>
                     <span>المساعد الذكي</span>
                     <span class="sidebar-badge bg-white/20">AI</span>
                 </a>
@@ -498,7 +498,7 @@
                 {{-- 2. زر سريع: طلب مساعدة جديد --}}
                 <button type="button" onclick="openCreateRequestModal()" 
                     class="menu-item sidebar-cta-btn text-right cursor-pointer w-full">
-                    <x-app-icon name="handshake" class="w-5 h-5 ml-2.5" />
+                    <i class="fa-solid fa-hand-holding-hand"></i>
                     <span>طلب مساعدة جديد</span>
                     <span class="sidebar-badge bg-white/20">+</span>
                 </button>
@@ -506,7 +506,7 @@
                 {{-- 3. سجل طلباتي ومتابعة الخدمات --}}
                 <a href="{{ route('service-requests.index') }}" 
                     class="menu-item {{ request()->routeIs('service-requests.*') ? 'active' : '' }}">
-                    <x-app-icon name="clipboard-list" class="w-5 h-5 ml-2.5" />
+                    <i class="fa-solid fa-clipboard-list"></i>
                     <span>طلباتي</span>
                     @if ($needsActionCount > 0)
                         <span class="sidebar-badge bg-amber-500 text-white animate-pulse" title="طلبات بحاجة لإجراء">{{ $needsActionCount }}</span>
@@ -518,7 +518,7 @@
                 {{-- 4. الإشعارات --}}
                 <a href="{{ route('notifications.index') }}" 
                     class="menu-item {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
-                    <x-app-icon name="bell" class="w-5 h-5 ml-2.5" />
+                    <i class="fa-regular fa-bell"></i>
                     <span>الإشعارات</span>
                     @if ($unreadNotificationsCount > 0)
                         <span class="sidebar-badge">{{ $unreadNotificationsCount }}</span>
@@ -528,7 +528,7 @@
                 {{-- 5. الملف الشخصي والإعدادات --}}
                 <a href="{{ route('profile.edit') }}" 
                     class="menu-item {{ request()->routeIs('profile.*') ? 'active' : '' }}">
-                    <x-app-icon name="user" class="w-5 h-5 ml-2.5" />
+                    <i class="fa-regular fa-user"></i>
                     <span>الملف الشخصي</span>
                 </a>
             </nav>
@@ -543,7 +543,7 @@
             <form method="POST" action="{{ route('logout') }}" class="logout-form">
                 @csrf
                 <button type="submit" class="logout-btn">
-                    <x-app-icon name="logout" class="w-4 h-4 ml-2" />
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
                     <span>تسجيل خروج</span>
                 </button>
             </form>
@@ -555,10 +555,10 @@
             <header class="top-header">
                 <div class="flex items-center gap-3">
                     <button type="button" class="mobile-menu-btn" @click="mobileSidebarOpen = !mobileSidebarOpen">
-                        <x-app-icon name="bars" class="w-6 h-6 text-[#354e20]" />
+                        <i class="fa-solid fa-bars"></i>
                     </button>
                     <div>
-                        <span class="text-xs font-bold text-slate-400">بوابة كبير السن والمستفيد</span>
+                        <span class="text-xs font-bold text-slate-400">بوابة طالب المساعدة</span>
                         <h2 class="text-sm font-black text-[#354e20]">
                             {{ match(true) {
                                 request()->routeIs('dashboard') && request()->boolean('assistant') => 'المساعد الذكي',
@@ -577,20 +577,20 @@
                     @if (request()->routeIs('dashboard') && request()->boolean('assistant'))
                         <button type="button" onclick="window.dispatchEvent(new CustomEvent('assistant-start-request'))"
                             class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-[#354e20] text-white hover:bg-[#4e6b35] transition shadow-xs cursor-pointer">
-                            <x-app-icon name="plus" class="w-3.5 h-3.5" />
+                            <i class="fa-solid fa-plus text-[9px]"></i>
                             <span>ابدأ طلب خدمة</span>
                         </button>
                     @else
                         <button type="button" onclick="openCreateRequestModal()"
                             class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-[#354e20] text-white hover:bg-[#4e6b35] transition shadow-xs cursor-pointer">
-                            <x-app-icon name="plus" class="w-3.5 h-3.5" />
+                            <i class="fa-solid fa-plus text-[9px]"></i>
                             <span>طلب مساعدة جديد</span>
                         </button>
                     @endif
 
                     {{-- جرس الإشعارات --}}
                     <a href="{{ route('notifications.index') }}" class="notification-icon-btn" title="الإشعارات">
-                        <x-app-icon name="bell" class="w-5 h-5 text-slate-600" />
+                        <i class="fa-regular fa-bell"></i>
                         @if ($unreadNotificationsCount > 0)
                             <span class="notification-badge-dot">{{ $unreadNotificationsCount }}</span>
                         @endif
@@ -601,7 +601,7 @@
                         <div class="w-8 h-8 rounded-full bg-[#354e20] text-white flex items-center justify-center font-bold text-xs">
                             {{ mb_substr($user?->name ?? 'إ', 0, 1) }}
                         </div>
-                        <span class="text-xs font-bold text-slate-800">{{ $user?->name }}</span>
+                        <span class="text-xs font-bold text-slate-800">{{ $displayUserName }}</span>
                     </a>
                 </div>
             </header>

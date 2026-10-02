@@ -120,8 +120,12 @@
         }
         .notif-message{
             margin:6px 0 0;font-size:13px;color:#4b5563;
-            line-height:1.7;font-weight:500;
+            line-height:1.85;font-weight:650;
         }
+        .notif-explanation{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+        .notif-explanation-item{display:flex;align-items:flex-start;gap:8px;border:1px solid #e6eadf;border-radius:11px;background:#f8faf6;padding:9px 11px;color:#4b5563;font-size:11px;line-height:1.65}
+        .notif-explanation-item i{margin-top:3px;color:#66834b;font-size:11px}
+        .notif-explanation-item strong{display:block;margin-bottom:1px;color:#2c4318;font-size:10px}
         .notif-time{
             font-size:11px;font-weight:700;color:#94a3b8;
             white-space:nowrap;flex:none;padding-top:2px;
@@ -137,6 +141,7 @@
             cursor:pointer;transition:all .2s ease;
         }
         .notif-listen-btn:hover{background:#dbeafe;border-color:#bfdbfe}
+        .notif-listen-btn.is-playing{border-color:#93c5fd;background:#dbeafe;color:#1d4ed8;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
         .notif-listen-btn i{font-size:12px}
 
         /* Footer actions */
@@ -193,6 +198,7 @@
             .notif-icon{width:36px;height:36px;border-radius:10px;font-size:15px}
             .notif-card-top{flex-direction:column;gap:8px}
             .notif-time{align-self:flex-start}
+            .notif-explanation{grid-template-columns:1fr}
         }
     </style>
 
@@ -202,14 +208,14 @@
         <div class="notif-hero">
             <div class="notif-hero-text">
                 <span class="notif-hero-label">لوحة التحكم</span>
-                <h1><x-app-icon name="bell" class="w-5 h-5 inline text-[#c8ddb0]" /> الإشعارات</h1>
+                <h1><i class="fa-regular fa-bell"></i> الإشعارات</h1>
                 <p>تابع تنبيهات ومستجدات طلباتك وحسابك أولاً بأول</p>
             </div>
             @if (($counts['unread'] ?? 0) > 0)
                 <form method="POST" action="{{ route('notifications.mark-all-read') }}">
                     @csrf
                     <button type="submit" class="notif-mark-all">
-                        <x-app-icon name="check" class="w-4 h-4 inline" />
+                        <i class="fa-solid fa-check-double"></i>
                         <span>تحديد الكل كمقروء</span>
                     </button>
                 </form>
@@ -238,12 +244,12 @@
         {{-- ═══════ Status Alerts ═══════ --}}
         @if (session('status') === 'notification-read')
             <div class="notif-status-alert">
-                <x-app-icon name="check-circle" class="w-4 h-4 text-emerald-600 inline" />
+                <i class="fa-solid fa-circle-check"></i>
                 <span>تم تعليم الإشعار كمقروء بنجاح.</span>
             </div>
         @elseif (session('status') === 'all-notifications-read')
             <div class="notif-status-alert">
-                <x-app-icon name="check-circle" class="w-4 h-4 text-emerald-600 inline" />
+                <i class="fa-solid fa-circle-check"></i>
                 <span>تم تعليم جميع الإشعارات كمقروءة بنجاح.</span>
             </div>
         @endif
@@ -253,29 +259,67 @@
             @forelse ($notifications as $notification)
                 @php
                     $type = $notification->type;
-                    $isRed = str_contains($type, 'problem') || str_contains($type, 'alert') || str_contains($type, 'cancelled') || str_contains($type, 'no_provider');
-                    $isOrange = str_contains($type, 'delay') || str_contains($type, 'apolog') || str_contains($type, 'warning');
-                    $isGreen = str_contains($type, 'upgrade') || str_contains($type, 'accept') || str_contains($type, 'completed') || str_contains($type, 'status');
+                    $isRed = str_contains($type, 'problem') || str_contains($type, 'alert') || str_contains($type, 'cancelled') || str_contains($type, 'no_provider') || str_contains($type, 'rejected') || str_contains($type, 'suspended');
+                    $isOrange = str_contains($type, 'delay') || str_contains($type, 'apolog') || str_contains($type, 'warning') || str_contains($type, 'resubmission');
+                    $isGreen = str_contains($type, 'upgrade') || str_contains($type, 'accept') || str_contains($type, 'completed') || str_contains($type, 'status') || str_contains($type, 'approved') || str_contains($type, 'reactivated');
 
                     $typeClass = $isRed ? 'type-red' : ($isOrange ? 'type-orange' : ($isGreen ? 'type-green' : 'type-default'));
                     $iconClass = $isRed ? 'red' : ($isOrange ? 'orange' : ($isGreen ? 'green' : 'default'));
 
                     $title = match(true) {
-                        str_contains($type, 'apolog') => 'اعتذار عن الخدمة',
-                        str_contains($type, 'delay') => 'تنبيه تأخر في التنفيذ',
-                        str_contains($type, 'problem') => 'إحالة بلاغ للمراجعة الإدارية',
                         str_contains($type, 'no_provider') => 'لم يتوفر مقدم خدمة',
+                        str_contains($type, 'apolog') => 'اعتذار مقدم الخدمة',
+                        str_contains($type, 'replaced_due_to_delay') => 'تم البحث عن مقدم خدمة بديل',
+                        str_contains($type, 'delay') => 'تأخر مقدم الخدمة',
+                        str_contains($type, 'problem') => 'تم استلام بلاغك',
+                        str_contains($type, 'request_status') => 'تحديث على طلبك',
+                        str_contains($type, 'account_approved') => 'تم اعتماد حسابك',
+                        str_contains($type, 'account_rejected') => 'تعذر اعتماد حسابك',
+                        str_contains($type, 'documents_resubmission') => 'مطلوب استكمال المستندات',
+                        str_contains($type, 'account_suspended') => 'تم إيقاف الحساب',
+                        str_contains($type, 'account_reactivated') => 'تمت إعادة تفعيل الحساب',
                         str_contains($type, 'upgrade') => 'ترقية المستوى التقديري (Tier)',
                         str_contains($type, 'downgrade') => 'تحديث المستوى التقديري (Tier)',
                         str_contains($type, 'alert') => 'تنبيه إداري مهم',
                         default => 'إشعار من النظام',
                     };
 
-                    $iconName = match(true) {
-                        $isRed => 'alert-triangle',
-                        $isOrange => 'clock',
-                        $isGreen => 'check-circle',
-                        default => 'bell',
+                    $explanation = match(true) {
+                        str_contains($type, 'no_provider') => 'بحثت المنصة عن مقدم خدمة للموعد المحدد، لكن لم يتم العثور على شخص متاح.',
+                        str_contains($type, 'apolog') => 'مقدم الخدمة السابق اعتذر، وتمت إعادة الطلب للبحث عن مقدم خدمة آخر.',
+                        str_contains($type, 'replaced_due_to_delay') => 'بسبب التأخر، أوقفت المنصة الإسناد السابق وبدأت البحث عن بديل.',
+                        str_contains($type, 'delay') => 'مقدم الخدمة لم يصل في الموعد المحدد، وما زال بإمكانك اختيار الإجراء المناسب.',
+                        str_contains($type, 'problem') => 'تم تسجيل بلاغك وإرساله إلى الإدارة لمراجعته ومتابعته.',
+                        str_contains($type, 'request_status') => 'طرأ تغيير جديد على حالة طلب المساعدة الخاص بك.',
+                        str_contains($type, 'account_approved') => 'أصبح حسابك معتمدًا ويمكنك استخدام خدمات المنصة.',
+                        str_contains($type, 'account_rejected') => 'راجعت الإدارة طلب التسجيل ولم تتمكن من اعتماده بالبيانات الحالية.',
+                        str_contains($type, 'documents_resubmission') => 'تحتاج الإدارة إلى نسخة أوضح أو مستند إضافي لإكمال مراجعة الحساب.',
+                        str_contains($type, 'account_suspended') => 'تم إيقاف استخدام الحساب مؤقتًا وفق السبب المذكور في تفاصيل الإشعار.',
+                        str_contains($type, 'account_reactivated') => 'عاد الحساب للعمل ويمكنك استخدام المنصة من جديد.',
+                        str_contains($type, 'upgrade') => 'ارتفع مستواك التقديري نتيجة أدائك وتقييماتك الجيدة.',
+                        str_contains($type, 'downgrade') => 'تم تعديل مستواك التقديري بناءً على التقييمات أو سجل تنفيذ المهام.',
+                        default => 'هذه رسالة مهمة من المنصة لإطلاعك على آخر تحديث.',
+                    };
+
+                    $nextStep = match(true) {
+                        str_contains($type, 'no_provider') => 'افتح طلباتي لإعادة جدولة الطلب أو إلغائه.',
+                        str_contains($type, 'apolog') => 'تابع طلبك؛ ستظهر لك حالة البحث عن مقدم خدمة جديد.',
+                        str_contains($type, 'replaced_due_to_delay') => 'راجع مهامك لمعرفة تفاصيل التغيير.',
+                        str_contains($type, 'delay') => 'افتح الطلب واختر الانتظار أو طلب بديل أو الإلغاء.',
+                        str_contains($type, 'problem') => 'لا يلزمك إجراء الآن؛ تابع الإشعارات لمعرفة نتيجة المراجعة.',
+                        str_contains($type, 'request_status') => 'افتح طلباتي للاطلاع على الحالة والتفاصيل الجديدة.',
+                        str_contains($type, 'account_approved') || str_contains($type, 'account_reactivated') => 'يمكنك الآن متابعة استخدام المنصة بشكل طبيعي.',
+                        str_contains($type, 'account_rejected') => 'راجع السبب المذكور وتواصل مع فريق الدعم إذا احتجت للمساعدة.',
+                        str_contains($type, 'documents_resubmission') => 'حدّث المستند المطلوب من ملفك لإكمال المراجعة.',
+                        str_contains($type, 'account_suspended') => 'راجع السبب المذكور وتواصل مع الدعم عند الحاجة.',
+                        default => 'اقرأ التفاصيل، ثم انتقل إلى القسم المرتبط إذا احتجت إلى إجراء.',
+                    };
+
+                    $iconFA = match(true) {
+                        $isRed => 'fa-solid fa-circle-exclamation',
+                        $isOrange => 'fa-solid fa-clock-rotate-left',
+                        $isGreen => 'fa-solid fa-circle-check',
+                        default => 'fa-solid fa-bell',
                     };
                 @endphp
 
@@ -283,7 +327,7 @@
                     <div class="notif-card-top">
                         <div class="notif-card-body">
                             <div class="notif-icon {{ $iconClass }}">
-                                <x-app-icon :name="$iconName" class="w-5 h-5" />
+                                <i class="{{ $iconFA }}"></i>
                             </div>
                             <div style="flex:1;min-width:0">
                                 <div class="notif-title-row">
@@ -294,14 +338,29 @@
                                 </div>
                                 @php
                                     $cleanMessage = preg_replace('/#?REQ-?(\d+)/ui', 'رقم الطلب $1', $notification->message);
+                                    $spokenMessage = str_ireplace('Tier', 'المستوى', $cleanMessage);
+                                    $spokenTime = $notification->created_at->locale('ar')->diffForHumans();
+                                    $spokenNotif = 'إشعار بعنوان: '.$title.'. التفاصيل: '.$spokenMessage.'. ماذا يعني هذا؟ '.$explanation.'. ماذا تفعل الآن؟ '.$nextStep.'. وصل هذا الإشعار '.$spokenTime.'.';
                                     $spokenNotif = "{$title}. {$cleanMessage}";
+                                    $spokenNotif = 'إشعار بعنوان: '.$title.'. التفاصيل: '.$spokenMessage.'. ماذا يعني هذا؟ '.$explanation.'. ماذا تفعل الآن؟ '.$nextStep.'. وصل هذا الإشعار '.$spokenTime.'.';
                                 @endphp
+                                <p class='notif-message'>{{ $cleanMessage }}</p>
+                                <div class='notif-explanation'>
+                                    <div class='notif-explanation-item'>
+                                        <i class='fa-solid fa-circle-info' aria-hidden='true'></i>
+                                        <span><strong>ماذا يعني هذا؟</strong>{{ $explanation }}</span>
+                                    </div>
+                                    <div class='notif-explanation-item'>
+                                        <i class='fa-solid fa-arrow-left' aria-hidden='true'></i>
+                                        <span><strong>ماذا تفعل الآن؟</strong>{{ $nextStep }}</span>
+                                    </div>
+                                </div>
                                 <button type="button"
                                     data-tts-text="{{ $spokenNotif }}"
                                     class="notif-listen-btn"
                                     aria-label="قراءة الإشعار بصوت مرتفع">
-                                    <x-app-icon name="volume" class="w-3.5 h-3.5 inline" />
-                                    <span>استمع للإشعار</span>
+                                    <i class="fa-solid fa-volume-high"></i>
+                                    <span data-tts-label>استمع لشرح الإشعار</span>
                                 </button>
                             </div>
                         </div>
@@ -317,13 +376,13 @@
                                     @csrf
                                     @method('patch')
                                     <button type="submit" class="notif-read-btn">
-                                        <x-app-icon name="check" class="w-3.5 h-3.5 inline" />
+                                        <i class="fa-solid fa-check"></i>
                                         <span>تحديد كمقروء</span>
                                     </button>
                                 </form>
                             @else
                                 <span class="notif-read-done">
-                                    <x-app-icon name="check" class="w-3 h-3 inline" />
+                                    <i class="fa-solid fa-check-double"></i>
                                     <span>مقروء</span>
                                 </span>
                             @endif
@@ -335,12 +394,12 @@
                                 @if (Auth::user()->isProvider())
                                     <a href="{{ route('provider.tasks') }}" class="notif-goto-link">
                                         <span>الانتقال لطلباتي</span>
-                                        <x-app-icon name="arrow-left" class="w-3 h-3 inline" />
+                                        <i class="fa-solid fa-arrow-left"></i>
                                     </a>
                                 @else
                                     <a href="{{ route('service-requests.index') }}" class="notif-goto-link">
                                         <span>الانتقال لطلباتي</span>
-                                        <x-app-icon name="arrow-left" class="w-3 h-3 inline" />
+                                        <i class="fa-solid fa-arrow-left"></i>
                                     </a>
                                 @endif
                             </div>
@@ -349,8 +408,8 @@
                 </article>
             @empty
                 <div class="notif-empty">
-                    <div class="notif-empty-icon flex justify-center items-center">
-                        <x-app-icon name="bell" class="w-7 h-7 text-slate-400" />
+                    <div class="notif-empty-icon">
+                        <i class="fa-regular fa-bell-slash"></i>
                     </div>
                     <h3>لا توجد إشعارات في هذا التبويب</h3>
                     <p>ستظهر هنا كافة التنبيهات المرتبطة بنشاطك على المنصة فور حدوثها.</p>

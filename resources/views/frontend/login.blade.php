@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="منصة أنيس لخدمة كبار السن وربطهم بالمتطوعين">
+  <meta name="description" content="منصة أنيس لربط طالبي المساعدة بمقدمي الخدمة الموثوقين">
   <title>تسجيل الدخول | أنيس</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
   <style>
@@ -14,47 +14,48 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #f2ede4;
+      background: radial-gradient(circle at 10% 10%, rgba(223, 242, 232, .9), transparent 30%), #f7f1e8;
       font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #333333;
+      color: #153f36;
     }
 
     .main-container {
-      width: 95vw;
-      max-width: 1200px;
-      min-height: 85vh;
+      width: min(94vw, 1180px);
+      min-height: min(720px, calc(100vh - 48px));
       display: flex;
       background-color: #ffffff;
-      border-radius: 24px;
+      border: 1px solid #dfe9e4;
+      border-radius: 32px;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      margin: 20px auto;
+      box-shadow: 0 24px 70px rgba(21, 63, 54, .12);
+      margin: 24px auto;
     }
 
     /* قسم الصورة */
     .image-section {
       flex: 1.1;
-      background-image: linear-gradient(rgba(49, 66, 30, 0.2), rgba(49, 66, 30, 0.3)), url('{{ asset('assets/img/hero-image.jpeg') }}');
+      background-image: linear-gradient(180deg, rgba(21, 63, 54, .02) 30%, rgba(21, 63, 54, .82) 100%), url('{{ asset('assets/img/assistance-seeker-register.jpg') }}');
       background-size: cover;
-      background-position: center 30%;
+      background-position: center;
       background-repeat: no-repeat;
       display: flex;
       align-items: flex-end;
-      padding: 40px;
+      padding: 32px;
       position: relative;
     }
 
     .image-overlay-text {
-      background: rgba(49, 66, 30, 0.85);
-      backdrop-filter: blur(8px);
-      padding: 24px 30px;
-      border-radius: 18px;
+      background: rgba(21, 63, 54, .78);
+      backdrop-filter: blur(14px);
+      padding: 22px 24px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 20px;
       color: #ffffff;
       max-width: 460px;
     }
 
     .image-overlay-text h2 {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 800;
       margin: 0 0 8px;
       color: #ffffff;
@@ -64,7 +65,7 @@
       font-size: 13px;
       line-height: 1.6;
       margin: 0;
-      color: #e6edd9;
+      color: rgba(255,255,255,.76);
     }
 
     /* قسم النموذج */
@@ -73,25 +74,37 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 40px 30px;
+      padding: 34px 38px;
       background-color: #ffffff;
     }
 
     .form-content {
       width: 100%;
-      max-width: 420px;
+      max-width: 430px;
     }
 
+    .form-brand { display: flex; justify-content: center; margin-bottom: 6px; }
+    .form-brand img { width: 92px; height: 72px; object-fit: contain; }
+
     h1 {
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 900;
-      color: #31421e;
-      margin-bottom: 24px;
+      color: #153f36;
+      margin: 0 0 6px;
       text-align: center;
     }
 
     .brand-name {
-      color: #718256;
+      color: #e9785d;
+    }
+
+    .welcome-copy {
+      margin: 0 0 22px;
+      text-align: center;
+      color: #64736e;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.8;
     }
 
     .input-group {
@@ -109,21 +122,21 @@
     input[type="email"],
     input[type="password"] {
       width: 100%;
-      padding: 12px 18px;
-      border: 1.5px solid #d2d6dc;
-      border-radius: 25px;
+      padding: 14px 16px;
+      border: 1.5px solid #dfe9e4;
+      border-radius: 14px;
       outline: none;
       font-size: 14px;
       font-family: inherit;
       transition: border-color 0.2s, box-shadow 0.2s;
-      background-color: #fafaf9;
+      background-color: #f8fbf9;
     }
 
     input[type="email"]:focus,
     input[type="password"]:focus {
-      border-color: #718256;
+      border-color: #24584c;
       background-color: #ffffff;
-      box-shadow: 0 0 0 3px rgba(113, 130, 86, 0.15);
+      box-shadow: 0 0 0 4px rgba(36, 88, 76, .10);
     }
 
     .options-row {
@@ -159,20 +172,21 @@
     .submit-btn {
       width: 100%;
       padding: 13px;
-      background-color: #31421e;
+      background-color: #153f36;
       color: white;
       border: none;
-      border-radius: 25px;
+      border-radius: 14px;
       font-size: 15px;
       font-weight: 800;
       font-family: inherit;
       cursor: pointer;
       transition: background-color 0.2s, transform 0.1s;
-      box-shadow: 0 4px 14px rgba(49, 66, 30, 0.25);
+      box-shadow: 0 10px 24px rgba(21, 63, 54, .20);
     }
 
     .submit-btn:hover {
-      background-color: #52643a;
+      background-color: #24584c;
+      transform: translateY(-1px);
     }
 
     .submit-btn:active {
@@ -231,6 +245,14 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
 
+    .quick-panel { margin-bottom: 20px; overflow: hidden; border: 1px dashed #b8cac2; border-radius: 14px; background: #f8fbf9; }
+    .quick-panel summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; color: #24584c; font-size: 12px; font-weight: 800; cursor: pointer; list-style: none; }
+    .quick-panel summary::-webkit-details-marker { display: none; }
+    .quick-panel summary::after { content: '+'; font-size: 18px; line-height: 1; }
+    .quick-panel[open] summary::after { content: '−'; }
+    .quick-panel[open] summary { border-bottom: 1px solid #dfe9e4; }
+    .quick-grid { padding: 12px; }
+
     .register-option {
       margin-top: 16px;
       text-align: center;
@@ -286,7 +308,7 @@
       }
 
       .image-section {
-        min-height: 220px;
+        min-height: 260px;
         flex: none;
         padding: 20px;
       }
@@ -296,8 +318,11 @@
       }
 
       .form-section {
-        padding: 30px 20px;
+        padding: 28px 20px 36px;
       }
+
+      .form-brand img { width: 82px; height: 62px; }
+      h1 { font-size: 24px; }
     }
   </style>
 </head>
@@ -307,15 +332,19 @@
     <!-- النصف الأيمن: الصورة -->
     <div class="image-section" role="img" aria-label="منصة أنيس">
       <div class="image-overlay-text">
-        <h2>معًا لرعاية كبار السن</h2>
-        <p>نصل كبار السن بالمتطوعين الموثوقين والجمعيات الخيرية لتقديم الدعم والمرافقة وقضاء الحوائج بكل محبة وأنيس.</p>
+        <h2>المساعدة أقرب مما تتخيّل</h2>
+        <p>أنيس يربط كبار السن وذوي الإعاقة ومبتوري الأطراف بمقدمي خدمة موثوقين، باهتمام يحفظ الراحة والكرامة.</p>
       </div>
     </div>
 
     <!-- النصف الأيسر: النموذج -->
     <div class="form-section">
       <div class="form-content">
-        <h1>مرحبا بكم في <span class="brand-name">أنيس</span></h1>
+        <a href="{{ url('/') }}" class="form-brand" aria-label="العودة إلى صفحة أنيس الرئيسية">
+          <img src="{{ asset('assets/img/anees-logo.png') }}" alt="شعار منصة أنيس">
+        </a>
+        <h1>مرحبًا بعودتك إلى <span class="brand-name">أنيس</span></h1>
+        <p class="welcome-copy">سجّل دخولك للوصول إلى خدماتك ومتابعة طلباتك بسهولة.</p>
 
         {{-- تنبيهات الحالة مثل تأكيد البريد أو إعادة تعيين كلمة المرور --}}
         @if (session('status'))
@@ -344,6 +373,125 @@
             {{ $errors->first('password') }}
           </div>
         @endif
+
+        @if (config('app.show_test_buttons', env('SHOW_TEST_BUTTONS', app()->environment(['local', 'production']))))
+        <!-- ======================================================== -->
+        <!-- [نظام الأزرار السريعة لحسابات الاختبار والتجربة] -->
+        <!-- ======================================================== -->
+        <details class="quick-panel">
+          <summary><span>⚡ نظام الأزرار للاختبار والدخول السريع</span><small style="font-size:10px;color:#64748b;font-weight:700;">اضغط للعرض</small></summary>
+
+          <div class="quick-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+            <!-- 1. مدير أعلى -->
+            <div class="quick-fill-card" onclick="fillCredentials('superadmin@anees.com', 'password', 'مدير النظام الأعلى (Super Admin)', false)"
+              style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; position: relative;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 800; font-size: 11.5px; color: #92400e; display: flex; align-items: center; gap: 5px;">
+                  <span>👑</span>
+                  <span>مدير أعلى (Super)</span>
+                </div>
+                <button type="button" onclick="event.stopPropagation(); fillCredentials('superadmin@anees.com', 'password', 'مدير النظام الأعلى (Super Admin)', true)"
+                  title="تسجيل دخول فوري"
+                  style="background: #fef3c7; border: 1px solid #f59e0b; color: #92400e; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; cursor: pointer;">
+                  دخول فوري
+                </button>
+              </div>
+              <div style="font-size: 9.5px; color: #b45309; margin-top: 3px; direction: ltr; text-align: right;">superadmin@anees.com</div>
+            </div>
+
+            <!-- 2. مدير نظام -->
+            <div class="quick-fill-card" onclick="fillCredentials('admin@ihsan.com', 'password', 'مدير نظام (Admin)', false)"
+              style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; position: relative;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 800; font-size: 11.5px; color: #1e40af; display: flex; align-items: center; gap: 5px;">
+                  <span>🛡️</span>
+                  <span>مدير نظام (Admin)</span>
+                </div>
+                <button type="button" onclick="event.stopPropagation(); fillCredentials('admin@ihsan.com', 'password', 'مدير نظام (Admin)', true)"
+                  title="تسجيل دخول فوري"
+                  style="background: #dbeafe; border: 1px solid #3b82f6; color: #1e40af; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; cursor: pointer;">
+                  دخول ⚡
+                </button>
+              </div>
+              <div style="font-size: 9.5px; color: #2563eb; margin-top: 3px; direction: ltr; text-align: right;">admin@ihsan.com</div>
+            </div>
+
+            <!-- 3. مقدم خدمة (متطوع) -->
+            <div class="quick-fill-card" onclick="fillCredentials('mohammed@ihsan.com', 'password', 'مقدم الخدمة (متطوع)', false)"
+              style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; position: relative;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 800; font-size: 11.5px; color: #166534; display: flex; align-items: center; gap: 5px;">
+                  <span>🤝</span>
+                  <span>مقدم خدمة (متطوع)</span>
+                </div>
+                <button type="button" onclick="event.stopPropagation(); fillCredentials('mohammed@ihsan.com', 'password', 'مقدم الخدمة (متطوع)', true)"
+                  title="تسجيل دخول فوري"
+                  style="background: #dcfce7; border: 1px solid #22c55e; color: #166534; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; cursor: pointer;">
+                  دخول ⚡
+                </button>
+              </div>
+              <div style="font-size: 9.5px; color: #15803d; margin-top: 3px; direction: ltr; text-align: right;">mohammed@ihsan.com</div>
+            </div>
+
+            <!-- 4. طالب مساعدة (مستفيد) -->
+            <div class="quick-fill-card" onclick="fillCredentials('elderly@ihsan.com', 'password', 'طالب مساعدة (مستفيد)', false)"
+              style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; position: relative;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 800; font-size: 11.5px; color: #6b21a8; display: flex; align-items: center; gap: 5px;">
+                  <span>🧓</span>
+                  <span>طالب مساعدة (مستفيد)</span>
+                </div>
+                <button type="button" onclick="event.stopPropagation(); fillCredentials('elderly@ihsan.com', 'password', 'طالب مساعدة (مستفيد)', true)"
+                  title="تسجيل دخول فوري"
+                  style="background: #f3e8ff; border: 1px solid #a855f7; color: #6b21a8; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; cursor: pointer;">
+                  دخول ⚡
+                </button>
+              </div>
+              <div style="font-size: 9.5px; color: #7e22ce; margin-top: 3px; direction: ltr; text-align: right;">elderly@ihsan.com</div>
+            </div>
+
+            <!-- 5. بانتظار الاعتماد -->
+            <div class="quick-fill-card" onclick="fillCredentials('pending@ihsan.com', 'password', 'حساب بانتظار الاعتماد', false)"
+              style="background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; position: relative;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 800; font-size: 11.5px; color: #9a3412; display: flex; align-items: center; gap: 5px;">
+                  <span>⏳</span>
+                  <span>بانتظار الاعتماد</span>
+                </div>
+                <button type="button" onclick="event.stopPropagation(); fillCredentials('pending@ihsan.com', 'password', 'حساب بانتظار الاعتماد', true)"
+                  title="تسجيل دخول فوري"
+                  style="background: #ffedd5; border: 1px solid #f97316; color: #9a3412; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; cursor: pointer;">
+                  دخول ⚡
+                </button>
+              </div>
+              <div style="font-size: 9.5px; color: #c2410c; margin-top: 3px; direction: ltr; text-align: right;">pending@ihsan.com</div>
+            </div>
+
+            <!-- 6. حساب موقوف -->
+            <div class="quick-fill-card" onclick="fillCredentials('suspended@ihsan.com', 'password', 'حساب موقوف', false)"
+              style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 8px 10px; text-align: right; cursor: pointer; transition: all 0.15s; position: relative;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 800; font-size: 11.5px; color: #991b1b; display: flex; align-items: center; gap: 5px;">
+                  <span>🚫</span>
+                  <span>حساب موقوف</span>
+                </div>
+                <button type="button" onclick="event.stopPropagation(); fillCredentials('suspended@ihsan.com', 'password', 'حساب موقوف', true)"
+                  title="تسجيل دخول فوري"
+                  style="background: #fee2e2; border: 1px solid #ef4444; color: #991b1b; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; cursor: pointer;">
+                  دخول ⚡
+                </button>
+              </div>
+              <div style="font-size: 9.5px; color: #b91c1c; margin-top: 3px; direction: ltr; text-align: right;">suspended@ihsan.com</div>
+            </div>
+          </div>
+
+          <div id="quickFillNotice" style="display:none; margin-top: 10px; font-size: 11px; font-weight: 700; color: #065f46; text-align: center; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 6px 10px;">
+            ✓ تم تعبئة البيانات بنجاح! يمكنك الآن الضغط على تسجيل الدخول.
+          </div>
+        </details>
+        <!-- ======================================================== -->
+        @endif
+
         <form method="POST" action="{{ route('login') }}" id="loginForm">
           @csrf
 
@@ -369,7 +517,7 @@
           <div class="user-type-section">
             <p>ليس لديك حساب؟ اختر نوع الحساب</p>
             <div class="role-buttons">
-              <a href="{{ route('frontend.elderly.register') }}" class="role-btn">حساب كبير السن</a>
+              <a href="{{ route('frontend.elderly.register') }}" class="role-btn">حساب طالب مساعدة</a>
               <a href="{{ route('frontend.volunteer.register') }}" class="role-btn">حساب متطوع</a>
             </div>
           </div>
@@ -397,7 +545,7 @@
 
         if (autoSubmit && form) {
           if (notice) {
-            notice.innerHTML = 'جاري تسجيل الدخول كـ <strong>' + roleName + '</strong>...';
+            notice.innerHTML = '⚡ جاري تسجيل الدخول كـ <strong>' + roleName + '</strong>...';
             notice.style.display = 'block';
             notice.style.background = '#e0f2fe';
             notice.style.borderColor = '#7dd3fc';
@@ -415,7 +563,7 @@
         }, 1500);
 
         if (notice) {
-          notice.innerHTML = 'تم تعبئة بيانات: <strong>' + roleName + '</strong>. اضغط الآن على زر "تسجيل الدخول" أو "دخول فوري".';
+          notice.innerHTML = '✓ تم تعبئة بيانات: <strong>' + roleName + '</strong>. اضغط الآن على زر "تسجيل الدخول" أو "دخول ⚡".';
           notice.style.display = 'block';
           notice.style.background = '#ecfdf5';
           notice.style.borderColor = '#a7f3d0';

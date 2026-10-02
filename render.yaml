@@ -15,25 +15,29 @@ services:
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
-        value: "true"
+        value: "false"
       - key: APP_KEY
-        value: base64:cca36xCX47WBAIKFXl8aUAAbn0iSzptH7dPlu/lrY+g=
+        sync: false
       - key: APP_URL
-        value: https://ihsan-backend-o34u.onrender.com
+        value: https://ihsan-backend-ybyl.onrender.com
       - key: ASSET_URL
-        value: https://ihsan-backend-o34u.onrender.com
+        value: https://ihsan-backend-ybyl.onrender.com
       - key: LOG_CHANNEL
         value: stderr
       - key: LOG_LEVEL
-        value: warning
+        value: info
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_URL
         fromDatabase:
-          name: ihsan-db
+          name: anees-db
           property: connectionString
       - key: SESSION_DRIVER
         value: database
+      - key: SESSION_SECURE_COOKIE
+        value: "true"
+      - key: SESSION_SAME_SITE
+        value: lax
       - key: CACHE_STORE
         value: database
       - key: QUEUE_CONNECTION
@@ -47,20 +51,31 @@ services:
       - key: MAIL_PORT
         value: "587"
       - key: MAIL_USERNAME
-        value: edaod886@gmail.com
+        sync: false
       - key: MAIL_PASSWORD
-        value: rqlwzfgdqkskevpd
+        sync: false
       - key: MAIL_ENCRYPTION
         value: tls
       - key: MAIL_FROM_ADDRESS
-        value: edaod886@gmail.com
+        sync: false
       - key: MAIL_FROM_NAME
         value: منصة أنيس
-
+      - key: SHOW_TEST_BUTTONS
+        value: "false"
+      - key: ADMIN_NAME
+        value: مدير منصة أنيس
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.8-flash
 
 databases:
-  - name: ihsan-db
+  - name: anees-db
     plan: free
     region: frankfurt
-    databaseName: ihsan
-    user: ihsan
+    databaseName: anees
+    user: anees

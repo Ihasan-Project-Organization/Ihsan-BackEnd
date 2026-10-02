@@ -1,8 +1,8 @@
 <x-provider-layout>
-    <div class="space-y-8">
+    <div class="provider-page provider-availability-page space-y-8">
 
         {{-- رأس الصفحة --}}
-        <div>
+        <div class="provider-page-intro">
             <h1 class="text-2xl font-black text-[#31421e] sm:text-3xl">إعدادات التوفر والتشغيل</h1>
             <p class="mt-1 text-xs text-slate-500 sm:text-sm">التحكم في جاهزيتك لاستقبال طلبات المساعدة ومراجعة القواعد التشغيلية المعتمدة.</p>
         </div>
@@ -10,18 +10,13 @@
         {{-- تنبيه نجاح الحفظ --}}
         @if (session('status') === 'settings-updated')
             <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-800 text-xs font-bold flex items-center justify-between animate-fadeIn">
-                <span class="flex items-center gap-2">
-                    <x-app-icon name="check-circle" class="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>تم حفظ وتحديث حالة التوفر بنجاح.</span>
-                </span>
-                <button type="button" onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
-                    <x-app-icon name="x-mark" class="w-4 h-4" />
-                </button>
+                <span><i class="fa-solid fa-check" aria-hidden="true"></i> تم حفظ وتحديث حالة التوفر بنجاح.</span>
+                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </div>
         @endif
 
         {{-- القسم العلوي: بطاقة ضبط التوفر + القواعد التشغيلية --}}
-        <div class="grid gap-6 lg:grid-cols-2">
+        <div class="provider-availability-grid grid gap-6 lg:grid-cols-2">
 
             {{-- 1. ضبط حالة التوفر الحقيقية --}}
             <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 space-y-6">
@@ -53,7 +48,7 @@
                             <div>
                                 <span class="text-sm font-black text-slate-900 flex items-center gap-2">
                                     <span class="h-2.5 w-2.5 rounded-full bg-rose-500"></span>
-                                    <span>غير متاح مؤقتًا (إجازة / توقف)</span>
+                                    <span>غير متاح مؤقتًا</span>
                                 </span>
                                 <p class="text-xs text-slate-500 mt-1 leading-5">
                                     يمكنك إيقاف الاستقبال مؤقتاً عند انشغالك أو سفرك دون أي تأثير على تقييمك أو مستواك.
@@ -80,26 +75,26 @@
 
                 <div class="space-y-3.5 text-xs">
                     <div class="rounded-2xl bg-[#f8faf6] p-4 border border-[#dfe6d5] flex items-start gap-3">
-                        <x-app-icon name="megaphone" class="w-5 h-5 text-[#52643a] shrink-0 mt-0.5" />
+                        <span class="text-lg"><i class="fa-solid fa-bullhorn" aria-hidden="true"></i></span>
                         <div>
                             <h4 class="font-black text-[#31421e]">البث المباشر (Broadcast):</h4>
-                            <p class="text-slate-600 mt-0.5 leading-5">يتم عرض الطلبات المنشورة لجميع مقدمي الخدمة المؤهلين بحسب المستوى (Tier) وتفضيل الجنس.</p>
+                            <p class="text-slate-600 mt-0.5 leading-5">تظهر لك الطلبات المتوافقة مع مستواك وتفضيلات المستفيد.</p>
                         </div>
                     </div>
 
                     <div class="rounded-2xl bg-[#f8faf6] p-4 border border-[#dfe6d5] flex items-start gap-3">
-                        <x-app-icon name="bolt" class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                        <span class="text-lg"><i class="fa-solid fa-bolt" aria-hidden="true"></i></span>
                         <div>
                             <h4 class="font-black text-[#31421e]">أسبقية القبول:</h4>
-                            <p class="text-slate-600 mt-0.5 leading-5">أول مقدم خدمة يضغط "قبول الطلب" يفوز به، ويُقفل الطلب فوراً أمام البقية لمنع أي تضارب.</p>
+                            <p class="text-slate-600 mt-0.5 leading-5">يُسند الطلب لأول مقدم خدمة يقبله، ثم يُغلق أمام الآخرين.</p>
                         </div>
                     </div>
 
                     <div class="rounded-2xl bg-[#f8faf6] p-4 border border-[#dfe6d5] flex items-start gap-3">
-                        <x-app-icon name="map-pin" class="w-5 h-5 text-[#52643a] shrink-0 mt-0.5" />
+                        <span class="text-lg"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span>
                         <div>
                             <h4 class="font-black text-[#31421e]">المرونة المكانية:</h4>
-                            <p class="text-slate-600 mt-0.5 leading-5">يعرض كل طلب عنواناً نصياً واضحاً، ومقدم الخدمة يحدد بنفسه ملاءمة الموقع لوقته وقدرته.</p>
+                            <p class="text-slate-600 mt-0.5 leading-5">راجع الموقع والموعد قبل قبول أي طلب.</p>
                         </div>
                     </div>
                 </div>
@@ -108,11 +103,12 @@
         </div>
 
         {{-- 3. قاموس الحالات التشغيلية المعتمد (القسم 4.3 من المرجع الشامل) --}}
-        <div class="space-y-4">
-            <div>
-                <h2 class="text-xl font-black text-[#31421e]">قاموس الحالات التشغيلية المعتمد</h2>
-                <p class="text-xs text-slate-500">المرجع الحصري المعتمد لجميع حالات الطلبات في منصة أنيس ومعانيها الميدانية.</p>
-            </div>
+        <details class="provider-status-reference rounded-2xl border border-slate-200 bg-white">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-3 p-4 text-sm font-black text-[#31421e]">
+                <span><i class="fa-solid fa-circle-info ml-2 text-[#718256]" aria-hidden="true"></i> مرجع حالات الطلبات</span>
+                <span class="text-[11px] font-semibold text-slate-500">افتح عند الحاجة <i class="fa-solid fa-chevron-down mr-1" aria-hidden="true"></i></span>
+            </summary>
+            <div class="border-t border-slate-100 p-4">
 
             @php($officialStatuses = [
                 ['name' => 'pending_acceptance', 'title' => 'بانتظار القبول', 'desc' => 'طلب متاح منشور لجميع مقدمي الخدمة المؤهلين.', 'badge' => 'bg-amber-50 text-amber-800 border-amber-200'],
@@ -120,12 +116,12 @@
                 ['name' => 'assigned', 'title' => 'تم التوكيل الرسمي', 'desc' => 'تم ربط الطلب نهائياً وتأكيد الموعد وإظهار الهاتف.', 'badge' => 'bg-indigo-50 text-indigo-800 border-indigo-200'],
                 ['name' => 'in_progress', 'title' => 'قيد التنفيذ', 'desc' => 'بدأ مقدم الخدمة تقديم المساعدة ميدانياً.', 'badge' => 'bg-purple-50 text-purple-800 border-purple-200'],
                 ['name' => 'pending_confirmation', 'title' => 'بانتظار التأكيد', 'desc' => 'أنهى مقدم الخدمة المهمة وبانتظار تأكيد المستفيد.', 'badge' => 'bg-orange-50 text-orange-800 border-orange-200'],
-                ['name' => 'completed', 'title' => 'مكتمل نهائياً', 'desc' => 'أكّد كبير السن الإكمال وتم التقييم الإجباري.', 'badge' => 'bg-emerald-50 text-emerald-800 border-emerald-200'],
+                ['name' => 'completed', 'title' => 'مكتمل نهائياً', 'desc' => 'أكّد طالب المساعدة الإكمال وتم التقييم الإجباري.', 'badge' => 'bg-emerald-50 text-emerald-800 border-emerald-200'],
                 ['name' => 'provider_delayed', 'title' => 'تأخر مقدم الخدمة', 'desc' => 'حل موعد الخدمة ولم يبدأ التنفيذ أو تم الإبلاغ عن تأخير.', 'badge' => 'bg-amber-100 text-amber-900 border-amber-300'],
                 ['name' => 'provider_apologized', 'title' => 'اعتذار مقدم الخدمة', 'desc' => 'اعتذر مقدم الخدمة بعد التوكيل وأعيد نشر الطلب.', 'badge' => 'bg-rose-50 text-rose-800 border-rose-200'],
                 ['name' => 'no_provider_found', 'title' => 'لم يتوفر متطوع', 'desc' => 'حل موعد التنفيذ دون قبول أي متطوع للطلب.', 'badge' => 'bg-slate-100 text-slate-800 border-slate-200'],
                 ['name' => 'under_review', 'title' => 'تحت المراجعة', 'desc' => 'أبلغ المستفيد عن مشكلة وجارٍ فحصها إدارياً.', 'badge' => 'bg-red-50 text-red-800 border-red-200'],
-                ['name' => 'cancelled', 'title' => 'ملغى نهائياً', 'desc' => 'أُلغي الطلب بطلب كبير السن أو الإدارة.', 'badge' => 'bg-slate-200 text-slate-700 border-slate-300'],
+                ['name' => 'cancelled', 'title' => 'ملغى نهائياً', 'desc' => 'أُلغي الطلب بطلب طالب المساعدة أو الإدارة.', 'badge' => 'bg-slate-200 text-slate-700 border-slate-300'],
             ])
 
             <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -141,7 +137,8 @@
                     </div>
                 @endforeach
             </div>
-        </div>
+            </div>
+        </details>
 
     </div>
 </x-provider-layout>

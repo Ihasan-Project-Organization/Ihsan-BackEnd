@@ -256,13 +256,13 @@
                         <span class="profile-role">
                             @if ($user->isAdmin()) مدير النظام
                             @elseif ($user->isProvider()) مقدم خدمة (Tier {{ $user->serviceProviderProfile?->tier ?? 1 }})
-                            @else كبير السن / مستفيد
+                            @else طالب مساعدة
                             @endif
                         </span>
                     </h2>
                     <div class="profile-email">{{ $user->email }}</div>
                     @if ($user->phone_number)
-                        <div class="profile-phone"><x-app-icon name="phone" class="w-3 h-3 inline ml-1" /> {{ $user->phone_number }}</div>
+                        <div class="profile-phone"><i class="fa-solid fa-phone" style="font-size:10px;margin-left:4px"></i> {{ $user->phone_number }}</div>
                     @endif
                 </div>
             </div>
@@ -273,7 +273,7 @@
             {{-- ═══════ 1. Profile Information ═══════ --}}
             <div class="settings-card">
                 <div class="settings-card-header">
-                    <span class="settings-card-icon green"><x-app-icon name="user" class="w-5 h-5" /></span>
+                    <span class="settings-card-icon green"><i class="fa-solid fa-user"></i></span>
                     <div>
                         <h2>الملف الشخصي</h2>
                         <p>تعديل معلوماتك الشخصية وصورتك ورقم هاتفك المعتمد.</p>
@@ -336,11 +336,11 @@
 
                     <div style="display:flex;align-items:center;gap:12px;margin-top:16px">
                         <button type="submit" class="save-btn">
-                            <x-app-icon name="check" class="w-4 h-4 inline ml-1" /> حفظ التغييرات
+                            <i class="fa-solid fa-check"></i> حفظ التغييرات
                         </button>
                         @if (session('status') === 'profile-updated')
                             <span x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" class="save-success">
-                                <x-app-icon name="check-circle" class="w-4 h-4 inline ml-1" /> تم حفظ التغييرات بنجاح
+                                <i class="fa-solid fa-circle-check"></i> تم حفظ التغييرات بنجاح
                             </span>
                         @endif
                     </div>
@@ -350,7 +350,7 @@
             {{-- ═══════ 2. Password ═══════ --}}
             <div class="settings-card">
                 <div class="settings-card-header">
-                    <span class="settings-card-icon blue"><x-app-icon name="lock-closed" class="w-5 h-5" /></span>
+                    <span class="settings-card-icon blue"><i class="fa-solid fa-lock"></i></span>
                     <div>
                         <h2>كلمة المرور والأمان</h2>
                         <p>استخدم كلمة مرور قوية لا تقل عن ثمانية أحرف لضمان حماية حسابك.</p>
@@ -381,11 +381,11 @@
 
                     <div style="display:flex;align-items:center;gap:12px;margin-top:16px">
                         <button type="submit" class="save-btn">
-                            <x-app-icon name="shield-check" class="w-4 h-4 inline ml-1" /> تحديث كلمة المرور
+                            <i class="fa-solid fa-shield-check"></i> تحديث كلمة المرور
                         </button>
                         @if (session('status') === 'password-updated')
                             <span x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" class="save-success">
-                                <x-app-icon name="check-circle" class="w-4 h-4 inline ml-1" /> تم تحديث كلمة المرور بنجاح
+                                <i class="fa-solid fa-circle-check"></i> تم تحديث كلمة المرور بنجاح
                             </span>
                         @endif
                     </div>
@@ -395,7 +395,7 @@
             {{-- ═══════ 3. Display Preferences ═══════ --}}
             <div class="settings-card">
                 <div class="settings-card-header">
-                    <span class="settings-card-icon amber"><x-app-icon name="sparkles" class="w-5 h-5" /></span>
+                    <span class="settings-card-icon amber"><i class="fa-solid fa-palette"></i></span>
                     <div>
                         <h2>تفضيلات الواجهة والقراءة</h2>
                         <p>خيارات بصرية مساعدة لتسهيل القراءة وتجربة الاستخدام.</p>
@@ -407,15 +407,12 @@
                     {{-- Font Size --}}
                     <div class="font-size-panel" x-data="{
                         scale: (function() {
-                            try { return parseInt(localStorage.getItem('anees_font_scale') || localStorage.getItem('ihsan_font_scale')) || 100; } catch (e) { return 100; }
+                            try { return parseInt(localStorage.getItem('anees_font_scale')) || 100; } catch (e) { return 100; }
                         })(),
                         apply(val) {
                             this.scale = parseInt(val);
                             document.documentElement.style.fontSize = this.scale + '%';
-                            try {
-                                localStorage.setItem('anees_font_scale', this.scale);
-                                localStorage.setItem('ihsan_font_scale', this.scale);
-                            } catch (e) {}
+                            try { localStorage.setItem('anees_font_scale', this.scale); } catch (e) {}
                         }
                     }">
                         <div class="font-size-row">
@@ -439,7 +436,7 @@
                     {{-- Sound notifications --}}
                     <div class="toggle-row">
                         <div class="toggle-row-info">
-                            <span class="toggle-row-icon" style="background:#edf6e8;color:#3d6125"><x-app-icon name="speaker-wave" class="w-4 h-4" /></span>
+                            <span class="toggle-row-icon" style="background:#edf6e8;color:#3d6125"><i class="fa-solid fa-volume-high"></i></span>
                             <div>
                                 <h3>إشعارات الصوت</h3>
                                 <p>تشغيل أو إيقاف صوت التنبيهات عند وصول إشعار جديد</p>
@@ -454,7 +451,7 @@
                     {{-- Help --}}
                     <div class="toggle-row">
                         <div class="toggle-row-info">
-                            <span class="toggle-row-icon" style="background:#f1f5f9;color:#475569"><x-app-icon name="question-mark-circle" class="w-4 h-4" /></span>
+                            <span class="toggle-row-icon" style="background:#f1f5f9;color:#475569"><i class="fa-solid fa-circle-question"></i></span>
                             <div>
                                 <h3>المساعدة والدعم الفني</h3>
                                 <p>تواصل مع فريق منصة أنيس لأي استفسار أو إرشاد</p>
@@ -468,14 +465,14 @@
             {{-- ═══════ 4. Danger Zone ═══════ --}}
             <div class="settings-card danger-card">
                 <div class="settings-card-header" style="border-bottom-color:#fee2e2">
-                    <span class="settings-card-icon red"><x-app-icon name="triangle-exclamation" class="w-5 h-5" /></span>
+                    <span class="settings-card-icon red"><i class="fa-solid fa-triangle-exclamation"></i></span>
                     <div>
                         <h2 style="color:#991b1b">حذف الحساب</h2>
                         <p>سيتم حذف الحساب وبياناته ووثائقه نهائيًا.</p>
                     </div>
                 </div>
                 <button type="button" x-data x-on:click.prevent="$dispatch('open-modal','confirm-user-deletion')" class="delete-btn">
-                    <x-app-icon name="trash" class="w-4 h-4 inline ml-1" /> حذف حسابي
+                    <i class="fa-solid fa-trash-can"></i> حذف حسابي
                 </button>
                 <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
                     <form method="POST" action="{{ route('profile.destroy') }}" class="p-6 text-right sm:p-8">
@@ -499,7 +496,7 @@
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="logout-full-btn">
-                    <x-app-icon name="arrow-right-on-rectangle" class="w-4 h-4" />
+                    <i class="fa-solid fa-right-from-bracket"></i>
                     تسجيل الخروج من الحساب
                 </button>
             </form>

@@ -1,53 +1,60 @@
 <x-provider-layout>
-    <div class="space-y-6">
+    <div class="provider-page provider-available-page space-y-6">
 
         {{-- رأس الصفحة --}}
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="provider-page-toolbar flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h1 class="text-2xl font-black text-[#31421e] sm:text-3xl">الطلبات المتاحة</h1>
-                <p class="mt-1 text-xs text-slate-500 sm:text-sm">فرص مساعدة تطوعية منشورة وبانتظار قبول مقدم الخدمة.</p>
+                <p class="mt-1 text-xs text-slate-500 sm:text-sm">طلبات مساعدة منشورة من المستفيدين وبانتظار مقدم خدمة مناسب.</p>
             </div>
 
             <div class="flex items-center gap-2">
                 <a href="{{ route('provider.tasks') }}"
                     class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition">
-                    <x-app-icon name="clipboard-list" class="w-4 h-4 inline" />
-                    <span>طلباتي المسندة</span>
+                    <span><i class="fa-solid fa-clipboard-list" aria-hidden="true"></i> طلباتي المسندة</span>
                 </a>
             </div>
         </div>
 
+        <section class='provider-onboarding grid gap-3 sm:grid-cols-3' aria-label='خطوات قبول طلب المساعدة'>
+            <div class='rounded-2xl border border-[#dfe6d5] bg-[#f8faf6] p-4'>
+                <span class='flex h-8 w-8 items-center justify-center rounded-xl bg-[#31421e] text-xs font-black text-white'>1</span>
+                <h2 class='mt-3 text-sm font-black text-[#31421e]'>اختر الطلب المناسب</h2>
+                <p class='mt-1 text-[11px] leading-5 text-slate-500'>راجع نوع الخدمة والموعد والموقع التقريبي قبل القبول.</p>
+            </div>
+            <div class='rounded-2xl border border-[#dfe6d5] bg-[#f8faf6] p-4'>
+                <span class='flex h-8 w-8 items-center justify-center rounded-xl bg-[#52643a] text-xs font-black text-white'>2</span>
+                <h2 class='mt-3 text-sm font-black text-[#31421e]'>اقبل بعد التأكد</h2>
+                <p class='mt-1 text-[11px] leading-5 text-slate-500'>بعد القبول تظهر بيانات التواصل اللازمة لتنفيذ الخدمة بأمان.</p>
+            </div>
+            <div class='rounded-2xl border border-[#dfe6d5] bg-[#f8faf6] p-4'>
+                <span class='flex h-8 w-8 items-center justify-center rounded-xl bg-[#718256] text-xs font-black text-white'>3</span>
+                <h2 class='mt-3 text-sm font-black text-[#31421e]'>تابع مراحل التنفيذ</h2>
+                <p class='mt-1 text-[11px] leading-5 text-slate-500'>حدّث حالة المهمة وأبلغ المستفيد بأي تأخير أو تغيير.</p>
+            </div>
+        </section>
+
         {{-- تنبيهات --}}
         @if (session('status'))
             <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-800 text-xs font-bold flex items-center justify-between animate-fadeIn">
-                <span class="inline-flex items-center gap-1.5">
-                    <x-app-icon name="check" class="w-4 h-4 text-emerald-800" />
-                    <span>{{ match(session('status')) {
-                        'task-dismissed' => 'تم تجاوز الطلب وإخفاؤه من قائمتك دون أي تأثير على تقييمك أو حسابك.',
-                        'task-accepted' => 'تم قبول الطلب بنجاح ونقله إلى قائمة طلباتي.',
-                        default => 'تم تنفيذ الإجراء بنجاح.'
-                    } }}</span>
-                </span>
-                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer">
-                    <x-app-icon name="x-mark" class="w-4 h-4" />
-                </button>
+                <span><i class="fa-solid fa-check" aria-hidden="true"></i> {{ match(session('status')) {
+                    'task-dismissed' => 'تم تجاوز الطلب وإخفاؤه من قائمتك دون أي تأثير على تقييمك أو حسابك.',
+                    'task-accepted' => 'تم قبول الطلب بنجاح ونقله إلى قائمة طلباتي.',
+                    default => 'تم تنفيذ الإجراء بنجاح.'
+                } }}</span>
+                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-emerald-600 hover:text-emerald-900 cursor-pointer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </div>
         @endif
 
         @if (session('error'))
             <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-800 text-xs font-bold flex items-center justify-between animate-fadeIn">
-                <span class="inline-flex items-center gap-1.5">
-                    <x-app-icon name="alert-triangle" class="w-4 h-4 text-rose-800" />
-                    <span>{{ session('error') }}</span>
-                </span>
-                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-rose-600 hover:text-rose-900 cursor-pointer">
-                    <x-app-icon name="x-mark" class="w-4 h-4" />
-                </button>
+                <span><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> {{ session('error') }}</span>
+                <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold text-rose-600 hover:text-rose-900 cursor-pointer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </div>
         @endif
 
         {{-- شريط الفلاتر والبحث --}}
-        <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
+        <div class="provider-filter-bar rounded-3xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
             <form method="GET" action="{{ route('provider.available') }}" class="grid gap-3 md:grid-cols-[1.5fr_1fr_1fr_auto]">
                 {{-- حقل البحث --}}
                 <div class="relative">
@@ -91,22 +98,19 @@
 
         {{-- شبكة بطاقات الطلبات المتاحة --}}
         @if ($requests->count() > 0)
-            <div class="grid gap-6 md:grid-cols-2">
+            <div class="provider-request-grid grid gap-6 md:grid-cols-2">
                 @foreach ($requests as $req)
-                    <div class="flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:border-[#718256] hover:shadow-md transition">
+                    <div class="provider-request-card flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:border-[#718256] hover:shadow-md transition">
                         <div>
                             {{-- رأس البطاقة: نوع الخدمة والعنوان ورقم الطلب --}}
                             <div class="flex items-start justify-between gap-3 border-b border-slate-100 pb-4">
                                 <div class="flex items-center gap-3">
                                     <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef2e8] text-2xl shadow-sm">
-                                        <x-app-icon :name="$req->service_type_icon_name" class="w-6 h-6 text-[#31421e]" />
+                                        <x-service-icon :type="$req->service_type" />
                                     </span>
                                     <div>
                                         <h3 class="text-base font-black text-slate-900">{{ $req->service_type_label }}</h3>
-                                        <p class="text-xs font-bold text-[#52643a] mt-0.5 inline-flex items-center gap-1">
-                                            <x-app-icon name="map-pin" class="w-3.5 h-3.5" />
-                                            <span>{{ $req->location }} (الموقع التقريبي)</span>
-                                        </p>
+                                        <p class="text-xs font-bold text-[#52643a] mt-0.5"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> {{ $req->location }} (الموقع التقريبي)</p>
                                     </div>
                                 </div>
                                 <span class="text-xs font-mono font-bold text-slate-400">{{ $req->public_id }}</span>
@@ -120,7 +124,7 @@
                             {{-- الموعد والمدة المتوقعة --}}
                             <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-500">
                                 <span class="flex items-center gap-1.5 font-bold text-slate-700 bg-slate-50 px-2.5 py-1 rounded-xl border border-slate-100">
-                                    <x-app-icon name="clock" class="w-3.5 h-3.5 text-slate-500" />
+                                    <span><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
                                     <span>{{ $req->scheduled_at->translatedFormat('l، d F Y - h:i A') }}</span>
                                 </span>
                                 <span class="text-slate-300">•</span>
@@ -128,8 +132,8 @@
                             </div>
 
                             {{-- تنبيه الخصوصية المعتمد --}}
-                            <div class="mt-4 rounded-2xl bg-amber-50/80 p-3 border border-amber-200/60 flex items-center gap-2 text-[11px] text-amber-800">
-                                <x-app-icon name="lock-closed" class="w-3.5 h-3.5 text-amber-800" />
+                            <div class="provider-privacy-note mt-4 rounded-2xl bg-amber-50/80 p-3 border border-amber-200/60 flex items-center gap-2 text-[11px] text-amber-800">
+                                <span class="text-sm"><i class="fa-solid fa-lock" aria-hidden="true"></i></span>
                                 <span>يظهر العنوان الدقيق وبيانات التواصل المباشر بعد قبول الطلب.</span>
                             </div>
                         </div>
@@ -144,7 +148,7 @@
                             </form>
 
                             <button type="button"
-                                onclick="openDetailsModal('{{ $req->public_id }}', '{{ $req->service_type_label }}', '{{ addslashes($req->description) }}', '{{ $req->location }} (الموقع التقريبي)', '{{ $req->scheduled_at->translatedFormat('l، d F Y - h:i A') }}', '{{ $req->service_type_icon_name }}')"
+                                onclick="openDetailsModal('{{ $req->public_id }}', '{{ $req->service_type_label }}', '{{ addslashes($req->description) }}', '{{ $req->location }} (الموقع التقريبي)', '{{ $req->scheduled_at->translatedFormat('l، d F Y - h:i A') }}')"
                                 class="rounded-2xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition cursor-pointer">
                                 التفاصيل
                             </button>
@@ -165,12 +169,10 @@
             </div>
         @else
             <div class="rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm space-y-3">
-                <div class="flex justify-center mb-2">
-                    <x-app-icon name="search" class="w-12 h-12 text-slate-300" />
-                </div>
+                <span class="text-4xl"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></span>
                 <h3 class="text-base font-black text-slate-800">لا توجد طلبات متاحة مطابقة حالياً</h3>
                 <p class="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
-                    يتم بث طلبات كبار السن فور نشرها لمقدمي الخدمة المؤهلين. يمكنك العودة لاحقاً أو إعادة تعيين الفلاتر.
+                    تظهر طلبات المساعدة فور نشرها لمقدمي الخدمة المؤهلين. يمكنك العودة لاحقًا أو إعادة تعيين الفلاتر.
                 </p>
                 <div class="pt-2 flex items-center justify-center gap-3">
                     <a href="{{ route('provider.available') }}" class="rounded-2xl bg-[#31421e] px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#52643a] transition">

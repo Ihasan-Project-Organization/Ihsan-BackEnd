@@ -4,7 +4,9 @@
 
     <div class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div class="flex items-center gap-6 lg:gap-8">
-            <a href="{{ $isVolunteer ? route('provider.dashboard') : route('dashboard') }}" class="text-2xl font-black text-[#31421e]">أنيس</a>
+            <a href="{{ $isVolunteer ? route('provider.dashboard') : route('dashboard') }}" class="flex items-center gap-2 text-2xl font-black text-[#31421e]">
+                <img src="{{ asset('assets/img/anees-logo.png') }}" alt="شعار منصة أنيس" class="h-12 w-16 object-contain">
+            </a>
             
             <div class="hidden items-center gap-1.5 sm:flex">
                 @if ($isVolunteer)
@@ -78,7 +80,7 @@
                 @php($unreadNotifsCount = $user?->notifications()->where('is_read', false)->count() ?? 0)
                 <a href="{{ route('notifications.index') }}"
                     class="relative rounded-xl px-3 py-2 text-xs font-bold transition {{ request()->routeIs('notifications.*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-500 hover:bg-slate-50' }}">
-                    <span class="inline-flex items-center gap-1.5"><x-app-icon name="bell" class="w-4 h-4 text-slate-500" /> الإشعارات</span>
+                    <span>🔔 الإشعارات</span>
                     @if ($unreadNotifsCount > 0)
                         <span class="mr-1 inline-flex items-center justify-center rounded-full bg-amber-500 px-1.5 py-0.5 text-[10px] font-black text-white">
                             {{ $unreadNotifsCount }}
@@ -92,14 +94,13 @@
             @if (!$isVolunteer)
                 <button type="button" onclick="openCreateRequestModal()"
                     class="inline-flex items-center gap-1.5 rounded-xl bg-[#31421e] px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#52643a] transition cursor-pointer">
-                    <x-app-icon name="plus" class="w-3.5 h-3.5" />
+                    <span class="text-sm">+</span>
                     <span>طلب مساعدة</span>
                 </button>
             @else
                 <a href="{{ route('provider.available') }}"
                     class="inline-flex items-center gap-1.5 rounded-xl bg-[#31421e] px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#52643a] transition cursor-pointer">
-                    <x-app-icon name="search" class="w-4 h-4" />
-                    <span>الطلبات المتاحة</span>
+                    <span>🔍 الطلبات المتاحة</span>
                 </a>
             @endif
 
@@ -113,7 +114,7 @@
 
             <div class="text-left">
                 <p class="text-xs font-bold text-slate-800">{{ $user->name }}</p>
-                <p class="text-[10px] text-slate-400">{{ $user->isProvider() ? 'مقدم خدمة متطوع' : ($user->isAdmin() ? 'مدير النظام' : 'كبير السن / مستفيد') }}</p>
+                <p class="text-[10px] text-slate-400">{{ $user->isProvider() ? 'مقدم خدمة متطوع' : ($user->isAdmin() ? 'مدير النظام' : 'طالب مساعدة') }}</p>
             </div>
 
             <form method="POST" action="{{ route('logout') }}">
@@ -155,7 +156,7 @@
                 <p class="text-xs text-slate-500 truncate">{{ $user->email }}</p>
             </div>
             <span class="rounded-full bg-[#eef2e8] px-2.5 py-1 text-[11px] font-bold text-[#31421e]">
-                {{ $user->isProvider() ? 'مقدم خدمة متطوع' : ($user->isAdmin() ? 'مدير النظام' : 'كبير السن / مستفيد') }}
+                {{ $user->isProvider() ? 'مقدم خدمة متطوع' : ($user->isAdmin() ? 'مدير النظام' : 'طالب مساعدة') }}
             </span>
         </div>
 
@@ -163,55 +164,54 @@
             @if ($isVolunteer)
                 <a href="{{ route('provider.dashboard') }}"
                     class="flex items-center justify-between rounded-xl px-4 py-2.5 text-xs font-bold {{ request()->routeIs('provider.dashboard') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
-                    <span class="inline-flex items-center gap-2"><x-app-icon name="home" class="w-4 h-4" /> الرئيسية</span>
+                    <span>🏠 الرئيسية</span>
                 </a>
                 <a href="{{ route('provider.available') }}"
                     class="flex items-center justify-between rounded-xl px-4 py-2.5 text-xs font-bold {{ request()->routeIs('provider.available') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
-                    <span class="inline-flex items-center gap-2"><x-app-icon name="handshake" class="w-4 h-4" /> الطلبات المتاحة</span>
+                    <span>👁️ الطلبات المتاحة</span>
                     <span class="rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-black text-white">
                         {{ \App\Models\ServiceRequest::availableForProvider($user)->count() }}
                     </span>
                 </a>
                 <a href="{{ route('provider.tasks') }}"
                     class="flex items-center justify-between rounded-xl px-4 py-2.5 text-xs font-bold {{ request()->routeIs('provider.tasks*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
-                    <span class="inline-flex items-center gap-2"><x-app-icon name="clipboard-list" class="w-4 h-4" /> طلباتي</span>
+                    <span>📋 طلباتي</span>
                 </a>
                 <a href="{{ route('provider.performance') }}"
                     class="flex items-center justify-between rounded-xl px-4 py-2.5 text-xs font-bold {{ request()->routeIs('provider.performance') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
-                    <span class="inline-flex items-center gap-2"><x-app-icon name="chart-pie" class="w-4 h-4" /> الأداء والتقييم</span>
+                    <span>⭐ الأداء والتقييم</span>
                 </a>
                 <a href="{{ route('provider.certificates') }}"
                     class="flex items-center justify-between rounded-xl px-4 py-2.5 text-xs font-bold {{ request()->routeIs('provider.certificates*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
-                    <span class="inline-flex items-center gap-2"><x-app-icon name="trophy" class="w-4 h-4" /> شهادات التطوع</span>
+                    <span>📜 شهادات التطوع</span>
                 </a>
                 <a href="{{ route('provider.availability') }}"
                     class="flex items-center justify-between rounded-xl px-4 py-2.5 text-xs font-bold {{ request()->routeIs('provider.availability') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
-                    <span class="inline-flex items-center gap-2"><x-app-icon name="clock" class="w-4 h-4" /> التوفر والإعدادات</span>
+                    <span>⚙️ التوفر والإعدادات</span>
                 </a>
             @else
                 <a href="{{ route('dashboard') }}"
                     class="flex items-center justify-between rounded-xl px-4 py-2.5 text-sm font-bold {{ request()->routeIs('dashboard') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
-                    <span class="inline-flex items-center gap-2"><x-app-icon name="home" class="w-4 h-4" /> الرئيسية</span>
+                    <span>🏠 الرئيسية</span>
                 </a>
                 <a href="{{ route('service-requests.index') }}"
                     class="flex items-center justify-between rounded-xl px-4 py-2.5 text-sm font-bold {{ request()->routeIs('service-requests.*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
-                    <span class="inline-flex items-center gap-2"><x-app-icon name="clipboard-list" class="w-4 h-4" /> طلباتي</span>
+                    <span>📋 طلباتي</span>
                 </a>
                 <button type="button" @click="open = false" onclick="openCreateRequestModal()"
                     class="mt-1 flex items-center justify-center gap-2 rounded-xl bg-[#31421e] px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-[#52643a] transition cursor-pointer">
-                    <x-app-icon name="plus" class="w-4 h-4" />
-                    <span>طلب مساعدة جديد</span>
+                    <span>+ طلب مساعدة جديد</span>
                 </button>
             @endif
 
             <a href="{{ route('profile.edit') }}"
                 class="flex items-center rounded-xl px-4 py-2.5 text-xs font-bold {{ request()->routeIs('profile.*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
-                <span class="inline-flex items-center gap-2"><x-app-icon name="user" class="w-4 h-4" /> الملف الشخصي</span>
+                <span>👤 الملف الشخصي</span>
             </a>
 
             <a href="{{ route('notifications.index') }}"
                 class="flex items-center justify-between rounded-xl px-4 py-2.5 text-xs font-bold {{ request()->routeIs('notifications.*') ? 'bg-[#eef2e8] text-[#31421e]' : 'text-slate-600 hover:bg-slate-50' }}">
-                <span class="inline-flex items-center gap-2"><x-app-icon name="bell" class="w-4 h-4" /> الإشعارات</span>
+                <span>🔔 الإشعارات</span>
                 @if (($unreadNotifsCount ?? 0) > 0)
                     <span class="rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-black text-white">
                         {{ $unreadNotifsCount }}
@@ -223,7 +223,7 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button class="flex w-full items-center rounded-xl px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 transition cursor-pointer">
-                        <span class="inline-flex items-center gap-2"><x-app-icon name="logout" class="w-4 h-4 text-red-600" /> تسجيل الخروج</span>
+                        <span>🚪 تسجيل الخروج</span>
                     </button>
                 </form>
             </div>
