@@ -28,4 +28,18 @@ Artisan::command('mail:test {email}', function (string $email) {
     }
 })->purpose('إرسال بريد إلكتروني اختباري للتأكد من اتصال SMTP');
 
+Artisan::command('mail:test-verification {email}', function (string $email) {
+    $this->info("جاري إرسال رسالة تفعيل حساب تجريبية بقالب أنيس الرسمي إلى: {$email}...");
+    try {
+        $user = \App\Models\User::first() ?? new \App\Models\User();
+        $user->setAttribute('id', $user->id ?: 1);
+        $user->name = 'أحمد العبدالله';
+        $user->email = $email;
+        $user->notify(new \App\Notifications\EhsanVerifyEmailNotification());
+        $this->info("تم إرسال قالب التفعيل الرسمي بنجاح! تفقد بريدك: {$email}");
+    } catch (\Throwable $e) {
+        $this->error("فشل إرسال رسالة التفعيل: " . $e->getMessage());
+    }
+})->purpose('إرسال قالب تفعيل الحساب الرسمي للتأكد من المظهر والروابط');
+
 
