@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أنيس — عرض تقديمي</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Tajawal', sans-serif; background: #000; }
+
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            --green-50: #f0fdf4; --green-100: #dcfce7; --green-200: #bbf7d0;
+            --green-300: #86efac; --green-400: #4ade80; --green-500: #22c55e;
+            --green-600: #16a34a; --green-700: #15803d; --green-800: #166534;
+            --green-900: #14532d; --green-950: #052e16;
+            --gold-400: #d4a853; --gold-500: #c9993a; --gold-600: #b8862d;
+            --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+            --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b;
+            --slate-900: #0f172a; --slate-950: #020617;
+        }
+
+        /* ===== SLIDE CONTAINER ===== */
+        .deck {
+            width: 100vw; height: 100vh; position: relative; overflow: hidden;
+        }
+
+        .slide {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+            transform: scale(0.97);
+            padding: 60px 80px;
+            z-index: 0;
+        }
+        .slide.active {
+            opacity: 1; visibility: visible; transform: scale(1); z-index: 10;
+        }
+
+        /* ===== BACKGROUNDS ===== */
+        .slide-bg { position: absolute; inset: 0; z-index: 0; }
+        .slide-bg img { width: 100%; height: 100%; object-fit: cover; }
+        .slide-bg-overlay {
+            position: absolute; inset: 0;
+        }
+        .slide-content { position: relative; z-index: 2; width: 100%; max-width: 1200px; }
+
+        /* ===== TITLE SLIDE ===== */
+        .slide-title-bg {
+            background: linear-gradient(135deg, #0a1a0a 0%, #0f2b14 30%, #1a3a20 60%, #0d1f10 100%);
+        }
+        .slide-title-bg::after {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 50% 50%, rgba(34,197,94,0.08) 0%, transparent 70%);
+        }
+        .title-logo {
+            width: 180px; height: auto; margin-bottom: 12px;
+            animation: floatLogo 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 40px rgba(201,153,58,0.3));
+        }
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        .title-name {
+            font-size: 62px; font-weight: 900; color: var(--gold-400);
+            text-shadow: 0 0 60px rgba(201,153,58,0.25);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        .title-tagline {
+            font-size: 26px; font-weight: 500; color: var(--green-200);
+            opacity: 0.9; margin-bottom: 24px;
+        }
+        .title-subtitle {
+            font-size: 18px; color: var(--slate-400); max-width: 600px;
+            text-align: center; line-height: 1.8;
+        }
+        .title-divider {
+            width: 80px; height: 3px; border-radius: 2px;
+            background: linear-gradient(90deg, var(--gold-400), var(--green-500));
+            margin: 20px auto;
+        }
+
+        /* Floating particles on title */
+        .particles {
+            position: absolute; inset: 0; overflow: hidden; z-index: 1; pointer-events: none;
+        }
+        .particle {
+            position: absolute; border-radius: 50%;
+            background: radial-gradient(circle, rgba(34,197,94,0.15), transparent);
+            animation: particleDrift linear infinite;
+        }
+        @keyframes particleDrift {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) scale(1); opacity: 0; }
+        }
+
+        /* ===== PROBLEM SLIDE ===== */
+        .slide-problem .slide-bg-overlay {
+            background: linear-gradient(135deg, rgba(15,23,42,0.88) 0%, rgba(15,23,42,0.75) 100%);
+        }
+        .problem-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3);
+            padding: 8px 20px; border-radius: 30px;
+            color: #fca5a5; font-size: 15px; font-weight: 700;
+            margin-bottom: 28px;
+        }
+        .problem-heading {
+            font-size: 46px; font-weight: 900; color: #ffffff;
+            margin-bottom: 40px; line-height: 1.4;
+        }
+        .problem-heading span { color: #f87171; }
+
+        .problem-cards {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+            width: 100%;
+        }
+        .problem-card {
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px; padding: 30px 24px;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .problem-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(248,113,113,0.4);
+        }
+        .problem-card-icon {
+            width: 64px; height: 64px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 18px;
+            font-size: 28px;
+        }
+        .problem-card:nth-child(1) .problem-card-icon { background: rgba(239,68,68,0.15); color: #f87171; }
+        .problem-card:nth-child(2) .problem-card-icon { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .problem-card:nth-child(3) .problem-card-icon { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .problem-card h3 {
+            font-size: 19px; font-weight: 800; color: #f1f5f9; margin-bottom: 10px;
+        }
+        .problem-card p {
+            font-size: 14.5px; color: var(--slate-400); line-height: 1.7;
+        }
+
+        /* ===== SOLUTION SLIDE ===== */
+        .slide-solution .slide-bg-overlay {
+            background: linear-gradient(135deg, rgba(5,46,22,0.92) 0%, rgba(15,23,42,0.85) 100%);
+        }
+        .solution-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3);
+            padding: 8px 20px; border-radius: 30px;
+            color: var(--green-300); font-size: 15px; font-weight: 700;
+            margin-bottom: 28px;
+        }
+        .solution-heading {
+            font-size: 44px; font-weight: 900; color: #ffffff;
+            margin-bottom: 16px; line-height: 1.4;
+        }
+        .solution-heading span { color: var(--green-400); }
+        .solution-sub {
+            font-size: 18px; color: var(--slate-300); max-width: 700px;
+            margin-bottom: 40px; line-height: 1.7;
+        }
+        .solution-pillars {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%;
+        }
+        .solution-pillar {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(34,197,94,0.2);
+            border-radius: 16px; padding: 28px 22px;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .solution-pillar:hover {
+            transform: translateY(-6px);
+            border-color: rgba(34,197,94,0.5);
+        }
+        .pillar-icon {
+            width: 60px; height: 60px; border-radius: 14px;
+            background: rgba(34,197,94,0.12);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px; font-size: 26px; color: var(--green-400);
+        }
+        .solution-pillar h3 {
+            font-size: 18px; font-weight: 800; color: var(--green-100); margin-bottom: 10px;
+        }
+        .solution-pillar p {
+            font-size: 14px; color: var(--slate-400); line-height: 1.7;
+        }
+
+        /* ===== MARKET / BUSINESS MODEL SLIDE ===== */
+        .slide-market {
+            background: linear-gradient(160deg, var(--slate-950) 0%, #0c1220 50%, #0a1628 100%);
+        }
+        .market-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25);
+            padding: 8px 20px; border-radius: 30px;
+            color: #a5b4fc; font-size: 15px; font-weight: 700;
+            margin-bottom: 28px;
+        }
+        .market-heading {
+            font-size: 42px; font-weight: 900; color: #ffffff;
+            margin-bottom: 40px; line-height: 1.3;
+        }
+        .market-heading span { color: #818cf8; }
+
+        .market-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 28px; width: 100%;
+        }
+        .market-left, .market-right {
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .market-who-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px; padding: 24px;
+        }
+        .market-who-card h3 {
+            font-size: 17px; font-weight: 800; color: #e0e7ff; margin-bottom: 14px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .market-who-card h3 i { color: #818cf8; }
+        .customer-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .customer-list li {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 15px; color: var(--slate-300);
+        }
+        .customer-dot {
+            width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+        }
+        .customer-dot.green { background: var(--green-400); }
+        .customer-dot.blue { background: #60a5fa; }
+        .customer-dot.amber { background: #fbbf24; }
+
+        .revenue-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px; padding: 22px;
+            display: flex; gap: 16px; align-items: flex-start;
+        }
+        .revenue-num {
+            width: 40px; height: 40px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: 18px; flex-shrink: 0;
+        }
+        .revenue-num.r1 { background: rgba(34,197,94,0.15); color: var(--green-400); }
+        .revenue-num.r2 { background: rgba(99,102,241,0.15); color: #818cf8; }
+        .revenue-num.r3 { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .revenue-info h4 { font-size: 16px; font-weight: 800; color: #f1f5f9; margin-bottom: 4px; }
+        .revenue-info p { font-size: 13.5px; color: var(--slate-400); line-height: 1.6; }
+
+        /* ===== TRACTION SLIDE ===== */
+        .slide-traction {
+            background: linear-gradient(160deg, #020617 0%, #0f1a12 50%, #0a1210 100%);
+        }
+        .traction-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.25);
+            padding: 8px 20px; border-radius: 30px;
+            color: var(--green-300); font-size: 15px; font-weight: 700;
+            margin-bottom: 28px;
+        }
+        .traction-heading {
+            font-size: 42px; font-weight: 900; color: #ffffff;
+            margin-bottom: 40px; line-height: 1.3;
+        }
+        .traction-heading span { color: var(--green-400); }
+
+        .traction-timeline {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%;
+        }
+        .traction-item {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(34,197,94,0.15);
+            border-radius: 16px; padding: 26px 20px;
+            text-align: center; position: relative;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .traction-item:hover {
+            transform: translateY(-6px);
+            border-color: rgba(34,197,94,0.4);
+        }
+        .traction-step {
+            position: absolute; top: -14px; right: 20px;
+            background: var(--green-700); color: white;
+            width: 28px; height: 28px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 900;
+        }
+        .traction-item-icon {
+            width: 56px; height: 56px; border-radius: 14px;
+            background: rgba(34,197,94,0.1);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px; font-size: 24px; color: var(--green-400);
+        }
+        .traction-item h3 {
+            font-size: 16px; font-weight: 800; color: var(--green-100); margin-bottom: 8px;
+        }
+        .traction-item p {
+            font-size: 13px; color: var(--slate-400); line-height: 1.65;
+        }
+        .traction-status {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-top: 14px; padding: 4px 12px; border-radius: 20px;
+            font-size: 12px; font-weight: 700;
+            background: rgba(34,197,94,0.12); color: var(--green-400);
+            border: 1px solid rgba(34,197,94,0.2);
+        }
+        .traction-status .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-400); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* ===== VISION SLIDE ===== */
+        .slide-vision .slide-bg-overlay {
+            background: linear-gradient(135deg, rgba(5,46,22,0.9) 0%, rgba(2,6,23,0.85) 100%);
+        }
+        .vision-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(201,153,58,0.12); border: 1px solid rgba(201,153,58,0.3);
+            padding: 8px 20px; border-radius: 30px;
+            color: var(--gold-400); font-size: 15px; font-weight: 700;
+            margin-bottom: 28px;
+        }
+        .vision-heading {
+            font-size: 44px; font-weight: 900; color: #ffffff;
+            margin-bottom: 40px; line-height: 1.4;
+        }
+        .vision-heading span { color: var(--gold-400); }
+
+        .vision-steps {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%;
+            margin-bottom: 36px;
+        }
+        .vision-step {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(201,153,58,0.2);
+            border-radius: 16px; padding: 28px 22px;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .vision-step:hover {
+            transform: translateY(-6px);
+            border-color: rgba(201,153,58,0.5);
+        }
+        .vision-step-icon {
+            width: 56px; height: 56px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px; font-size: 24px;
+        }
+        .vision-step:nth-child(1) .vision-step-icon { background: rgba(34,197,94,0.12); color: var(--green-400); }
+        .vision-step:nth-child(2) .vision-step-icon { background: rgba(96,165,250,0.12); color: #60a5fa; }
+        .vision-step:nth-child(3) .vision-step-icon { background: rgba(201,153,58,0.12); color: var(--gold-400); }
+        .vision-step h3 { font-size: 17px; font-weight: 800; color: #f1f5f9; margin-bottom: 8px; }
+        .vision-step p { font-size: 13.5px; color: var(--slate-400); line-height: 1.7; }
+
+        .vision-quote {
+            background: rgba(201,153,58,0.08);
+            border: 1px solid rgba(201,153,58,0.2);
+            border-radius: 14px; padding: 24px 32px;
+            text-align: center; max-width: 700px; margin: 0 auto;
+        }
+        .vision-quote p {
+            font-size: 20px; font-weight: 700; color: var(--gold-400);
+            line-height: 1.7;
+        }
+        .vision-quote .quote-icon { font-size: 22px; color: rgba(201,153,58,0.4); margin-bottom: 8px; }
+
+        /* ===== THANK YOU SLIDE ===== */
+        .slide-thanks {
+            background: linear-gradient(135deg, #0a1a0a 0%, #0f2b14 30%, #1a3a20 60%, #0d1f10 100%);
+        }
+        .thanks-logo { width: 140px; margin-bottom: 20px; filter: drop-shadow(0 0 30px rgba(201,153,58,0.2)); }
+        .thanks-heading {
+            font-size: 52px; font-weight: 900; color: #ffffff; margin-bottom: 14px;
+        }
+        .thanks-sub {
+            font-size: 22px; color: var(--green-200); opacity: 0.8; margin-bottom: 30px;
+        }
+        .thanks-contact {
+            display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+        }
+        .contact-pill {
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 20px; border-radius: 30px;
+            color: var(--slate-300); font-size: 15px; font-weight: 600;
+        }
+        .contact-pill i { color: var(--green-400); }
+
+        /* ===== NAVIGATION ===== */
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 32px;
+            background: rgba(2,6,23,0.7); backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255,255,255,0.06);
+            z-index: 100;
+        }
+        .nav-progress {
+            display: flex; align-items: center; gap: 8px;
+        }
+        .nav-dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            cursor: pointer; transition: all 0.3s;
+        }
+        .nav-dot.active {
+            background: var(--green-400);
+            box-shadow: 0 0 12px rgba(34,197,94,0.4);
+            width: 28px; border-radius: 5px;
+        }
+        .nav-dot:hover { background: rgba(255,255,255,0.3); }
+        .nav-dot.active:hover { background: var(--green-400); }
+        .nav-label {
+            color: var(--slate-500); font-size: 13px; font-weight: 600;
+        }
+        .nav-buttons { display: flex; gap: 10px; }
+        .nav-btn {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #e2e8f0; width: 44px; height: 44px;
+            border-radius: 10px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; transition: all 0.2s;
+        }
+        .nav-btn:hover {
+            background: rgba(34,197,94,0.15);
+            border-color: rgba(34,197,94,0.3);
+            color: var(--green-400);
+        }
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .nav-btn:disabled:hover { background: rgba(255,255,255,0.06); color: #e2e8f0; border-color: rgba(255,255,255,0.1); }
+
+        .nav-fullscreen {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #e2e8f0; padding: 8px 16px;
+            border-radius: 10px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            font-size: 13px; font-weight: 600; transition: all 0.2s;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .nav-fullscreen:hover {
+            background: rgba(34,197,94,0.15);
+            border-color: rgba(34,197,94,0.3);
+            color: var(--green-400);
+        }
+
+        /* ===== SLIDE-IN ANIMATIONS ===== */
+        .slide .anim-up {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .slide.active .anim-up { opacity: 1; transform: translateY(0); }
+        .slide.active .anim-up:nth-child(1) { transition-delay: 0.1s; }
+        .slide.active .anim-up:nth-child(2) { transition-delay: 0.25s; }
+        .slide.active .anim-up:nth-child(3) { transition-delay: 0.4s; }
+        .slide.active .anim-up:nth-child(4) { transition-delay: 0.55s; }
+
+        .slide .anim-card { opacity: 0; transform: translateY(30px); transition: opacity 0.5s ease, transform 0.5s ease; }
+        .slide.active .anim-card { opacity: 1; transform: translateY(0); }
+        .slide.active .anim-card:nth-child(1) { transition-delay: 0.3s; }
+        .slide.active .anim-card:nth-child(2) { transition-delay: 0.45s; }
+        .slide.active .anim-card:nth-child(3) { transition-delay: 0.6s; }
+        .slide.active .anim-card:nth-child(4) { transition-delay: 0.75s; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .slide { padding: 40px; }
+            .problem-cards, .solution-pillars, .traction-timeline, .vision-steps { grid-template-columns: repeat(2, 1fr); }
+            .market-grid { grid-template-columns: 1fr; }
+            .title-name { font-size: 44px; }
+            .problem-heading, .solution-heading, .market-heading, .traction-heading, .vision-heading { font-size: 32px; }
+        }
+        @media (max-width: 640px) {
+            .slide { padding: 24px 20px 80px; }
+            .problem-cards, .solution-pillars, .traction-timeline, .vision-steps { grid-template-columns: 1fr; }
+            .title-name { font-size: 36px; }
+            .title-logo { width: 120px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+    <!-- ============================== -->
+    <!-- SLIDE 0: TITLE                 -->
+    <!-- ============================== -->
+    <div class="slide active" data-slide="0">
+        <div class="slide-bg slide-title-bg"></div>
+        <div class="particles" id="particles"></div>
+        <div class="slide-content" style="text-align:center; display:flex; flex-direction:column; align-items:center;">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23d4a853'/%3E%3Cstop offset='100%25' stop-color='%23c9993a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M100 20 Q120 20 120 50 Q120 80 100 95 Q80 80 80 50 Q80 20 100 20Z' fill='none' stroke='url(%23g)' stroke-width='3'/%3E%3Cpath d='M100 95 Q70 110 60 130 Q50 155 80 170 Q100 180 120 170 Q150 155 140 130 Q130 110 100 95Z' fill='none' stroke='url(%23g)' stroke-width='3'/%3E%3Cpath d='M90 115 Q100 125 110 115' fill='none' stroke='url(%23g)' stroke-width='2.5'/%3E%3Ctext x='100' y='205' text-anchor='middle' fill='%23d4a853' font-family='Tajawal' font-size='22' font-weight='700'%3Eأنيس Anis%3C/text%3E%3C/svg%3E" alt="شعار أنيس" class="title-logo anim-up">
+            <h1 class="title-name anim-up">أنيس</h1>
+            <p class="title-tagline anim-up">منصة إحسان الذكية لرعاية كبار السن</p>
+            <div class="title-divider anim-up"></div>
+            <p class="title-subtitle anim-up">الحل الأول المتكامل الذي يربط كبار السن بمقدمي خدمات موثوقين من أبناء مدينتهم — بنقرة واحدة أو محادثة صوتية بسيطة</p>
+        </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- SLIDE 1: THE PROBLEM           -->
+    <!-- ============================== -->
+    <div class="slide slide-problem" data-slide="1">
+        <div class="slide-bg">
+            <img src="C:/Users/pc/.gemini/antigravity-ide/brain/9f183672-1598-42d4-bd1b-6ae421797f2e/elderly_loneliness_1789981785523.jpg" alt="المشكلة">
+            <div class="slide-bg-overlay"></div>
+        </div>
+        <div class="slide-content">
+            <span class="problem-badge anim-up"><i class="fa-solid fa-triangle-exclamation"></i> المحور الأول</span>
+            <h2 class="problem-heading anim-up">المعاناة <span>الصامتة</span> لكبار السن وعائلاتهم</h2>
+            <div class="problem-cards">
+                <div class="problem-card anim-card">
+                    <div class="problem-card-icon"><i class="fa-solid fa-people-arrows"></i></div>
+                    <h3>الاعتماد العشوائي</h3>
+                    <p>الاعتماد المحرج على الجيران والمعارف بدون أي ضمان للاستمرارية أو الموثوقية أو الحضور في الموعد</p>
+                </div>
+                <div class="problem-card anim-card">
+                    <div class="problem-card-icon"><i class="fa-solid fa-coins"></i></div>
+                    <h3>التكلفة الباهظة</h3>
+                    <p>استقدام ممرض أو مرافق خاص يكلف مئات الدنانير شهرياً — مبلغ لا تقدر عليه أغلب العائلات المتوسطة</p>
+                </div>
+                <div class="problem-card anim-card">
+                    <div class="problem-card-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+                    <h3>الفجوة الرقمية</h3>
+                    <p>التطبيقات الحالية معقدة بخطوط صغيرة وخطوات كثيرة لا تناسب قدرات كبار السن وتزيد من عزلتهم</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- SLIDE 2: THE SOLUTION          -->
+    <!-- ============================== -->
+    <div class="slide slide-solution" data-slide="2">
+        <div class="slide-bg">
+            <img src="C:/Users/pc/.gemini/antigravity-ide/brain/9f183672-1598-42d4-bd1b-6ae421797f2e/solution_connection_1789981809402.jpg" alt="الحل">
+            <div class="slide-bg-overlay"></div>
+        </div>
+        <div class="slide-content">
+            <span class="solution-badge anim-up"><i class="fa-solid fa-lightbulb"></i> المحور الثاني</span>
+            <h2 class="solution-heading anim-up"><span>أنيس</span> — الاستقلالية والرعاية بضغطة زر</h2>
+            <p class="solution-sub anim-up">منصة ذكية تربط كبار السن فوراً بشباب موثوقين ومفحوصين أمنياً من أبناء مدينتهم، بنموذج هجين مبتكر يجمع بين التطوع والخدمات المأجورة</p>
+            <div class="solution-pillars">
+                <div class="solution-pillar anim-card">
+                    <div class="pillar-icon"><i class="fa-solid fa-microphone-lines"></i></div>
+                    <h3>مساعد ذكي تفاعلي</h3>
+                    <p>واجهة صوتية ومحادثة موجهة تلغي التعقيد التقني بالكامل — كبير السن يحكي ببساطة وأنيس يفهم ويتصرف</p>
+                </div>
+                <div class="solution-pillar anim-card">
+                    <div class="pillar-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3>أمان وموثوقية 100%</h3>
+                    <p>تدقيق هوية رسمية وشهادة حسن سيرة وسلوك لكل مقدم خدمة قبل الاعتماد — مراجعة إدارية صارمة</p>
+                </div>
+                <div class="solution-pillar anim-card">
+                    <div class="pillar-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                    <h3>نموذج هجين مرن</h3>
+                    <p>خدمات تطوعية كاملة أو مقابل أجر رمزي ومباشر — أرخص بكثير من التوظيف الدائم وبإشراف كامل</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- SLIDE 3: MARKET & BIZ MODEL    -->
+    <!-- ============================== -->
+    <div class="slide slide-market" data-slide="3">
+        <div class="slide-content">
+            <span class="market-badge anim-up"><i class="fa-solid fa-chart-pie"></i> المحور الثالث</span>
+            <h2 class="market-heading anim-up">السوق <span>ونموذج العمل</span> المستدام</h2>
+            <div class="market-grid anim-up">
+                <!-- LEFT: Customers -->
+                <div class="market-left">
+                    <div class="market-who-card">
+                        <h3><i class="fa-solid fa-users"></i> مَن العميل المستهدف؟</h3>
+                        <ul class="customer-list">
+                            <li><span class="customer-dot green"></span><strong>كبار السن</strong> — المستفيد المباشر الباحث عن الاستقلالية</li>
+                            <li><span class="customer-dot blue"></span><strong>الأبناء والعائلة</strong> — العميل الذي يدفع مقابل راحة باله وأمان والديه</li>
+                            <li><span class="customer-dot amber"></span><strong>الشباب المتطوعون</strong> — الباحثون عن التطوع الموثق أو دخل مرن إضافي</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- RIGHT: Revenue -->
+                <div class="market-right">
+                    <div class="revenue-card">
+                        <div class="revenue-num r1">1</div>
+                        <div class="revenue-info">
+                            <h4>عمولة + اشتراكات عائلية</h4>
+                            <p>عمولة مقتطعة من المهام المأجورة + باقات اشتراك شهرية تتيح للأبناء المتابعة اللحظية والإشعارات</p>
+                        </div>
+                    </div>
+                    <div class="revenue-card">
+                        <div class="revenue-num r2">2</div>
+                        <div class="revenue-info">
+                            <h4>ترخيص المنصة للمؤسسات (B2B SaaS)</h4>
+                            <p>تقديم النظام كحل جاهز للجمعيات الخيرية والمستشفيات والمراكز الصحية لإدارة متطوعيها</p>
+                        </div>
+                    </div>
+                    <div class="revenue-card">
+                        <div class="revenue-num r3">3</div>
+                        <div class="revenue-info">
+                            <h4>شراكات المسؤولية المجتمعية (CSR)</h4>
+                            <p>رعايات وشراكات مع شركات التأمين ومزودي المستلزمات الطبية والقطاع الحكومي</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- SLIDE 4: TRACTION              -->
+    <!-- ============================== -->
+    <div class="slide slide-traction" data-slide="4">
+        <div class="slide-content">
+            <span class="traction-badge anim-up"><i class="fa-solid fa-rocket"></i> المحور الرابع</span>
+            <h2 class="traction-heading anim-up">من الفكرة إلى <span>الواقع</span> — ما تم إنجازه فعلياً</h2>
+            <div class="traction-timeline">
+                <div class="traction-item anim-card">
+                    <span class="traction-step">1</span>
+                    <div class="traction-item-icon"><i class="fa-solid fa-database"></i></div>
+                    <h3>البنية التحتية الكاملة</h3>
+                    <p>نظام برمجي متكامل (Full-Stack) مع محرك حالات (State Machine) يمنع التعارضات ويحفظ الحقوق</p>
+                    <span class="traction-status"><span class="dot"></span> مكتمل وشغّال</span>
+                </div>
+                <div class="traction-item anim-card">
+                    <span class="traction-step">2</span>
+                    <div class="traction-item-icon"><i class="fa-solid fa-robot"></i></div>
+                    <h3>مساعد أنيس الذكي</h3>
+                    <p>محادثة تفاعلية وإرشاد صوتي متكامل يُسهّل إنشاء الطلبات في ثوانٍ معدودة</p>
+                    <span class="traction-status"><span class="dot"></span> مكتمل وشغّال</span>
+                </div>
+                <div class="traction-item anim-card">
+                    <span class="traction-step">3</span>
+                    <div class="traction-item-icon"><i class="fa-solid fa-shield-check"></i></div>
+                    <h3>منظومة الأمان والتدقيق</h3>
+                    <p>لوحة تحكم إدارية للمراجعة الأمنية وتدقيق الهويات وشهادات حسن السيرة والسلوك</p>
+                    <span class="traction-status"><span class="dot"></span> مكتمل وشغّال</span>
+                </div>
+                <div class="traction-item anim-card">
+                    <span class="traction-step">4</span>
+                    <div class="traction-item-icon"><i class="fa-solid fa-ranking-star"></i></div>
+                    <h3>نظام الثقة والشهادات</h3>
+                    <p>مستويات ثقة (Tiers) ترقي الملتزمين + إصدار تلقائي لشهادات تطوع رقمية موثقة</p>
+                    <span class="traction-status"><span class="dot"></span> مكتمل وشغّال</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- SLIDE 5: VISION & NEXT STEPS   -->
+    <!-- ============================== -->
+    <div class="slide slide-vision" data-slide="5">
+        <div class="slide-bg">
+            <img src="C:/Users/pc/.gemini/antigravity-ide/brain/9f183672-1598-42d4-bd1b-6ae421797f2e/vision_future_1789981834904.jpg" alt="الرؤية المستقبلية">
+            <div class="slide-bg-overlay"></div>
+        </div>
+        <div class="slide-content">
+            <span class="vision-badge anim-up"><i class="fa-solid fa-eye"></i> المحور الخامس</span>
+            <h2 class="vision-heading anim-up">الرؤية والخطوة <span>القادمة</span></h2>
+            <div class="vision-steps">
+                <div class="vision-step anim-card">
+                    <div class="vision-step-icon"><i class="fa-solid fa-flask-vial"></i></div>
+                    <h3>إطلاق تجريبي ميداني</h3>
+                    <p>خدمة أول 100 كبير سن مع 50 مقدم خدمة معتمد في مدينة تجريبية لقياس الأثر والرضا</p>
+                </div>
+                <div class="vision-step anim-card">
+                    <div class="vision-step-icon"><i class="fa-solid fa-brain"></i></div>
+                    <h3>ذكاء اصطناعي صوتي متقدم</h3>
+                    <p>تطوير تطبيق موبايل يعتمد على نماذج AI تفهم اللهجات المحلية العربية بكفاءة</p>
+                </div>
+                <div class="vision-step anim-card">
+                    <div class="vision-step-icon"><i class="fa-solid fa-handshake"></i></div>
+                    <h3>شراكات استراتيجية</h3>
+                    <p>تعاون رسمي مع وزارات التنمية والجامعات والمستشفيات لاعتماد ساعات التطوع والتوسع</p>
+                </div>
+            </div>
+            <div class="vision-quote anim-up" style="transition-delay: 0.7s;">
+                <div class="quote-icon"><i class="fa-solid fa-quote-right"></i></div>
+                <p>هدفنا أن لا يُترك أي كبير سن في مجتمعنا وحيداً أو محتاجاً</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- SLIDE 6: THANK YOU             -->
+    <!-- ============================== -->
+    <div class="slide slide-thanks" data-slide="6">
+        <div class="particles" id="particles2"></div>
+        <div class="slide-content" style="text-align:center; display:flex; flex-direction:column; align-items:center;">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23d4a853'/%3E%3Cstop offset='100%25' stop-color='%23c9993a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M100 20 Q120 20 120 50 Q120 80 100 95 Q80 80 80 50 Q80 20 100 20Z' fill='none' stroke='url(%23g)' stroke-width='3'/%3E%3Cpath d='M100 95 Q70 110 60 130 Q50 155 80 170 Q100 180 120 170 Q150 155 140 130 Q130 110 100 95Z' fill='none' stroke='url(%23g)' stroke-width='3'/%3E%3Cpath d='M90 115 Q100 125 110 115' fill='none' stroke='url(%23g)' stroke-width='2.5'/%3E%3Ctext x='100' y='205' text-anchor='middle' fill='%23d4a853' font-family='Tajawal' font-size='22' font-weight='700'%3Eأنيس Anis%3C/text%3E%3C/svg%3E" alt="شعار أنيس" class="thanks-logo anim-up">
+            <h2 class="thanks-heading anim-up">شكراً لاستماعكم</h2>
+            <p class="thanks-sub anim-up">نسعد بالإجابة على استفساراتكم ومشاركتكم رؤيتنا</p>
+            <div class="thanks-contact anim-up">
+                <div class="contact-pill"><i class="fa-solid fa-globe"></i> منصة إحسان</div>
+                <div class="contact-pill"><i class="fa-solid fa-envelope"></i> info@anis-care.com</div>
+                <div class="contact-pill"><i class="fa-solid fa-heart"></i> أنيس لرعاية كبار السن</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- NAVIGATION BAR -->
+<nav class="nav-bar">
+    <div class="nav-progress">
+        <span class="nav-label" id="slideLabel">1 / 7</span>
+        <div id="navDots" style="display:flex; gap:6px;"></div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="nav-fullscreen" onclick="toggleFullscreen()" title="ملء الشاشة">
+            <i class="fa-solid fa-expand"></i> ملء الشاشة
+        </button>
+        <div class="nav-buttons">
+            <button class="nav-btn" id="btnNext" onclick="goSlide(current+1)" title="الشريحة التالية"><i class="fa-solid fa-chevron-right"></i></button>
+            <button class="nav-btn" id="btnPrev" onclick="goSlide(current-1)" title="الشريحة السابقة"><i class="fa-solid fa-chevron-left"></i></button>
+        </div>
+    </div>
+</nav>
+
+<script>
+    // ===== SLIDE ENGINE =====
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let current = 0;
+
+    function goSlide(n) {
+        if (n < 0 || n >= totalSlides) return;
+        slides[current].classList.remove('active');
+        current = n;
+        slides[current].classList.add('active');
+        updateNav();
+    }
+
+    function updateNav() {
+        document.getElementById('slideLabel').textContent = `${current + 1} / ${totalSlides}`;
+        document.getElementById('btnPrev').disabled = current === 0;
+        document.getElementById('btnNext').disabled = current === totalSlides - 1;
+        document.querySelectorAll('.nav-dot').forEach((d, i) => {
+            d.classList.toggle('active', i === current);
+        });
+    }
+
+    // Build dots
+    const dotsContainer = document.getElementById('navDots');
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => goSlide(i));
+        dotsContainer.appendChild(dot);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+            e.preventDefault(); goSlide(current + 1);
+        }
+        if (e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+            e.preventDefault(); goSlide(current - 1);
+        }
+        if (e.key === 'Home') { e.preventDefault(); goSlide(0); }
+        if (e.key === 'End') { e.preventDefault(); goSlide(totalSlides - 1); }
+        if (e.key === 'f' || e.key === 'F' || e.key === 'F11') { e.preventDefault(); toggleFullscreen(); }
+    });
+
+    // Touch swipe
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+    document.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].screenX - touchStartX;
+        if (Math.abs(dx) > 60) {
+            if (dx > 0) goSlide(current + 1); // RTL: swipe right = next
+            else goSlide(current - 1);
+        }
+    });
+
+    // Fullscreen
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    // ===== PARTICLES =====
+    function createParticles(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        for (let i = 0; i < 20; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const size = Math.random() * 120 + 40;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+            p.style.animationDelay = (Math.random() * 10) + 's';
+            container.appendChild(p);
+        }
+    }
+    createParticles('particles');
+    createParticles('particles2');
+
+    updateNav();
+</script>
+
+</body>
+</html>
