@@ -42,7 +42,13 @@ class AuthenticatedSessionController extends Controller
 
         // 3. توجيه المستخدم حسب دوره (Role):
         if ($user->isAdmin()) {
-            return redirect()->intended(route('admin.dashboard', absolute: false));
+            // الأدمن يجب أن يسجل دخول من صفحة الإدارة المخصصة
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('admin.login')
+                ->with('status', 'يرجى تسجيل الدخول من صفحة الإدارة المخصصة.');
         }
 
         if ($user->isProvider()) {

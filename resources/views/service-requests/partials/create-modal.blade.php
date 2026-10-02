@@ -16,6 +16,7 @@ window.openCreateRequestModal = function () {
         scheduled_at: '',
         description: '',
         errorMessage: '',
+        isSubmitting: false,
         services: [
             { id: 'grocery', title: 'شراء أغراض', description: 'احتياجات المنزل اليومية', icon: 'fa-cart-shopping' },
             { id: 'medicine', title: 'شراء دواء', description: 'إحضار الدواء من الصيدلية', icon: 'fa-kit-medical' },
@@ -99,6 +100,7 @@ window.openCreateRequestModal = function () {
             this.scheduled_at = '';
             this.description = '';
             this.errorMessage = '';
+            this.isSubmitting = false;
         }
     }"
     x-on:open-create-request-modal.window="open = true"
@@ -133,7 +135,7 @@ window.openCreateRequestModal = function () {
             </div>
         </header>
 
-        <form method="POST" action="{{ route('service-requests.store') }}" class="request-wizard-form">
+        <form method="POST" action="{{ route('service-requests.store') }}" class="request-wizard-form" @submit="if(isSubmitting) { $event.preventDefault(); return false; } isSubmitting = true;">
             @csrf
             <input type="hidden" name="service_type" :value="service_type">
             <input type="hidden" name="title" :value="title">
@@ -212,10 +214,13 @@ window.openCreateRequestModal = function () {
             </div>
 
             <footer class="request-wizard-footer">
-                <button x-show="step > 1" type="button" @click="prevStep()" class="wizard-back"><i class="fa-solid fa-arrow-right"></i> السابق</button>
+                <button x-show="step > 1" type="button" @click="prevStep()" class="wizard-back" :disabled="isSubmitting"><i class="fa-solid fa-arrow-right"></i> السابق</button>
                 <button x-show="step < 5" type="button" @click="nextStep()" class="wizard-next">متابعة <i class="fa-solid fa-arrow-left"></i></button>
-                <button x-show="step === 5" x-cloak type="submit" class="wizard-submit"><i class="fa-solid fa-paper-plane"></i> تأكيد وإرسال</button>
-                <button x-show="step === 1" type="button" @click="resetForm()" class="wizard-cancel">إلغاء</button>
+                <button x-show="step === 5" x-cloak type="submit" class="wizard-submit" :disabled="isSubmitting" :style="isSubmitting ? 'opacity: 0.7; pointer-events: none;' : ''">
+                    <span x-show="!isSubmitting"><i class="fa-solid fa-paper-plane"></i> تأكيد وإرسال</span>
+                    <span x-show="isSubmitting"><i class="fa-solid fa-spinner fa-spin"></i> جاري الإرسال...</span>
+                </button>
+                <button x-show="step === 1" type="button" @click="resetForm()" class="wizard-cancel" :disabled="isSubmitting">إلغاء</button>
             </footer>
         </form>
     </section>

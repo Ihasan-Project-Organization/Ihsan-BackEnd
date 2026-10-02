@@ -93,6 +93,20 @@ class ServiceRequestController extends Controller
             'attachments.*' => ['nullable', 'file', 'mimes:jpeg,png,jpg,pdf,doc,docx', 'max:5120'],
         ]);
 
+        // حماية ضد التكرار: إذا تم إرسال نفس الطلب خلال آخر 10 ثوانٍ (بسبب النقر المتكرر)
+        $elderProfile = $request->user()->elderProfile;
+        if ($elderProfile) {
+            $recentDuplicate = $elderProfile->serviceRequests()
+                ->where('title', $validated['title'])
+                ->where('created_at', '>=', now()->subSeconds(10))
+                ->first();
+
+            if ($recentDuplicate) {
+                return redirect()->route('service-requests.index')
+                    ->with('success', 'تم إنشاء الطلب بنجاح (رقم الطلب: ' . $recentDuplicate->public_id . ')');
+            }
+        }
+
         DB::transaction(function () use ($request, $validated) {
             $publicId = ServiceRequest::generatePublicId();
 

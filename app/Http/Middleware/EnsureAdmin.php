@@ -16,7 +16,11 @@ class EnsureAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! Auth::check() || ! Auth::user()->admin()->exists()) {
+        if (! Auth::check()) {
+            return redirect()->route('admin.login');
+        }
+
+        if (! Auth::user()->admin()->exists()) {
             abort(403, 'غير مخوّل بالوصول إلى لوحة الإدارة.');
         }
 

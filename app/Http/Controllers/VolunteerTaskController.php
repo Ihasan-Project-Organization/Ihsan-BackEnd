@@ -351,17 +351,8 @@ class VolunteerTaskController extends Controller
             'good_conduct_cert_path' => 'documents/conduct.pdf',
         ]);
 
-        // 1. فحص التطابق لمستوى مقدم الخدمة (Tier Eligibility)
+        // تم إلغاء قيود المستويات بناءً على رغبة المستخدم - يمكن للمتطوع قبول أي طلب
         $providerTier = (int) ($providerProfile->tier ?? 1);
-        $requiredTier = match ($serviceRequest->service_type) {
-            'medical_escort' => 3,
-            'home_help' => 2,
-            default => 1,
-        };
-
-        if ($providerTier < $requiredTier) {
-            abort(403, 'هذا الطلب غير متاح لمستوى حسابك الحالي.');
-        }
 
         // 2. فحص تطابق تفضيل الجنس (Gender Preference Matching)
         $providerGender = $provider->gender ?? $providerProfile->gender ?? $request->input('gender') ?? null;

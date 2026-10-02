@@ -100,6 +100,14 @@ require __DIR__.'/auth.php';
 // ============================================================
 // مسارات لوحة الإدارة — الدفعة 0 والدفعة 1
 // ============================================================
+
+// مسارات تسجيل دخول وخروج الأدمن (بدون حماية auth)
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/login', [\App\Http\Controllers\Admin\AdminLoginController::class, 'create'])->middleware('guest')->name('login');
+    Route::post('/login', [\App\Http\Controllers\Admin\AdminLoginController::class, 'store'])->middleware('guest');
+    Route::post('/logout', [\App\Http\Controllers\Admin\AdminLoginController::class, 'destroy'])->middleware('auth')->name('logout');
+});
+
 Route::prefix('admin')
     ->name('admin.')
     ->middleware(['auth', 'ensure.admin'])
