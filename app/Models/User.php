@@ -175,21 +175,13 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * التقييم الفعلي لمقدم الخدمة بعد خصم حوادث عدم الموثوقية.
-     * كل حادثة (تأخير أو اعتذار) تخصم 0.1 نجمة بشكل دائم.
-     * الحد الأدنى للتقييم: 1.0
+     * متوسط التقييم الفعلي لمقدم الخدمة (بدون خصومات نقاط التزام وفقاً للمرجع §6).
      */
     public function getEffectiveRating(float $default = 5.0): float
     {
         $baseRating = (float) ($this->receivedReviews()->avg('stars') ?? $default);
 
-        $incidentsCount = $this->serviceProviderProfile
-            ? (int) $this->serviceProviderProfile->reliability_incidents_count
-            : 0;
-
-        $penalty = $incidentsCount * 0.1;
-
-        return max(1.0, round($baseRating - $penalty, 1));
+        return round($baseRating, 1);
     }
 
     public function sendPasswordResetNotification($token): void
